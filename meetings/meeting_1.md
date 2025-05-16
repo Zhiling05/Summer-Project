@@ -1,4 +1,5 @@
-### Insteuctions for developing the app
+
+### Instructions for developing the app
 - this app serves for Optometrists, GPs and Patients
 - this app helps healthcare providers and patients navigate suspected papilloedema cases, based on the DIPP study guidelines
 
@@ -7,7 +8,7 @@ our goal is...
 - to improve referral accuracy across the healthcare system using the app, reducing unnecessary hospital visits while ensuring true papilloedema cases receive prompt assessment and treatment.
 
 
-***
+---
 
 ### What this app does for optometrists:
 The app guides optometrists through a structured assessment:
@@ -33,14 +34,11 @@ They may see emergency clinicians, neurologists, or ophthalmologists...
 
 High importance of mentioning if they have **known pseudo-papilloedema.**
 
-***
+---
 
 ### Extensions:
 We acknowledges GPs' different expertise levels, so we're not expecting them to diagnose pseudo-papilloedema, but GPs should be able to recognize definite swelling or normal discs. 
 For Hospital Specialists, there could be more additional versions available. e.g. It defines how to triage referrals and access urgency for ophthamologists, specifies specific guidlines for practice of neurologists, and offer support for non-specialists in A&E for emergency clinicians.
-
-
-
 
 
 
