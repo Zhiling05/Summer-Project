@@ -1,7 +1,7 @@
 # Project Kick-off Meeting Summary
 
-**Date:** June 2  
-**Participants:** All team members 
+**Date:** June 2  <br>
+**Participants:** All team members  <br>
 **Purpose:** Project launch, planning, and proposal writing guidance
 
 ---
