@@ -19,4 +19,6 @@
    □ Choroidal folds
 
    □ Other OCT features (if available) *[Text box appears when selected]*
+   
+   □ None of them
 
