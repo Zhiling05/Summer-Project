@@ -18,7 +18,13 @@
 
    □ Choroidal folds
 
-   □ Other OCT features (if available) *[Text box appears when selected]*
-   
    □ None of them
+
+4. Are there any other abnormal features identified on the OCT  (if available) ？
+
+   □ Yes *[Text box appears when selected - 'Please enter other abnormal features identified on OCT']*            
+
+   □ No                      
+
+   □ OCT not performed
 
