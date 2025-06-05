@@ -5,7 +5,7 @@
 Identify possible patient visit scenarios:
 - Asymptomatic routine vision examination
 - With headache but no red flag symptoms
-- With visual symptoms suggestive of increased intracranial pressure (e.g., transient blurred vision, diplopia)
+- With visual symptoms suggestive of increased intracranial pressure
 - With headache red flag symptoms
 
 
