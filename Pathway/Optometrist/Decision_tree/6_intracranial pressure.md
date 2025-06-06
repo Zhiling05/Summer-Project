@@ -41,8 +41,11 @@ Q3.3 Is it worse in a particular gaze direction? □ Yes  □ No  □ 
 *If Yes*
 
 Q6.1 Onset and pattern □ Acute □ Chronic (> 2 weeks) □ Intermittent □ Constant □ Worsening □ Stable
+
 Q6.2 Associated features (tick all) □ Nausea □ Vomiting □ Photophobia □ Phonophobia □ None
+
 Q6.3 Red-flag features (tick all)
+
 □ Worst on waking or early morning
 □ Pulsatile tinnitus
 □ Altered consciousness
