@@ -28,6 +28,6 @@
 
 ### Flowchart:
 
-<img src="A_flowchart_in_the_image_addresses_whether_a_patie.png" alt="Headache Red Flags Flowchart" width="500"/>
+<img src="Pathway/Optometrist/Decision_tree/Does the patient report headaches with red flags suggesting raised intracranial pressure (ICP) Image.png" alt="Headache Red Flags Flowchart" width="500"/>
 
 ---
