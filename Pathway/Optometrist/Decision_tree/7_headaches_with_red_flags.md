@@ -23,4 +23,12 @@
 ### If YES → Action:
 **Send the patient to the Emergency Department immediately.**
 
-![Does the patient report headaches with red flags suggesting raised intracranial pressure (ICP) Image](https://github.com/user-attachments/assets/36f059ac-5d52-432e-a23d-bf0b8350a8a5)
+
+---
+
+### Flowchart:
+
+<img src="A_flowchart_in_the_image_addresses_whether_a_patie.png" alt="Headache Red Flags Flowchart" width="500"/>
+![Does the patient report headaches with red flags suggesting raised intracranial pressure (ICP) Image](https://github.com/user-attachments/assets/55eed4f7-088a-437c-8cc6-87a186b4cd9d)
+
+---
