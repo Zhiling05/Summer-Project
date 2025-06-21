@@ -1,0 +1,39 @@
+1. As an optometrist,  
+   I want to use a lightweight, offline-accessible decision support tool,  
+   so that I can determine whether a patient with possible papilloedema needs a referral and how urgent it should be.
+
+2. As an optometrist,  
+   I want to answer a series of structured clinical questions based on symptoms and optic disc appearance,  
+   so that I can receive guidance aligned with national consensus on papilloedema triage.
+
+3. As an optometrist,  
+   I want the system to present diagnostic pathways clearly without requiring internet connection,  
+   so that I can rely on it in community settings or when working remotely.
+
+4. As an optometrist,  
+   I want the referral advice to be consistent with published Delphi-guided clinical pathways,  
+   so that I can justify my decision and communicate effectively with secondary care services.
+
+5. As an optometrist,  
+   I want the tool to clearly distinguish between emergency, urgent, and routine management plans,  
+   so that I can act quickly in high-risk situations and avoid unnecessary hospital referrals.
+
+6. As an optometrist,  
+   I want to access different diagnostic scenarios by patient presentation (e.g. headaches, visual symptoms),  
+   so that I can follow the correct pathway based on the initial complaint.
+
+7. As an optometrist,  
+   I want the tool to highlight specific red flags (e.g. sudden vision loss, severe headache),  
+   so that I know when an immediate referral is necessary.
+
+8. As an optometrist,  
+   I want to be able to revisit previous sections in the decision guide,  
+   so that I can double-check my inputs or revise my assessment if needed.
+
+9. As an optometrist,  
+   I want the tool to include explanations for clinical terms used (e.g. PHOMS, drusen),  
+   so that I can make informed decisions even if I am less familiar with certain findings.
+
+10. As an optometrist,  
+    I want to receive referral suggestions that specify the referral urgency and destination (e.g. ophthalmology OPD vs A&E),  
+    so that I can make the appropriate arrangements for the patient.
