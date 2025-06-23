@@ -1,40 +1,40 @@
-1. As an optometrist, I want the system to clearly display diagnostic pathways without requiring internet connection, so I can rely on it for decision-making in community clinics or remote practice settings.  
+1. As an optometrist, I want the system to display diagnostic pathways clearly without requiring internet, so that I can rely on it in community clinics or remote practice settings.
 
-2. I want the tool to highlight specific "red flag" symptoms (e.g., sudden vision loss, severe headache) to indicate when immediate referral is mandatory.  
+2. As an optometrist, I want the tool to highlight "red flag" symptoms (e.g., sudden vision loss, severe headache), so that I know when immediate referral is mandatory.
 
-3. As an optometrist, I want to return to previous steps in the decision guide to review or modify inputs when necessary.  
+3. As an optometrist, I want to return to previous steps in the decision guide, so that I can review or modify inputs if needed.
 
-4. I want the tool to provide concise explanations of professional terms (e.g., PHOMS, drusen) to support informed decisions even when unfamiliar with certain examination findings.  
+4. As an optometrist, I want explanations of professional terms (e.g., PHOMS, drusen), so that I can make informed decisions even with unfamiliar findings.
 
-5. As an optometrist, I want the software to retain partially completed questionnaires when re-entering, allowing me to continue interrupted work due to clinical demands.  
+5. As an optometrist, I want the system to retain partially completed questionnaires, so that I can resume work after interruptions.
 
-6. As an optometrist with age-related or impaired vision, I want adjustable font sizes for better readability during data entry.  
+6. As an optometrist with age-related or impaired vision, I want adjustable font sizes, so that I can read content comfortably.
 
-7. As a first-time user, I want clear tutorials to quickly understand workflows and use the tool correctly.  
+7. As an optometrist (first-time user), I want a clear tutorial, so that I can quickly understand the workflow.
 
-8. As an experienced user, I want the option to skip tutorials for direct access to the operational interface.  
+8. As an optometrist (experienced user), I want the option to skip tutorials, so that I can access the tool faster.
 
-9. As a functionality-focused optometrist, I want an interface that is both aesthetically pleasing and minimalist to maintain clinical focus without operational distractions.  
+9. As an optometrist, I want a minimalist and intuitive interface, so that I can focus on clinical judgment without distractions.
 
-10. As an optometrist, I want to export referral recommendations with patient symptoms as downloadable PDFs for documented referral justification.  
+10. As an optometrist, I want to export referral summaries as PDFs, so that I have documentation for referral forms.
 
-11. As an optometrist, I want color-coded tags (red/yellow/green) to categorize patient assessments by urgency for efficient retrospective review.  
+11. As an optometrist, I want color-coded urgency tags (red/yellow/green) on patient assessments, so that I can prioritize reviews efficiently.
 
-12. As an optometrist, I want confirmation prompts after submitting diagnostic workflows to verify completion before starting new cases.  
+12. As an optometrist, I want a submission confirmation prompt, so that I know when a diagnostic workflow is complete.
 
-13. As a junior optometrist, I want simplified referral rationale displays to better explain needs to patients and improve compliance/trust.  
+13. As an optometrist (junior), I want simplified referral explanations, so that I can better communicate with patients and improve compliance.
 
-14. As a novice optometrist, I want an "exit current test" button to restart assessments after accidental inputs.  
+14. As an optometrist (novice), I want an "Exit Test" button, so that I can restart if I make accidental inputs.
 
-15. As an optometrist, I want to save assessment progress and exit workflows at any time for better work scheduling.  
+15. As an optometrist, I want to save and exit assessments anytime, so that I can manage my schedule flexibly.
 
-16. As a frequent mobile user, I want an eye-care mode for comfortable use in low-light or nighttime environments.  
+16. As an optometrist (mobile user), I want a dark/eye-care mode, so that I can work comfortably in low-light environments.
 
-17. As an optometrist frequently encountering optic disc boundary ambiguity, I want navigation bars with diagnostic reference images (especially for "uncertain" or "suspected edema" criteria) to improve borderline case accuracy.  
+17. As an optometrist, I want reference images for unclear diagnoses (e.g., optic disc edema), so that I can improve accuracy in borderline cases.
 
-18. As a mobile user, I want all buttons and input areas optimized for one-handed operation to facilitate concurrent patient care or device handling.  
+18. As an optometrist (mobile user), I want one-handed operation support, so that I can use the tool while handling patients or equipment.
 
-19. As an optometrist requiring case reviews, I want timestamped records of every step selection to support:  
-   - Quality control and medico-legal review  
-   - Team training  
-   - Product optimization (e.g., identifying prolonged/frequent step transitions to improve UI/UX and clinical efficiency)  
+19. As an optometrist, I want timestamped step-by-step logs, so that I can:
+   - Support quality control and audits.
+   - Train team members.
+   - Identify UI/UX improvements (e.g., steps causing delays).
