@@ -9,14 +9,14 @@
 I want the diagnostic pathway to be rendered offline using local data (e.g. JSON structure),<br>
 so that I can use the system in remote without internet access.**
 
-| ID  | Acceptance Criteria                                                                                                                                                    | Category                        |
-|-----|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| AC1 | The flowchart data (e.g. pathway structure, decision branches) must be fully loaded from a local JSON file, with no network requests required.                         | Verifiability / Offline support |
-| AC2 | When the device is offline, users must still be able to open and have a full view of the diagnostic flowchart.                                                         | Edge case / Verifiability       |
-| AC3 | The flowchart should render within 3 seconds (this threshold could adjusted based on actual performance testing)                                                       | Functional completeness         |
-| AC4 | All flowchart functions must behave identically in offline mode as in online mode.                                                                                     | Functional consistency          |
-| AC5 | If the JSON file fails to load, the system must display a clear error message and must not attempt to fetch any data from the internet.                                | Edge case / Error handling      |
-| AC6 | The system must not make any requests to external resources (e.g. APIs or CDNs); network activity logs (e.g. browser developer tools) should show no external traffic. | Verifiability                   |
+| ID                     | Acceptance Criteria                                                                                                                                                                                                                                                      | Category                        |
+|------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| AC1                    | Given the user is using the system,<br>When the diagnostic flowchart is displayed,<br>Then all required data (e.g., pathway structure, decision branches) must be loaded from a local JSON file,<br>And the system must not make any network requests to fetch this data | Verifiability / Offline support |
+| AC2                    | Given the device is offline,<br>When the user opens the diagnostic flowchart,<br>Then the system must display the full flowchart view without requiring an internet connection                                                                                           | Edge case / Verifiability       |
+| AC3                    | Given the diagnostic flowchart is triggered for display,<br>When the rendering process begins,<br>Then the flowchart should finish rendering within 3 seconds                                                                                                            | Functional completeness         |
+| AC4                    | Given the device is offline,<br>When the user interacts with the diagnostic flowchart,<br>Then all flowchart functions must behave identically as they do in online mode                                                                                                 | functional consistency          |
+| AC5                    | Given the local JSON file fails to load,<br>When the diagnostic flowchart is initiated,<br>Then the system must display a clear error message,<br>Then the system must not attempt to fetch any data from the internet                                                   | Edge case / Error handling      |
+| AC6                    | Given the user is using the system,<br>When the application is running,<br>Then the system must not make any requests to external resources such as APIs or CDNs,<br>Then network activity logs such as browser developer tools should show no external traffic          | Verifiability                   |
 
 <br>
 
@@ -26,42 +26,176 @@ so that I can use the system in remote without internet access.**
 I want the diagnostic conclusion output to align with the content of the clinical guideline, <br>
 so that I can make traceable and reliable clinical decisions.**
 
-| ID   | Acceptance Criteria                                                                                                                                                                | Category                                   |
-|------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
-| AC1  | Each diagnostic conclusion generated by the system must correspond to a specific path or statement found in the official guideline document.                                       | Verifiability                              |
-| AC2  | The diagnostic pathway structure used in the system must follow the logical sequence and content of the PDF-based guideline flowchart, and must be manually reviewed for accuracy. | Structural integrity / Manual verification |
+| ID   | Acceptance Criteria                                                                                                                                                                                                                                        | Category                                   |
+|------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|
+| AC1  | Given the system generates a diagnostic conclusion,<br>When the result is presented to the user,<br>Then it must correspond to a specific path or statement found in the official guideline document                                                       | Verifiability                              |
+| AC2  | Given the system is using a diagnostic pathway structure,<br>When the flowchart is constructed or updated,<br>Then it must follow the logical sequence and content of the PDF-based guideline flowchart,<br>Then it must be manually reviewed for accuracy | Structural integrity / Manual verification |
 
 <br>
 
 
+
 ### user story 3
-
 **As an optometrist,<br>
-I want the system to record my selected option after each evaluation step,<br>
-so that I can clearly see the progress of the whole pathway.**
+I want to click and return to any previously answered decision and modify my answer,<br>
+so that I can reassess based on new findings.**
 
-| ID   | Acceptance Criteria                                                                                                                                                                   | Category                                    |
-|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
-| AC1  | After each question is completed, the system must save the question and the selected answer in a progress record area (e.g. sidebar or top navigation).                               | Verifiability / Interaction feedback        |
-| AC2  | The progress record must display completed questions and their selected answers in a linear order.                                                                                    | Usability / Traceability                    |
-| AC3  | The progress information should persist across page refreshes or navigation events.                                                                                                   | Functional completeness / State persistence |
-| AC4  | If the user revisits and changes a previous answer, the corresponding question and all subsequent records must be automatically updated or cleared to avoid diagnostic inconsistency. | Logic integrity / Error prevention          |
+| ID  | Acceptance Criteria                                                                                                                                                                                                                                                                                         v   | Category                 |
+|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
+| AC1 | Given the user is on an evaluation page,<br>When the page is displayed,<br>Then the user should see the decision history of the current path,<br>Then the history should show all previously answered questions and corresponding answers                                                                       | Visibility               |
+| AC2 | Given the user is viewing the decision history,<br>When the user clicks on any completed node,<br>Then they should be navigated back to that step,<br>Then they should be allowed to change their answer,<br>And all subsequent steps after that node must be automatically refreshed according to their answer | Interaction / Navigation |
+| AC3 | Given the user has edited a previous answer,<br>When the system updates the evaluation flow,<br>Then the user should be able to continue the evaluation from the updated position                                                                                                                               | UX                       |
+| AC4 | Given the user is on a question within the decision flow,<br>When the question is displayed,<br>Then the current question should be visually highlighted to help the user identify their position in the decision flow                                                                                          | UI / UX                  |
+
 
 <br>
 
 
 ### user story 4
-**As an optometrist,<br>
-I want to click and return to any previously answered decision point and modify my answer,<br>
-so that I can reassess based on new findings.**
+**As an optometrist, <br>
+I want the selected option to be highlighted when I click on any option, <br>
+so that I can clearly confirm my selection.**
 
-| ID   | Acceptance Criteria                                                                                                                                 | Category                 |
-|------|-----------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
-| AC1  | On every evaluation page, the user should see the decision history of the current path, showing all previously questions and corresponding answers. | Visibility               |
-| AC2  | When the user clicks on any completed node, they should be navigated back to that step and allowed to change their answer.                          | Interaction / Navigation |
-| AC3  | Once the answer is modified, all subsequent steps after that node must be automatically refreshed to reflect the updated logic.                     | Dynamic update           |
-| AC4  | After editing a previous answer, the user should be able to continue the evaluation flow from the updated position.                                 | UX                       |
-| AC5  | The current question should be visually highlighted to help the user identify their position in the decision flow.                                  | UI                       |
+| ID   | Acceptance Criteria                                                                                                                        | Category |
+|------|--------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| AC1  | Given the optometrist has entered the assessment flow, <br>when the user clicks on any option, <br>then that option should be highlighted. | UI/UX    |
+
+<br>
+
+
+### user story 5
+**As an inexperienced optometrist, <br>
+I want explanations of professional terms (e.g., PHOMS, drusen), <br>
+so that I can make informed decisions even with unfamiliar findings.**
+
+| ID  | Acceptance Criteria                                                                                                                                                                                                                                                      | Category |
+|-----|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| AC1 | Given that a question contains professional terms,<br>When the user views the question,<br>Then all professional terms should be visually highlighted,<br>and when the user clicks on a highlighted term,<br>then an explanation of the term should appear in a pop-up . | UI/UX    |
+| AC2 | Given the optometrist has viewed the explanation of a professional term,<>brWhen the user clicks the back button,<br>Then the user should be taken back to the previously viewed page..                                                                                  | UI/UX    |
+| AC3 | Given the user opens the terminology explanation page, <br>When the explanation is too long to fit on the screen, <br>Then the user should be able to scroll down to view the full content.                                                                              | UI/UX    |
 
 
 <br>
+
+
+### user story 6
+**As an optometrist,<br>
+when the assessment page is closed intentionally or accidentally,<br>
+I want my progress to be saved automatically,<br>
+so that I can resume my work seamlessly when I return to the assessment flow.**
+
+| ID   | Acceptance Criteria                                                                                                                                                                                                                                              | Category                   |
+|------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
+| AC1  | Given the user accidentally exits the app,<br>When the user returns to the app,<br>Then a prompt should appear saying “You exited unexpectedly” and ask whether the user wants to resume the previous assessment or start a new one.                             | Edge Case & Error Handling |
+| AC2  | Given the optometrist navigate away to any other page intentionally, when the optometrist return to the assessment page<br>then the system should let the optometrist to choose whether they want to “Continue previous assessment”or “Start a new assessment”   | Edge Case & Error Handling |
+| AC3  | Given the user returns to the assessment page for any reason,<br>When the user chooses to resume the previous assessment,<br>Then they should be navigated back to the exact page where they left off.                                                           | Functional Integrity       |
+| AC4  | Given the user returns to the assessment page for any reason,<br>When the user chooses to start a new assessment,<br>Then any previously saved data should be discarded and the assessment should begin from the first page.                                     | Functional Integrity       |
+
+<br>
+
+
+### user story 7
+**As an optometrist with age-related or impaired vision, <br>
+I want adjustable font sizes, <br>
+so that I can read content comfortably.**
+
+| ID  | Acceptance Criteria                                                                                                                 | Category                              |
+|-----|-------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| AC1 | Given the optometrist opens the settings menu,<br>When they adjust the font size,<br>Then interface text should update immediately  | Functional Completeness/Accessibility |
+
+
+### user story 8
+**As an optometrist using the system for the first time,<br> 
+I want a clear and brief tutorial, <br>
+so that I can quickly understand how to use the system.**
+
+| ID  | Acceptance Criteria                                                                                                                                                                                                                                                                                                                                                                   | Category                        |
+|-----|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| AC1 | Given the user is using the system for the first time<br>,When they enter the system<br>Then the system should prompt the user asking whether they would like to start a tutorial. <br>And when they select "Yes", <br>then it should clearly explain the assessment workflow.<br> And when they select "No", <br>then they should be taken directly to the assessment starting page. | Functional Completeness         |
+| AC2 | Given user has chosen to view the tutorial after being prompted,When they are viewing the tutorial,<br>, then they will be given a "Next" option,<br>And when the user clicks the “Next” button,<br>Then the system should advance to the next step of the tutorial.                                                                                                                  | Functional Completeness/ UI/UX  |
+| AC3 | Given the user has chosen to view the tutorial and entered the tutorial screen.<br>When the user clicks "Exit" during any step of the tutorial,<br>Then the system should immediately exit the entire tutorial,and take the user directly to the home page without requiring the user to finish the remaining steps.                                                                  | Functional Completeness/ UI/UX  |
+| AC4 | Given the user dismissed or completed the tutorial,<br>When they later want to view it again,<br>Then they should be able to access the tutorial manually from the Guide page.                                                                                                                                                                                                        | Functional Completeness/ UI/UX  |
+
+
+### user story 9
+
+**As an optometrist,<br>
+I want to generate a PDF version of the diagnostic outcome after completing the assessment process,<br>
+so that I can use it as a documented record for referral purposes.**
+
+
+| ID  | Acceptance Criteria                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Category                              |
+|-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| AC1 | Given the user has completed the assessment and received a referral outcome,<br>When the results page is displayed,<br>Then the “Download PDF” button should be visible and enabled.                                                                                                                                                                                                                                                                                                                                                      | Verifiability/Functional Completeness |
+| AC2 | Given the "Download PDF" button is visible,<br>When the user clicks the “Download PDF” button,<br>Then the user should be able to choose between downloading a full version or a summary version.<br>And when user select to download a full version PDF,<br>Then it should include symptoms found during the assessment workflow, referral recommendation and all assessment questions and answers.<br>And when user select to download a summary version PDF,<br>Then it should include only key symptoms and referral recommendations. | Verifiability/Functional Completeness |
+
+
+<br>
+
+
+### user story 10
+
+**As an optometrist,
+I want to have access to example reference images with diagnostic guidance,
+so that I can improve my diagnostic accuracy when encountering borderline or ambiguous cases.**
+
+| ID  | Acceptance Criteria                                                                                                                                                                                                                                                                                                                   | Category                              |
+|-----|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
+| AC1 | Given the user is using the system,<br>When the user navigates to the Guide section,<br>Then they should be presented with a button labeled "Reference Image Gallery",<br>And when the user clicks the "Reference Image Gallery" button,<br>Then the system should navigate to a separate page containing diagnostic reference images | Verifiability/Functional Completeness |
+| AC2 | Given the user is viewing the reference image gallery,<br>When the user clicks on any image,<br>Then the image should open in an enlarged view mode,<br>And the user should be able to zoom in and out on the image                                                                                                                   | Verifiability/Functional Completeness |
+| AC3 | Given the user is browsing the image gallery page,<br>When the user selects any image category (e.g., "Typical Edema" or "Blurred Margins"),<br>Then the system should display the corresponding image thumbnails,<br>And each thumbnail should be accompanied by key diagnostic notes                                                | Functional Completeness               |
+| AC4 | Given the user clicks on multiple image examples in succession,<br>When switching between images or zooming in on an image,<br>Then the loading time should not exceed 1 second, and the page should remain smooth without lag.                                                                                                       | Performance/UIUX                      |
+
+<br>
+
+
+### user story 11
+
+**As an optometrist, <br>
+I want an "Exit Test" button on every assessment page, <br>
+so that I can restart the assessment whenever I want.**
+
+| ID  | Acceptance Criteria                                                                                                                                                                          | Category                               |
+|-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| AC1 | Given the confirmation dialog is displayed,<br>When the user confirms the action,<br>Then the system should reset the assessment and navigate to the starting page.                          | Verifiability/Functional Completeness  |
+| AC2 | Given the confirmation dialog is displayed,<br>When the user cancels the action,<br>Then the dialog should close and the user should remain on the current page with all progress preserved. | Verifiability/Functional Completeness. | 
+
+<br>
+
+### user story 12
+
+**As an optometrist,<br>
+I want to view my past assessment records in a dedicated Records page,<br>
+so that I can review previous outcomes and referral decisions at any time.**
+
+| ID  | Acceptance Criteria                                                                                                                                                                                 | Category                               |
+|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| AC1 | Given the optometrists enter the app,<br>When they navigate to the “Records” page,<br>Then the system should display a list of their previously completed assessments.                              | Verifiability/Functional Completeness  |
+| AC2 | Given the optometrist has not completed any assessments yet,<br>When they navigate to the Records page,<br>Then the system should display a friendly message such as:<br>“You have no records yet.” | Verifiability/Functional Completeness. | 
+
+<br>
+
+
+### user story 13
+
+**As an optometrist,<br>
+I want to categorize my completed patient assessments based on urgency levels using visual tags (e.g., red, yellow, green),<br>
+so that I can efficiently locate the relevant patient records when reviewing past diagnostic workflows.**
+
+| ID  | Acceptance Criteria                                                                                                                                                                                                                                              | Category                |
+|-----|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| AC1 | Given the optometrist is performing a diagnostic assessment,<br>When a diagnosis is completed,<br>Then the system should assign an urgency tag to the result,<br>And developer should assign a color to the tag,<br>And all tag should be stored in database.    | Functional Completeness |
+| AC2 | Given the optometrist has completed the assessment,<br>When the user reaches the referral recommendation page,<br>Then the referral suggestion should be visually color-coded according to its level of urgency, so that the priority is easily distinguishable. | UIUX/Verifiability      |
+| AC3 | Given the optometrist is on the Record page,<br>When the page loads,<br>Then a tag filter dropdown should be visible at the top of the page.                                                                                                                     | Functional Completeness |
+| AC4 | Given the optometrist is on the Record page,<br>When they click on or select a tag filter (e.g., Red tag: "Immediate/urgent referral cases"),<br>Then the system should display only entries that match the selected urgency level                               | Functional Completeness |
+| AC5 | Given the user enters the Records page,<br>When the list of previous assessment records is displayed,<br>Then each record should be accompanied by a visible colored tag representing its urgency level.                                                         | Functional Completeness |
+
+
+
+
+
+
+
+
+
+
