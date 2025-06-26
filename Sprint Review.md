@@ -13,3 +13,23 @@
 | **Goal**                | To collect feedback from the client and supervisor, assess whether the decision tree logic and UI prototype meet expectations, and revise future development accordingly. |
 | **Artifacts or Tools**  | - GitHub  <br> - Lark  <br> - Xmind  <br> - Google Docs  <br> - Notion  <br> - Miro  <br> - Sigma |
 | **Example Questions Asked** | - What value did we deliver to the client in this Sprint?  <br> - Do the supervisor and client approve of our logic and structure design?  <br> - What aspects require revision and improvement? |
+
+
+## Sprint Achievements
+
+- Successfully implemented the first version of the optometrist diagnostic decision tree logic.  
+- Completed the initial interactive UI prototype; client gave positive feedback.  
+- Planned the testing strategy in advance, adopting a task-driven development (TDD) approach.  
+- Submitted the university license agreement for approval.  
+
+## Areas for Improvement
+
+- Logic pathways for some questions remain unclear; trigger conditions and combination rules need clarification.  
+- Inconsistent color coding in the flowchart; recommend using a traffic light system (red/orange/green) with a legend.  
+- Question design should avoid forced multiple-choice selection and must provide a logical exit for "none selected" cases.  
+
+##  Next Steps
+
+- Client and supervisor will provide an updated logic specification document by this Friday.  
+- The team will revise the decision tree structure and deliver an updated interactive prototype based on feedback.  
+- Supervisor will assist in driving the license agreement signing process.  
