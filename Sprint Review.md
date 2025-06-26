@@ -1,4 +1,4 @@
-## Sprint Review
+## Sprint1 Review
 
 | **Section**             | **Details** |
 |-------------------------|-------------|
@@ -15,7 +15,7 @@
 | **Example Questions Asked** | - What value did we deliver to the client in this Sprint?  <br> - Do the supervisor and client approve of our logic and structure design?  <br> - What aspects require revision and improvement? |
 
 
-## Sprint Achievements
+## Sprint1 Achievements
 
 - Successfully implemented the first version of the optometrist diagnostic decision tree logic.  
 - Completed the initial interactive UI prototype; client gave positive feedback.  
