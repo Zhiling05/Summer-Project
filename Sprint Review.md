@@ -24,8 +24,7 @@
 ## Areas for Improvement
 
 - Logic pathways for some questions remain unclear; trigger conditions and combination rules need clarification.  
-- Inconsistent color coding in the flowchart; recommend using a traffic light system (red/orange/green) with a legend.  
-- Question design should avoid forced multiple-choice selection and must provide a logical exit for "none selected" cases.  
+- Inconsistent color coding in the flowchart; recommend using a traffic light system (red/orange/green) with a legend.   
 
 ##  Next Steps
 
