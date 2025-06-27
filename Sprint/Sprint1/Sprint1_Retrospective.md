@@ -11,7 +11,7 @@
 | **What Is Discussed** | • Goal achievement review<br>• Successes<br>• Pain points & blockers<br>• Next-step improvement ideas<br>• Team sentiment |
 | **Key Question** | How can we accelerate decision-tree clarity while keeping clinical accuracy |
 | **Goal** | Deliver a clinically-validated optometrist flow and clear requirement scope for engineering. |
-| **Artifacts or Tools** | • GitHub<br>• Lark<br>• Xmind<br>• Google Doc<br>• Notion<br>• Miro<br>• sigma |
+| **Artifacts or Tools** | • GitHub<br>• Lark<br>• Xmind<br>• Google Doc<br>• Notion<br>• Miro<br>• Figma |
 | **Example Questions Asked** | • Is any branch still ambiguous?<br>• Which assumptions must the client validate? |
 
 
