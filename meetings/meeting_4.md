@@ -16,14 +16,14 @@
 - Several misleading labels (e.g., “Immediate referral with headache” is only a page jump, not an outcome).  
 
 ### Actions
-1. **Denise & Olivia** will revisit Delphi consensus data and supply a clear **Boolean formula (AND/OR)** defining each symptom trigger.  
+1. **Denize & Olivia** will revisit Delphi consensus data and supply a clear **Boolean formula (AND/OR)** defining each symptom trigger.  
 2. Delete or rewrite **Question 3**.  
 3. Standardize the color palette.  
 4. Redraw a complete Decision Tree so every path has a proper end node.  
 
 ## 3. Prototype Feedback
 ### Core functions
-1. **Landing page**: Role selection – Optometrist / GP / Patient.  
+1. **Landing page**: Role selection – Optometrist / GP / Patient / neurologist / emergency care clinician / ophthalmologist .  
 2. **Onboarding**: 4–5 tutorial screens for first-time users, skippable.  
 3. **Assessment flow**: Supports single-/multi-choice, back/next navigation, and state preservation.  
 4. **Records**: Show de-identified, minimal case logs (timestamp, recommendation, etc.).  
@@ -37,5 +37,5 @@
 ## 4. Meeting Outputs
 1. Licence workflow and signatories confirmed.  
 2. Revised decision-tree logic to be delivered.  
-3. UI prototype improvement checklist agreed.  
+3. UI prototype has been determined. 
 4. Next deliverables and owners defined.  
