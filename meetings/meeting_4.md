@@ -31,7 +31,7 @@
 
 ### Enhancement suggestions
 - Adopt a **NHS-app style** minimalist UI; add UoB & DIP Study logos on the first screen.  
-- **Result page**: Offer an **editable PDF** download that auto-fills selected red-flag symptoms and leaves blank fields for patient identifiers; align with the GOS-18 referral template.  
+- **Result page**: Offer an **editable PDF** download that auto-fills selected red-flag symptoms and leaves blank fields for patient identifiers; align with the referral template.  
 - Support **session resume** when the assessment is interrupted.  
 
 ## 4. Meeting Outputs
