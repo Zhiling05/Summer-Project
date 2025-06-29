@@ -23,7 +23,7 @@
 
 ## 3. Prototype Feedback
 ### Core functions
-1. **Landing page**: Role selection – Optometrist / GP / Patient / neurologist / emergency care clinician / ophthalmologist .  
+1. **Landing page**: Role selection – Ophthalmologist / GP / Patient / Neurologist / Emergency care clinician .  
 2. **Onboarding**: 4–5 tutorial screens for first-time users, skippable.  
 3. **Assessment flow**: Supports single-/multi-choice, back/next navigation, and state preservation.  
 4. **Records**: Show de-identified, minimal case logs (timestamp, recommendation, etc.).  
