@@ -10,12 +10,12 @@ import NoReferral from './NoReferral';
 function RecommendationsRouter() {
   return (
     <Routes>
-      <Route path="emergencyDepartment" element={<EmergencyDepartment />} />
+      <Route path="emergency-department" element={<EmergencyDepartment />} />
       <Route path="immediate" element={<Immediate />} />
-      <Route path="urgentToOph" element={<UrgentToOph />} />
-      <Route path="urgentToGpOrNeur" element={<UrgentToGpOrNeur />} />
-      <Route path="toGp" element={<ToGp />} />
-      <Route path="noReferral" element={<NoReferral />} />
+      <Route path="urgent-to-oph" element={<UrgentToOph />} />
+      <Route path="urgent-to-gp-or-neur" element={<UrgentToGpOrNeur />} />
+      <Route path="to-gp" element={<ToGp />} />
+      <Route path="no-referral" element={<NoReferral />} />
     </Routes>
   );
 }
