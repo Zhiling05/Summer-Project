@@ -3,10 +3,10 @@ export interface AssessmentRecommendations {
   
   // 类别标识，即有这几种label，但UI需前端补充
   recommendationType?: 
-      'emergency_department' 
+      'emergency-department' 
     | 'immediate' 
-    | 'urgent_to_oph' 
-    | 'urgent_to_gp_or_neur' 
-    | 'gp'
-    | 'no_referral' ;
+    | 'urgent-to-oph' 
+    | 'urgent-to-gp-or-neur' 
+    | 'to-gp'
+    | 'no-referral' ;
 }

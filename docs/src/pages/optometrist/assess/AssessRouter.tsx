@@ -9,7 +9,7 @@ function Assess() {
   return (
     <Routes>
       {/* 点击Assess后出现的开始页面 */}
-      <Route path="startPage" element={<StartPage />} />
+      <Route path="start-page" element={<StartPage />} />
       <Route path="questions/*" element={<QuestionsRouter />} />
 
       {/* 6种可能出现的转诊页面，如果前端后续认为只需一个页面，其根据逻辑进行渲染，而不需要提前
