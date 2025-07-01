@@ -1,4 +1,4 @@
-function RecommendImmediate() {
+function Immediate() {
   return (
     <div>
       <h2>Immediate referral Eye Emergency on call  </h2>
@@ -6,4 +6,4 @@ function RecommendImmediate() {
   );
 }
 
-export default RecommendImmediate;
+export default Immediate;

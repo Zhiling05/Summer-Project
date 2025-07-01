@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 
+// 进入软件的logo页面
+import LogoPage from './pages/LogoPage';
+
 // 角色选择页面
 import UserSelectionPage from './pages/UserSelectionPage';
 
@@ -12,7 +15,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<UserSelectionPage />} />
+        <Route path="/" element={<LogoPage />} />
+        <Route path="/select-role" element={<UserSelectionPage />} />
 
         <Route path="/optometrist/*" element={<OptometristApp />} />
         <Route path="/patient/*" element={<PatientApp />} />

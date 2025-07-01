@@ -1,4 +1,4 @@
-function RecommendEmergencyDepartment() {
+function EmergencyDepartment() {
   return (
     <div>
       <h2>Send patient to Emergency Department immediately </h2>
@@ -6,4 +6,4 @@ function RecommendEmergencyDepartment() {
   );
 }
 
-export default RecommendEmergencyDepartment;
+export default EmergencyDepartment;
