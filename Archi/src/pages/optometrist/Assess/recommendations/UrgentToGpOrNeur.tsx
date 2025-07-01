@@ -1,4 +1,4 @@
-function RecommendUrgentToGpOrNeur() {
+function UrgentToGpOrNeur() {
     return (
     <div>
       <h2>Urgent referral to GP or direct to Neurology if possible</h2>
@@ -6,4 +6,4 @@ function RecommendUrgentToGpOrNeur() {
   );
 }
 
-export default RecommendUrgentToGpOrNeur;
+export default UrgentToGpOrNeur;

@@ -1,4 +1,4 @@
-function RecommendToGp() {
+function ToGp() {
   return (
     <div>
       <h2>Refer to the general practioner for headache management</h2>
@@ -6,4 +6,4 @@ function RecommendToGp() {
   );
 }
 
-export default RecommendToGp;
+export default ToGp;

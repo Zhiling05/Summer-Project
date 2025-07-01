@@ -1,4 +1,4 @@
-function RecommendUrgentToOph() {
+function UrgentToOph() {
     return (
     <div>
       <h2>Urgent referral to Ophthalmology</h2>
@@ -6,4 +6,4 @@ function RecommendUrgentToOph() {
   );
 }
 
-export default RecommendUrgentToOph;
+export default UrgentToOph;

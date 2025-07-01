@@ -1,4 +1,4 @@
-function RecommendNoReferral() {
+function NoReferral() {
   return (
     <div>
       <h2>No referral required</h2>
@@ -6,4 +6,4 @@ function RecommendNoReferral() {
   );
 }
 
-export default RecommendNoReferral;
+export default NoReferral;
