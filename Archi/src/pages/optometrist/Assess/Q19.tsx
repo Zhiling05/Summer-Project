@@ -1,5 +1,3 @@
-// Q19.tsx
-import React from 'react';
 
 function Q19() {
   return (

@@ -1,6 +1,7 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
 
+import { Routes, Route } from 'react-router-dom';
+import RecommendationsRouter from './RecommendationsRouter';
+import StartPage from './StartPage';
 import Q1 from './Q1';
 import Q2 from './Q2';
 import Q3 from './Q3';
@@ -24,6 +25,9 @@ import Q19 from './Q19';
 function Assess() {
   return (
     <Routes>
+      {/* 点击Assess后出现的开始页面 */}
+      <Route path='startPage' element={<StartPage />} />
+      {/* 点击Start后的问题页面 */}
       <Route path="q1" element={<Q1 />} />
       <Route path="q2" element={<Q2 />} />
       <Route path="q3" element={<Q3 />} />
@@ -43,6 +47,9 @@ function Assess() {
       <Route path="q17" element={<Q17 />} />
       <Route path="q18" element={<Q18 />} />
       <Route path="q19" element={<Q19 />} />
+      {/* 6种可能出现的转诊页面，如果前端后续认为只需一个页面，根据逻辑进行渲染，而不需要提前
+      设计好6个页面，可以换成仅一个路径 */}
+      <Route path="recommendations/*" element={<RecommendationsRouter />} />
     </Routes>
   );
 }

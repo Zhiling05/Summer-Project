@@ -1,5 +1,3 @@
-// Q15.tsx
-import React from 'react';
 
 function Q15() {
   return (
