@@ -1,21 +1,15 @@
-import { useState, useMemo } from "react";
+// docs/src/pages/optometrist/assess/questions/Q2.tsx
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
-import flow from "../../../../data/questionnaire.json";
-
-type FlowEntry =
-  | { id: string; next: string }
-  | { id: string; next: Record<string, string> };
-
-const Q2 = () => {
+export default function Q2() {
   const navigate = useNavigate();
   const [answer, setAnswer] = useState("");
 
-  /* ---------- Q2 文案 ---------- */
   const question =
     "Has the patient experienced any of the following red-flag symptoms?";
   const opts = [
@@ -29,43 +23,28 @@ const Q2 = () => {
     "None of the above",
   ];
 
-  /* ---------- 从跳转表取 Q2 记录 ---------- */
-  const flowEntry = useMemo(
-    () => (flow as FlowEntry[]).find((f) => f.id === "Q2"),
-    []
-  );
-
   const handleNext = () => {
-    if (!flowEntry) return;
+    if (!answer) return;
 
-    let nextId: string | undefined;
-
-    if (typeof flowEntry.next === "string") {
-      nextId = flowEntry.next;
+    if (answer !== "None of the above") {
+      // 红旗症状 → 立即转诊
+      navigate("../../recommendations/emergency-department");
     } else {
-      nextId = flowEntry.next[answer];
+      // “None of the above” → 下一题 Q3
+      navigate("../Q3");
     }
-    if (!nextId) return;
-
-    const path = nextId.startsWith("Q")
-      ? `/optometrist/assess/questions/${nextId}`
-      : `/optometrist/assess/${nextId}`;
-
-    navigate(path);
   };
 
   return (
     <>
-      {/* 顶部栏 */}
       <header className="nhs-header">
         <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
           <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">DIPP</span>
+          <span className="nhs-header__service">DIPP Assessment</span>
         </div>
       </header>
 
-      {/* 主体 */}
       <div className="nhsuk-width-container">
         <main id="maincontent">
           <button className="back-button" onClick={() => navigate(-1)}>
@@ -74,20 +53,19 @@ const Q2 = () => {
 
           <section className="question-box">
             <h1 className="nhsuk-heading-l">{question}</h1>
-            <p className="hint">Select any that apply</p>
-
+            <p className="hint">Select one option</p>
             <ul className="radio-list">
-              {opts.map((o) => (
-                <li key={o}>
+              {opts.map((opt) => (
+                <li key={opt}>
                   <label className="radio-label">
                     <input
                       type="radio"
                       name="q2"
-                      value={o}
-                      checked={answer === o}
-                      onChange={() => setAnswer(o)}
+                      value={opt}
+                      checked={answer === opt}
+                      onChange={() => setAnswer(opt)}
                     />
-                    {o}
+                    {opt}
                   </label>
                 </li>
               ))}
@@ -104,7 +82,6 @@ const Q2 = () => {
         </main>
       </div>
 
-      {/* ---------- 页脚 ---------- */}
       <footer className="nhs-footer">
         <div className="footer-inner">
           <p>
@@ -114,16 +91,7 @@ const Q2 = () => {
               (opens in a new tab)
             </a>.
           </p>
-          <p>
-            This website only stores the cookies that are needed to make it
-            work.&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              Read more about how we use cookies
-            </a>{" "}
-            (opens in a new tab).
-          </p>
           <hr />
-          <p>The following links open in a new tab:</p>
           <ul className="footer-links">
             <li>
               <a href="#/" target="_blank" rel="noopener noreferrer">
@@ -145,7 +113,4 @@ const Q2 = () => {
       </footer>
     </>
   );
-};
-
-
-export default Q2;
+}
