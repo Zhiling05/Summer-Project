@@ -41,8 +41,8 @@ src
       |__ patient
       |__ optometrist
            |__ OptometristApp.tsx (Manages all routes under optometrist version)
-           |__ Guide.tsx (Can be ignored for now, considering guide may contain multiple jump pages, will be moved to guide folder after functionality is confirmed)
-           |__ Records.tsx (Records page may only need one page, can consider developing directly on this basis)
+           |__ Guide.tsx
+           |__ Records.tsx (Records page may only need one page, can develop directly on this basis)
            |__ assess
                  |__ AssessRouter.tsx (Main routing for assessment, manages all routes under assess)
                  |__ StartPage.tsx 
@@ -54,20 +54,16 @@ src
                  |__ recommendations
                        |__ RecommendationsRouter.tsx (Manages all result routes)
                        |__ ...(6 types of result route .tsx files)
+           |__ tutorial
+                 |__ TutorialRouter.tsx (Manages all tutorial routes. If the page development for each character going forward uses the same layout, and the tutorials are also the same, I will move it to global use pages.)
+                 |__ Tutorial1.tsx
+                 |__ Tutorial2.tsx
+                 |__ Totorial3.tsx (Currently configured three pages per prototype, will add/remove as needed)
+      |__ navigation (Navigation bar pages (Settings, About Us, Contact Us) are grouped in one folder for single import via index.ts instead of individual imports. See /index.ts.)
+           |__ SettingsPage.tsx 
+           |__ AboutUsPage.tsx
+           |__ ContactUsPage.tsx (Note: Routes for these three files are in App.tsx as they're global (no character distinction))
+           |__ index.ts (Click to see details)
 ```
 
 
-
-### Future Development
-
-1. You can add page components in the corresponding `.tsx` files for each page, and create corresponding CSS files, or develop style systems, such as:
-
-   ```
-   src/styles/
-      |__ globals.css         # Global styles
-      |__ variables.css       # Variables
-      |__ themes.css          # Themes
-      ...
-   ```
-
-2. Optionally develop shared components
