@@ -1,28 +1,27 @@
-// docs/src/App.tsx
+// src/App.tsx
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LogoPage from './pages/LogoPage';
+import WelcomePage from './pages/WelcomePage';
 import UserSelectionPage from './pages/UserSelectionPage';
+import * as Navigation from './pages/navigation';
 import OptometristApp from './pages/optometrist/OptometristApp';
 import PatientApp from './pages/patient/PatientApp';
 import GPApp from './pages/gp/GPApp';
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 根路径 / 就是我们刚写的 LogoPage */}
-        <Route path="/" element={<LogoPage />} />
-
-        {/* 角色选择页，如需保留 */}
+        <Route path="/"            element={<WelcomePage />} />
         <Route path="/select-role" element={<UserSelectionPage />} />
+        <Route path="/settings"    element={<Navigation.SettingsPage />} />
+        <Route path="/about"       element={<Navigation.AboutPage />} />
+        <Route path="/contact"     element={<Navigation.ContactPage />} />
 
-        {/* 各角色嵌套路由 */}
         <Route path="/optometrist/*" element={<OptometristApp />} />
-        <Route path="/patient/*" element={<PatientApp />} />
-        <Route path="/gp/*"       element={<GPApp />} />
+        <Route path="/patient/*"      element={<PatientApp />} />
+        <Route path="/gp/*"           element={<GPApp />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;
