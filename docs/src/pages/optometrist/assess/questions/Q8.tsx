@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-
-function Q8() {
-  return (
-    <div>
-      <h2>Question 8</h2>
-      {/* 放置题干和选项占位 */}
-    </div>
-  );
-}
-=======
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
@@ -141,6 +130,5 @@ const Q8 = () => {
     </>
   );
 };
->>>>>>> remotes/origin/Junjie_develop
 
 export default Q8;

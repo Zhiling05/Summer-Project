@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-function LogoPage() {
-  return <h1>Logo Page</h1>;
-}
-
-export default LogoPage;
-=======
 import { useNavigate } from 'react-router-dom';
 import '../styles/question.css';        // 引入 NHS 头尾、按钮 等样式
 import NHSLogo from '../assets/NHS_LOGO.jpg';
@@ -69,4 +62,3 @@ export default function LogoPage() {
     </>
   );
 }
->>>>>>> remotes/origin/Junjie_develop

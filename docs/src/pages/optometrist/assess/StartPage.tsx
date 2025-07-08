@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-
-function StartPage() {
-  return (
-    <div>
-      <h2>Start Page</h2>
-    </div>
-  );
-}
-
-export default StartPage;
-=======
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/question.css';
 import NHSLogo from '../../../assets/NHS_LOGO.jpg';
@@ -79,4 +67,3 @@ export default function StartPage() {
     </>
   );
 }
->>>>>>> remotes/origin/Junjie_develop

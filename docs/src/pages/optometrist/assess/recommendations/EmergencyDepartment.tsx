@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-function EmergencyDepartment() {
-  return (
-    <div>
-      <h2>Send patient to Emergency Department immediately </h2>
-    </div>
-  );
-}
-
-export default EmergencyDepartment;
-=======
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
@@ -97,4 +86,3 @@ export default function EmergencyDepartment() {
     </>
   );
 }
->>>>>>> remotes/origin/Junjie_develop

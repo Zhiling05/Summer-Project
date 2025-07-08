@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-
-function Q12() {
-  return (
-    <div>
-      <h2>Question 12</h2>
-      {/* 放置题干和选项占位 */}
-    </div>
-  );
-}
-=======
 // docs/src/pages/optometrist/assess/questions/Q12.tsx
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -147,6 +136,5 @@ const Q12 = () => {
     </>
   );
 };
->>>>>>> remotes/origin/Junjie_develop
 
 export default Q12;

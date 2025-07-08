@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-
-function Q2() {
-  return (
-    <div>
-      <h2>Question 2</h2>
-      {/* 放置题干和选项占位 */}
-    </div>
-  );
-}
-
-export default Q2;
-=======
 // docs/src/pages/optometrist/assess/questions/Q2.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -127,4 +114,3 @@ export default function Q2() {
     </>
   );
 }
->>>>>>> remotes/origin/Junjie_develop

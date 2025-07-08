@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-
-function Q9() {
-  return (
-    <div>
-      <h2>Question 9</h2>
-      {/* 放置题干和选项占位 */}
-    </div>
-  );
-}
-=======
 // docs/src/pages/optometrist/assess/questions/Q9.tsx
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -147,6 +136,5 @@ const Q9 = () => {
     </>
   );
 };
->>>>>>> remotes/origin/Junjie_develop
 
 export default Q9;
