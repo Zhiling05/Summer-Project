@@ -7,8 +7,7 @@ function OptometristApp() {
   return (
     <Routes>
       <Route path="guide" element={<Guide />} />
-      {/* 现在只写了assess的页面路径，其他的后面会慢慢补充 */}
-      <Route path="assess/*" element={<AssessRouter />} /> 
+      <Route path="assess/*" element={<AssessRouter />} />
       <Route path="records" element={<Records />} />
     </Routes>
   );
