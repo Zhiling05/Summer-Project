@@ -35,15 +35,15 @@ export default function EmergencyDepartment() {
                 paddingBottom: "0.5rem",
               }}
             >
-              Immediate referral
+              Immediate Referral
             </h1>
             <p>
-              Send patient to <strong>Emergency Department</strong> immediately for further evaluation and management, including but not limited to:
+              Send patient to <strong>Emergency Department</strong> Context XXXXX
             </p>
             <ul className="nhsuk-list nhsuk-list--bullet">
-              <li>Continuous monitoring of vital signs</li>
-              <li>Immediate neuroimaging (CT/MRI) as indicated</li>
-              <li>Activate urgent neurology or ophthalmology consultation</li>
+              <li>Context XXXXX</li>
+              <li>Context XXXXX</li>
+              <li>Context XXXXX</li>
             </ul>
             <button
               className="continue-button"
