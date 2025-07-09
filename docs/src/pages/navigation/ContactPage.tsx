@@ -1,4 +1,4 @@
 // src/pages/navigation/SettingsPage.tsx
-export default function SettingsPage() {
+export default function ContactPage() {
   return <h1>SettingsPage</h1>;
 }

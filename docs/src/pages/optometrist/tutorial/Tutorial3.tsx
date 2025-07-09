@@ -1,10 +1,2 @@
-
-function Tutorial3() {
-  return (
-    <div>
-      <h2>Tutorial page 3</h2>
-    </div>
-  );
-}
-
-export default Tutorial3;
+// src/pages/optometrist/tutorial/Tutorial3.tsx
+export default function Tutorial3() { return <h1>Tutorial3</h1>; }

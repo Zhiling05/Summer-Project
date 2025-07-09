@@ -1,11 +1,11 @@
-// docs/src/pages/gp/GPApp.tsx
+// docs/src/pages/optometrist/OptometristHome.tsx
 import { useNavigate } from 'react-router-dom';
 import '../../styles/question.css';
 import NHSLogo from '../../assets/NHS_LOGO.jpg';
 import DIPPLogo from '../../assets/DIPP_Study_logo.png';
 import BackButton from '../../components/BackButton';
 
-export default function GPApp() {
+export default function OptometristHome() {
   const navigate = useNavigate();
   return (
     <div
@@ -16,7 +16,7 @@ export default function GPApp() {
         position: 'relative',
       }}
     >
-      {/* 顶部横幅 */}
+      {/* Header */}
       <header className="nhs-header">
         <div
           className="nhs-header__inner"
@@ -24,14 +24,14 @@ export default function GPApp() {
         >
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
           <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">GPApp</span>
+          <span className="nhs-header__service">OptometristApp</span>
         </div>
       </header>
 
-      {/* 回退按钮，固定在 header 下方，不会遮挡 logo */}
+      {/* Back */}
       <BackButton />
 
-      {/* 主体内容区 */}
+      {/* Body */}
       <div
         style={{
           flex: 1,
@@ -41,10 +41,16 @@ export default function GPApp() {
         }}
       >
         <div className="nhsuk-width-container">
-          <h1 className="nhsuk-heading-l">GPApp</h1>
+          <h1 className="nhsuk-heading-l">OptometristHome</h1>
           <p>context line 1</p>
           <p>context line 2</p>
           <p>context line 3</p>
+          <button
+            className="continue-button"
+            onClick={() => navigate('assess/start-page')}
+          >
+            Access
+          </button>
         </div>
       </div>
     </div>
