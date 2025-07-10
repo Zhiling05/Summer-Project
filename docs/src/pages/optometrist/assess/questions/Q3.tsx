@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
-
+import BottomNav from "../../../../components/BottomNav";
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
@@ -15,7 +15,6 @@ const Q3 = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<string[]>([]);
 
-  /* ---------- Q3 文案 ---------- */
   const question =
     "In relation to this patient's headache symptoms, please identify whether any of the following red-flag symptoms are present";
   const opts = [
@@ -29,35 +28,27 @@ const Q3 = () => {
     "H. None of the above",
   ];
 
-  /* ---------- 跳转表 ---------- */
   const flowEntry = useMemo(
     () => (flow as FlowEntry[]).find((f) => f.id === "Q3"),
     []
   );
 
-  /* ---------- 勾选逻辑 ---------- */
   const toggle = (label: string) => {
     setAnswers((prev) =>
       prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
     );
   };
 
-  /* ---------- 跳转 ---------- */
   const handleNext = () => {
     if (!flowEntry) return;
 
-    let nextId: string | undefined;
-
-    if (typeof flowEntry.next === "string") {
-      nextId = flowEntry.next; // 本例 = "Q4"
-    } else {
-      /* 如果以后需要根据答案分流，可在此解析 answers */
-      // 例如：nextId = flowEntry.next["default"];
-      nextId = Object.values(flowEntry.next)[0];
-    }
+    // Q3 only has a single string next
+    const nextId =
+      typeof flowEntry.next === "string"
+        ? flowEntry.next
+        : flowEntry.next["default"];
 
     if (!nextId) return;
-
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
       : `/optometrist/assess/${nextId}`;
@@ -67,7 +58,6 @@ const Q3 = () => {
 
   return (
     <>
-      {/* 顶部栏 */}
       <header className="nhs-header">
         <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
@@ -76,9 +66,8 @@ const Q3 = () => {
         </div>
       </header>
 
-      {/* 主体 */}
       <div className="nhsuk-width-container">
-        <main id="maincontent">
+        <main id="maincontent" className="nhsuk-main-wrapper">
           <button className="back-button" onClick={() => navigate(-1)}>
             ← Go back
           </button>
@@ -86,7 +75,6 @@ const Q3 = () => {
           <section className="question-box">
             <h1 className="nhsuk-heading-l">{question}</h1>
             <p className="hint">(Choose any that apply)</p>
-
             <ul className="radio-list">
               {opts.map((o) => (
                 <li key={o}>
@@ -103,7 +91,6 @@ const Q3 = () => {
                 </li>
               ))}
             </ul>
-
             <button
               className="continue-button"
               disabled={answers.length === 0}
@@ -115,7 +102,6 @@ const Q3 = () => {
         </main>
       </div>
 
-      {/* ---------- 页脚 ---------- */}
       <footer className="nhs-footer">
         <div className="footer-inner">
           <p>
@@ -125,16 +111,7 @@ const Q3 = () => {
               (opens in a new tab)
             </a>.
           </p>
-          <p>
-            This website only stores the cookies that are needed to make it
-            work.&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              Read more about how we use cookies
-            </a>{" "}
-            (opens in a new tab).
-          </p>
           <hr />
-          <p>The following links open in a new tab:</p>
           <ul className="footer-links">
             <li>
               <a href="#/" target="_blank" rel="noopener noreferrer">
@@ -144,11 +121,6 @@ const Q3 = () => {
             <li>
               <a href="#/" target="_blank" rel="noopener noreferrer">
                 Terms and conditions
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Accessibility statement
               </a>
             </li>
           </ul>

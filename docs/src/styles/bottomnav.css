@@ -1,0 +1,43 @@
+/* 底部导航栏容器 */
+.bottom-nav {
+  background: #fff; /* 白色背景 */
+  border-top: 4px solid var(--core-blue); /* 改为 NHS 蓝色粗线 */
+  display: flex;
+  justify-content: space-around; /* 平均分布四个按钮 */
+  align-items: center;
+  height: 64px; /* 固定高度 */
+  position: fixed; /* 固定在页面底部 */
+  left: 0;          /* 关键：把静态位置锁到视口左边 */
+  right: 0;         /* 可选，保证右侧也贴边 */
+  bottom: 0;
+  width: 100%;
+  z-index: 998; /* 略低于顶部栏，避免盖住顶部 NHS 区 */
+}
+
+/* 每个按钮（图标 + 文本） */
+.bottom-nav button {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--core-blue); /* NHS 主蓝色 */
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* 鼠标悬停时的颜色变化 */
+.bottom-nav button:hover {
+  color: var(--light-blue);
+}
+
+/* 图标样式 */
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 4px;
+  filter: brightness(0) saturate(100%); /* 变为纯黑色 */
+  object-fit: contain; /* 防止拉伸 */
+}

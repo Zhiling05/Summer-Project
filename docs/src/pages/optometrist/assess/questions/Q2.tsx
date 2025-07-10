@@ -1,23 +1,30 @@
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
-
+import BottomNav from "../../../../components/BottomNav";
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
 import flow from "../../../../data/questionnaire.json";
 
+type Rule = {
+  if: {
+    notIncludes?: string;
+    includesOnly?: string;
+  };
+  next: string;
+};
+
 type FlowEntry =
-  | { id: string; next: string }
-  | { id: string; next: Record<string, string> };
+  | { id: string; next: string; rules?: never }
+  | { id: string; next: Record<string, string>; rules?: Rule[] };
 
 const Q2 = () => {
   const navigate = useNavigate();
   const [answer, setAnswer] = useState("");
 
-  /* ---------- Q2 文案 ---------- */
   const question =
-    "Has the patient experienced any of the following red-flag symptoms?";
+    "Has the patient experienced any of the following red flag symptoms?";
   const opts = [
     "Impaired level or decreased consciousness",
     "Seizures",
@@ -29,7 +36,6 @@ const Q2 = () => {
     "None of the above",
   ];
 
-  /* ---------- 从跳转表取 Q2 记录 ---------- */
   const flowEntry = useMemo(
     () => (flow as FlowEntry[]).find((f) => f.id === "Q2"),
     []
@@ -37,16 +43,35 @@ const Q2 = () => {
 
   const handleNext = () => {
     if (!flowEntry) return;
-
     let nextId: string | undefined;
 
-    if (typeof flowEntry.next === "string") {
-      nextId = flowEntry.next;
-    } else {
-      nextId = flowEntry.next[answer];
+    // 1️⃣ 优先按 rules 判断
+    if ("rules" in flowEntry && Array.isArray(flowEntry.rules)) {
+      for (const rule of flowEntry.rules) {
+        const cond = rule.if;
+        // any answer ≠ cond.notIncludes 就匹配第一条
+        if (cond.notIncludes != null && answer !== cond.notIncludes) {
+          nextId = rule.next;
+          break;
+        }
+        // answer === cond.includesOnly
+        if (cond.includesOnly != null && answer === cond.includesOnly) {
+          nextId = rule.next;
+          break;
+        }
+      }
     }
-    if (!nextId) return;
 
+    // 2️⃣ 如果 rules 都没匹配，再 fallback 到 next.default 或直接 next
+    if (!nextId) {
+      if (typeof flowEntry.next === "string") {
+        nextId = flowEntry.next;
+      } else {
+        nextId = flowEntry.next["default"];
+      }
+    }
+
+    if (!nextId) return;
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
       : `/optometrist/assess/${nextId}`;
@@ -56,7 +81,6 @@ const Q2 = () => {
 
   return (
     <>
-      {/* 顶部栏 */}
       <header className="nhs-header">
         <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
@@ -65,16 +89,15 @@ const Q2 = () => {
         </div>
       </header>
 
-      {/* 主体 */}
       <div className="nhsuk-width-container">
-        <main id="maincontent">
+        <main id="maincontent" className="nhsuk-main-wrapper">
           <button className="back-button" onClick={() => navigate(-1)}>
             ← Go back
           </button>
 
           <section className="question-box">
             <h1 className="nhsuk-heading-l">{question}</h1>
-            <p className="hint">Select any that apply</p>
+            <p className="hint">(Select any that apply)</p>
 
             <ul className="radio-list">
               {opts.map((o) => (
@@ -104,48 +127,10 @@ const Q2 = () => {
         </main>
       </div>
 
-      {/* ---------- 页脚 ---------- */}
-      <footer className="nhs-footer">
-        <div className="footer-inner">
-          <p>
-            Other ways to contact DIPP if you have a hearing problem or need help
-            in other languages&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              (opens in a new tab)
-            </a>.
-          </p>
-          <p>
-            This website only stores the cookies that are needed to make it
-            work.&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              Read more about how we use cookies
-            </a>{" "}
-            (opens in a new tab).
-          </p>
-          <hr />
-          <p>The following links open in a new tab:</p>
-          <ul className="footer-links">
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Privacy statement
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Terms and conditions
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Accessibility statement
-              </a>
-            </li>
-          </ul>
-        </div>
-      </footer>
+      {/* 使用自定义底部导航栏 */}
+      <BottomNav />
     </>
   );
 };
-
 
 export default Q2;

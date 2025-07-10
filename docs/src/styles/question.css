@@ -1,125 +1,237 @@
-/* ========== NHS 颜色方案 ========== */
+/* ===========================================================
+   NHS Questionnaire Theme – v5.0
+   Designed by “专业前端设计师” (ChatGPT) · 2025-07-09
+   =========================================================== */
+
+/* ——— 色板 & 全局变量 ——— */
 :root {
-  --core-blue:   #005eb8;
-  --light-blue:  #41b6e6;
-  --core-green:  #007f3b;
-  --dark-green:  #005a30;
+  --core-blue:        #005eb8;
+  --light-blue:       #41b6e6;
+  --core-green:       #007f3b;
+  --dark-green:       #005a30;
+  --warm-yellow:      #fae100;
 
-  /* 黄色提示条用色：NHS Warm Yellow */
-  --warm-yellow: #FAE100;   /* 若想改用 #FAE100，只需替换此行 #FFB81C*/
+  --page-grey:        #e5ecef;
+  --border-grey:      #aeb7bd;
+  --text-body:        #0b0c0c;
+  --text-inverse:     #ffffff;
 
-  --page-grey:   #e5ecef;
-  --border-grey: #aeb7bd;
+  --radius-s:         4px;
+  --radius-m:         6px;
+  --shadow-card:      0 2px 6px rgba(0,0,0,.06);
+
+  --container-max:    960px;
+  --space-xs:         4px;
+  --space-s:          8px;
+  --space-m:          16px;
+  --space-l:          24px;
+  --space-xl:         32px;
 }
 
-/* ========== 全局 ========== */
+/* —— 杜绝夜间爆闪：暗色模式自定义变量 —— */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-grey:        #0d1215;
+    --border-grey:      #273036;
+    --text-body:        #e9ecef;
+    --text-inverse:     #0d1215;
+    --shadow-card:      0 2px 6px rgba(0,0,0,.35);
+  }
+}
+
+/* ——— 重置与基线 ——— */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { font-size: 18px; }
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+               Arial, sans-serif;
   background: var(--page-grey);
-  color: #0b0c0c;
+  color: var(--text-body);
   -webkit-font-smoothing: antialiased;
+
+  /* Flex 纵向布局：中段自撑 & 页脚贴底 */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* ========== 顶部栏 ========== */
+/* ——— 工具类 ——— */
+.u-sr-only {               /* 屏幕阅读器专用文本 */
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===========================================================
+   1. 顶栏 / 页脚：全宽拉伸 + 栅格内部居中
+   =========================================================== */
+
+/* —— 拉伸技巧：脱离父容器限制 —— */
+.nhs-header,
+.nhs-footer {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+}
+
+/* —— 顶栏 —— */
 .nhs-header {
   background: var(--core-blue);
 }
 .nhs-header__inner {
-  max-width: 960px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 12px 24px;
+  padding: var(--space-m) var(--space-l);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-m);
 }
 .logo { height: 42px; }
 .nhs-header__service {
-  color: #fff;
+  margin-left: auto;
+  color: var(--text-inverse);
   font-size: 1.125rem;
   font-weight: 600;
-  margin-left: auto;
 }
 
-/* ========== 版心容器 ========== */
-.nhsuk-width-container {
-  max-width: 960px;
+/* —— 页脚 —— */
+.nhs-footer {
+  background: #dfe5e7;
+  border-top: 4px solid var(--core-blue);
+  margin-top: auto; /* 推到底部 */
+  padding: var(--space-xl) 0;
+}
+.footer-inner {
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--space-l);
+  font-size: .9rem;
+  line-height: 1.55;
+}
+.footer-inner a { color: var(--core-blue); }
+.footer-links {
+  margin: var(--space-s) 0 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+.footer-links li { margin: 4px 0; }
+
+/* ===========================================================
+   2. 主内容区
+   =========================================================== */
+#maincontent {
+  flex: 1;                              /* 填充剩余高度 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;              /* question-box 垂直居中 */
+  /*  顶部留 var(--space-xl)，底部给导航让路  */
+  padding: var(--space-xl) 0 calc(64px + 128px);
 }
 
-/* ========== 返回按钮 ========== */
+/* —— 内容栅格 —— */
+.nhsuk-width-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-l);
+}
+
+.nhsuk-main-wrapper{
+/* 让里面的元素（尤其是返回按钮）靠左，不被拉伸 */
+display:flex;
+flex-direction:column;
+align-items:flex-start;   /* 关键：子项横向不再 stretch，而是按自身宽度 */
+/* 给固定的底部导航保留空间（64px 导航高 + 16px 缓冲）*/
+padding-bottom: calc(64px + 16px);
+}
+
+/* —— 返回按钮 —— */
 .back-button {
-  background: #fff;
+  background: var(--text-inverse);
   border: 2px solid var(--core-blue);
   color: var(--core-blue);
-  font-size: 0.95rem;
+  font-size: .95rem;
   padding: 6px 14px;
-  margin: 24px 0 16px;
-  border-radius: 4px;
+  margin: var(--space-l) 0 var(--space-m);
+  border-radius: var(--radius-s);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all .15s;
+  width:auto;           /* 禁止百分百拉伸，保持内容宽度 */
+  display:inline-flex;  /* 和原先行为一致 */
 }
 .back-button:hover,
-.back-button:focus {
+.back-button:focus-visible {
   background: var(--core-blue);
-  color: #fff;
+  color: var(--text-inverse);
+  outline: none;
 }
 
-/* ========== 问题块 ========== */
+/* —— 问题卡片 —— */
 .question-box {
-  background: #fff;
+  background: var(--text-inverse);
   border-left: 4px solid var(--core-blue);
-  padding: 32px 32px 40px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: var(--space-xl) var(--space-xl) calc(var(--space-xl) + 8px);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-m) 0 0 var(--radius-m);
 }
 .nhsuk-heading-l {
   font-size: 1.95rem;
   font-weight: 700;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-m);
 }
 
 /* —— 黄色提示条 —— */
 .hint {
   display: inline-block;
   background: var(--warm-yellow);
-  color: #0b0c0c;
-  font-size: 0.95rem;
+  color: var(--text-body);
+  font-size: .95rem;
   font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 4px;
-  margin: 0 0 24px;
-  transition: all 0.15s;
+  padding: var(--space-xs) var(--space-m);
+  border-radius: var(--radius-s);
+  margin-bottom: var(--space-l);
   cursor: default;
+  transition: filter .15s, box-shadow .15s;
 }
-.hint:hover {
-  filter: brightness(0.95);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
+.hint:hover { filter: brightness(.95); box-shadow: var(--shadow-card); }
 
-/* ------ 单选列表 ------ */
+/* —— 单选 / 多选列表 —— */
 .radio-list {
   list-style: none;
-  margin: 0 0 32px;
+  margin: 0 0 var(--space-xl);
   padding: 0;
 }
+
+/* label 整行即可点击 */
 .radio-label {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--space-m);
   padding: 10px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-s);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background .15s, color .15s;
 }
 .radio-label:hover,
 .radio-label:focus-within {
   background: var(--light-blue);
-  color: #fff;
+  color: var(--text-inverse);
 }
 
-/* 自定义圆形单选框 */
-.radio-label input[type="radio"] {
+/* 自定义圆形控件（radio / checkbox 通用） */
+.radio-label input[type="radio"],
+.radio-label input[type="checkbox"] {
   appearance: none;
   width: 28px;
   height: 28px;
@@ -127,59 +239,83 @@ body {
   border-radius: 50%;
   position: relative;
   flex-shrink: 0;
-  transition: border 0.15s;
+  transition: border .15s;
 }
-.radio-label input[type="radio"]::before {
+.radio-label input[type="radio"]::before,
+.radio-label input[type="checkbox"]::before {
   content: "";
   position: absolute;
   inset: 5px;
   border-radius: 50%;
   background: var(--core-blue);
   transform: scale(0);
-  transition: transform 0.15s ease-in-out;
+  transition: transform .15s ease-in-out;
 }
-.radio-label input[type="radio"]:checked::before {
+.radio-label input[type="radio"]:checked::before,
+.radio-label input[type="checkbox"]:checked::before {
   transform: scale(1);
 }
-.radio-label input[type="radio"]:hover {
+.radio-label input[type="radio"]:hover,
+.radio-label input[type="checkbox"]:hover {
   border-color: var(--light-blue);
 }
+.radio-label input:focus-visible {
+  outline: 3px solid var(--warm-yellow);
+  outline-offset: 2px;
+}
 
-/* ------ 下一步按钮 ------ */
+/* —— 下一步按钮 —— */
 .continue-button {
   background: var(--core-green);
-  color: #fff;
+  color: var(--text-inverse);
   border: none;
   padding: 12px 40px;
   font-size: 1rem;
-  border-radius: 4px;
+  border-radius: var(--radius-s);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background .15s, transform .1s;
 }
-.continue-button:hover:not(:disabled) { background: var(--dark-green); }
+.continue-button:hover:not(:disabled)   { background: var(--dark-green); }
+.continue-button:active:not(:disabled)  { transform: translateY(1px); }
 .continue-button:disabled {
   background: #c5c5c5;
   cursor: not-allowed;
 }
 
-/* ========== 页脚 ========== */
-.nhs-footer {
-  background: #dfe5e7;
-  border-top: 4px solid var(--core-blue);
-  margin-top: 60px;
-  padding: 32px 0;
+/* ===========================================================
+   3. 响应式微调
+   =========================================================== */
+@media (max-width: 640px) {
+  html { font-size: 16px; }
+
+  .nhs-header__inner,
+  .footer-inner,
+  .nhsuk-width-container {
+    padding-left: var(--space-m);
+    padding-right: var(--space-m);
+  }
+
+  .logo { height: 36px; }
+
+  .question-box {
+    padding: var(--space-l);
+  }
+
+  .continue-button {
+    width: auto;
+    padding: 12px 24px;        /* ② 给左右各 24px 余量 */
+    align-self: flex-start;    /* ③ 靠左，不再被 Flex 居中 */
+    margin-top: 16px;          /* ④ 跟选项留点距离，可选 */
+  }
 }
-.footer-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 24px;
-  font-size: 0.9rem;
-  line-height: 1.6;
+
+/* ===========================================================
+   4. 暗色模式覆盖（可选）
+   =========================================================== */
+[data-theme="dark"] {
+  --core-blue:        #3390ff;
+  --light-blue:       #63b6ff;
+  --core-green:       #2ec47e;
+  --dark-green:       #19945d;
+  --warm-yellow:      #ffdf3e;
 }
-.footer-inner a { color: var(--core-blue); }
-.footer-links {
-  list-style: disc;
-  padding-left: 20px;
-  margin: 8px 0 0;
-}
-.footer-links li { margin: 4px 0; }
