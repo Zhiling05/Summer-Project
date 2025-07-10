@@ -2,8 +2,6 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
-
-import BottomNav from "../../../../components/BottomNav";
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
@@ -17,25 +15,25 @@ const Q1 = () => {
   const navigate = useNavigate();
   const [answer, setAnswer] = useState("");
 
-  // 文案 & 选项由 TSX 里定义
+  /* ---------- Q1 文案 ---------- */
   const question = "Does the patient have a headache?";
   const opts = ["Yes", "No"];
 
-  // 读取 JSON 中 Q1 的跳转表
+  /* ---------- 从跳转表取 Q1 记录 ---------- */
   const flowEntry = useMemo(
     () => (flow as FlowEntry[]).find((f) => f.id === "Q1"),
     []
   );
 
+  /* ---------- 跳转 ---------- */
   const handleNext = () => {
     if (!flowEntry) return;
+
     let nextId: string | undefined;
 
-    // 如果 next 是字符串（未作分支），直接用它
     if (typeof flowEntry.next === "string") {
       nextId = flowEntry.next;
     } else {
-      // next 是一个映射表，根据答案读取
       nextId = flowEntry.next[answer];
     }
     if (!nextId) return;
@@ -49,6 +47,7 @@ const Q1 = () => {
 
   return (
     <>
+      {/* 顶部栏 */}
       <header className="nhs-header">
         <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
@@ -57,8 +56,9 @@ const Q1 = () => {
         </div>
       </header>
 
+      {/* 主体 */}
       <div className="nhsuk-width-container">
-        <main id="maincontent" className="nhsuk-main-wrapper">
+        <main id="maincontent">
           <button className="back-button" onClick={() => navigate(-1)}>
             ← Go back
           </button>
@@ -95,10 +95,48 @@ const Q1 = () => {
         </main>
       </div>
 
-      {/* 使用自定义底部导航栏 */}
-      <BottomNav />
+      {/* ---------- 页脚 ---------- */}
+      <footer className="nhs-footer">
+        <div className="footer-inner">
+          <p>
+            Other ways to contact DIPP if you have a hearing problem or need help
+            in other languages&nbsp;
+            <a href="#/" target="_blank" rel="noopener noreferrer">
+              (opens in a new tab)
+            </a>.
+          </p>
+          <p>
+            This website only stores the cookies that are needed to make it
+            work.&nbsp;
+            <a href="#/" target="_blank" rel="noopener noreferrer">
+              Read more about how we use cookies
+            </a>{" "}
+            (opens in a new tab).
+          </p>
+          <hr />
+          <p>The following links open in a new tab:</p>
+          <ul className="footer-links">
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Privacy statement
+              </a>
+            </li>
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Terms and conditions
+              </a>
+            </li>
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Accessibility statement
+              </a>
+            </li>
+          </ul>
+        </div>
+      </footer>
     </>
   );
 };
+
 
 export default Q1;

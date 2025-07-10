@@ -7,25 +7,15 @@ import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
 import flow from "../../../../data/questionnaire.json";
 
-type Rule = {
-  if: {
-    "Q3.includesAny"?: string[];
-    "Q3.includesOnly"?: string[];
-    "Q4.includesTwoOrMore"?: string[];
-    "Q4.includesExactlyOneOf"?: string[];
-    "Q4.includes"?: string[];
-  };
-  next: string;
-};
-
 type FlowEntry =
-  | { id: string; next: string; rules?: never }
-  | { id: string; next: Record<string, string>; rules?: Rule[] };
+  | { id: string; next: string }
+  | { id: string; next: Record<string, string> };
 
 const Q4 = () => {
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<string[]>([]);
 
+  /* ---------- Q4 文案 ---------- */
   const question =
     "Does the patient also present with any of the following symptoms?";
   const opts = [
@@ -36,6 +26,7 @@ const Q4 = () => {
     "E. None of the above",
   ];
 
+  /* ---------- 跳转表 ---------- */
   const flowEntry = useMemo(
     () => (flow as FlowEntry[]).find((f) => f.id === "Q4"),
     []
@@ -48,62 +39,29 @@ const Q4 = () => {
   };
 
   const handleNext = () => {
-    if (!flowEntry || !Array.isArray(flowEntry.rules)) return;
+    if (!flowEntry) return;
 
     let nextId: string | undefined;
 
-    // 遍历 rules
-    for (const rule of flowEntry.rules) {
-      const c = rule.if;
-      // Q3.includesAny
-      if (c["Q3.includesAny"]?.some((opt) => opt && c["Q3.includesAny"]?.includes(opt) && answers.some((a) => a.startsWith(opt.charAt(0))))) {
-        nextId = rule.next; break;
-      }
-      // Q3.includesOnly + Q4.includesTwoOrMore
-      if (
-        c["Q3.includesOnly"] &&
-        answers.length === 0 &&
-        c["Q4.includesTwoOrMore"] &&
-        answers.filter((a) => c["Q4.includesTwoOrMore"]!.some((opt) => a.startsWith(opt))).length >= 2
-      ) {
-        nextId = rule.next; break;
-      }
-      // Q3.includesOnly + includesExactlyOneOf
-      if (
-        c["Q3.includesOnly"] &&
-        answers.length === 0 &&
-        c["Q4.includesExactlyOneOf"] &&
-        answers.filter((a) => c["Q4.includesExactlyOneOf"]!.some((opt) => a.startsWith(opt))).length === 1
-      ) {
-        nextId = rule.next; break;
-      }
-      // Q3.includesOnly + Q4.includes E
-      if (
-        c["Q3.includesOnly"] &&
-        answers.length === 0 &&
-        c["Q4.includes"] &&
-        answers.some((a) => a.startsWith("E"))
-      ) {
-        nextId = rule.next; break;
-      }
-    }
-
-    if (!nextId) {
-      // fallback
-      nextId = typeof flowEntry.next === "string"
-        ? flowEntry.next
-        : flowEntry.next["default"];
+    if (typeof flowEntry.next === "string") {
+      nextId = flowEntry.next; // 预期 = "Q5"
+    } else {
+      /* 如需分流可在此解析 answers */
+      nextId = Object.values(flowEntry.next)[0];
     }
 
     if (!nextId) return;
+
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
       : `/optometrist/assess/${nextId}`;
+
     navigate(path);
   };
 
   return (
     <>
+      {/* 顶部栏 */}
       <header className="nhs-header">
         <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
@@ -112,8 +70,9 @@ const Q4 = () => {
         </div>
       </header>
 
+      {/* 主体 */}
       <div className="nhsuk-width-container">
-        <main id="maincontent" className="nhsuk-main-wrapper">
+        <main id="maincontent">
           <button className="back-button" onClick={() => navigate(-1)}>
             ← Go back
           </button>
@@ -121,6 +80,7 @@ const Q4 = () => {
           <section className="question-box">
             <h1 className="nhsuk-heading-l">{question}</h1>
             <p className="hint">Select all symptoms that the patient has</p>
+
             <ul className="radio-list">
               {opts.map((o) => (
                 <li key={o}>
@@ -137,6 +97,7 @@ const Q4 = () => {
                 </li>
               ))}
             </ul>
+
             <button
               className="continue-button"
               disabled={answers.length === 0}
@@ -148,6 +109,7 @@ const Q4 = () => {
         </main>
       </div>
 
+       {/* ---------- 页脚 ---------- */}
       <footer className="nhs-footer">
         <div className="footer-inner">
           <p>
@@ -157,7 +119,16 @@ const Q4 = () => {
               (opens in a new tab)
             </a>.
           </p>
+          <p>
+            This website only stores the cookies that are needed to make it
+            work.&nbsp;
+            <a href="#/" target="_blank" rel="noopener noreferrer">
+              Read more about how we use cookies
+            </a>{" "}
+            (opens in a new tab).
+          </p>
           <hr />
+          <p>The following links open in a new tab:</p>
           <ul className="footer-links">
             <li>
               <a href="#/" target="_blank" rel="noopener noreferrer">
@@ -169,11 +140,17 @@ const Q4 = () => {
                 Terms and conditions
               </a>
             </li>
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Accessibility statement
+              </a>
+            </li>
           </ul>
         </div>
       </footer>
     </>
   );
 };
+
 
 export default Q4;

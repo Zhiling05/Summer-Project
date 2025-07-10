@@ -15,10 +15,12 @@ const Q5 = () => {
   const navigate = useNavigate();
   const [answer, setAnswer] = useState("");
 
+  /* ---------- 文案 ---------- */
   const question =
-    "Does the patient report new-onset TVO — transient episodes of blurred vision, blackout or grey-out/loss of vision, typically precipitated by changes in posture or Valsalva manoeuvres?";
+    "Does the patient report new-onset TVO — transient episodes of blurred vision, blackout or grey-out/loss of vision, typically precipitated by changes in posture or Valsalva manoeuvres (e.g. standing up, bending forward, coughing, or straining)?";
   const opts = ["Yes", "No"];
 
+  /* ---------- 跳转表 ---------- */
   const flowEntry = useMemo(
     () => (flow as FlowEntry[]).find((f) => f.id === "Q5"),
     []
@@ -26,23 +28,26 @@ const Q5 = () => {
 
   const handleNext = () => {
     if (!flowEntry) return;
-    let nextId: string;
+
+    let nextId: string | undefined;
 
     if (typeof flowEntry.next === "string") {
       nextId = flowEntry.next;
     } else {
       nextId = flowEntry.next[answer];
     }
-
     if (!nextId) return;
-    const path = nextId.startsWith("Q")
-      ? `/optometrist/assess/questions/${nextId}`
-      : `/optometrist/assess/${nextId}`;
-    navigate(path);
+
+    navigate(
+      nextId.startsWith("Q")
+        ? `/optometrist/assess/questions/${nextId}`
+        : `/optometrist/assess/${nextId}`
+    );
   };
 
   return (
     <>
+      {/* 顶部栏 */}
       <header className="nhs-header">
         <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
@@ -51,8 +56,9 @@ const Q5 = () => {
         </div>
       </header>
 
+      {/* 主体 */}
       <div className="nhsuk-width-container">
-        <main id="maincontent" className="nhsuk-main-wrapper">
+        <main id="maincontent">
           <button className="back-button" onClick={() => navigate(-1)}>
             ← Go back
           </button>
@@ -60,6 +66,7 @@ const Q5 = () => {
           <section className="question-box">
             <h1 className="nhsuk-heading-l">{question}</h1>
             <p className="hint">Select one option</p>
+
             <ul className="radio-list">
               {opts.map((o) => (
                 <li key={o}>
@@ -76,6 +83,7 @@ const Q5 = () => {
                 </li>
               ))}
             </ul>
+
             <button
               className="continue-button"
               disabled={!answer}
@@ -87,6 +95,7 @@ const Q5 = () => {
         </main>
       </div>
 
+      {/* ---------- 页脚 ---------- */}
       <footer className="nhs-footer">
         <div className="footer-inner">
           <p>
@@ -96,7 +105,16 @@ const Q5 = () => {
               (opens in a new tab)
             </a>.
           </p>
+          <p>
+            This website only stores the cookies that are needed to make it
+            work.&nbsp;
+            <a href="#/" target="_blank" rel="noopener noreferrer">
+              Read more about how we use cookies
+            </a>{" "}
+            (opens in a new tab).
+          </p>
           <hr />
+          <p>The following links open in a new tab:</p>
           <ul className="footer-links">
             <li>
               <a href="#/" target="_blank" rel="noopener noreferrer">
@@ -106,6 +124,11 @@ const Q5 = () => {
             <li>
               <a href="#/" target="_blank" rel="noopener noreferrer">
                 Terms and conditions
+              </a>
+            </li>
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Accessibility statement
               </a>
             </li>
           </ul>
