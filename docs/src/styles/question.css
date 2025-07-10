@@ -1,136 +1,185 @@
-/* ---------- NHS 颜色系统（根据 identity-guidelines） ---------- */
+/* ========== NHS 颜色方案 ========== */
 :root {
-  --nhs-blue: #005eb8;           /* Core Blue */
-  --nhs-light-blue: #41b6e6;     /* Supporting */
-  --nhs-green: #007f3b;          /* Buttons */
-  --nhs-green-dark: #005a30;     /* Hover */
-  --nhs-grey-bg: #f0f4f5;        /* Page background */
-  --nhs-grey-border: #d8dde0;    /* Card border */
+  --core-blue:   #005eb8;
+  --light-blue:  #41b6e6;
+  --core-green:  #007f3b;
+  --dark-green:  #005a30;
+
+  /* 黄色提示条用色：NHS Warm Yellow */
+  --warm-yellow: #FAE100;   /* 若想改用 #FAE100，只需替换此行 #FFB81C*/
+
+  --page-grey:   #e5ecef;
+  --border-grey: #aeb7bd;
 }
 
-/* ---------- 页面基础 ---------- */
+/* ========== 全局 ========== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: var(--nhs-grey-bg);
+  background: var(--page-grey);
   color: #0b0c0c;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- NHS 顶栏 ---------- */
+/* ========== 顶部栏 ========== */
 .nhs-header {
-  background: var(--nhs-blue);
-  padding: 8px 0;
+  background: var(--core-blue);
 }
 .nhs-header__inner {
   max-width: 960px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
-.nhs-logo {
-  height: 40px;
-}
+.logo { height: 42px; }
 .nhs-header__service {
   color: #fff;
   font-size: 1.125rem;
   font-weight: 600;
+  margin-left: auto;
 }
 
-/* ---------- 容器与主区 ---------- */
+/* ========== 版心容器 ========== */
 .nhsuk-width-container {
   max-width: 960px;
   margin: 0 auto;
   padding: 0 24px;
 }
-.nhsuk-main-wrapper {
-  padding: 40px 0 80px;
-}
 
-/* ---------- 返回链接 ---------- */
-.back-link {
-  background: none;
-  border: none;
-  color: var(--nhs-blue);
-  font-size: 0.95rem;
-  cursor: pointer;
-  margin-bottom: 24px;
-}
-.back-link:hover { text-decoration: underline; }
-
-/* ---------- 问题卡片 ---------- */
-.question-card {
+/* ========== 返回按钮 ========== */
+.back-button {
   background: #fff;
-  border: 1px solid var(--nhs-grey-border);
-  border-radius: 6px;
-  padding: 32px 28px;
+  border: 2px solid var(--core-blue);
+  color: var(--core-blue);
+  font-size: 0.95rem;
+  padding: 6px 14px;
+  margin: 24px 0 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.back-button:hover,
+.back-button:focus {
+  background: var(--core-blue);
+  color: #fff;
+}
+
+/* ========== 问题块 ========== */
+.question-box {
+  background: #fff;
+  border-left: 4px solid var(--core-blue);
+  padding: 32px 32px 40px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: box-shadow 0.25s ease;
 }
-.question-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* ---------- 文字排版 ---------- */
 .nhsuk-heading-l {
-  font-size: 2rem;
+  font-size: 1.95rem;
   font-weight: 700;
-  margin: 0 0 16px 0;
-}
-.lead {
-  font-size: 1rem;
-  margin: 0 0 24px 0;
+  margin: 0 0 16px;
 }
 
-/* ---------- 单选组 ---------- */
+/* —— 黄色提示条 —— */
+.hint {
+  display: inline-block;
+  background: var(--warm-yellow);
+  color: #0b0c0c;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin: 0 0 24px;
+  transition: all 0.15s;
+  cursor: default;
+}
+.hint:hover {
+  filter: brightness(0.95);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* ------ 单选列表 ------ */
 .radio-list {
   list-style: none;
-  padding: 0;
   margin: 0 0 32px;
+  padding: 0;
 }
 .radio-label {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px;
+  gap: 14px;
+  padding: 10px 8px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.15s, color 0.15s;
 }
-.radio-label:hover {
-  background: var(--nhs-light-blue);
+.radio-label:hover,
+.radio-label:focus-within {
+  background: var(--light-blue);
   color: #fff;
-}
-.radio-label input[type="radio"] {
-  width: 20px;
-  height: 20px;
-  accent-color: var(--nhs-blue);
-  flex-shrink: 0;
 }
 
-/* ---------- 按钮 ---------- */
+/* 自定义圆形单选框 */
+.radio-label input[type="radio"] {
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--core-blue);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+  transition: border 0.15s;
+}
+.radio-label input[type="radio"]::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--core-blue);
+  transform: scale(0);
+  transition: transform 0.15s ease-in-out;
+}
+.radio-label input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+.radio-label input[type="radio"]:hover {
+  border-color: var(--light-blue);
+}
+
+/* ------ 下一步按钮 ------ */
 .continue-button {
-  background: var(--nhs-green);
-  border: none;
+  background: var(--core-green);
   color: #fff;
-  padding: 12px 32px;
+  border: none;
+  padding: 12px 40px;
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.15s;
 }
-.continue-button:hover:not(:disabled) {
-  background: var(--nhs-green-dark);
-}
+.continue-button:hover:not(:disabled) { background: var(--dark-green); }
 .continue-button:disabled {
-  background: #a6a6a6;
+  background: #c5c5c5;
   cursor: not-allowed;
 }
 
-/* ---------- 手机端 ---------- */
-@media (max-width: 600px) {
-  .continue-button { width: 100%; }
-  .question-card   { padding: 24px 20px; }
+/* ========== 页脚 ========== */
+.nhs-footer {
+  background: #dfe5e7;
+  border-top: 4px solid var(--core-blue);
+  margin-top: 60px;
+  padding: 32px 0;
 }
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.footer-inner a { color: var(--core-blue); }
+.footer-links {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 8px 0 0;
+}
+.footer-links li { margin: 4px 0; }
