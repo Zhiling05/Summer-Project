@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import AboutPage from '../../pages/sidebar/AboutPage';
 
+
 describe('AboutPage', () => {
     it('renders without crashing', () => {
         render(<AboutPage />);

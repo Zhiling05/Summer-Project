@@ -23,4 +23,15 @@
 ### If YES → Action:
 **Send the patient to the Emergency Department immediately.**
 
+<<<<<<<< HEAD:app_documentation/pathway/Optometrist/Decision_tree/7_headaches_with_red_flags.md
 ![Does the patient report headaches with red flags suggesting raised intracranial pressure (ICP) Image](https://github.com/user-attachments/assets/9ffcead8-b4e3-4ff8-a1e4-db2d38d24f1f)
+========
+
+---
+
+### Flowchart:
+
+<img src="Does the patient report headaches with red flags suggesting raised intracranial pressure (ICP) Image.png" alt="Headache Red Flags Flowchart" width="500"/>
+
+---
+>>>>>>>> remotes/origin/Junjie_develop:Pathway/Optometrist/Decision_tree/7_headaches_with_red_flags.md
