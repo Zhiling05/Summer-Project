@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Guide matches snapshot 1`] = `
+<DocumentFragment>
+  <div>
+    <h2>
+      Optometrist Guide Page
+    </h2>
+  </div>
+</DocumentFragment>
+`;
