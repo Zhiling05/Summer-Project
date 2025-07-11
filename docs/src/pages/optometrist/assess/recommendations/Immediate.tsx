@@ -3,7 +3,7 @@ import "../../../../styles/question.css";
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
-//change 1
+
 export default function Immediate() {
   const navigate = useNavigate();
 
