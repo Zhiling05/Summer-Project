@@ -7,7 +7,6 @@ export default function Records() {
 
   return (
     <>
-      {/* 标准蓝色页眉 */}
       <header className="nhs-header" style={{ 
         backgroundColor: "#005eb8",
         color: "white",
@@ -32,7 +31,6 @@ export default function Records() {
         </div>
       </header>
 
-      {/* 全屏浅灰色背景 */}
       <div style={{ 
         backgroundColor: "#f0f4f5",
         minHeight: "calc(100vh - 120px)",
@@ -46,7 +44,6 @@ export default function Records() {
           margin: "0 auto",
           padding: "0 16px"
         }}>
-          {/* 标题区域 */}
           <h1 style={{ 
             color: "#005eb8",
             fontSize: "1.8rem",
@@ -55,7 +52,6 @@ export default function Records() {
             Records
           </h1>
 
-          {/* 近期记录区域 */}
           <section style={{ 
             backgroundColor: "white",
             padding: "2rem",
@@ -80,38 +76,37 @@ export default function Records() {
               margin: "1.5rem 0"
             }}>
               <div style={{ 
-                backgroundColor: "#d03838", // 红色
+                backgroundColor: "#d03838", 
                 padding: "1rem",
                 borderRadius: "4px",
                 textAlign: "center",
-                color: "white" // 文字设为白色
+                color: "white" 
               }}>
                 <div style={{ fontSize: "1.8rem", fontWeight: "bold" }}>32</div>
                 <div>cases</div>
               </div>
               <div style={{ 
-                backgroundColor: "#e67e00", // 橙色
+                backgroundColor: "#e67e00", 
                 padding: "1rem",
                 borderRadius: "4px",
                 textAlign: "center",
-                color: "white" // 文字设为白色
+                color: "white" 
               }}>
                 <div style={{ fontSize: "1.8rem", fontWeight: "bold" }}>25</div>
                 <div>cases</div>
               </div>
               <div style={{ 
-                backgroundColor: "#006747", // 绿色
+                backgroundColor: "#006747", 
                 padding: "1rem",
                 borderRadius: "4px",
                 textAlign: "center",
-                color: "white" // 文字设为白色
+                color: "white" 
               }}>
                 <div style={{ fontSize: "1.8rem", fontWeight: "bold" }}>18</div>
                 <div>cases</div>
               </div>
             </div>
 
-            {/* 记录表格 */}
             <div style={{ overflowX: "auto" }}>
               <table style={{ 
                 width: "100%",

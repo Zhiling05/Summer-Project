@@ -10,7 +10,7 @@ import Records from './Records';
 export default function OptometristApp() {
   const navigate = useNavigate();
 
-  // 首页组件
+  // 首页
   const Home = () => (
     <div
       style={{
@@ -60,7 +60,6 @@ export default function OptometristApp() {
     <Routes>
       {/* /optometrist → Home */}
       <Route index element={<Home />} />
-
       {/* /optometrist/assess/* → AssessRouter (Q1…Q19 + recommendations) */}
       <Route path="assess/*" element={<AssessRouter />} />
       <Route path="records" element={<Records />} />
