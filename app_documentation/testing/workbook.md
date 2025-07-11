@@ -21,6 +21,7 @@ Also, ensure that your `npm` version is `>=9.x` to match the Node version.
 
 If you are using `nvm`, make sure the same version is configured in `.nvmrc`.
 
+
 ---
 
 
@@ -49,7 +50,6 @@ When using a Mac, we encountered issues where TextEncoder could not be resolved,
 - moduleNameMapper: handles imports of static resources like `jpg`,`png`and`svg`
 
 
-
 `tsconfig.json & tsconfig.app.json`
 - We set `jsx` to `react-jsx`.
 - The `"include"` field covers `"src"` and the `images.d.ts` type declaration file.
@@ -58,13 +58,15 @@ When using a Mac, we encountered issues where TextEncoder could not be resolved,
 
 
 
-
 ---
 
-### How to run tests
+
+#### How to run tests
+
 
 To run a single test file:
 `npx jest src/tests/unit_tests/WelcomePage.test.tsx --runInBand --verbose`
+
 
 To run all tests all together:
 `npx jest`
@@ -72,10 +74,12 @@ To run all tests all together:
 Whether you are running a single test or all tests together, we recommend first running `test_dummy.test.tsx` to ensure your environment is configured correctly.
 Additionally, it is recommended to regularly clear the cache during testing by running `npx jest --clearCache`——sometimes, unexpected test failures are caused by unrefreshed cache.
 
+
 You may notice that we have a `_snapshots_` folder. After running specific tests involving image file rendering, `_snapshots_` will be updated.
 This is because, during testing, Jest compares the component’s rendered output with the snapshot file. If the rendered output changes, the test will fail, indicating a mismatch with the snapshot.
 In general, we do not need to delete _snapshots_.
 
 Please note that if it becomes too large and cluttered, it should be cleaned up in time.
+
 
 
