@@ -1,8 +1,9 @@
+
 // docs/src/pages/optometrist/assess/questions/Q2.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
-
+import BottomNav from "../../../../components/BottomNav";
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
@@ -46,7 +47,7 @@ export default function Q2() {
       </header>
 
       <div className="nhsuk-width-container">
-        <main id="maincontent">
+        <main id="maincontent" className="nhsuk-main-wrapper">
           <button className="back-button" onClick={() => navigate(-1)}>
             ← Go back
           </button>
@@ -82,35 +83,8 @@ export default function Q2() {
         </main>
       </div>
 
-      <footer className="nhs-footer">
-        <div className="footer-inner">
-          <p>
-            Other ways to contact DIPP if you have a hearing problem or need help
-            in other languages&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              (opens in a new tab)
-            </a>.
-          </p>
-          <hr />
-          <ul className="footer-links">
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Privacy statement
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Terms and conditions
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Accessibility statement
-              </a>
-            </li>
-          </ul>
-        </div>
-      </footer>
+      {/* 使用自定义底部导航栏 */}            
+      <BottomNav />
     </>
   );
 }
