@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/bottomnav.css"; // 引入底部导航栏样式（路径无误）
 
-// 导入图标（注意 icons 多一层目录）
+// 导入图标（注意 icons 多一层目录）(之前文件夹名是Icons导致报错了)
 import HomeIcon from "../assets/icons/Home.svg?url";
 import AssessIcon from "../assets/icons/Assess.svg?url";
 import RecordsIcon from "../assets/icons/Records.svg?url";
