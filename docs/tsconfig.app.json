@@ -1,4 +1,7 @@
 {
+  // 确保将 tsconfig.app.json 识别为 TypeScript 项目根
+  "extends": "./tsconfig.json",
+
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
@@ -7,10 +10,12 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+
+
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": false,
+//    "verbatimModuleSyntax": false,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
@@ -21,7 +26,19 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["jest", "node", "@testing-library/jest-dom"],
+    // resolve .json import
+    "resolveJsonModule": true
+
   },
-  "include": ["src"]
+  "include": ["./src", "./src/types","./src/types/images.d.ts",
+//    "./src/tests/unit_tests/**/*.test.tsx",
+    "./tests/unit_tests/**/*.test.tsx",
+    "./tests/**/*.test.tsx",
+    "jest.setup.ts",
+    "test_dummy.test.ts",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    ]
 }
