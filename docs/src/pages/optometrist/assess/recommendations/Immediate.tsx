@@ -1,9 +1,124 @@
-function Immediate() {
+import { useNavigate } from "react-router-dom";
+import "../../../../styles/question.css";
+import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
+import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
+
+//change 1
+export default function Immediate() {
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <h2>Immediate referral Eye Emergency on call  </h2>
-    </div>
+    <>
+      <header className="nhs-header" style={{ 
+        backgroundColor: "#005eb8", 
+        color: "white",
+        padding: "12px 0"
+      }}>
+        <div className="nhs-header__inner" style={{ 
+          maxWidth: "960px",
+          margin: "0 auto",
+          padding: "0 16px",
+          display: "flex",
+          alignItems: "center"
+        }}>
+          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" style={{ height: "40px" }} />
+          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" style={{ height: "40px", marginLeft: "20px" }} />
+          <span className="nhs-header__service" style={{ 
+            marginLeft: "auto",
+            fontSize: "1.2rem",
+            fontWeight: "bold"
+          }}>
+            DIPP Assessment
+          </span>
+        </div>
+      </header>
+
+      <div style={{ 
+        backgroundColor: "#ffebee",
+        minHeight: "calc(100vh - 120px)",
+        padding: "2rem 0",
+        width: "100vw",
+        marginLeft: "calc(-50vw + 50%)",
+        boxSizing: "border-box"
+      }}>
+        <div style={{ 
+          maxWidth: "960px",
+          margin: "0 auto",
+          padding: "0 16px"
+        }}>
+          <section className="question-box" style={{ 
+            backgroundColor: "white",
+            padding: "2rem",
+            borderRadius: "4px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+          }}>
+            <h1 style={{ 
+              color: "#d32f2f",
+              borderBottom: "4px solid #d32f2f",
+              paddingBottom: "0.5rem",
+              fontSize: "1.5rem",
+              marginTop: 0
+            }}>
+              IMMEDIATE REFERRAL TO EYE EMERGENCY ON CALL
+            </h1>
+            <p style={{ fontSize: "1.1rem" }}>
+              This patient requires immediate ophthalmology review.
+            </p>
+            <ul style={{ 
+              paddingLeft: "20px",
+              margin: "1rem 0"
+            }}>
+              <li>Context XXXXX</li>
+              <li>Context XXXXX</li>
+              <li>Context XXXXX</li>
+            </ul>
+            <button
+              onClick={() => navigate("/optometrist/assess/")}
+              style={{ 
+                backgroundColor: "#d32f2f",
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                fontSize: "1rem",
+                borderRadius: "4px",
+                cursor: "pointer",
+                marginTop: "2rem"
+              }}
+            >
+              Return to Home
+            </button>
+          </section>
+        </div>
+      </div>
+
+      <footer className="nhs-footer">
+        <div className="footer-inner">
+          <p>
+            Other ways to contact DIPP if you have a hearing problem or need help in other languages&nbsp;
+            <a href="#/" target="_blank" rel="noopener noreferrer">
+              (opens in a new tab)
+            </a>.
+          </p>
+          <hr />
+          <ul className="footer-links">
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Privacy statement
+              </a>
+            </li>
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Terms and conditions
+              </a>
+            </li>
+            <li>
+              <a href="#/" target="_blank" rel="noopener noreferrer">
+                Accessibility statement
+              </a>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </>
   );
 }
-
-export default Immediate;
