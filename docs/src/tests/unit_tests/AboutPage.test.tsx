@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import AboutPage from '../../pages/navigation/AboutPage';
+import AboutPage from '../../pages/sidebar/AboutPage';
 
 describe('AboutPage', () => {
     it('renders without crashing', () => {
