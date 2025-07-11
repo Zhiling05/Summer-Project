@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import ContactPage from '../../pages/navigation/ContactPage';
+import ContactPage from '../../pages/sidebar/ContactPage';
+
 
 describe('ContactPage', () => {
     it('renders without crashing', () => {

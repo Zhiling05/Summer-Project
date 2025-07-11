@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import SettingsPage from '../../pages/navigation/SettingsPage';
+import SettingsPage from '../../pages/sidebar/SettingsPage';
+
 
 describe('SettingsPage', () => {
     it('renders without crashing', () => {
