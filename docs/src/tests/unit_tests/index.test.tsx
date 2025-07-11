@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import * as NavigationPages from '../../pages/sidebar';
+=======
 import * as NavigationPages from '../../pages/navigation';
+>>>>>>> develop
 
 describe('navigation/index.ts exports', () => {
     it('should export SettingsPage component', () => {
