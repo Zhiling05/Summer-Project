@@ -63,6 +63,11 @@ export default function OptometristApp() {
       <Route index element={<Home />} />
       {/* /optometrist/assess/* → AssessRouter (Q1…Q19 + recommendations) */}
       <Route path="assess/*" element={<AssessRouter />} />
+      {/* /optometrist/guide → Guide 页面 */}
+      <Route path="guide" element={<Guide />} />
+
+      {/* /optometrist/records → Records 页面 */}
+      <Route path="records" element={<Records />} />
     </Routes>
   );
 }
