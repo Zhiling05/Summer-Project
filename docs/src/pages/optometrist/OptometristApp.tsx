@@ -5,6 +5,7 @@ import NHSLogo from '../../assets/NHS_LOGO.jpg';
 import DIPPLogo from '../../assets/DIPP_Study_logo.png';
 import BackButton from '../../components/BackButton';
 import AssessRouter from './assess/AssessRouter';
+import Guide from './Guide'; 
 
 export default function OptometristApp() {
   const navigate = useNavigate();
@@ -66,6 +67,10 @@ export default function OptometristApp() {
 
       {/* /optometrist/assess/* → AssessRouter (Q1…Q19 + recommendations) */}
       <Route path="assess/*" element={<AssessRouter />} />
+
+      {/* /optometrist/guide      → Guide 页面 */}
+      <Route path="guide" element={<Guide />} /> 
+
     </Routes>
   );
 }
