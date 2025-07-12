@@ -19,7 +19,7 @@ export default function Guide() {
         </div>
       </header>
 
-      {/* ★★★ 与 Records 同级的“全宽灰底” ★★★ */}
+      
       <div
         style={{
           background: 'var(--page-grey)',   // 同一灰色
