@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`navigation/index.ts exports exports remain consistent (snapshot) 1`] = `
+[
+  "SettingsPage",
+  "AboutPage",
+  "ContactPage",
+]
+`;
