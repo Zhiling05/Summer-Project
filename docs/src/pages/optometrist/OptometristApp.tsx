@@ -5,6 +5,7 @@ import NHSLogo from '../../assets/NHS_LOGO.jpg';
 import DIPPLogo from '../../assets/DIPP_Study_logo.png';
 import BackButton from '../../components/BackButton';
 import AssessRouter from './assess/AssessRouter';
+import Guide from './Guide'; 
 import Records from './Records';
 
 export default function OptometristApp() {
@@ -62,7 +63,6 @@ export default function OptometristApp() {
       <Route index element={<Home />} />
       {/* /optometrist/assess/* → AssessRouter (Q1…Q19 + recommendations) */}
       <Route path="assess/*" element={<AssessRouter />} />
-      <Route path="records" element={<Records />} />
     </Routes>
   );
 }
