@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/"            element={<WelcomePage />} />
         <Route path="/select-role" element={<UserSelectionPage />} />
         <Route path="/settings"    element={<Sidebar.SettingsPage />} />
-        <Route path="/about-us"       element={<Sidebar.AboutUsPage />} />
+        <Route path="/about-us"       element={<Sidebar.AboutPage />} />
         <Route path="/contact-us"     element={<Sidebar.ContactPage />} />
 
         <Route path="/optometrist/*" element={<OptometristApp />} />
