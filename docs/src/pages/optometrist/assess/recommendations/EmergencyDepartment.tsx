@@ -1,32 +1,59 @@
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
-
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
+
 
 export default function EmergencyDepartment() {
   const navigate = useNavigate();
 
   return (
     <>
-      <header className="nhs-header">
-        <div className="nhs-header__inner">
-          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">DIPP Assessment</span>
+      <header className="nhs-header" style={{ 
+        backgroundColor: "#005eb8",
+        color: "white",
+        padding: "12px 0"
+      }}>
+        <div className="nhs-header__inner" style={{ 
+          maxWidth: "960px",
+          margin: "0 auto",
+          padding: "0 16px",
+          display: "flex",
+          alignItems: "center"
+        }}>
+          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" style={{ height: "40px" }} />
+          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" style={{ height: "40px", marginLeft: "20px" }} />
+          <span className="nhs-header__service" style={{ 
+            marginLeft: "auto",
+            fontSize: "1.2rem",
+            fontWeight: "bold"
+          }}>
+            DIPP Assessment
+          </span>
         </div>
       </header>
 
-      {/* Pink background section */}
-      <div
-        style={{
-          backgroundColor: "#ffe4e6",
-          padding: "2rem 0",
-          minHeight: "80vh",
-        }}
-      >
-        <div className="nhsuk-width-container">
-          <section className="question-box">
+      {/* 2. 全屏粉色背景（保持原内容不变） */}
+      <div style={{ 
+        backgroundColor: "#ffe4e6", // 保持原有粉色
+        minHeight: "calc(100vh - 120px)",
+        padding: "2rem 0",
+        width: "100vw",
+        marginLeft: "calc(-50vw + 50%)",
+        boxSizing: "border-box"
+      }}>
+        <div style={{ 
+          maxWidth: "960px",
+          margin: "0 auto",
+          padding: "0 16px"
+        }}>
+          <section className="question-box" style={{ 
+            backgroundColor: "white",
+            padding: "2rem",
+            borderRadius: "4px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+          }}>
+            {/* >>> 原内容完全保持不变 <<< */}
             <h1
               className="nhsuk-heading-l"
               style={{
@@ -48,6 +75,7 @@ export default function EmergencyDepartment() {
             <button
               className="continue-button"
               onClick={() => navigate("/optometrist/assess/")}
+              style={{ backgroundColor: "#d03838" }} 
             >
               Return to Home
             </button>

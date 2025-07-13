@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AboutPage matches snapshot 1`] = `
+<DocumentFragment>
+  <h1>
+    SettingsPage
+  </h1>
+</DocumentFragment>
+`;
