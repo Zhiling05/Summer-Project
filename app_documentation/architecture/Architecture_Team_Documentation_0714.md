@@ -32,17 +32,24 @@
 src
  |-- App.tsx (Main routing, includes logo page + user role selection page + path entry for each role's App)
  |__ types
-      |__ assessment.ts (Interface for 19 questions variables, please strictly follow this specification for future development)
-      |__ recommendations.ts  (Interface for 6 referral result variables, same as above)
+      |__ assessment.ts 
+      |__ recommendations.ts 
  |__ pages
-      |__ LogoPage.tsx (Logo display page when entering the app)
-      |__ UserSelectionPage.tsx  (Home page for each user role's App, extracted separately as it's common)
+      |__ LogoPage.tsx 
+      |__ WelcomePage.tsx
+      |__ UserSelectionPage.tsx  
+      |__ sidebar
+   		   |__ SettingsPage.tsx 
+           |__ AboutPage.tsx
+           |__ ContactPage.tsx 
+           |__ index.ts (Click to see details)
       |__ gp
       |__ patient
       |__ optometrist
-           |__ OptometristApp.tsx (Manages all routes under optometrist version)
+           |__ OptometristApp.tsx 
+           |__ OptometristHome.tsx
            |__ Guide.tsx
-           |__ Records.tsx (Records page may only need one page, can develop directly on this basis)
+           |__ Records.tsx 
            |__ assess
                  |__ AssessRouter.tsx (Main routing for assessment, manages all routes under assess)
                  |__ StartPage.tsx 
@@ -53,17 +60,11 @@ src
                        |__ ...(Q3-Q19)
                  |__ recommendations
                        |__ RecommendationsRouter.tsx (Manages all result routes)
-                       |__ ...(6 types of result route .tsx files)
+                       |__ ...(6 types of result route)
            |__ tutorial
                  |__ TutorialRouter.tsx (Manages all tutorial routes. If the page development for each character going forward uses the same layout, and the tutorials are also the same, I will move it to global use pages.)
                  |__ Tutorial1.tsx
                  |__ Tutorial2.tsx
                  |__ Totorial3.tsx (Currently configured three pages per prototype, will add/remove as needed)
-      |__ navigation (Navigation bar pages (Settings, About Us, Contact Us) are grouped in one folder for single import via index.ts instead of individual imports. See /index.ts.)
-           |__ SettingsPage.tsx 
-           |__ AboutUsPage.tsx
-           |__ ContactUsPage.tsx (Note: Routes for these three files are in App.tsx as they're global (no character distinction))
-           |__ index.ts (Click to see details)
 ```
-
 
