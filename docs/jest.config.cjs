@@ -16,8 +16,10 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   moduleNameMapper: {
-    "\\.(jpg|jpeg|png|svg)$": "<rootDir>_mocks_/fileMock.js",
+    "\\.(jpg|jpeg|png)$": "<rootDir>_mocks_/fileMock.js",
     '\\.(css|less)$': '<rootDir>/_mocks_/styleMock.js',
+    '\\.svg\\?url$': '<rootDir>/_mocks_/fileMock.js',
+    '\\.svg$': '<rootDir>/_mocks_/fileMock.js',
   },
   //solve png showing problem
   globals: {
