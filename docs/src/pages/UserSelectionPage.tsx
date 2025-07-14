@@ -34,7 +34,10 @@ export default function UserSelectionPage() {
           <p>context line 1</p>
           <p>context line 2</p>
           <p>context line 3</p>
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+          <div
+              data-testid="role-selection-container"
+              className="responsive-layout" //为了测试代码加的class名
+              style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
             <button
               className="continue-button"
               onClick={() => navigate('/gp')}

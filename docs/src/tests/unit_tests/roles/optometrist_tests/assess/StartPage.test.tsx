@@ -1,94 +1,78 @@
-//后续可以完善添加响应式适配测试，就是页面的resizing
+// //后续可以完善添加响应式适配测试，就是页面的resizing
 
 
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
 import StartPage from '../../../../../pages/optometrist/assess/StartPage';
 
-
+// Mock useNavigate
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: jest.fn(),
 }));
 
-describe('StartPage Component Tests', () => {
+describe('StartPage Component (TDD)', () => {
     const mockNavigate = jest.fn();
 
     beforeEach(() => {
         (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+        mockNavigate.mockClear();
     });
 
-    afterEach(() => {
-        jest.clearAllMocks();
+    describe('Initial Page Rendering', () => {
+        it('displays NHS and DIPP logos', () => {
+            render(<StartPage />, { wrapper: MemoryRouter });
+
+            expect(screen.getByAltText('NHS logo')).toBeInTheDocument();
+            expect(screen.getByAltText('DIPP Study logo')).toBeInTheDocument();
+        });
+
+        it('renders page title and context lines', () => {
+            render(<StartPage />, { wrapper: MemoryRouter });
+
+            expect(screen.getByRole('heading', { name: /StartPage/i })).toBeInTheDocument();
+            expect(screen.getByText(/context line 1/i)).toBeInTheDocument();
+            expect(screen.getByText(/context line 2/i)).toBeInTheDocument();
+            expect(screen.getByText(/context line 3/i)).toBeInTheDocument();
+        });
+
+        it('renders "Start now" button', () => {
+            render(<StartPage />, { wrapper: MemoryRouter });
+
+            const startBtn = screen.getByRole('button', { name: /Start now/i });
+            expect(startBtn).toBeInTheDocument();
+        });
     });
 
-    it('renders logos, title and context lines', () => {
-        render(
-            <MemoryRouter>
-                <StartPage />
-            </MemoryRouter>
-        );
+    describe('Interaction and Navigation', () => {
+        it('navigates to /questions/Q1 when "Start now" button is clicked', () => {
+            render(<StartPage />, { wrapper: MemoryRouter });
 
-        expect(screen.getByAltText('NHS logo')).toBeInTheDocument();
-        expect(screen.getByAltText('DIPP Study logo')).toBeInTheDocument();
+            const button = screen.getByRole('button', { name: /Start now/i });
+            fireEvent.click(button);
 
-        expect(screen.getByRole('heading', { name: 'StartPage' })).toBeInTheDocument();
-
-        expect(screen.getByText('context line 1')).toBeInTheDocument();
-        expect(screen.getByText('context line 2')).toBeInTheDocument();
-        expect(screen.getByText('context line 3')).toBeInTheDocument();
+            expect(mockNavigate).toHaveBeenCalledWith('questions/Q1');
+        });
     });
 
-    it('navigates to questions/Q1 when clicking the Start now button', () => {
-        render(
-            <MemoryRouter>
-                <StartPage />
-            </MemoryRouter>
-        );
+    describe('Edge Cases and Responsiveness', () => {
+        it('handles logo image loading error gracefully', () => {
+            render(<StartPage />, { wrapper: MemoryRouter });
 
-        const startButton = screen.getByRole('button', { name: 'Start now' });
-        expect(startButton).toBeInTheDocument();
+            const nhsLogo = screen.getByAltText('NHS logo') as HTMLImageElement;
+            fireEvent.error(nhsLogo);
 
-        fireEvent.click(startButton);
+            expect(nhsLogo).toBeInTheDocument(); // still remains on screen
+        });
 
-        expect(mockNavigate).toHaveBeenCalledWith('questions/Q1');
+        it('renders correctly on small screens (responsive)', () => {
+            window.innerWidth = 320;
+            window.dispatchEvent(new Event('resize'));
+
+            render(<StartPage />, { wrapper: MemoryRouter });
+
+            expect(screen.getByRole('heading', { name: /StartPage/i })).toBeInTheDocument();
+            expect(screen.getByRole('button', { name: /Start now/i })).toBeInTheDocument();
+        });
     });
-
-    //测试响应式适配
-    it('renders correctly on small screen widths (responsive)', () => {
-        // 模拟小屏设备
-        window.innerWidth = 375;
-        window.dispatchEvent(new Event('resize'));
-
-        render(
-            <MemoryRouter>
-                <StartPage />
-            </MemoryRouter>
-        );
-
-        // 基本渲染仍然正常
-        expect(screen.getByRole('heading', { name: 'StartPage' })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Start now' })).toBeInTheDocument();
-    });
-
-
-    //测试图片处理失败的边远情况
-    it('handles logo image load failure gracefully', () => {
-        render(
-            <MemoryRouter>
-                <StartPage />
-            </MemoryRouter>
-        );
-
-        const nhsLogo = screen.getByAltText('NHS logo') as HTMLImageElement;
-
-        // 模拟加载错误
-        fireEvent.error(nhsLogo);
-
-        // 图片仍在页面上（React 不会自动删除 img 元素）
-        expect(nhsLogo).toBeInTheDocument();
-    });
-
-
-
 });
