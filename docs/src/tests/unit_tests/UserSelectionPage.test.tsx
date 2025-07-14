@@ -22,16 +22,16 @@ describe('UserSelectionPage', () => {
             </BrowserRouter>
         );
 
-        // 检查 NHS logo
+
         expect(screen.getByAltText('NHS logo')).toBeInTheDocument();
 
-        // 检查 DIPP Study logo
+
         expect(screen.getByAltText('DIPP Study logo')).toBeInTheDocument();
 
-        // 检查标题
+
         expect(screen.getByRole('heading', { name: /UserSelectionPage/i })).toBeInTheDocument();
 
-        // 检查 context lines
+
         expect(screen.getByText('context line 1')).toBeInTheDocument();
         expect(screen.getByText('context line 2')).toBeInTheDocument();
         expect(screen.getByText('context line 3')).toBeInTheDocument();
@@ -46,7 +46,7 @@ describe('UserSelectionPage', () => {
 
         const user = userEvent.setup();
 
-        // 检查按钮
+
         const doctorButton = screen.getByRole('button', { name: /Doctor/i });
         const optometristButton = screen.getByRole('button', { name: /Optometrist/i });
         const patientButton = screen.getByRole('button', { name: /Patient/i });
@@ -55,15 +55,15 @@ describe('UserSelectionPage', () => {
         expect(optometristButton).toBeInTheDocument();
         expect(patientButton).toBeInTheDocument();
 
-        // 点击 Doctor
+
         await user.click(doctorButton);
         expect(mockedNavigate).toHaveBeenCalledWith('/gp');
 
-        // 点击 Optometrist
+
         await user.click(optometristButton);
         expect(mockedNavigate).toHaveBeenCalledWith('/optometrist');
 
-        // 点击 Patient
+
         await user.click(patientButton);
         expect(mockedNavigate).toHaveBeenCalledWith('/patient');
     });

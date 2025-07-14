@@ -107,7 +107,14 @@ When using a Mac, we encountered issues where TextEncoder could not be resolved,
 ---
 
 
-#### How to run tests
+### Start testing
+
+#### set up the environment
+
+set up Node.js, recommend version 16: `nvm install 16`,`nvm use 16`.
+
+set up dependencies: `npm install` or `npm ci`.If you fail to run the test at the first time, try ` rm -rf node_modules package-lock.json`,then
+`npm install`.
 
 
 To run a single test file:
@@ -115,7 +122,7 @@ To run a single test file:
 
 
 To run all tests all together:
-`npx jest`
+`npx jest` , or try `npx jest --runInBand --verbose` to get more details.
 
 Whether you are running a single test or all tests together, we recommend first running `test_dummy.test.tsx` to ensure your environment is configured correctly.
 Additionally, it is recommended to regularly clear the cache during testing by running `npx jest --clearCache`——sometimes, unexpected test failures are caused by unrefreshed cache.
