@@ -16,7 +16,7 @@ describe('AboutPage', () => {
 
     it('does not render unexpected elements', () => {
         render(<AboutPage />);
-        // no other headings...
+        // make sure there's no other headings...
         expect(screen.queryByRole('heading', { name: /About/i })).not.toBeInTheDocument();
         expect(screen.queryByRole('button')).not.toBeInTheDocument();
         expect(screen.queryByRole('link')).not.toBeInTheDocument();
