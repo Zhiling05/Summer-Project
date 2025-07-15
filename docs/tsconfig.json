@@ -3,21 +3,15 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
+    "baseUrl": "."
 
 //    "paths": {
 //      "*": ["*", "src/types/images.d.ts"]
 //    }
-    "types": ["jest", "node", "@testing-library/jest-dom"],           // 加入 "jest"，这样 TS 会加载 @types/jest
   },
-  //"files": [],
-  // "references": [
-  //   { "path": "./tsconfig.app.json" },
-  //   { "path": "./tsconfig.node.json" }
-  // ],
-  "include": [
-    "src",                                // 确保包含你的源码和测试文件
-    "src/tests/unit_tests/**/*.ts",
-    "src/tests/unit_tests/**/*.tsx"
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
   ]
 }
