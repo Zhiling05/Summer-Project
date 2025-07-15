@@ -3,7 +3,7 @@
 exports[`SettingsPage matches snapshot 1`] = `
 <DocumentFragment>
   <h1>
-    SettingsPage
+    Settings Page
   </h1>
 </DocumentFragment>
 `;
