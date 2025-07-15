@@ -1,5 +1,5 @@
 [
-  { "id": "Q1", "next": { "Yes": "Q2", "No": "Q9" } },
+  { "id": "Q1", "next": { "Yes": "Q2", "No": "Q5_noHD" } },
   {
     "id": "Q2",
     "rules": [
@@ -8,16 +8,36 @@
     ]
   },
   { "id": "Q3", "next": "Q4" },
+
+
   {
     "id": "Q4",
     "rules": [
-      { "if": { "Q3.includesAny":          ["A","B","C","D","E","F","G"] },               "next": "Q14" },
-      { "if": { "Q3.includesOnly":         ["H"], "Q4.includesTwoOrMore": ["A","B","C","D"] }, "next": "Q14" },
-      { "if": { "Q3.includesOnly":         ["H"], "Q4.includesExactlyOneOf": ["A","B","C","D"] }, "next": "Q5"  },
-      { "if": { "Q3.includesOnly":         ["H"], "Q4.includes":           ["E"]               }, "next": "Q5"  }
+      { "if": { "Q3.includesAny":          ["A","B","C","D","E","F","G"] },               "next": "Q10_urgent" },
+      { "if": { "Q3.includesOnly":         ["H"], "Q4.includesTwoOrMore": ["A","B","C","D"] }, "next": "Q10_urgent" },
+      { "if": { "Q3.includesOnly":         ["H"], "Q4.includesExactlyOneOf": ["A","B","C","D"] }, "next": "Q5_HD"  },
+      { "if": { "Q3.includesOnly":         ["H"], "Q4.includes":           ["E"]               }, "next": "Q5_HD"  }
     ]
   },
-  { "id": "Q5", "next": { "Yes": "Q29", "No": "Q6" } },
+
+
+  {
+    "id": "Q5_noHD",
+    "rules": [
+      { "if": { "equals": "Yes" }, "next": "Q10_visual" },
+      { "if": { "equals": "No"  }, "next": "Q6_noHD"    }
+    ]
+  },
+
+  {
+    "id": "Q5_HD",
+    "rules": [
+      { "if": { "equals": "Yes" },                           "next": "Q10_visual" },
+      { "if": { "equals": "No", "Q1.equals": "Yes" },        "next": "Q6_HD"      }
+    ]
+  },
+
+
   { "id": "Q6", "next": { "Yes": "Q7", "No": "Q23" } },
   { "id": "Q7",  "next": "Q8" },
   { "id": "Q8",  "next": "Q9" },

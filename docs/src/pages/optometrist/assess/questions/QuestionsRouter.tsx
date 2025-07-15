@@ -20,31 +20,48 @@ import Q17 from './Q17';
 import Q18 from './Q18';
 import Q19 from './Q19';
 
-function QuestionsRouter() {
+export default function QuestionsRouter() {
   return (
     <Routes>
-      {/* 点击Start后的问题页面 */}
-      <Route path="q1" element={<Q1 />} />
-      <Route path="q2" element={<Q2 />} />
-      <Route path="q3" element={<Q3 />} />
-      <Route path="q4" element={<Q4 />} />
-      <Route path="q5" element={<Q5 />} />
-      <Route path="q6" element={<Q6 />} />
-      <Route path="q7" element={<Q7 />} />
-      <Route path="q8" element={<Q8 />} />
-      <Route path="q9" element={<Q9 />} />
-      <Route path="q10" element={<Q10 />} />
-      <Route path="q11" element={<Q11 />} />
-      <Route path="q12" element={<Q12 />} />
-      <Route path="q13" element={<Q13 />} />
-      <Route path="q14" element={<Q14 />} />
-      <Route path="q15" element={<Q15 />} />
-      <Route path="q16" element={<Q16 />} />
-      <Route path="q17" element={<Q17 />} />
-      <Route path="q18" element={<Q18 />} />
-      <Route path="q19" element={<Q19 />} />
+      {/* 统一使用大写 ID */}
+      <Route path="Q1"  element={<Q1 />} />
+      <Route path="Q2"  element={<Q2 />} />
+      <Route path="Q3"  element={<Q3 />} />
+      <Route path="Q4"  element={<Q4 />} />
+
+      {/* Q5 分支 */}
+      <Route path="Q5"        element={<Q5 />} />
+      <Route path="Q5_noHD"   element={<Q5 />} />
+      <Route path="Q5_HD"     element={<Q5 />} />
+
+      {/* Q6 分支 */}
+      <Route path="Q6"        element={<Q6 />} />
+      <Route path="Q6_noHD"   element={<Q6 />} />
+      <Route path="Q6_HD"     element={<Q6 />} />
+
+      <Route path="Q7"  element={<Q7 />} />
+      <Route path="Q8"  element={<Q8 />} />
+      <Route path="Q9"  element={<Q9 />} />
+
+      {/* Q10 四条别名 */}
+      <Route path="Q10"           element={<Q10 />} />
+      <Route path="Q10_urgent"    element={<Q10 />} />
+      <Route path="Q10_noVisual"        element={<Q10 />} />
+      <Route path="Q10_visual"      element={<Q10 />} />
+      <Route path="Q10_routine"   element={<Q10 />} />
+
+      <Route path="Q11" element={<Q11 />} />
+      <Route path="Q12" element={<Q12 />} />
+      <Route path="Q13" element={<Q13 />} />
+      <Route path="Q14" element={<Q14 />} />
+      <Route path="Q15" element={<Q15 />} />
+      <Route path="Q16" element={<Q16 />} />
+      <Route path="Q17" element={<Q17 />} />
+      <Route path="Q18" element={<Q18 />} />
+      <Route path="Q19" element={<Q19 />} />
+
+      {/* 兜底 404，防止白屏 */}
+      <Route path="*" element={<h2>Question Not Found</h2>} />
     </Routes>
   );
 }
-
-export default QuestionsRouter;

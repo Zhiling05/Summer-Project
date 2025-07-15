@@ -1,15 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 import BottomNav from "../../../../components/BottomNav";
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
-import flow from "../../../../data/questionnaire.json";
-
-type FlowEntry =
-  | { id: string; next: string }
-  | { id: string; next: Record<string, string> };
+import { recordAnswer, getNextId } from "../../../../Core/flow";
 
 const Q4 = () => {
   const navigate = useNavigate();
@@ -23,40 +19,27 @@ const Q4 = () => {
     "B. Headache worst in the morning",
     "C. Pulsatile tinnitus (pulsates in time with heart beat)",
     "D. New-onset headache in someone with compromised immunity (HIV, immunosuppressive drugs)",
-    "E. None of the above",
+    "E. None of the above"
   ];
 
-  /* ---------- 跳转表 ---------- */
-  const flowEntry = useMemo(
-    () => (flow as FlowEntry[]).find((f) => f.id === "Q4"),
-    []
-  );
-
+  /* ---------- 复选框 ---------- */
   const toggle = (label: string) => {
-    setAnswers((prev) =>
-      prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
+    setAnswers(prev =>
+      prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label]
     );
   };
 
+  /* ---------- 跳转 ---------- */
   const handleNext = () => {
-    if (!flowEntry) return;
-
-    let nextId: string | undefined;
-
-    if (typeof flowEntry.next === "string") {
-      nextId = flowEntry.next; // 预期 = "Q5"
-    } else {
-      /* 如需分流可在此解析 answers */
-      nextId = Object.values(flowEntry.next)[0];
-    }
-
+    recordAnswer("Q4", answers);                     // ① 记录答案
+    const nextId = getNextId("Q4", answers);         // ② 解析下一题
     if (!nextId) return;
 
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
       : `/optometrist/assess/${nextId}`;
 
-    navigate(path);
+    navigate(path);                                  // ③ 跳转
   };
 
   return (
@@ -82,7 +65,7 @@ const Q4 = () => {
             <p className="hint">Select all symptoms that the patient has</p>
 
             <ul className="radio-list">
-              {opts.map((o) => (
+              {opts.map(o => (
                 <li key={o}>
                   <label className="radio-label">
                     <input
@@ -109,11 +92,9 @@ const Q4 = () => {
         </main>
       </div>
 
-       {/* 使用自定义底部导航栏 */}            
       <BottomNav />
     </>
   );
 };
-
 
 export default Q4;
