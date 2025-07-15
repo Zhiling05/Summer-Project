@@ -28,7 +28,6 @@ describe('OptometristApp', () => {
         // check DIPP Study logo
         const dippLogo = screen.getByAltText('DIPP Study logo');
         expect(dippLogo).toBeInTheDocument();
-        // expect(dippLogo).toHaveAttribute('src', expect.stringContaining('DIPP_Study_logo.png'));
 
 
         // check if title contains OptometristApp
