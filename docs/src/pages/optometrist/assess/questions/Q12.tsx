@@ -94,45 +94,8 @@ const Q12 = () => {
         </main>
       </div>
 
-      {/* ---------- 页脚 ---------- */}
-      <footer className="nhs-footer">
-        <div className="footer-inner">
-          <p>
-            Other ways to contact DIPP if you have a hearing problem or need help
-            in other languages&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              (opens in a new tab)
-            </a>.
-          </p>
-          <p>
-            This website only stores the cookies that are needed to make it
-            work.&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              Read more about how we use cookies
-            </a>{" "}
-            (opens in a new tab).
-          </p>
-          <hr />
-          <p>The following links open in a new tab:</p>
-          <ul className="footer-links">
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Privacy statement
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Terms and conditions
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Accessibility statement
-              </a>
-            </li>
-          </ul>
-        </div>
-      </footer>
+      {/* 使用自定义底部导航栏 */}            
+      <BottomNav />
     </>
   );
 };

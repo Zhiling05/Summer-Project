@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "strict": true,
+      "esModuleInterop": true,
+      "jsx": "react-jsx"
+    },
+    "include": [
+      "src/pages/types/**/*.ts",
+      "src/tests/unit_tests/types/**/*.test-d.ts"
+    ]
+  }
