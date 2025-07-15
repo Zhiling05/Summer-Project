@@ -1,5 +1,12 @@
 {
   "compilerOptions": {
+    // 让 import './App.tsx' 合法-cl
+    "allowImportingTsExtensions": true,
+    // 告诉 tsc 只做类型检查，不生成 .js-cl
+    "noEmit": true,
+
+    // 让 import xxx.json 合法-cl
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
