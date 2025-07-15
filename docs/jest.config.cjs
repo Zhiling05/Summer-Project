@@ -23,15 +23,10 @@ module.exports = {
   moduleNameMapper: {
     "\\.(jpg|jpeg|png)$": "<rootDir>_mocks_/fileMock.js",
     '\\.(css|less)$': '<rootDir>/_mocks_/styleMock.js',
-<<<<<<< HEAD
     // 样式文件
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     // 图片与 svg（含 ?url）都走同一个 mock
     '\\.(png|jpe?g|gif|svg)(\\?url)?$': '<rootDir>/_mocks_/fileMock.js'
-=======
-    '\\.svg\\?url$': '<rootDir>/_mocks_/fileMock.js',
-    '\\.svg$': '<rootDir>/_mocks_/fileMock.js',
->>>>>>> develop
   },
   //solve png showing problem
   globals: {
