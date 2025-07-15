@@ -152,6 +152,10 @@ Please note that if it becomes too large and cluttered, it should be cleaned up 
 - This is often due to `Node.js` or `npm` version mismatch, causing path resolution failures. 
 - Check your current version using `nvm`, and ensure it matches the version specified in `.nvmrc`.
 
+**5. Your test suite must contain at least one test or No tests found errors?**
+- PowerShell (the Windows command line, and the default terminal in some VS Code setups) does not support the backslash `\` as a path separator—you must use `/` or escape it as `\\`. Pasting a file path directly into a command to test can also produce errors like above.
+
+
 
 
 
