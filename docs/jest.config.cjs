@@ -21,7 +21,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   moduleNameMapper: {
-    "\\.(jpg|jpeg|png|svg)$": "<rootDir>_mocks_/fileMock.js",
+    "\\.(jpg|jpeg|png)$": "<rootDir>_mocks_/fileMock.js",
     '\\.(css|less)$': '<rootDir>/_mocks_/styleMock.js',
     // 样式文件
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
