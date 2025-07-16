@@ -8,7 +8,7 @@ import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 import BottomNav from "../../../../components/BottomNav";
 
 import questionnaire from "../../../../data/questionnaire.json";
-import { getNextId } from "../../../../utils/NavigationLogic";
+import { getNextId } from "../../../../utils/NavigationLogic.ts";
 
 /* ---------- 类型声明 ---------- */
 type QuestionType = "single" | "multi";
@@ -77,11 +77,12 @@ const DynamicQuestion = () => {
         nextId = currentQuestion.next[singleAns];
       } else {
         /* 多选：若任一选项匹配映射键就用；否则用 default 或第一个值 */
-        const matched = multiAns.find((a) => a in currentQuestion.next);
+        const nextMap = currentQuestion.next as Record<string, string>;
+        const matched = multiAns.find((a) => (a in nextMap));
         nextId =
-          (matched && currentQuestion.next[matched]) ||
-          currentQuestion.next["default"] ||
-          Object.values(currentQuestion.next)[0];
+          (matched && nextMap[matched]) ||
+          nextMap["default"] ||
+          Object.values(nextMap)[0];
       }
     }
 
@@ -100,6 +101,44 @@ const DynamicQuestion = () => {
         <h2>Question not found: {questionId}</h2>
       </div>
     );
+  /* ---------------------------------------------------------------
+ *  题目存在，但缺少 question / options 配置
+ * ------------------------------------------------------------- */
+if (
+  (!currentQuestion.question || currentQuestion.question.trim() === "") ||
+  !currentQuestion.options ||
+  currentQuestion.options.length === 0
+) {
+  return (
+    <>
+      {/* —— 顶栏 —— */}
+      <header className="nhs-header">
+        <div className="nhs-header__inner">
+          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
+          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
+          <span className="nhs-header__service">DIPP Assessment</span>
+        </div>
+      </header>
+
+      {/* —— 主体 —— */}
+      <div className="nhsuk-width-container">
+        <main id="maincontent" className="nhsuk-main-wrapper">
+          <section className="question-box">
+            <h1 className="nhsuk-heading-l">⚠️ 题目未配置</h1>
+            <p className="hint">
+              后台没有为 <strong>{currentQuestion.id}</strong> 配置完整内容。
+            </p>
+            <button className="continue-button" onClick={handleNext}>
+              跳过
+            </button>
+          </section>
+        </main>
+      </div>
+
+      <BottomNav />
+    </>
+  );
+}
 
   /* ——— 渲染 —— */
   const opts = currentQuestion.options.map(normalize);
