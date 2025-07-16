@@ -320,3 +320,8 @@ padding-bottom: calc(64px + 16px);
   --warm-yellow:      #ffdf3e;
 }
 
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
