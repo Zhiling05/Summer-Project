@@ -22,6 +22,25 @@ interface Question {
   next: string | Record<string, string>;
   hint?: string;
 }
+/*这一段用的还是next不是navigation，要改一下，然后最好把这个部分放到types/assessment.ts里面，你最开头再import一下*/
+// interface Question {
+//   id: string;
+//   type: "single" | "multi";
+//   question: string;
+//   options: RawOption[];
+//   hint?: string;
+//   navigation?: {
+//     type: "simple" | "conditional" | "map" | "cross-question";
+//     rules: Record<string, string> | {
+//       [key: string]: string | number;
+//       next: string;
+//       operator?: string;
+//       value?: number;
+//     }[];
+//     defaultNext?: string;
+//   };
+// }
+
 
 const normalize = (opt: RawOption): { label: string; value: string } =>
   typeof opt === "string" ? { label: opt, value: opt } : opt;
@@ -36,10 +55,18 @@ const DynamicQuestion = () => {
     () => (questionnaire as Question[]).find((q) => q.id === questionId),
     [questionId]
   );
+  //上面这里要改一下下
+  // const currentQuestion = useMemo<Question | undefined>(
+  //     () => (questionnaire.questions as Question[]).find((q) => q.id === questionId),
+  //     [questionId, questionnaire]
+  // );
+
 
   /* ——— 答案状态 ——— */
   const [singleAns, setSingleAns] = useState("");
   const [multiAns, setMultiAns] = useState<string[]>([]);
+  // 姚璟添加：这里应该加入一个记录历史选择的功能，为了逻辑跳转/修改选项功能
+  // const [answerHistory, setAnswerHistory] = useState<Record<string, string | string[]>>({});
 
   /* 题目切换时重置答案 */
   useEffect(() => {
@@ -66,8 +93,17 @@ const DynamicQuestion = () => {
     const answerPayload =
       currentQuestion.type === "single" ? singleAns : multiAns;
 
+
+    // 姚璟添加：更新答题历史
+    // const updatedHistory = {
+    //   ...answerHistory,
+    //   [currentQuestion.id]: answerPayload,
+    // };
+    // setAnswerHistory(updatedHistory);
+
     /* ① 让 NavigationLogic 判断（若有更复杂逻辑） */
     let nextId = getNextId?.(currentQuestion.id, answerPayload);
+    // let nextId = getNextId?.(currentQuestion.id, answerPayload, updatedHistory);
 
     /* ② fallback：按题目自身 next 字段 */
     if (!nextId) {
