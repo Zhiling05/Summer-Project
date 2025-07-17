@@ -1,0 +1,97 @@
+[
+  {
+    "id": "EMERGENCY_DEPARTMENT",
+    "recommendationType": "EMERGENCY_DEPARTMENT",
+    "title": "Immediate Referral",
+    "description": "Send patient to Emergency Department. Context XXXXX.",
+    "bulletPoints": [
+      "Context XXXXX",
+      "Context XXXXX",
+      "Context XXXXX"
+    ],
+    "themeColor": "#d03838",
+    "backgroundColor": "#ffe4e6",
+    "actions": ["Return to Home"]
+  },
+  {
+    "id": "IMMEDIATE",
+    "recommendationType": "IMMEDIATE",
+    "title": "IMMEDIATE REFERRAL TO EYE EMERGENCY ON CALL",
+    "description": "This patient requires immediate ophthalmology review.",
+    "bulletPoints": [
+      "Context XXXXX",
+      "Context XXXXX",
+      "Context XXXXX"
+    ],
+    "themeColor": "#d32f2f",
+    "backgroundColor": "#ffebee",
+    "actions": ["Return to Home"]
+  },
+  {
+    "id": "URGENT_TO_OPH",
+    "recommendationType": "URGENT_TO_OPH",
+    "title": "Urgent Referral to Ophthalmology",
+    "description": "The patient requires urgent ophthalmology review.",
+    "bulletPoints": [
+      "Context XXXXX",
+      "Context XXXXX",
+      "Context XXXXX"
+    ],
+    "themeColor": "#e67e00",
+    "backgroundColor": "#ffebcc",
+    "actions": ["Return to Home"]
+  },
+  {
+    "id": "URGENT_TO_GP_OR_NEUR",
+    "recommendationType": "URGENT_TO_GP_OR_NEUR",
+    "title": "Urgent Referral to GP or Neurology",
+    "description": "The patient requires urgent referral. Please refer them to a General Practitioner (GP) or directly to Neurology if needed.",
+    "bulletPoints": [
+      "Context XXXXX",
+      "Context XXXXX",
+      "Context XXXXX",
+      "Context XXXXX",
+      "Context XXXXX"
+    ],
+    "themeColor": "#e67e00",
+    "backgroundColor": "#ffebcc",
+    "actions": ["Return to Home"]
+  },
+  {
+    "id": "TO_GP",
+    "recommendationType": "TO_GP",
+    "title": "Refer to the General Practitioner",
+    "description": "Refer to the general practitioner for headache management.",
+    "bulletPoints": [],
+    "themeColor": "#007bff",
+    "backgroundColor": "#e6f0ff",
+    "actions": ["Return to Home"]
+  },
+  {
+    "id": "NO_REFERRAL",
+    "recommendationType": "NO_REFERRAL",
+    "title": "No Referral Required",
+    "description": "Not require a specialist referral at this time.",
+    "bulletPoints": [
+      "Context XXXXX",
+      "Context XXXXX",
+      "Context XXXXX"
+    ],
+    "themeColor": "#006747",
+    "backgroundColor": "#d5f5d5",
+    "actions": ["Return to Home"]
+  },
+  {
+    "id": "OTHER_DEPARTMENT",     
+    "recommendationType": "OTHER_DEPARTMENT",
+    "title": "Referral to Other Department",
+    "description": "The patient requires referral to another department. Please proceed as per the department's guidelines.",
+    "bulletPoints": [
+      "Context XXXXX",
+      "Context XXXXX"
+    ],
+    "themeColor": "#ff8c00",
+    "backgroundColor": "#fff4e6",
+    "actions": ["Return to Home"]
+  }
+]

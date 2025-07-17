@@ -1,0 +1,111 @@
+/* src/styles/recommendation.css */
+.recommendation-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+.nhs-header {
+  background-color: #005eb8;
+  color: white;
+  padding: 12px 0;
+}
+
+.nhs-header__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+}
+
+.recommendation-main {
+  flex: 1;
+  padding: 2rem 0;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  box-sizing: border-box;
+}
+
+.recommendation-card {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.recommendation-title {
+  font-size: 1.5rem;
+  margin-top: 0;
+  border-bottom: 4px solid;
+  padding-bottom: 0.5rem;
+}
+
+.recommendation-description {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+}
+
+.recommendation-bullets {
+  padding-left: 20px;
+  margin: 1rem 0;
+}
+
+.recommendation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.recommendation-actions button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.nhs-footer {
+  background-color: #f0f4f8;
+  color: #212b32;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin-top: 0.5rem;
+}
+
+.footer-links a {
+  color: #005eb8;
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .recommendation-card {
+    padding: 1rem;
+  }
+  .recommendation-title {
+    font-size: 1.25rem;
+  }
+}
