@@ -11,36 +11,7 @@ import questionnaire from "../../../../data/questionnaire.json";
 import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
 
 /* ---------- 类型声明 ---------- */
-type QuestionType = "single" | "multi";
-type RawOption = string | { label: string; value: string };
-
-interface Question {
-  id: string;
-  type: QuestionType;
-  question: string;
-  options: RawOption[];
-  next: string | Record<string, string>;
-  hint?: string;
-}
-/*这一段用的还是next不是navigation，要改一下，然后最好把这个部分放到types/assessment.ts里面，你最开头再import一下*/
-// interface Question {
-//   id: string;
-//   type: "single" | "multi";
-//   question: string;
-//   options: RawOption[];
-//   hint?: string;
-//   navigation?: {
-//     type: "simple" | "conditional" | "map" | "cross-question";
-//     rules: Record<string, string> | {
-//       [key: string]: string | number;
-//       next: string;
-//       operator?: string;
-//       value?: number;
-//     }[];
-//     defaultNext?: string;
-//   };
-// }
-
+import { Question, RawOption } from "../../../../types/assessment.ts";
 
 const normalize = (opt: RawOption): { label: string; value: string } =>
   typeof opt === "string" ? { label: opt, value: opt } : opt;
@@ -63,6 +34,11 @@ const DynamicQuestion = () => {
     },
     [questionId]
   );
+  //上面这里要改一下下
+  // const currentQuestion = useMemo<Question | undefined>(
+  //     () => (questionnaire.questions as Question[]).find((q) => q.id === questionId),
+  //     [questionId, questionnaire]
+  // );
 
 
   /* ——— 答案状态 ——— */
@@ -97,31 +73,18 @@ const DynamicQuestion = () => {
       currentQuestion.type === "single" ? singleAns : multiAns;
 
 
-    // 姚璟添加：更新答题历史
-      const updatedHistory: AnswerHistory = {
-        ...answerHistory,
-        [currentQuestion.id]: answerPayload,
-      };
-      setAnswerHistory(updatedHistory);
+    const updatedHistory: AnswerHistory = {
+      ...answerHistory,
+      [currentQuestion.id]: answerPayload,
+    };
+    setAnswerHistory(updatedHistory);
 
     /* ① 让 NavigationLogic 判断（若有更复杂逻辑） */
     let nextId = getNextId?.(currentQuestion.id, answerPayload, updatedHistory);
 
-    /* ② fallback：按题目自身 next 字段 */
-    if (!nextId) {
-      if (typeof currentQuestion.next === "string") {
-        nextId = currentQuestion.next;
-      } else if (currentQuestion.type === "single") {
-        nextId = currentQuestion.next[singleAns];
-      } else {
-        /* 多选：若任一选项匹配映射键就用；否则用 default 或第一个值 */
-        const nextMap = currentQuestion.next as Record<string, string>;
-        const matched = multiAns.find((a) => (a in nextMap));
-        nextId =
-          (matched && nextMap[matched]) ||
-          nextMap["default"] ||
-          Object.values(nextMap)[0];
-      }
+    /* ② fallback：按 navigation.defaultNext */
+    if (!nextId && currentQuestion.navigation?.defaultNext) {
+      nextId = currentQuestion.navigation.defaultNext;
     }
 
     if (!nextId) return; // 配置错误
