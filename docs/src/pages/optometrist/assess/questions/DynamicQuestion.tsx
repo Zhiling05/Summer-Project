@@ -63,11 +63,6 @@ const DynamicQuestion = () => {
     },
     [questionId]
   );
-  //上面这里要改一下下
-  // const currentQuestion = useMemo<Question | undefined>(
-  //     () => (questionnaire.questions as Question[]).find((q) => q.id === questionId),
-  //     [questionId, questionnaire]
-  // );
 
 
   /* ——— 答案状态 ——— */

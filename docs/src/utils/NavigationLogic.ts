@@ -1,6 +1,3 @@
-//NavigationLogic负责根据 questionnaire.json 和用户输入的当前回答，返回下一题的ID
-
-// utils/NavigationLogic.ts
 import questionnaire from "../data/questionnaire.json";
 
 // 类型定义
@@ -43,7 +40,7 @@ export function getNextId(
       }
 
     case "cross-question":
-      return getNextByCrossQuestionRules(rules, answerHistory, defaultNext);
+      return getNextByCrossQuestionRules(rules, answerHistory, defaultNext, currentId, answer);
 
     default:
       return;
@@ -80,7 +77,9 @@ function getNextByConditionalRules(
 function getNextByCrossQuestionRules(
     rules: CrossQuestionRule[],
     history: AnswerHistory,
-    defaultNext?: string
+    defaultNext?: string,
+    currentId?: string,
+    answer?: string | string[]
 ): string | undefined {
   for (const rule of rules) {
     let passed = true;
@@ -89,17 +88,19 @@ function getNextByCrossQuestionRules(
       if (key === "next") continue;
 
       const [qid, method] = key.split(".");
-      const val = history[qid];
+
+      // 当前题目的答案需要从 answer 参数中读取
+      const val = (qid === currentId) ? answer : history[qid];
 
       if (method === "hasAnyExcept") {
         if (!Array.isArray(val) || !val.some((v) => v !== expected)) passed = false;
       }
 
-      if (method === "includesOnly") {
+      else if (method === "includesOnly") {
         if (!Array.isArray(val) || val.some((v) => v !== expected)) passed = false;
       }
 
-      if (method === "countExcept") {
+      else if (method === "countExcept") {
         const count = Array.isArray(val)
             ? val.filter((v) => v !== expected).length
             : 0;
@@ -113,6 +114,11 @@ function getNextByCrossQuestionRules(
         ) {
           passed = false;
         }
+      }
+
+      else {
+        console.warn(`Unknown method "${method}" in cross-question rule.`);
+        passed = false;
       }
     }
 
