@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/bottomnav.css"; // 引入底部导航栏样式（路径无误）
 
 // 导入图标（注意 icons 多一层目录）(之前文件夹名是Icons导致报错了)
@@ -10,6 +10,13 @@ import GuideIcon from "../assets/icons/Guide.svg?url";
 // 底部导航栏组件
 const BottomNav = () => {
   const navigate = useNavigate(); // 用于编程式跳转
+    const location = useLocation();
+
+    const handleNavigation = (path: string) => {
+        if (location.pathname !== path) {
+            navigate(path);
+        }
+    };
 
   return (
     <nav className="bottom-nav">

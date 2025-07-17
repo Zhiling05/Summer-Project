@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+  
+    // 只排除出问题的文件/目录-cl
+    "exclude": [
+      "src/tests/**",            // 所有测试目录
+      "**/*.test-d.ts",          // 类型测试文件
+      "src/types/images.d.ts"    // 那个重复声明的文件
+    ]
+  }
+  
