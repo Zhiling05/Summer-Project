@@ -8,7 +8,7 @@ import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 import BottomNav from "../../../../components/BottomNav";
 
 import questionnaire from "../../../../data/questionnaire.json";
-import { getNextId } from "../../../../utils/NavigationLogic.ts";
+import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
 
 /* ---------- 类型声明 ---------- */
 type QuestionType = "single" | "multi";
@@ -52,7 +52,15 @@ const DynamicQuestion = () => {
 
   /* ——— 当前题目 ——— */
   const currentQuestion = useMemo<Question | undefined>(
-    () => (questionnaire as Question[]).find((q) => q.id === questionId),
+    () => {
+      /**
+       * questionnaire 可能是 [{…}] 或 { questions: [{…}] }
+       * 统一取出 Question[] 列表
+       */
+      const raw: any = questionnaire;
+      const list: Question[] = Array.isArray(raw.questions) ? raw.questions : raw;
+      return list.find((q) => q.id === questionId);
+    },
     [questionId]
   );
   //上面这里要改一下下
@@ -66,7 +74,7 @@ const DynamicQuestion = () => {
   const [singleAns, setSingleAns] = useState("");
   const [multiAns, setMultiAns] = useState<string[]>([]);
   // 姚璟添加：这里应该加入一个记录历史选择的功能，为了逻辑跳转/修改选项功能
-  // const [answerHistory, setAnswerHistory] = useState<Record<string, string | string[]>>({});
+  const [answerHistory, setAnswerHistory] = useState<AnswerHistory>({});
 
   /* 题目切换时重置答案 */
   useEffect(() => {
@@ -95,15 +103,14 @@ const DynamicQuestion = () => {
 
 
     // 姚璟添加：更新答题历史
-    // const updatedHistory = {
-    //   ...answerHistory,
-    //   [currentQuestion.id]: answerPayload,
-    // };
-    // setAnswerHistory(updatedHistory);
+      const updatedHistory: AnswerHistory = {
+        ...answerHistory,
+        [currentQuestion.id]: answerPayload,
+      };
+      setAnswerHistory(updatedHistory);
 
     /* ① 让 NavigationLogic 判断（若有更复杂逻辑） */
-    let nextId = getNextId?.(currentQuestion.id, answerPayload);
-    // let nextId = getNextId?.(currentQuestion.id, answerPayload, updatedHistory);
+    let nextId = getNextId?.(currentQuestion.id, answerPayload, updatedHistory);
 
     /* ② fallback：按题目自身 next 字段 */
     if (!nextId) {
