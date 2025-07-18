@@ -19,6 +19,7 @@ const themeMap: Record<string, { bg: string; text: string; border: string }> = {
   URGENT_TO_OPH:        { bg: '#ffebcc', text: '#e67e00', border: '#e67e00' },
   URGENT_TO_GP_OR_NEUR: { bg: '#ffebcc', text: '#e67e00', border: '#e67e00' },
   TO_GP:                { bg: '#e6f0ff', text: '#e67e00', border: '#e67e00' },
+  OTHER_EYE_CONDITIONS_GUIDANCE:{ bg: '#e6f0ff', text: '#e67e00', border: '#e67e00' },
   NO_REFERRAL:          { bg: '#d5f5d5', text: '#006747', border: '#006747' },
 };
 
