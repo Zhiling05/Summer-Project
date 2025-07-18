@@ -82,8 +82,8 @@
     "actions": ["Return to Home"]
   },
   {
-    "id": "OTHER_DEPARTMENT",     
-    "recommendationType": "OTHER_DEPARTMENT",
+    "id": "OTHER EYE CONDITIONS GUIDANCE",     
+    "recommendationType": "OTHER EYE CONDITIONS GUIDANCE",
     "title": "Referral to Other Department",
     "description": "The patient requires referral to another department. Please proceed as per the department's guidelines.",
     "bulletPoints": [
