@@ -10,6 +10,7 @@
   --core-green:       #007f3b;
   --dark-green:       #005a30;
   --warm-yellow:      #fae100;
+  --error-red:       #d4351c;         /* NHS error red */
 
   --page-grey:        #e5ecef;
   --border-grey:      #aeb7bd;
@@ -36,6 +37,7 @@
     --text-body:        #e9ecef;
     --text-inverse:     #0d1215;
     --shadow-card:      0 2px 6px rgba(0,0,0,.35);
+    --error-red:        #ff5f56;
   }
 }
 
@@ -213,6 +215,13 @@ padding-bottom: calc(64px + 16px);
   padding: 0;
 }
 
+/*ycl：去掉 ul 的默认项目符号*/
+.checkbox-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* label 整行即可点击 */
 .radio-label {
   display: flex;
@@ -280,6 +289,7 @@ padding-bottom: calc(64px + 16px);
 .continue-button:disabled {
   background: #c5c5c5;
   cursor: not-allowed;
+  opacity: .65;
 }
 
 /* ===========================================================
@@ -325,3 +335,106 @@ img {
   -webkit-user-drag: none;
 }
 
+/* ===========================================================
+   5. 错误提示组件（toast / modal / 表单校验）
+   =========================================================== */
+
+/* —— 动画 —— */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate(-50%, 25px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes fadeOutDown {
+  from { opacity: 1; transform: translate(-50%, 0); }
+  to   { opacity: 0; transform: translate(-50%, 25px); }
+}
+
+/* —— 顶部 / 底部错误 toast —— */
+.error-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  max-width: 420px;
+  width: calc(100% - 32px);
+  background: var(--error-red);
+  color: var(--text-inverse);
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-s);
+  box-shadow: var(--shadow-card);
+  font-size: .95rem;
+  line-height: 1.45;
+  z-index: 10000;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-s);
+  pointer-events: none;          /* 仅展示，不拦截点击 */
+  opacity: 0;                    /* 默认隐藏 */
+  transform: translate(-50%, 25px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.error-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  animation: fadeInUp .25s ease-out;
+}
+.error-toast.hide {
+  animation: fadeOutDown .25s ease-in both;
+}
+
+.error-toast__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+/* —— 全屏遮罩 + 模态 —— */
+.error-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.error-modal {
+  background: var(--text-inverse);
+  border-left: 4px solid var(--error-red);
+  border-radius: var(--radius-m) 0 0 var(--radius-m);
+  box-shadow: var(--shadow-card);
+  max-width: 500px;
+  width: calc(100% - 48px);
+  padding: var(--space-xl);
+  color: var(--text-body);
+}
+.error-modal__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 var(--space-m);
+  color: var(--error-red);
+}
+.error-modal__actions {
+  margin-top: var(--space-l);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-s);
+}
+
+/* —— 表单校验 —— */
+.is-invalid {
+  border-color: var(--error-red) !important;
+}
+.error-text {
+  color: var(--error-red);
+  font-size: .9rem;
+  margin-top: 4px;
+}
+
+/* —— 移动端宽度适配 —— */
+@media (max-width: 640px) {
+  .error-toast {
+    max-width: 90vw;
+  }
+}

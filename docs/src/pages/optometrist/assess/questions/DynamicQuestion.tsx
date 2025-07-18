@@ -3,12 +3,15 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
+// ycl: 改为从 src/assets 里 import，Vite 才能正确打包
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
+
 import BottomNav from "../../../../components/BottomNav";
 
 import questionnaire from "../../../../data/questionnaire.json";
-import { getNextId } from "../../../../utils/NavigationLogic.ts";
+import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
+import { validateByType } from "../../../../utils/ValidationLogic"; // ycl
 
 /* ---------- 类型声明 ---------- */
 type QuestionType = "single" | "multi";
@@ -22,6 +25,24 @@ interface Question {
   next: string | Record<string, string>;
   hint?: string;
 }
+/*这一段用的还是next不是navigation，要改一下，然后最好把这个部分放到types/assessment.ts里面，你最开头再import一下*/
+// interface Question {
+//   id: string;
+//   type: "single" | "multi";
+//   question: string;
+//   options: RawOption[];
+//   hint?: string;
+//   navigation?: {
+//     type: "simple" | "conditional" | "map" | "cross-question";
+//     rules: Record<string, string> | {
+//       [key: string]: string | number;
+//       next: string;
+//       operator?: string;
+//       value?: number;
+//     }[];
+//     defaultNext?: string;
+//   };
+// }
 
 const normalize = (opt: RawOption): { label: string; value: string } =>
   typeof opt === "string" ? { label: opt, value: opt } : opt;
@@ -33,18 +54,29 @@ const DynamicQuestion = () => {
 
   /* ——— 当前题目 ——— */
   const currentQuestion = useMemo<Question | undefined>(
-    () => (questionnaire as Question[]).find((q) => q.id === questionId),
+    () => {
+      /**
+       * questionnaire 可能是 [{…}] 或 { questions: [{…}] }
+       * 统一取出 Question[] 列表
+       */
+      const raw: any = questionnaire;
+      const list: Question[] = Array.isArray(raw.questions) ? raw.questions : raw;
+      return list.find((q) => q.id === questionId);
+    },
     [questionId]
   );
 
   /* ——— 答案状态 ——— */
   const [singleAns, setSingleAns] = useState("");
   const [multiAns, setMultiAns] = useState<string[]>([]);
+  const [answerHistory, setAnswerHistory] = useState<AnswerHistory>({});
+  const [errors, setErrors] = useState<string[]>([]); // ycl
 
   /* 题目切换时重置答案 */
   useEffect(() => {
     setSingleAns("");
     setMultiAns([]);
+    setErrors([]); // ycl
   }, [questionId]);
 
   /* 已作答？ */
@@ -63,22 +95,39 @@ const DynamicQuestion = () => {
   const handleNext = () => {
     if (!currentQuestion) return;
 
+    // 1) 校验逻辑 // ycl
+    const selections = currentQuestion.type === "single" ? [singleAns] : multiAns;
+    const validationErrors = validateByType(
+      currentQuestion.type,
+      selections,
+      currentQuestion.options.length
+    );
+    if (validationErrors.length > 0) { setErrors(validationErrors); return; } // ycl
+    setErrors([]); // ycl
+
     const answerPayload =
       currentQuestion.type === "single" ? singleAns : multiAns;
 
+    // 姚璟添加：更新答题历史
+    const updatedHistory: AnswerHistory = {
+      ...answerHistory,
+      [currentQuestion.id]: answerPayload,
+    };
+    setAnswerHistory(updatedHistory);
+
     /* ① 让 NavigationLogic 判断（若有更复杂逻辑） */
-    let nextId = getNextId?.(currentQuestion.id, answerPayload);
+    let nextId = getNextId?.(currentQuestion.id, answerPayload, updatedHistory);
 
     /* ② fallback：按题目自身 next 字段 */
     if (!nextId) {
       if (typeof currentQuestion.next === "string") {
         nextId = currentQuestion.next;
       } else if (currentQuestion.type === "single") {
-        nextId = currentQuestion.next[singleAns];
+        nextId = (currentQuestion.next as Record<string, string>)[singleAns];
       } else {
         /* 多选：若任一选项匹配映射键就用；否则用 default 或第一个值 */
         const nextMap = currentQuestion.next as Record<string, string>;
-        const matched = multiAns.find((a) => (a in nextMap));
+        const matched = multiAns.find((a) => a in nextMap);
         nextId =
           (matched && nextMap[matched]) ||
           nextMap["default"] ||
@@ -90,8 +139,8 @@ const DynamicQuestion = () => {
 
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
-      : `/optometrist/assess/${nextId}`;
-    navigate(path);
+      : `/optometrist/assess/recommendations/${nextId}`; // ycl
+    navigate(path); // ycl
   };
 
   /* ——— 题目不存在 —— */
@@ -104,41 +153,42 @@ const DynamicQuestion = () => {
   /* ---------------------------------------------------------------
  *  题目存在，但缺少 question / options 配置
  * ------------------------------------------------------------- */
-if (
-  (!currentQuestion.question || currentQuestion.question.trim() === "") ||
-  !currentQuestion.options ||
-  currentQuestion.options.length === 0
-) {
-  return (
-    <>
-      {/* —— 顶栏 —— */}
-      <header className="nhs-header">
-        <div className="nhs-header__inner">
-          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">DIPP Assessment</span>
+  if (
+    (!currentQuestion.question || currentQuestion.question.trim() === "") ||
+    !currentQuestion.options ||
+    currentQuestion.options.length === 0
+  ) {
+    return (
+      <>
+        {/* —— 顶栏 —— */}
+        <header className="nhs-header">
+          <div className="nhs-header__inner">
+            {/* ycl: 使用变量引用，避免写死路径 */}
+            <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
+            <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
+            <span className="nhs-header__service">DIPP Assessment</span>
+          </div>
+        </header>
+
+        {/* —— 主体 —— */}
+        <div className="nhsuk-width-container">
+          <main id="maincontent" className="nhsuk-main-wrapper">
+            <section className="question-box">
+              <h1 className="nhsuk-heading-l">⚠️ 题目未配置</h1>
+              <p className="hint">
+                后台没有为 <strong>{currentQuestion.id}</strong> 配置完整内容。
+              </p>
+              <button className="continue-button" onClick={handleNext}>
+                跳过
+              </button>
+            </section>
+          </main>
         </div>
-      </header>
 
-      {/* —— 主体 —— */}
-      <div className="nhsuk-width-container">
-        <main id="maincontent" className="nhsuk-main-wrapper">
-          <section className="question-box">
-            <h1 className="nhsuk-heading-l">⚠️ 题目未配置</h1>
-            <p className="hint">
-              后台没有为 <strong>{currentQuestion.id}</strong> 配置完整内容。
-            </p>
-            <button className="continue-button" onClick={handleNext}>
-              跳过
-            </button>
-          </section>
-        </main>
-      </div>
-
-      <BottomNav />
-    </>
-  );
-}
+        <BottomNav />
+      </>
+    );
+  }
 
   /* ——— 渲染 —— */
   const opts = currentQuestion.options.map(normalize);
@@ -154,6 +204,7 @@ if (
         </div>
       </header>
 
+
       {/* 主体 */}
       <div className="nhsuk-width-container">
         <main id="maincontent" className="nhsuk-main-wrapper">
@@ -165,7 +216,7 @@ if (
             <h1 className="nhsuk-heading-l">{currentQuestion.question}</h1>
             {currentQuestion.hint && <p className="hint">{currentQuestion.hint}</p>}
 
-            <ul className="radio-list">
+            <ul className={currentQuestion.type === "single" ? "radio-list" : "checkbox-list"}>
               {opts.map((o) => {
                 const checked =
                   currentQuestion.type === "single"
@@ -193,6 +244,17 @@ if (
               })}
             </ul>
 
+            {/* 错误提示 */}
+            {errors.length > 0 && (
+              <div className="error-block" style={{ color: "red", margin: "1rem 0" }}>
+                <ul>
+                  {errors.map((e, i) => (
+                    <li key={i}>{e}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <button
               className="continue-button"
               disabled={!answered}
@@ -205,7 +267,7 @@ if (
       </div>
 
       {/* 底部导航 */}
-      <BottomNav />
+      <BottomNav onNext={handleNext} />
     </>
   );
 };
