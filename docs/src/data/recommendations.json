@@ -1,7 +1,7 @@
 [
   {
-    "id": "EMERGENCY_DEPARTMENT",
-    "recommendationType": "EMERGENCY_DEPARTMENT",
+    "id": "emergency-department",
+    "recommendationType": "emergency-department",
     "title": "Immediate Referral",
     "description": "Send patient to Emergency Department. Context XXXXX.",
     "bulletPoints": [
@@ -82,8 +82,8 @@
     "actions": ["Return to Home"]
   },
   {
-    "id": "OTHER EYE CONDITIONS GUIDANCE",     
-    "recommendationType": "OTHER EYE CONDITIONS GUIDANCE",
+    "id": "OTHER_EYE_CONDITIONS_GUIDANCE",     
+    "recommendationType": "OTHER_EYE_CONDITIONS_GUIDANCE",
     "title": "Referral to Other Department",
     "description": "The patient requires referral to another department. Please proceed as per the department's guidelines.",
     "bulletPoints": [
