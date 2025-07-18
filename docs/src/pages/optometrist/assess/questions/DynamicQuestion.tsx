@@ -128,7 +128,7 @@ const DynamicQuestion = () => {
 
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
-      : `/optometrist/assess/${nextId}`;
+      : `/optometrist/assess/recommendations/${nextId}`;
     navigate(path);
   };
 

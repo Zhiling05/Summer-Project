@@ -13,7 +13,7 @@ export default function AssessRouter() {
       <Route path="questions/*"     element={<QuestionsRouter />} />
       <Route path="questions/:id"   element={<DynamicQuestion />} />
       {/* ✅ 所有结果页统一由 DynamicRecommendation 渲染 */}
-      <Route path=":resultId"       element={<DynamicRecommendation />} />
+      <Route path="recommendations/:resultId"       element={<DynamicRecommendation />} />
     </Routes>
   );
 }
