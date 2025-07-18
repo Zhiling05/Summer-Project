@@ -33,7 +33,6 @@ export default function OptometristApp() {
         </div>
       </header>
 
-      {/* 回退按钮 */}
       <BackButton />
 
       {/* 主体 */}

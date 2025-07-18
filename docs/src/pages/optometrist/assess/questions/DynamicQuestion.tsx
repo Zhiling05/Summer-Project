@@ -3,8 +3,10 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
+// ycl: 改为从 src/assets 里 import，Vite 才能正确打包
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
+
 import BottomNav from "../../../../components/BottomNav";
 
 import questionnaire from "../../../../data/questionnaire.json";
@@ -94,12 +96,12 @@ const DynamicQuestion = () => {
     if (!currentQuestion) return;
 
     // 1) 校验逻辑 // ycl
-    const selections = currentQuestion.type === "single" ? [singleAns] : multiAns; // ycl
+    const selections = currentQuestion.type === "single" ? [singleAns] : multiAns;
     const validationErrors = validateByType(
       currentQuestion.type,
       selections,
       currentQuestion.options.length
-    ); // ycl
+    );
     if (validationErrors.length > 0) { setErrors(validationErrors); return; } // ycl
     setErrors([]); // ycl
 
@@ -121,7 +123,7 @@ const DynamicQuestion = () => {
       if (typeof currentQuestion.next === "string") {
         nextId = currentQuestion.next;
       } else if (currentQuestion.type === "single") {
-        nextId = currentQuestion.next[singleAns];
+        nextId = (currentQuestion.next as Record<string, string>)[singleAns];
       } else {
         /* 多选：若任一选项匹配映射键就用；否则用 default 或第一个值 */
         const nextMap = currentQuestion.next as Record<string, string>;
@@ -137,8 +139,8 @@ const DynamicQuestion = () => {
 
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
-      : `/optometrist/assess/${nextId}`;
-    navigate(path);
+      : `/optometrist/assess/recommendations/${nextId}`; // ycl
+    navigate(path); // ycl
   };
 
   /* ——— 题目不存在 —— */
@@ -161,6 +163,7 @@ const DynamicQuestion = () => {
         {/* —— 顶栏 —— */}
         <header className="nhs-header">
           <div className="nhs-header__inner">
+            {/* ycl: 使用变量引用，避免写死路径 */}
             <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
             <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
             <span className="nhs-header__service">DIPP Assessment</span>
@@ -201,6 +204,7 @@ const DynamicQuestion = () => {
         </div>
       </header>
 
+
       {/* 主体 */}
       <div className="nhsuk-width-container">
         <main id="maincontent" className="nhsuk-main-wrapper">
@@ -212,9 +216,7 @@ const DynamicQuestion = () => {
             <h1 className="nhsuk-heading-l">{currentQuestion.question}</h1>
             {currentQuestion.hint && <p className="hint">{currentQuestion.hint}</p>}
 
-            <ul className={
-              currentQuestion.type === "single" ? "radio-list" : "checkbox-list"
-            }>
+            <ul className={currentQuestion.type === "single" ? "radio-list" : "checkbox-list"}>
               {opts.map((o) => {
                 const checked =
                   currentQuestion.type === "single"

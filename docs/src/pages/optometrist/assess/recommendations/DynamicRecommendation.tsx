@@ -1,75 +1,118 @@
 // src/pages/optometrist/assess/recommendations/DynamicRecommendation.tsx
+
 import React from 'react';
-import { useParams, Navigate, Outlet } from 'react-router-dom';
-import RecommendationsRouter from './RecommendationsRouter';
-import './recommendation.css';
+import { useParams, Link } from 'react-router-dom';
+import recommendationsData from '../../../../data/recommendations.json';
+import '../../../../styles/recommendation.css';
 
-/**
- * recommendations.json 写好后：
- *    - 确认文件路径（下面 require 里的相对路径）。
- *    - 确认 JSON 里每条记录的字段名和结构，对应到下面的 ResultRecord 接口。
- */
-export interface ResultRecord {
+// ycl: 从 src/assets 导入 Logo
+import NHSLogo from '../../../../assets/NHS_LOGO.jpg'; // ycl
+import DIPPLogo from '../../../../assets/DIPP_Study_logo.png'; // ycl
+
+interface Recommendation {
   id: string;
-  /** 
-   *  recommendations.json 中此字段用全大写下划线：
-   *    e.g. "EMERGENCY_DEPARTMENT", "URGENT_TO_OPH" 等
-   */
-  recommendationType: RecommendationType;
-  // TODO: 补充其他字段，比如 title, description, imageUrl 等
-  // title: string;
-  // description: string;
-  // imageUrl?: string;
-}
-
-/**
- * 如果在 recommendations.json 里添加了新的类型，
- *    也要在这里加一行，并在 RecommendationsRouter.tsx 注册对应的 path（用连字符小写）。
- */
-export enum RecommendationType {
-  EMERGENCY_DEPARTMENT   = 'EMERGENCY_DEPARTMENT',
-  IMMEDIATE              = 'IMMEDIATE',
-  URGENT_TO_OPH          = 'URGENT_TO_OPH',
-  URGENT_TO_GP_OR_NEUR   = 'URGENT_TO_GP_OR_NEUR',
-  TO_GP                  = 'TO_GP',
-  NO_REFERRAL            = 'NO_REFERRAL',
+  title: string;
+  description: string;
+  bulletPoints: string[];
+  themeColor: string;
+  backgroundColor: string;
+  actions: string[];
 }
 
 const DynamicRecommendation: React.FC = () => {
-  // 路由里约定的 param 名，根据 Route 定义调整
   const { resultId } = useParams<{ resultId: string }>();
+  const rec = (recommendationsData as Recommendation[]).find(r => r.id === resultId);
 
-  // ▶这里 require 的路径，等 recommendations.json 确定放在哪调整
-  const allResults: ResultRecord[] = require('../../../../data/recommendations.json');
-  const result = allResults.find((r) => r.id === resultId);
-
-  if (!result) {
+  if (!rec) {
     return (
       <div className="recommendation-page">
-        <h2>Result “{resultId}” not found</h2>
+        {/* 顶部 NHS & DIPP Study header */}
+        <header className="nhs-header">
+          <div className="nhs-header__inner">
+            <img src={NHSLogo} alt="NHS Logo" className="logo" />
+            <img src={DIPPLogo} alt="DIPP Study logo" className="logo dipp-logo" />
+            <span className="nhs-header__service">DIPP Assessment</span>
+          </div>
+        </header>
+
+        <div className="recommendation-main">
+          <div className="recommendation-card">
+            <h2 className="recommendation-title">未找到推荐结果 “{resultId}”</h2>
+          </div>
+        </div>
+        <div className="nhs-footer">
+          <div className="footer-inner">
+            <ul className="footer-links">
+              <li><Link to="/">首页</Link></li>
+            </ul>
+          </div>
+        </div>
       </div>
     );
   }
 
-  /**
-   * 把 UPPER_SNAKE_CASE 转回小写连字符：
-   * EMERGENCY_DEPARTMENT → emergency-department
-   * 正好匹配 RecommendationsRouter.tsx 里注册的 path
-   */
-  const pathSegment = result.recommendationType
-    .toLowerCase()
-    .replace(/_/g, '-');
-
   return (
-    <div className="recommendation-page">
-      {/* 子路由入口（EmergencyDepartment、Immediate…等） */}
-      <RecommendationsRouter />
+    <div
+      className="recommendation-container"
+      style={{ backgroundColor: rec.backgroundColor }}
+    >
+      {/* 顶部 NHS & DIPP Study header */}
+      <header className="nhs-header">
+        <div className="nhs-header__inner">
+          <img src={NHSLogo} alt="NHS Logo" className="logo" /> {/* ycl */}
+          <img src={DIPPLogo} alt="DIPP Study logo" className="logo dipp-logo" /> {/* ycl */}
+          <span className="nhs-header__service">DIPP Assessment</span> {/* ycl */}
+        </div>
+      </header>
 
-      {/* 将页面导航到对应的子路由 */}
-      <Navigate to={pathSegment} replace />
+      {/* 主体内容 */}
+      <main className="recommendation-main">
+        <div className="recommendation-card">
+          <h2
+            className="recommendation-title"
+            style={{ borderColor: rec.themeColor }}
+          >
+            {rec.title}
+          </h2>
+          <p className="recommendation-description">{rec.description}</p>
 
-      {/* 渲染子路由组件 */}
-      <Outlet />
+          {rec.bulletPoints.length > 0 && (
+            <ul className="recommendation-bullets">
+              {rec.bulletPoints.map((pt, idx) => (
+                <li key={idx}>{pt}</li>
+              ))}
+            </ul>
+          )}
+
+          <div className="recommendation-actions">
+            {rec.actions.map((action) => (
+              <Link
+                key={action}
+                to="/"
+                className="button"
+                style={{
+                  backgroundColor: rec.themeColor,
+                  color: 'white',                
+                  textAlign: 'center',          
+                  width: '100%'           
+                }}
+              >
+                {action}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </main>
+
+      {/* NHS 页脚 */}
+      <footer className="nhs-footer">
+        <div className="footer-inner">
+          <ul className="footer-links">
+            <li><a href="/privacy">隐私政策</a></li>
+            <li><a href="/contact">联系我们</a></li>
+          </ul>
+        </div>
+      </footer>
     </div>
   );
 };
