@@ -1,11 +1,21 @@
+/* src/styles/recommendation.css */
 
+/* ===== 整体框架 ===== */
 .recommendation-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
+  background-color: inherit; 
 }
 
+.recommendation-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 顶部 NHS 栏 ===== */
 .nhs-header {
   background-color: #005eb8;
   color: white;
@@ -24,11 +34,11 @@
   height: 40px;
 }
 
+/* ===== 主内容区 ===== */
 .recommendation-main {
   flex: 1;
   padding: 2rem 0;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -74,6 +84,7 @@
   cursor: pointer;
 }
 
+/* ===== 页脚 ===== */
 .nhs-footer {
   background-color: #f0f4f8;
   color: #212b32;
@@ -101,6 +112,7 @@
   text-decoration: none;
 }
 
+/* ===== 响应式 ===== */
 @media (max-width: 480px) {
   .recommendation-card {
     padding: 1rem;
