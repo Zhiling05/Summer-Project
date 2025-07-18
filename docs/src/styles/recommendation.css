@@ -1,18 +1,20 @@
-/* src/styles/recommendation.css */
+/* 确保 html 和 body 元素高度和宽度为 100% */
+html, body {
+  height: 100%;
+  width: 100%; /* 确保宽度占满屏幕 */
+  margin: 0;  /* 去除默认的 margin */
+  background-color: inherit;  /* 保证背景色继承 */
+}
 
 /* ===== 整体框架 ===== */
 .recommendation-container {
-  min-height: 100vh;
+  height: 100vh; /* 确保容器高度占满视口 */
+  width: 100vw; /* 确保宽度占满屏幕 */
   display: flex;
   flex-direction: column;
   font-family: Arial, sans-serif;
-  background-color: inherit; 
-}
-
-.recommendation-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background-color: inherit; /* 背景色继承自父元素 */
+  margin-left: calc(-50vw + 50%); /* 保证背景色和宽度占满屏幕 */
 }
 
 /* ===== 顶部 NHS 栏 ===== */
@@ -36,14 +38,16 @@
 
 /* ===== 主内容区 ===== */
 .recommendation-main {
-  flex: 1;
+  flex: 1; /* 填满剩余空间 */
   padding: 2rem 0;
-  width: 100%;
+  width: 100%; /* 确保宽度占满屏幕 */
   box-sizing: border-box;
+  background-color: inherit; /* 背景色继承 */
 }
 
 .recommendation-card {
-  max-width: 960px;
+  width: 100%; /* 确保卡片宽度占满父容器 */
+  max-width: 600px; /* 限制最大宽度 */
   margin: 0 auto;
   padding: 2rem;
   background-color: white;
@@ -113,7 +117,7 @@
 }
 
 /* ===== 响应式 ===== */
-@media (max-width: 480px) {
+@media (max-width: 300px) {
   .recommendation-card {
     padding: 1rem;
   }

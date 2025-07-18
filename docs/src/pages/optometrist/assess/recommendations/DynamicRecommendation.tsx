@@ -9,6 +9,9 @@ import '../../../../styles/recommendation.css';
 import NHSLogo from '../../../../assets/NHS_LOGO.jpg'; // ycl
 import DIPPLogo from '../../../../assets/DIPP_Study_logo.png'; // ycl
 
+import BackButton from '../../../../components/BackButton';//zkx
+import BottomNav from '../../../../components/BottomNav';//zkx
+
 interface Recommendation {
   id: string;
   title: string;
@@ -37,7 +40,7 @@ const DynamicRecommendation: React.FC = () => {
 
         <div className="recommendation-main">
           <div className="recommendation-card">
-            <h2 className="recommendation-title">未找到推荐结果 “{resultId}”</h2>
+            <h2 className="recommendation-title">did not find “{resultId}”</h2>
           </div>
         </div>
         <div className="nhs-footer">
@@ -57,6 +60,7 @@ const DynamicRecommendation: React.FC = () => {
       style={{ backgroundColor: rec.backgroundColor }}
     >
       {/* 顶部 NHS & DIPP Study header */}
+      <BackButton /> {/* 引入 BackButton */}
       <header className="nhs-header">
         <div className="nhs-header__inner">
           <img src={NHSLogo} alt="NHS Logo" className="logo" /> {/* ycl */}
@@ -103,8 +107,9 @@ const DynamicRecommendation: React.FC = () => {
           </div>
         </div>
       </main>
+      <BottomNav /> {/* 引入 BottomNav */}
 
-      {/* NHS 页脚 */}
+      {/* NHS 页脚 
       <footer className="nhs-footer">
         <div className="footer-inner">
           <ul className="footer-links">
@@ -112,7 +117,7 @@ const DynamicRecommendation: React.FC = () => {
             <li><a href="/contact">联系我们</a></li>
           </ul>
         </div>
-      </footer>
+      </footer>*/}
     </div>
   );
 };

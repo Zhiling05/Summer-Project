@@ -58,8 +58,8 @@
     "title": "Refer to the General Practitioner",
     "description": "Refer to the general practitioner for headache management.",
     "bulletPoints": [],
-    "themeColor": "#007bff",
-    "backgroundColor": "#e6f0ff",
+    "themeColor": "#e67e00",
+    "backgroundColor": "#ffebcc",
     "actions": ["Return to Home"]
   },
   {
