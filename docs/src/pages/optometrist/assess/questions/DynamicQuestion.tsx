@@ -14,35 +14,9 @@ import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
 import { validateByType } from "../../../../utils/ValidationLogic"; // ycl
 
 /* ---------- 类型声明 ---------- */
-type QuestionType = "single" | "multi";
-type RawOption = string | { label: string; value: string };
 
-interface Question {
-  id: string;
-  type: QuestionType;
-  question: string;
-  options: RawOption[];
-  next: string | Record<string, string>;
-  hint?: string;
-}
-/*这一段用的还是next不是navigation，要改一下，然后最好把这个部分放到types/assessment.ts里面，你最开头再import一下*/
-// interface Question {
-//   id: string;
-//   type: "single" | "multi";
-//   question: string;
-//   options: RawOption[];
-//   hint?: string;
-//   navigation?: {
-//     type: "simple" | "conditional" | "map" | "cross-question";
-//     rules: Record<string, string> | {
-//       [key: string]: string | number;
-//       next: string;
-//       operator?: string;
-//       value?: number;
-//     }[];
-//     defaultNext?: string;
-//   };
-// }
+import { Question, RawOption } from "../../../../types/assessment.ts";//zkx
+
 
 const normalize = (opt: RawOption): { label: string; value: string } =>
   typeof opt === "string" ? { label: opt, value: opt } : opt;
@@ -65,10 +39,17 @@ const DynamicQuestion = () => {
     },
     [questionId]
   );
+  //上面这里要改一下下
+  // const currentQuestion = useMemo<Question | undefined>(
+  //     () => (questionnaire.questions as Question[]).find((q) => q.id === questionId),
+  //     [questionId, questionnaire]
+  // );
+
 
   /* ——— 答案状态 ——— */
   const [singleAns, setSingleAns] = useState("");
   const [multiAns, setMultiAns] = useState<string[]>([]);
+  // 姚璟添加：这里应该加入一个记录历史选择的功能，为了逻辑跳转/修改选项功能
   const [answerHistory, setAnswerHistory] = useState<AnswerHistory>({});
   const [errors, setErrors] = useState<string[]>([]); // ycl
 
@@ -78,6 +59,7 @@ const DynamicQuestion = () => {
     setMultiAns([]);
     setErrors([]); // ycl
   }, [questionId]);
+
 
   /* 已作答？ */
   const answered =
@@ -118,29 +100,17 @@ const DynamicQuestion = () => {
     /* ① 让 NavigationLogic 判断（若有更复杂逻辑） */
     let nextId = getNextId?.(currentQuestion.id, answerPayload, updatedHistory);
 
-    /* ② fallback：按题目自身 next 字段 */
-    if (!nextId) {
-      if (typeof currentQuestion.next === "string") {
-        nextId = currentQuestion.next;
-      } else if (currentQuestion.type === "single") {
-        nextId = (currentQuestion.next as Record<string, string>)[singleAns];
-      } else {
-        /* 多选：若任一选项匹配映射键就用；否则用 default 或第一个值 */
-        const nextMap = currentQuestion.next as Record<string, string>;
-        const matched = multiAns.find((a) => a in nextMap);
-        nextId =
-          (matched && nextMap[matched]) ||
-          nextMap["default"] ||
-          Object.values(nextMap)[0];
-      }
+    /* ② fallback：按 navigation.defaultNext */
+    if (!nextId && currentQuestion.navigation?.defaultNext) {
+      nextId = currentQuestion.navigation.defaultNext;
     }
 
     if (!nextId) return; // 配置错误
 
     const path = nextId.startsWith("Q")
       ? `/optometrist/assess/questions/${nextId}`
-      : `/optometrist/assess/recommendations/${nextId}`; // ycl
-    navigate(path); // ycl
+      : `/optometrist/assess/recommendations/${nextId}`;//zkx注意路径！！
+    navigate(path);//ycl
   };
 
   /* ——— 题目不存在 —— */
@@ -153,42 +123,42 @@ const DynamicQuestion = () => {
   /* ---------------------------------------------------------------
  *  题目存在，但缺少 question / options 配置
  * ------------------------------------------------------------- */
-  if (
-    (!currentQuestion.question || currentQuestion.question.trim() === "") ||
-    !currentQuestion.options ||
-    currentQuestion.options.length === 0
-  ) {
-    return (
-      <>
-        {/* —— 顶栏 —— */}
-        <header className="nhs-header">
-          <div className="nhs-header__inner">
-            {/* ycl: 使用变量引用，避免写死路径 */}
-            <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-            <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-            <span className="nhs-header__service">DIPP Assessment</span>
-          </div>
-        </header>
-
-        {/* —— 主体 —— */}
-        <div className="nhsuk-width-container">
-          <main id="maincontent" className="nhsuk-main-wrapper">
-            <section className="question-box">
-              <h1 className="nhsuk-heading-l">⚠️ 题目未配置</h1>
-              <p className="hint">
-                后台没有为 <strong>{currentQuestion.id}</strong> 配置完整内容。
-              </p>
-              <button className="continue-button" onClick={handleNext}>
-                跳过
-              </button>
-            </section>
-          </main>
+if (
+  (!currentQuestion.question || currentQuestion.question.trim() === "") ||
+  !currentQuestion.options ||
+  currentQuestion.options.length === 0
+) {
+  return (
+    <>
+      {/* —— 顶栏 —— */}
+      <header className="nhs-header">
+        <div className="nhs-header__inner">
+          {/* ycl: 使用变量引用，避免写死路径 */}
+          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
+          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
+          <span className="nhs-header__service">DIPP Assessment</span>
         </div>
+      </header>
 
-        <BottomNav />
-      </>
-    );
-  }
+      {/* —— 主体 —— */}
+      <div className="nhsuk-width-container">
+        <main id="maincontent" className="nhsuk-main-wrapper">
+          <section className="question-box">
+            <h1 className="nhsuk-heading-l">⚠️ The question is not configured</h1>
+            <p className="hint">
+              The backend has not configured complete content for <strong>{currentQuestion.id}</strong>.
+            </p>
+            <button className="continue-button" onClick={handleNext}>
+              Skip
+            </button>
+          </section>
+        </main>
+      </div>
+
+      <BottomNav />
+    </>
+  );
+}
 
   /* ——— 渲染 —— */
   const opts = currentQuestion.options.map(normalize);
@@ -204,7 +174,6 @@ const DynamicQuestion = () => {
         </div>
       </header>
 
-
       {/* 主体 */}
       <div className="nhsuk-width-container">
         <main id="maincontent" className="nhsuk-main-wrapper">
@@ -216,7 +185,7 @@ const DynamicQuestion = () => {
             <h1 className="nhsuk-heading-l">{currentQuestion.question}</h1>
             {currentQuestion.hint && <p className="hint">{currentQuestion.hint}</p>}
 
-            <ul className={currentQuestion.type === "single" ? "radio-list" : "checkbox-list"}>
+            <ul className="radio-list">
               {opts.map((o) => {
                 const checked =
                   currentQuestion.type === "single"
@@ -267,7 +236,7 @@ const DynamicQuestion = () => {
       </div>
 
       {/* 底部导航 */}
-      <BottomNav onNext={handleNext} />
+      <BottomNav />
     </>
   );
 };

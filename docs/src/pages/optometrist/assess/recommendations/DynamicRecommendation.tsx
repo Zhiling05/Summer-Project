@@ -107,7 +107,7 @@ const DynamicRecommendation: React.FC = () => {
           </div>
         </div>
       </main>
-      <BottomNav /> {/* 引入 BottomNav */}
+      <BottomNav /> {/* 引入 BottomNav ——zkx*/}
 
       {/* NHS 页脚 
       <footer className="nhs-footer">
