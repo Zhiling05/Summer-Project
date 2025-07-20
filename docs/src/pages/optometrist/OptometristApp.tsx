@@ -1,8 +1,9 @@
 // docs/src/pages/optometrist/OptometristApp.tsx
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import '../../styles/question.css';
-import NHSLogo from '../../assets/NHS_LOGO.jpg';
-import DIPPLogo from '../../assets/DIPP_Study_logo.png';
+// import NHSLogo from '../../assets/NHS_LOGO.jpg';
+// import DIPPLogo from '../../assets/DIPP_Study_logo.png';
+import Header from '../../components/Header';    // lzl:使用header组件
 import BackButton from '../../components/BackButton';
 import AssessRouter from './assess/AssessRouter';
 import Guide from './Guide'; 
@@ -21,18 +22,17 @@ export default function OptometristApp() {
         position: 'relative',
       }}
     >
+      {/*--------lzl修改：使用header组件--------------------------  */}
       {/* 顶栏 */}
-      <header className="nhs-header">
+      {/* <header className="nhs-header">
         <div
-          className="nhs-header__inner"
-          style={{ maxWidth: '100%', margin: 0, padding: '12px 24px' }}
-        >
+          className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
           <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">OptometristApp</span>
+          <span className="nhs-header__service">Optometrist</span>
         </div>
-      </header>
-
+      </header> */}
+      <Header title="Optometrist" />
       <BackButton />
 
       {/* 主体 */}

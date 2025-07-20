@@ -1,23 +1,26 @@
 import { useNavigate } from 'react-router-dom';
 import '../../styles/question.css';
+import Header from '../../components/Header';    //lzl新增
 import BottomNav from '../../components/BottomNav';
 
-import NHSLogo  from '../../assets/NHS_LOGO.jpg';
-import DIPPLogo from '../../assets/DIPP_Study_logo.png';
+// import NHSLogo  from '../../assets/NHS_LOGO.jpg';
+// import DIPPLogo from '../../assets/DIPP_Study_logo.png';
 
 export default function Guide() {
   const nav = useNavigate();
 
   return (
     <>
+    {/* ----------------lzl修改：使用header组件--------------*/}
       {/* 顶栏（保持通用写法） */}
-      <header className="nhs-header">
+      {/* <header className="nhs-header">
         <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo}  alt="NHS logo" />
           <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
           <span className="nhs-header__service">Guide</span>
         </div>
-      </header>
+      </header> */}
+      <Header title="Guide" />
 
       
       <div

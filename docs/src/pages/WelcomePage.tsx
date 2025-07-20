@@ -1,23 +1,23 @@
 // docs/src/pages/WelcomePage.tsx
 import { useNavigate } from 'react-router-dom';
 import '../styles/question.css';
-import NHSLogo from '../assets/NHS_LOGO.jpg';
-import DIPPLogo from '../assets/DIPP_Study_logo.png';
+// import NHSLogo from '../assets/NHS_LOGO.jpg';   // lzl：使用header通用组件
+// import DIPPLogo from '../assets/DIPP_Study_logo.png';
+import Header from '../components/Header';
 
 export default function WelcomePage() {
   const navigate = useNavigate();
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <header className="nhs-header">
-        <div
-          className="nhs-header__inner"
-          style={{ maxWidth: '100%', margin: 0, padding: '12px 24px' }}
-        >
+      {/*-----------lzl修改：使用header组件 ------------- */
+      /* <header className="nhs-header">
+        <div className="nhs-header__inner">
           <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
           <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">WelcomePage</span>
+          <span className="nhs-header__service">Welcome</span>
         </div>
-      </header>
+      </header> */}
+      <Header title="Welcome" />
 
       <div
         style={{

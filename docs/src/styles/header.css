@@ -1,0 +1,42 @@
+/* ——— 统一header样式 ——— */
+.nhs-header {
+  background: var(--core-blue);
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+}
+
+.nhs-header__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-m) var(--space-l);
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  position: relative;
+}
+
+.logo { 
+  height: 42px; 
+}
+
+.nhs-header__service {
+  margin-left: auto;
+  color: var(--text-inverse);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .logo { 
+    height: 36px; 
+  }
+  
+  .nhs-header__inner {
+    padding-left: var(--space-m);
+    padding-right: var(--space-m);
+  }
+}

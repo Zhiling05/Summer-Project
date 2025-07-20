@@ -1,36 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import "../../styles/question.css";
-import NHSLogo from "../../assets/NHS_LOGO.jpg";
-import DIPPLogo from "../../assets/DIPP_Study_logo.png"; 
+import Header from "../../components/Header";   // lzl: 新增header组件
+// import NHSLogo from "../../assets/NHS_LOGO.jpg";
+// import DIPPLogo from "../../assets/DIPP_Study_logo.png"; 
 import BottomNav from "../../components/BottomNav";
 export default function Records() {
   const navigate = useNavigate();
 
   return (
     <>
-      <header className="nhs-header" style={{ 
-        backgroundColor: "#005eb8",
-        color: "white",
-        padding: "12px 0"
-      }}>
-        <div style={{ 
-          maxWidth: "960px",
-          margin: "0 auto",
-          padding: "0 16px",
-          display: "flex",
-          alignItems: "center"
-        }}>
-          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" style={{ height: "40px" }} />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" style={{ height: "40px", marginLeft: "20px" }} />
-          <span style={{ 
-            marginLeft: "auto",
-            fontSize: "1.2rem",
-            fontWeight: "bold"
-          }}>
-            DIPP Assessment
-          </span>
-        </div>
-      </header>
+      <Header title="Records" />
 
       <div style={{ 
         backgroundColor: "#f0f4f5",
