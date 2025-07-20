@@ -1,11 +1,68 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { createAssessment, Answer, UserRole } from '../../../../api';
 import "../../../../styles/question.css";
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
 
+interface LocationState {
+  // 假设前一个页面 navigate 时写了：
+  // navigate('/optometrist/assess/recommendations/immediate', { state: { answers, patientId } })
+  answers: Answer[];
+  patientId: string;
+  recommendation: string; // 'Immediate'
+}
+
 export default function Immediate() {
   const navigate = useNavigate();
+  const { state } = useLocation() as { state: LocationState };
+
+  // 额外一个本地 loading 和 error UI 状态
+  const [saving, setSaving] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // 如果没有答案，从头开始
+    if (!state?.answers?.length || !state.patientId) {
+      setError('缺少答题数据，请重新开始 Assessment');
+      setSaving(false);
+      return;
+    }
+
+    (async () => {
+      try {
+        // 调用后端接口保存：answers + recommendation
+        await createAssessment({
+          role: 'optometrist' as UserRole,
+          patientId: state.patientId,
+          answers: state.answers,
+          recommendation: state.recommendation,
+        });
+      } catch (e) {
+        console.error(e);
+        setError((e as Error).message);
+      } finally {
+        setSaving(false);
+      }
+    })();
+  }, []);
+
+  // 如果正在保存，先给个 loading 提示
+  if (saving) {
+    return <div>正在保存你的 Assessment…</div>;
+  }
+
+  // 如果保存失败，给个错误和重试按钮
+  if (error) {
+    return (
+      <div>
+        <p>保存失败：{error}</p>
+        <button onClick={() => window.location.reload()}>重试</button>
+      </div>
+    );
+  }
+
 
   return (
     <>
