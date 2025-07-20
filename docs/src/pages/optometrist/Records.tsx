@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/question.css";
 import NHSLogo from "../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../assets/DIPP_Study_logo.png"; 
+import BottomNav from "../../components/BottomNav";
 export default function Records() {
   const navigate = useNavigate();
 
@@ -200,34 +201,9 @@ export default function Records() {
         </div>
       </div>
 
-      <footer className="nhs-footer">
-        <div className="footer-inner">
-          <p>
-            Other ways to contact DIPP if you have a hearing problem or need help in other languages&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              (opens in a new tab)
-            </a>.
-          </p>
-          <hr />
-          <ul className="footer-links">
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Privacy statement
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Terms and conditions
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Accessibility statement
-              </a>
-            </li>
-          </ul>
-        </div>
-      </footer>
+      
+      {/* 底部导航 */}
+      <BottomNav />
     </>
   );
 }

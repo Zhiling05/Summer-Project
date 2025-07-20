@@ -1,3 +1,25 @@
+export type QuestionType = "single" | "multi";
+export type NavigationType = "simple" | "conditional" | "cross-question";
+export type RawOption = string | { label: string; value: string };
+
+export interface QuestionNavigation {
+  type: NavigationType;
+  rules:
+    | Record<string, string>       // simple
+    | ({ [k: string]: any; next: string; operator?: string; value?: number })[]; // 条件 / 交叉
+  defaultNext?: string;
+}
+
+export interface Question {
+  id: string;
+  type: QuestionType;
+  question: string;
+  options: RawOption[];
+  hint?: string;
+  navigation?: QuestionNavigation;
+}
+
+
 export interface AssessmentAnswers {
   // Starting question: Does the patient have a headache?
   hasHeadache: boolean;
