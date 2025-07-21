@@ -1,68 +1,124 @@
-// docs/src/pages/UserSelectionPage.tsx
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/question.css';
-
-// import NHSLogo from '../assets/NHS_LOGO.jpg';
-// import DIPPLogo from '../assets/DIPP_Study_logo.png';
-import Header from '../components/Header';   // lzl： 使用Header组件
-// 以下这个退回键没有被使用
-// import BackButton from '../components/BackButton';
+import Header from '../components/Header';
+import '../styles/card.css';
 
 export default function UserSelectionPage() {
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--core-blue', '#005eb8');
+    root.style.setProperty('--container-max', '960px');
+    root.style.setProperty('--space-m', '16px');
+    root.style.setProperty('--space-l', '24px');
+    root.style.setProperty('--text-inverse', '#ffffff');
+  }, []);
+
+  const roles = [
+    {
+      id: 'gp',
+      title: 'I am a GP',
+      route: '/gp'
+    },
+    {
+      id: 'ophthalmology',
+      title: 'I am an Ophthalmology',
+      route: '/ophthalmology'
+    },
+    {
+      id: 'neurologist',
+      title: 'I am a Neurologist',
+      route: '/neurologist'
+    },
+    {
+      id: 'optometrist',
+      title: 'I am an Optometrist',
+      route: '/optometrist'
+    },
+    {
+      id: 'patient',
+      title: 'I am a Patient',
+      route: '/patient'
+    }
+  ];
+
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/*--------lzl修改：使用header组件--------------------------  */}
-      {/* <header className="nhs-header">
-        <div
-          className="nhs-header__inner">
-          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <BackButton />
-          <span className="nhs-header__service">Select Role</span>
-        </div>
-      </header> */}
+    <>
       <Header title="Select Role" />
-
-
-      <div
-        style={{
+      
+      <div style={{ 
+        minHeight: 'calc(100vh - 80px)',
+        display: 'flex', 
+        flexDirection: 'column'
+      }}>
+        <div style={{
           flex: 1,
           display: 'flex',
-          alignItems: 'center',
+          flexDirection: 'column',
           justifyContent: 'center',
-        }}
-      >
-        <div className="nhsuk-width-container">
-          <h1 className="nhsuk-heading-l">UserSelectionPage</h1>
-          <p>context line 1</p>
-          <p>context line 2</p>
-          <p>context line 3</p>
-          <div
-              data-testid="role-selection-container"
-              className="responsive-layout" //为了测试代码加的class名
-              style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-            <button
-              className="continue-button"
-              onClick={() => navigate('/gp')}
-            >
-              Doctor
-            </button>
-            <button
-              className="continue-button"
-              onClick={() => navigate('/optometrist')}
-            >
-              Optometrist
-            </button>
-            <button
-              className="continue-button"
-              onClick={() => navigate('/patient')}
-            >
-              Patient
-            </button>
+          padding: '1rem'
+        }}>
+          <div style={{ 
+            maxWidth: '960px', 
+            margin: '0 auto', 
+            padding: '0 1.5rem',
+            width: '100%'
+          }}>
+            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+              <h1 style={{ 
+                fontSize: '2rem',
+                fontWeight: '700',
+                color: '#212b32',
+                margin: '0 0 0.5rem 0'
+              }}>
+                Select Your Role
+              </h1>
+            </div>
+            
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+              width: '100%',
+              alignItems: 'center'
+            }}>
+              {roles.map((role) => (
+                <div
+                  key={role.id}
+                  className="base-card"
+                  onClick={() => navigate(role.route)}
+                  style={{
+                    padding: '1rem 1.5rem',
+                    width: '50vw',
+                    maxWidth: '600px',
+                    minWidth: '300px'
+                  }}
+                >
+                  <div className="card-content">
+                    <h3 className="card-title">
+                      {role.title}
+                    </h3>
+                  </div>
+                  <div className="card-arrow-container">
+                    <div className="card-arrow-circle">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path 
+                          d="M9 18l6-6-6-6" 
+                          stroke="white" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
