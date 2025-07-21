@@ -21,11 +21,54 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: var(--core-blue); /* NHS 主蓝色 */
+  color: #015EB8; /* NHS 主蓝色 */
   font-weight: bold;
   font-size: 0.9rem;
   cursor: pointer;
   padding: 4px 8px;
+}
+
+/* ======================= */
+/* ★ 新增：方框高亮效果 ★  */
+/* ======================= */
+/* —— ★ 方框高亮（粗 4 px，恰好包在底栏内） —— */
+/* ——— 方形背景高亮 ——— */
+.bottom-nav button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;                 
+  height: 56px;
+  transform: translate(-50%, -50%);
+  border-radius: 8px;           /* 轻微圆角，可按需调整 */
+  background: transparent;      /* 默认透明 */
+  z-index: -1;                  /* 放到按钮下方 */
+}
+
+/* 悬停时：可选是否也加背景，不需要可删掉 */
+.bottom-nav button:hover::before {
+  background: #F2F8FF;          /* 若想只有选中才填色，就删除这一段 */
+}
+
+/* 选中时：淡蓝色方形背景 */
+.bottom-nav button.active::before {
+  background: #F2F8FF;
+}
+
+/* ——— 文字 / 图标颜色 ——— */
+.bottom-nav button { color: #015EB8; }         /* 默认深蓝 */
+.bottom-nav button:hover { color: #015EB8; }  /* 悬停浅蓝 */
+.bottom-nav button.active { color: #015EB8; }  /* 选中保持深蓝 */
+
+/* ——— 图标 ——— */
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 4px;
+  /* 之前的黑色滤镜已移除 */
+  object-fit: contain;
+  transition: color 0.18s ease;
 }
 
 /* 鼠标悬停时的颜色变化 */
@@ -33,11 +76,7 @@
   color: var(--light-blue);
 }
 
-/* 图标样式 */
-.nav-icon {
-  width: 28px;
-  height: 28px;
-  margin-bottom: 4px;
-  filter: brightness(0) saturate(100%); /* 变为纯黑色 */
-  object-fit: contain; /* 防止拉伸 */
-}
+/* 只画描边，不填充（防止 Records 变成实心方块） */
+.nav-icon        { fill: none; }
+.nav-item.active .nav-icon { fill: none; }  /* 选中时同样不填 */
+

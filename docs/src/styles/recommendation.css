@@ -1,0 +1,175 @@
+/* ===========================================================
+   DIPP Referral Recommendation – v2.0
+   完整样式表 · 2025-07-20
+   =========================================================== */
+
+/* —— 设计变量 —— */
+:root {
+  --nhs-blue:        #005eb8;     /* NHS 主蓝色 */
+  --nhs-light-blue:  #f4f9ff;     /* 整页淡蓝背景（仅推荐页用） */
+  --orange-start:    #ff7b21;     /* 渐变起始 */
+  --orange-end:      #ffb347;     /* 渐变结束 */
+  --white:           #ffffff;
+  --text-body:       #0b0c0c;
+  --shadow-card:     0 8px 24px rgba(0,0,0,.08);
+  --radius-card:     16px;
+}
+
+/* —— Reset —— */
+/* html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  /* ⚠️ 不再全局设置背景，避免影响其他页面 */
+  /* font-family: Arial, sans-serif;
+  color: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+} */ */
+
+/* ===== 顶栏（限定在推荐页内） ===== */
+.recommendation-container .nhs-header {
+  width: 100%;
+  background: var(--nhs-blue);
+  color: var(--white);
+}
+.recommendation-container .nhs-header__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+}
+.logo { height: 40px; }
+
+/* ===== 推荐页整体容器 ===== */
+.recommendation-container {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--nhs-light-blue);
+}
+
+/* ===== 主内容区 ===== */
+.recommendation-main {
+  flex: 1;
+  padding: 2rem 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ===== 推荐卡片 ===== */
+.recommendation-card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--white);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+}
+
+/* —— 卡片头（渐变） —— */
+.recommendation-card__header {
+  background: linear-gradient(135deg, var(--orange-start) 0%, var(--orange-end) 100%);
+  color: var(--white);
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+}
+.recommendation-card__header img {
+  width: 64px;
+  margin-bottom: 1rem;
+}
+.recommendation-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+.recommendation-subtitle {
+  margin: .5rem 0 0;
+  font-size: 1.125rem;
+}
+
+/* —— 卡片正文 —— */
+.recommendation-body {
+  padding: 2rem 1.5rem 3rem;
+}
+.recommendation-description {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+}
+.recommendation-bullets {
+  margin: 1rem 0 1.5rem;
+  padding-left: 20px;
+}
+
+/* —— 行动按钮 —— */
+.recommendation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.recommendation-actions button {
+  height: 56px;
+  border: 2px solid var(--nhs-blue);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+/* 实心 & 空心两种 */
+.btn-primary { background: var(--nhs-blue); color: var(--white); }
+.btn-primary:hover { background: #004b97; }
+.btn-outline  { background: transparent;   color: var(--nhs-blue); }
+.btn-outline:hover { background: rgba(0,94,184,.08); }
+
+/* ===== 页脚 ===== */
+.nhs-footer {
+  background: #f0f4f8;
+  color: #212b32;
+  text-align: center;
+}
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 16px;
+}
+.footer-inner hr {
+  border: none;
+  border-top: 1px solid #d8dde0;
+  margin: 1rem 0;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: .5rem 0 0;
+}
+.footer-links a {
+  color: var(--nhs-blue);
+  text-decoration: none;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 360px) {
+  .recommendation-card__header { padding: 2rem 1rem 1.5rem; }
+  .recommendation-title       { font-size: 1.5rem; }
+  .recommendation-body        { padding: 1.5rem 1rem 2rem; }
+  .recommendation-actions button { font-size: .9rem; }
+}

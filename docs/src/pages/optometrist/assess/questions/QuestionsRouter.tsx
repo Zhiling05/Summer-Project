@@ -1,5 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
-
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Q1 from './Q1';
 import Q2 from './Q2';
 import Q3 from './Q3';
@@ -19,30 +18,24 @@ import Q16 from './Q16';
 import Q17 from './Q17';
 import Q18 from './Q18';
 import Q19 from './Q19';
+import DynamicQuestion from './DynamicQuestion';
 
 function QuestionsRouter() {
   return (
     <Routes>
-      {/* 点击Start后的问题页面 */}
-      <Route path="q1" element={<Q1 />} />
-      <Route path="q2" element={<Q2 />} />
-      <Route path="q3" element={<Q3 />} />
-      <Route path="q4" element={<Q4 />} />
-      <Route path="q5" element={<Q5 />} />
-      <Route path="q6" element={<Q6 />} />
-      <Route path="q7" element={<Q7 />} />
-      <Route path="q8" element={<Q8 />} />
-      <Route path="q9" element={<Q9 />} />
-      <Route path="q10" element={<Q10 />} />
-      <Route path="q11" element={<Q11 />} />
-      <Route path="q12" element={<Q12 />} />
-      <Route path="q13" element={<Q13 />} />
-      <Route path="q14" element={<Q14 />} />
-      <Route path="q15" element={<Q15 />} />
-      <Route path="q16" element={<Q16 />} />
-      <Route path="q17" element={<Q17 />} />
-      <Route path="q18" element={<Q18 />} />
-      <Route path="q19" element={<Q19 />} />
+      {/* 点击 Start 后默认跳转到第一题（可以保留） */}
+      <Route index element={<Navigate to="q1" replace />} />
+
+      {/*
+      // ↓ 下面这些静态分支都可以注释掉，改由 DynamicQuestion 统一处理
+      // <Route path="q1"  element={<Q1 />} />
+      // <Route path="q2"  element={<Q2 />} />
+      // ……………………………………
+      // <Route path="q19" element={<Q19 />} />
+      */}
+
+      {/* catch-all：所有没有上面显式声明的，都用 DynamicQuestion 渲染 */}
+      <Route path=":questionId" element={<DynamicQuestion />} />
     </Routes>
   );
 }
