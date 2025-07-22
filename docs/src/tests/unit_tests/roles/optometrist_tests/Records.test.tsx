@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Records from '../../../../pages/optometrist/Records';
-import Guide from '../../../../pages/optometrist/Guide';
+import Guide from '../../../../pages/optometrist/guide/GuideHome';
 import OptometristHome from '../../../../pages/optometrist/OptometristHome';
 import AssessStart from '../../../../pages/optometrist/assess/StartPage';
 
