@@ -15,7 +15,52 @@ import NHSLogo  from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
 import BackButton from "../../../../components/BackButton";
+
 import BottomNav  from "../../../../components/BottomNav";
+
+/* ---------- 邮件发送模态框 ---------- */
+const EmailModal: React.FC<{
+  open: boolean;
+  loading: boolean;
+  onClose: () => void;
+  onSend: (email: string) => void;
+}> = ({ open, loading, onClose, onSend }) => {
+  if (!open) return null;
+
+  const [email, setEmail] = React.useState("");
+
+  return (
+    <div className="email-modal-overlay" onClick={onClose}>
+      <div
+        className="email-modal"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="email-modal__title">Send report via email</h3>
+
+        <input
+          type="email"
+          placeholder="name@example.com"
+          className="email-modal__input"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <div className="email-modal__actions">
+          <button
+            className="btn-primary"
+            disabled={loading || !email}
+            onClick={() => onSend(email)}
+          >
+            {loading ? "Sending…" : "Send"}
+          </button>
+          <button className="btn-outline" onClick={onClose}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /* ---------- 类型 ---------- */
 interface Recommendation {
@@ -44,6 +89,13 @@ const DynamicRecommendation: React.FC = () => {
   /* —— 缓存纯文本报告 —— */
   const [report,   setReport]   = useState("");
   const [sending,  setSending]  = useState(false);
+
+  // 控制邮件发送模态框显示
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const openEmailModal = () => setShowEmailModal(true);
+  const closeEmailModal = () => {
+    if (!sending) setShowEmailModal(false);
+  };
 
   /** 如果还没拿过报告就去请求一次 */
   const ensureReport = async () => {
@@ -81,16 +133,14 @@ const DynamicRecommendation: React.FC = () => {
     }
   };
 
-  // 邮件
-  const handleEmail = async () => {
+  // 发送邮件（由 EmailModal 调用）
+  const sendEmail = async (email: string) => {
     if (!assessId) return;
-    const email = prompt("Send to email address:");
-    if (!email) return;
-
     try {
       setSending(true);
       await sendReport(assessId, email, "txt");
       alert("邮件已发送！");
+      setShowEmailModal(false);
     } catch (e) {
       alert("Send failed: " + (e as Error).message);
     } finally {
@@ -176,7 +226,7 @@ const DynamicRecommendation: React.FC = () => {
               <button
                 className="btn-outline"
                 disabled={sending}
-                onClick={handleEmail}
+                onClick={openEmailModal}
               >
                 Send via Email
               </button>
@@ -184,6 +234,12 @@ const DynamicRecommendation: React.FC = () => {
           </div>
         </div>
       </main>
+      <EmailModal
+        open={showEmailModal}
+        loading={sending}
+        onClose={closeEmailModal}
+        onSend={sendEmail}
+      />
 
       <BottomNav />
     </div>
