@@ -1,26 +1,26 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Q1 from './Q1';
-import Q2 from './Q2';
-import Q3 from './Q3';
-import Q4 from './Q4';
-import Q5 from './Q5';
-import Q6 from './Q6';
-import Q7 from './Q7';
-import Q8 from './Q8';
-import Q9 from './Q9';
-import Q10 from './Q10';
-import Q11 from './Q11';
-import Q12 from './Q12';
-import Q13 from './Q13';
-import Q14 from './Q14';
-import Q15 from './Q15';
-import Q16 from './Q16';
-import Q17 from './Q17';
-import Q18 from './Q18';
-import Q19 from './Q19';
+// import Q1 from './Q1';
+// import Q2 from './Q2';
+// import Q3 from './Q3';
+// import Q4 from './Q4';
+// import Q5 from './Q5';
+// import Q6 from './Q6';
+// import Q7 from './Q7';
+// import Q8 from './Q8';
+// import Q9 from './Q9';
+// import Q10 from './Q10';
+// import Q11 from './Q11';
+// import Q12 from './Q12';
+// import Q13 from './Q13';
+// import Q14 from './Q14';
+// import Q15 from './Q15';
+// import Q16 from './Q16';
+// import Q17 from './Q17';
+// import Q18 from './Q18';
+// import Q19 from './Q19';
 import DynamicQuestion from './DynamicQuestion';
 
-function QuestionsRouter() {
+export default function QuestionsRouter() {
   return (
     <Routes>
       {/* 点击 Start 后默认跳转到第一题（可以保留） */}
@@ -40,4 +40,4 @@ function QuestionsRouter() {
   );
 }
 
-export default QuestionsRouter;
+
