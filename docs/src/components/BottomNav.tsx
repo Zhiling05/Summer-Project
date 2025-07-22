@@ -77,8 +77,11 @@ const BottomNav = () => {
   };
 
   const items = [
+    // { label: "Home", to: "/optometrist/home", Icon: HomeIcon },
+    // { label: "Assess", to: "/optometrist/assess/start", Icon: AssessIcon },
     { label: "Home", to: "/optometrist/home", Icon: HomeIcon },
-    { label: "Assess", to: "/optometrist/assess/start", Icon: AssessIcon },
+    { label: "Assess", to: "/optometrist/assess/questions/Q1", Icon: AssessIcon },
+
     { label: "Records", to: "/optometrist/records", Icon: RecordsIcon },
     { label: "Guide", to: "/optometrist/guide", Icon: GuideIcon },
   ];
