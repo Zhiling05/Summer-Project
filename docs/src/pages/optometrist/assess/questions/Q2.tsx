@@ -1,30 +1,31 @@
 // docs/src/pages/optometrist/assess/questions/Q2.tsx
-import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import type { Answer } from '../../../../api'
-import '../../../../styles/question.css'
-import BottomNav  from '../../../../components/BottomNav'
-import NHSLogo    from '../../../../assets/NHS_LOGO.jpg'
-import DIPPLogo   from '../../../../assets/DIPP_Study_logo.png'
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import type { Answer } from '../../../../api';
+import { createAssessment } from '../../../../api';
+import '../../../../styles/question.css';
+import BottomNav from '../../../../components/BottomNav';
+import NHSLogo from '../../../../assets/NHS_LOGO.jpg';
+import DIPPLogo from '../../../../assets/DIPP_Study_logo.png';
 
 interface LocationState {
-  answers?: Answer[]
-  patientId?: string
+  answers?: Answer[];
+  patientId?: string;
 }
 
 export default function Q2() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   /* ---------- 上一题带过来的 state ---------- */
-  const { state }   = useLocation() as { state: LocationState }
-  const prevAnswers = state?.answers ?? []
-  const patientId   = state?.patientId ?? `pid-${Date.now().toString(36)}`
+  const { state } = useLocation() as { state: LocationState };
+  const prevAnswers = state?.answers ?? [];
+  const patientId = state?.patientId ?? `pid-${Date.now().toString(36)}`;
 
   /* ---------- 本题内容 ---------- */
-  const [answer, setAnswer] = useState('')
+  const [answer, setAnswer] = useState('');
 
   const question =
-    'Has the patient experienced any of the following red-flag symptoms?'
+    'Has the patient experienced any of the following red-flag symptoms?';
   const opts = [
     'Impaired level or decreased consciousness',
     'Seizures',
@@ -34,31 +35,42 @@ export default function Q2() {
     'Objective neurological deficit',
     'Worsening headache and fever',
     'None of the above',
-  ]
+  ];
 
   /* ---------- 下一步 ---------- */
-  const handleNext = () => {
-    if (!answer) return
+  const handleNext = async () => {
+    if (!answer) return;
 
     /* 把本题答案加入数组（含题干 question） */
     const newAnswers: Answer[] = [
       ...prevAnswers,
       {
         questionId: 'Q2',
-        question,     // 题干一起送后端
+        question, // 题干一起送后端
         answer,
       },
-    ]
+    ];
 
     if (answer !== 'None of the above') {
-      /* 红旗症状 -> 直接跳急诊推荐页 */
-      navigate('../../recommendations/emergency-department', {
-        state: {
-          answers: newAnswers,
+      /* 红旗症状 -> 先保存 assessment，再跳急诊推荐页 */
+      try {
+        const { id } = await createAssessment({
+          role: 'optometrist',
           patientId,
+          answers: newAnswers,
           recommendation: 'EmergencyDepartment',
-        },
-      })
+        });
+
+        navigate('../../recommendations/EMERGENCY_DEPARTMENT', {
+          state: {
+            assessmentId: id, // 带给推荐页使用
+            answers: newAnswers,
+            patientId,
+          },
+        });
+      } catch (e) {
+        alert('Save failed: ' + (e as Error).message);
+      }
     } else {
       /* 正常流程 -> 下一题 Q3 */
       navigate('../Q3', {
@@ -66,16 +78,16 @@ export default function Q2() {
           answers: newAnswers,
           patientId,
         },
-      })
+      });
     }
-  }
+  };
 
   /* ---------- JSX ---------- */
   return (
     <>
       <header className="nhs-header">
         <div className="nhs-header__inner">
-          <img className="logo nhs-logo" src={NHSLogo}  alt="NHS logo" />
+          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
           <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
           <span className="nhs-header__service">DIPP Assessment</span>
         </div>
@@ -92,7 +104,7 @@ export default function Q2() {
             <p className="hint">Select one option</p>
 
             <ul className="radio-list">
-              {opts.map(opt => (
+              {opts.map((opt) => (
                 <li key={opt}>
                   <label className="radio-label">
                     <input
@@ -121,5 +133,5 @@ export default function Q2() {
 
       <BottomNav />
     </>
-  )
+  );
 }

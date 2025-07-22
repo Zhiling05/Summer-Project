@@ -1,16 +1,23 @@
-// src/pages/optometrist/assess/recommendations/DynamicRecommendation.tsx
+// docs/src/pages/optometrist/assess/recommendations/DynamicRecommendation.tsx
+import React, { useState } from "react";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
+import {
+  fetchReportText,
+  exportAssessment,
+  sendReport,
+} from "../../../../api";
+import { saveAs } from "file-saver";
 
-import React from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
 import recommendationsData from "../../../../data/recommendations.json";
 import "../../../../styles/recommendation.css";
 
-import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
+import NHSLogo  from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
 import BackButton from "../../../../components/BackButton";
-import BottomNav from "../../../../components/BottomNav";
+import BottomNav  from "../../../../components/BottomNav";
 
+/* ---------- 类型 ---------- */
 interface Recommendation {
   id: string;
   title: string;
@@ -21,31 +28,83 @@ interface Recommendation {
   actions: string[];
 }
 
+/* =============================================================== */
+
 const DynamicRecommendation: React.FC = () => {
+  /* —— 路由参数 —— */
   const { resultId } = useParams<{ resultId: string }>();
   const rec = (recommendationsData as Recommendation[]).find(
     (r) => r.id === resultId
   );
 
-  /* ---------- 回调 ---------- */
+  /* —— assessmentId 来自 DynamicQuestion 跳转时的 state —— */
+  const { state }   = useLocation() as { state?: { assessmentId?: string } };
+  const assessId    = state?.assessmentId ?? "";
+
+  /* —— 缓存纯文本报告 —— */
+  const [report,   setReport]   = useState("");
+  const [sending,  setSending]  = useState(false);
+
+  /** 如果还没拿过报告就去请求一次 */
+  const ensureReport = async () => {
+    if (report) return report;
+    if (!assessId) throw new Error("assessmentId missing");
+    const txt = await fetchReportText(assessId);
+    setReport(txt);
+    return txt;
+  };
+
+  /* —— 回调 —— */
   const navigate = useNavigate();
-  const reportText = rec ? `${rec.title}\n\n${rec.description}` : "";
 
-  const handlePreview = () =>
-    navigate("/optometrist/assess/recommendations/report-preview");
-  const handleCopy = () => navigator.clipboard.writeText(reportText);
-  const handleEmail = () =>
-    (window.location.href = `mailto:?subject=DIPP%20Assessment%20Report&body=${encodeURIComponent(
-      reportText
-    )}`);
+  // 预览
+  const handlePreview = async () => {
+    try {
+      const txt = await ensureReport();
+      navigate(
+        "/optometrist/assess/recommendations/report-preview",
+        { state: { text: txt } }
+      );
+    } catch (e) {
+      alert("Fetch report failed: " + (e as Error).message);
+    }
+  };
 
-  /* ---------- 未找到结果 ---------- */
+  // 下载
+  const handleDownload = async () => {
+    if (!assessId) return;
+    try {
+      const blob = await exportAssessment(assessId, "txt");
+      saveAs(blob, `assessment-${assessId}.txt`);
+    } catch (e) {
+      alert("Download failed: " + (e as Error).message);
+    }
+  };
+
+  // 邮件
+  const handleEmail = async () => {
+    if (!assessId) return;
+    const email = prompt("Send to email address:");
+    if (!email) return;
+
+    try {
+      setSending(true);
+      await sendReport(assessId, email, "txt");
+      alert("邮件已发送！");
+    } catch (e) {
+      alert("Send failed: " + (e as Error).message);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  /* —— 未找到推荐 id —— */
   if (!rec) {
     return (
       <div className="recommendation-container">
         <header className="nhs-header">
           <div className="nhs-header__inner">
-            <img src={NHSLogo} className="logo" alt="NHS" />
+            <img src={NHSLogo}  className="logo" alt="NHS"  />
             <img src={DIPPLogo} className="logo" alt="DIPP" />
             <span className="nhs-header__service">DIPP Assessment</span>
           </div>
@@ -53,18 +112,14 @@ const DynamicRecommendation: React.FC = () => {
 
         <main className="recommendation-main">
           <div className="recommendation-card">
-            <h2 className="recommendation-title">
-              did not find “{resultId}”
-            </h2>
+            <h2 className="recommendation-title">did not find “{resultId}”</h2>
           </div>
         </main>
 
         <footer className="nhs-footer">
           <div className="footer-inner">
             <ul className="footer-links">
-              <li>
-                <Link to="/">首页</Link>
-              </li>
+              <li><Link to="/">首页</Link></li>
             </ul>
           </div>
         </footer>
@@ -72,7 +127,7 @@ const DynamicRecommendation: React.FC = () => {
     );
   }
 
-  /* ---------- 正常渲染 ---------- */
+  /* —— 正常渲染 —— */
   return (
     <div
       className="recommendation-container"
@@ -82,7 +137,7 @@ const DynamicRecommendation: React.FC = () => {
       <BackButton />
       <header className="nhs-header">
         <div className="nhs-header__inner">
-          <img src={NHSLogo} className="logo" alt="NHS" />
+          <img src={NHSLogo}  className="logo" alt="NHS"  />
           <img src={DIPPLogo} className="logo" alt="DIPP" />
           <span className="nhs-header__service">DIPP Assessment</span>
         </div>
@@ -95,33 +150,35 @@ const DynamicRecommendation: React.FC = () => {
           <div
             className="recommendation-card__header"
             style={{
-              background: `linear-gradient(135deg, var(--orange-start), ${rec.themeColor})`,
+              background: `linear-gradient(135deg,var(--orange-start),${rec.themeColor})`,
             }}
           >
-            <img
-              src="https://twemoji.maxcdn.com/v/latest/72x72/1f3e5.png"
-              alt=""
-            />
+            <img src="https://twemoji.maxcdn.com/v/latest/72x72/1f3e5.png" alt="" />
             <h2 className="recommendation-title">{rec.title}</h2>
-            <p className="recommendation-subtitle">{resultId}</p>
+            <p  className="recommendation-subtitle">{resultId}</p>
           </div>
 
           {/* 正文 & 按钮 */}
           <div className="recommendation-body">
-            {/* 仅保留一句转诊建议 */}
             <p className="recommendation-description">
               Send patient to <strong>Emergency Department</strong>.
             </p>
 
             <div className="recommendation-actions">
-              <button className="btn-primary" onClick={handlePreview}>
+              <button className="btn-primary"  onClick={handlePreview}>
                 Preview&nbsp;Report
               </button>
-              <button className="btn-outline" onClick={handleCopy}>
-                Copy&nbsp;Report
+
+              <button className="btn-outline" onClick={handleDownload}>
+                Download&nbsp;TXT
               </button>
-              <button className="btn-outline" onClick={handleEmail}>
-                Send&nbsp;via&nbsp;Email
+
+              <button
+                className="btn-outline"
+                disabled={sending}
+                onClick={handleEmail}
+              >
+                Send via Email
               </button>
             </div>
           </div>
