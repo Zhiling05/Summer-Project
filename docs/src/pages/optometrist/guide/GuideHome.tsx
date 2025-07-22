@@ -1,9 +1,9 @@
 // import { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
-// import Header from '../../components/Header';
-// import BottomNav from '../../components/BottomNav';
+// import Header from '../../../components/Header';
+// import BottomNav from '../../../components/BottomNav';
 
-// export default function Guide() {
+// export default function GuideHome() {
 //   const [selectedCard, setSelectedCard] = useState<string | null>(null);
 //   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 //   const navigate = useNavigate();
@@ -289,17 +289,20 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../../components/Header';
-import BottomNav from '../../components/BottomNav';
-import '../../styles/card.css';
+import Header from '../../../components/Header';
+import BottomNav from '../../../components/BottomNav';
+import '../../../styles/card.css';
 
-export default function Guide() {
+export default function GuideHome() {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleCardClick = (cardType: string) => {
     setSelectedCard(cardType);
     console.log(`Selected: ${cardType}`);
+    if (cardType === 'gallery') {
+      navigate('gallery');
+    }
     // 待添加：导航逻辑
     // if (cardType === 'tutorial') {
     //   navigate('/tutorial');
@@ -327,10 +330,10 @@ export default function Guide() {
       >
         <div 
           style={{ 
-            maxWidth: '65%', 
+            maxWidth: '80%', 
             width: '100%',
             padding: '0 2rem',
-            minWidth: '320px', // 确保在小屏幕上不会太窄
+            minWidth: '320px', 
           }}
         >
           <div style={{
@@ -346,7 +349,7 @@ export default function Guide() {
               style={{
                 borderLeftColor: selectedCard === 'gallery' ? '#005eb8' : undefined,
                 borderLeftWidth: selectedCard === 'gallery' ? '4px' : undefined,
-                minHeight: '150px', // 添加这一行来增加卡片高度
+                minHeight: '150px', // 这一行可增加卡片高度
               }}
             >
               <div className="card-content">
@@ -385,7 +388,7 @@ export default function Guide() {
               style={{
                 borderLeftColor: selectedCard === 'tutorial' ? '#005eb8' : undefined,
                 borderLeftWidth: selectedCard === 'tutorial' ? '4px' : undefined,
-                minHeight: '150px', // 添加这一行来增加卡片高度
+                minHeight: '150px',
               }}
             >
               <div className="card-content">
