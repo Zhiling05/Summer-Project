@@ -173,3 +173,47 @@ body {
   .recommendation-body        { padding: 1.5rem 1rem 2rem; }
   .recommendation-actions button { font-size: .9rem; }
 }
+
+/* ===== 邮件发送模态框 ===== */
+.email-modal-overlay {
+  position: fixed;
+  inset: 0;                             /* top/right/bottom/left 0 */
+  background: rgba(0, 0, 0, 0.45);      /* 半透明遮罩 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;                        /* 高于页面其他元素 */
+}
+
+.email-modal {
+  width: 90%;
+  max-width: 400px;
+  background: var(--white);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.email-modal__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.email-modal__input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--nhs-blue);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.email-modal__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}

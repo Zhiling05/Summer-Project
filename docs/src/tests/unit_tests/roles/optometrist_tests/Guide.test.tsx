@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import Guide from '../../../../pages/optometrist/Guide';
+import Guide from '../../../../pages/optometrist/guide/GuideHome';
 import '@testing-library/jest-dom';
 
 describe('Guide Page', () => {

@@ -20,10 +20,12 @@ const Q1 = () => {
   const opts = ["Yes", "No"];
 
   /* ---------- 从跳转表取 Q1 记录 ---------- */
-  const flowEntry = useMemo(
-    () => (flow as FlowEntry[]).find((f) => f.id === "Q1"),
-    []
-  );
+  const flowEntry = useMemo<FlowEntry | undefined>(() => {
+  const raw: any = flow;                       // JSON 默认类型是 any
+  /** ① 若是 { questions: [...] } 取里面那一层；否则直接当数组用 */
+  const list: FlowEntry[] = Array.isArray(raw.questions) ? raw.questions : raw;
+  return list.find(f => f.id === 'Q1');
+}, []);
 
   /* ---------- 跳转 ---------- */
   const handleNext = () => {

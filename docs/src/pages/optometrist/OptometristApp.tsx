@@ -5,8 +5,8 @@ import '../../styles/question.css';
 // import DIPPLogo from '../../assets/DIPP_Study_logo.png';
 import Header from '../../components/Header';    // lzl:使用header组件
 import BackButton from '../../components/BackButton';
-import AssessRouter from './assess/AssessRouter';
-import Guide from './Guide'; 
+import AssessRouter from './assess/AssessRouter';  
+import GuideRouter from './guide/GuideRouter';    // lzl: 新增
 import Records from './Records';
 
 export default function OptometristApp() {
@@ -62,8 +62,8 @@ export default function OptometristApp() {
       <Route index element={<Home />} />
       {/* /optometrist/assess/* → AssessRouter (Q1…Q19 + recommendations) */}
       <Route path="assess/*" element={<AssessRouter />} />
-      {/* /optometrist/guide → Guide 页面 */}
-      <Route path="guide" element={<Guide />} />
+      {/* /optometrist/guide → Guide的Home页面 */}
+      <Route path="guide/*" element={<GuideRouter />} />   
 
       {/* /optometrist/records → Records 页面 */}
       <Route path="records" element={<Records />} />
