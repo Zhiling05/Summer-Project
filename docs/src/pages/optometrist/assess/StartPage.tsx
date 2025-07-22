@@ -2,8 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/question.css';
 import Header from '../../../components/Header';   // lzl新增：使用header组件
-// import NHSLogo from '../../../assets/NHS_LOGO.jpg';
-// import DIPPLogo from '../../../assets/DIPP_Study_logo.png';
+
 import BackButton from '../../../components/BackButton';
 
 export default function StartPage() {
@@ -38,7 +37,9 @@ export default function StartPage() {
           <p>context line 3</p>
           <button
             className="continue-button"
-            onClick={() => navigate('questions/Q1')}
+            // onClick={() => navigate('questions/Q1')}
+              //姚璟：修改相对路径丢失问题。
+            onClick={() => navigate('../questions/Q1')}
           >
             Start now
           </button>

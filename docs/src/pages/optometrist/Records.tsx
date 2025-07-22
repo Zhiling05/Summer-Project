@@ -1,188 +1,200 @@
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/question.css";
-import Header from "../../components/Header";   // lzl: 新增header组件
-// import NHSLogo from "../../assets/NHS_LOGO.jpg";
-// import DIPPLogo from "../../assets/DIPP_Study_logo.png"; 
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { parseISO } from "date-fns";
+
+import Header from "../../components/Header";
 import BottomNav from "../../components/BottomNav";
+import "../../styles/records.css";
+import recordsJson from "../../data/records.json";
+import { AssessmentRecommendations } from "../../types/recommendation";
+
+//定义一个类型安全的级别数组，后面的红黄绿卡片要用
+const LEVELS: Level[] = ["high", "medium", "low"];
+export type Level = "high" | "medium" | "low";
+
+type RiskLabel = NonNullable<AssessmentRecommendations["recommendationType"]>;
+
+/** 把 `"EMERGENCY_DEPARTMENT"` → `"emergency-department"` */
+function normalizeRisk(raw: string): RiskLabel {
+  return raw.toLowerCase().replace(/_/g, "-") as RiskLabel;
+}
+
+interface RawRecord {
+  id: string;
+  date: string;
+  risk: string;
+}
+type NormalizedRecord = {
+  id: string;
+  date: string;
+  risk: RiskLabel;
+};
+
+/** UI 配置 */
+const LEVEL_UI: Record<Level, { css: "red" | "orange" | "green"; title: string; desc: string }> = {
+  high:   { css: "red",    title: "High Risk",   desc: "Uegent or Immediate Referral Required" },
+  medium: { css: "orange", title: "Moderate Risk", desc: "Further Observation Required" },
+  low:    { css: "green",  title: "Low Risk",   desc: "No Special Intervention Required" },
+};
+
+const RISK_TO_LEVEL: Record<RiskLabel, Level> = {
+  "emergency-department":   "high",
+  "immediate":              "high",
+  "urgent-to-oph":          "medium",
+  "urgent-to-gp-or-neur":   "medium",
+  "to-gp":                  "low",
+  "no-referral":            "low",
+};
+
+const dateOnly = (iso: string) => iso.slice(0, 10);
+type FilterValue = Level | "all";
+
+
+/*下面写组件了*/
 export default function Records() {
   const navigate = useNavigate();
 
+  //把all类型标注为normalized，TS 就知道 rec.risk 属于 RiskLabel，可以安全地写 RISK_TO_LEVEL[rec.risk]，LEVEL_UI[lvl]，stats[lvl] 等索引都不会再报。
+  const all: NormalizedRecord[] = (recordsJson as RawRecord[]).map(r => {
+    const norm = normalizeRisk(r.risk);
+    const finalRisk = (norm in RISK_TO_LEVEL ? norm : "no-referral") as RiskLabel;
+    return { id: r.id, date: r.date, risk: finalRisk };
+    });
+
+
+  // —— 筛选 state ——
+  const [level, setLevel] = useState<FilterValue>("all");
+  const [from,  setFrom]  = useState<Date | null>(null);
+  const [to,    setTo]    = useState<Date | null>(null);
+
+  // —— 统计 ——
+  const stats = useMemo(() => {
+    const initial = { high: 0, medium: 0, low: 0 } as Record<Level, number>;
+    return all.reduce((acc, rec) => {
+      const lvl = RISK_TO_LEVEL[rec.risk];
+      acc[lvl] += 1;
+      return acc;
+    }, initial);
+  }, [all]);
+
+  // —— 过滤 ——
+  const list = useMemo(() => {
+    return all.filter((r) => {
+      const lvl = RISK_TO_LEVEL[r.risk];
+      if (level !== "all" && lvl !== level) return false;
+
+      const recDate = parseISO(r.date);
+      if (from && recDate < from) return false;
+      if (to   && recDate > to)   return false;
+      return true;
+    });
+  }, [all, level, from, to]);
+
+
+
+
   return (
-    <>
-      <Header title="Records" />
+      <>
+        <Header title="Records" />
+        <div className="page-container">
+        <main className="records-main">
+          <h1 className="records-title">Records</h1>
 
-      <div style={{ 
-        backgroundColor: "#f0f4f5",
-        minHeight: "calc(100vh - 120px)",
-        padding: "2rem 0",
-        width: "100vw",
-        marginLeft: "calc(-50vw + 50%)",
-        boxSizing: "border-box"
-      }}>
-        <div style={{ 
-          maxWidth: "960px",
-          margin: "0 auto",
-          padding: "0 16px"
-        }}>
-          <h1 style={{ 
-            color: "#005eb8",
-            fontSize: "1.8rem",
-            marginBottom: "2rem"
-          }}>
-            Records
-          </h1>
-
-          <section style={{ 
-            backgroundColor: "white",
-            padding: "2rem",
-            borderRadius: "4px",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            marginBottom: "2rem"
-          }}>
-            <h2 style={{ 
-              color: "#212b32",
-              fontSize: "1.4rem",
-              borderBottom: "2px solid #d8dde0",
-              paddingBottom: "0.5rem",
-              marginTop: 0
-            }}>
-              Recent Assessment Records
-            </h2>
-
-            <div style={{ 
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "1rem",
-              margin: "1.5rem 0"
-            }}>
-              <div style={{ 
-                backgroundColor: "#d03838", 
-                padding: "1rem",
-                borderRadius: "4px",
-                textAlign: "center",
-                color: "white" 
-              }}>
-                <div style={{ fontSize: "1.8rem", fontWeight: "bold" }}>32</div>
-                <div>cases</div>
-              </div>
-              <div style={{ 
-                backgroundColor: "#e67e00", 
-                padding: "1rem",
-                borderRadius: "4px",
-                textAlign: "center",
-                color: "white" 
-              }}>
-                <div style={{ fontSize: "1.8rem", fontWeight: "bold" }}>25</div>
-                <div>cases</div>
-              </div>
-              <div style={{ 
-                backgroundColor: "#006747", 
-                padding: "1rem",
-                borderRadius: "4px",
-                textAlign: "center",
-                color: "white" 
-              }}>
-                <div style={{ fontSize: "1.8rem", fontWeight: "bold" }}>18</div>
-                <div>cases</div>
-              </div>
-            </div>
-
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ 
-                width: "100%",
-                borderCollapse: "collapse"
-              }}>
-                <thead>
-                  <tr style={{ 
-                    backgroundColor: "#f8f9fa",
-                    borderBottom: "2px solid #d8dde0"
-                  }}>
-                    <th style={{ 
-                      padding: "12px 16px",
-                      textAlign: "left",
-                      fontWeight: "600"
-                    }}>Date & Result</th>
-                    <th style={{ 
-                      padding: "12px 16px",
-                      textAlign: "right",
-                      fontWeight: "600"
-                    }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{ borderBottom: "1px solid #e8edee" }}>
-                    <td style={{ padding: "12px 16px" }}>
-                      <div>2025/06/20 14:32</div>
-                      <div style={{ color: "#006747", fontWeight: "500" }}>No referral needed</div>
-                    </td>
-                    <td style={{ padding: "12px 16px", textAlign: "right" }}>
-                      <button 
-                        onClick={() => navigate("/records/detail")}
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "#005eb8",
-                          border: "1px solid #005eb8",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                          cursor: "pointer"
-                        }}
-                      >
-                        View Details
-                      </button>
-                    </td>
-                  </tr>
-                  <tr style={{ borderBottom: "1px solid #e8edee" }}>
-                    <td style={{ padding: "12px 16px" }}>
-                      <div>2025/06/18 10:05</div>
-                      <div style={{ color: "#d32f2f", fontWeight: "500" }}>Send to Emergency Department immediately</div>
-                    </td>
-                    <td style={{ padding: "12px 16px", textAlign: "right" }}>
-                      <button 
-                        onClick={() => navigate("/records/detail")}
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "#005eb8",
-                          border: "1px solid #005eb8",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                          cursor: "pointer"
-                        }}
-                      >
-                        View Details
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: "12px 16px" }}>
-                      <div>2025/06/20 16:20</div>
-                      <div style={{ color: "#d32f2f", fontWeight: "500" }}>Send to Emergency Department immediately</div>
-                    </td>
-                    <td style={{ padding: "12px 16px", textAlign: "right" }}>
-                      <button 
-                        onClick={() => navigate("/records/detail")}
-                        style={{
-                          backgroundColor: "transparent",
-                          color: "#005eb8",
-                          border: "1px solid #005eb8",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                          cursor: "pointer"
-                        }}
-                      >
-                        View Details
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          {/* 统计卡 */}
+          <section className="stats-grid">
+            {/*{(Object.keys(LEVEL_UI) as Level[]).map((lvl) => (*/}
+            {LEVELS.map((lvl) => (
+                <article key={lvl} className={`stats-card ${LEVEL_UI[lvl].css}`}>
+                  <span className="stats-title">{LEVEL_UI[lvl].title}</span>
+                  <span className="stats-num">{stats[lvl]}</span>
+                  <span className="stats-desc">{LEVEL_UI[lvl].desc}</span>
+                </article>
+            ))}
           </section>
-        </div>
-      </div>
 
-      
-      {/* 底部导航 */}
-      <BottomNav />
-    </>
+          {/* 筛选栏 */}
+          <section className="filter-bar">
+            <label>
+              Risk Level
+              <select value={level} onChange={(e) => setLevel(e.target.value as FilterValue)}>
+                <option value="all">All</option>
+                <option value="high">High Risk</option>
+                <option value="medium">Moderate Risk</option>
+                <option value="low">Low Risk</option>
+              </select>
+            </label>
+            <label>
+              Start Date
+              <DatePicker
+                  selected={from}
+                  onChange={(date) => setFrom(date)}
+                  placeholderText="YYYY-MM-DD"
+                  dateFormat="yyyy-MM-dd"
+                  locale="en-US"
+                  isClearable
+              />
+            </label>
+            <label>
+              End Date
+            <DatePicker
+            selected={to}
+            onChange={(date) => setTo(date)}
+            placeholderText="YYYY-MM-DD"
+            dateFormat="yyyy-MM-dd"
+            locale="en-US"
+            isClearable
+            />
+            </label>
+          </section>
+
+          {/* 表格 */}
+          <div className="table-wrapper">
+            <table className="records-table">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Risk Level</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {list.map((r) => {
+                const lvl = RISK_TO_LEVEL[r.risk];
+                return (
+                    <tr key={r.id}>
+                      <td>{r.id}</td>
+                      <td>{dateOnly(r.date)}</td>
+                      <td>
+                        <span className={`tag-pill tag-${LEVEL_UI[lvl].css}`}>{LEVEL_UI[lvl].title}</span>
+                      </td>
+                      <td>
+                        <button
+                            className="view-btn"
+                            onClick={() => navigate(`/optometrist/records/${r.id}`)}
+                        >
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                );
+              })}
+              {list.length === 0 && (
+                  <tr>
+                    <td colSpan={4} style={{ textAlign: "center", padding: "24px" }}>
+                      No Matching Records Found
+                    </td>
+                  </tr>
+              )}
+              </tbody>
+            </table>
+          </div>
+        </main>
+        </div>
+        <BottomNav />
+      </>
   );
 }
