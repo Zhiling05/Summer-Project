@@ -8,9 +8,11 @@ app.use(cors());
 app.use(express.json());
 
 /* ───────── 业务路由 ───────── */
+app.use('/api', require('./routes/report'));      // 纯文本预览
 app.use('/api', require('./routes/assessments')); // POST /api/assessments + GET /:id
 
 app.use('/api', require('./routes/export'));      // GET  /api/assessments/:id/export
+
 app.use('/api', require('./routes/mail'));        // POST /api/send-report
 
 /* ───────── 统计接口（仍放在这里） ───────── */

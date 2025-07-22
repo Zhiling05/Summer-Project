@@ -7,7 +7,7 @@ const assessments = new Map();
 
 /* ---------- POST /api/assessments ---------- */
 router.post('/assessments', (req, res) => {
-  const id = Date.now().toString();        // 简单时间戳 ID
+  const id        = Date.now().toString();   // 简单时间戳 ID
   const createdAt = new Date().toISOString();
 
   assessments.set(id, { id, createdAt, ...req.body });
@@ -23,22 +23,25 @@ router.get('/assessments/:id', (req, res) => {
   res.json(record);
 });
 
-/* ---------- GET /api/assessments/:id/export ---------- */
-router.get('/assessments/:id/export', (req, res) => {
-  const record = assessments.get(req.params.id);
-  if (!record) return res.status(404).send('Not found');
+/* ---------- GET /api/assessments/:id/export ----------
+ *  ⚠️ 运行时再 require utils/doc，避免与 report.js 循环引用
+ * ---------------------------------------------- */
+router.get('/assessments/:id/export', async (req, res, next) => {
+  try {
+    const ass = assessments.get(req.params.id);
+    if (!ass) return res.status(404).send('Not found');
 
-  res.setHeader(
-    'Content-Disposition',
-    `attachment; filename=assessment-${record.id}.txt`
-  );
-  res.type('txt').send(
-    `ID: ${record.id}\n` +
-    `Role: ${record.role}\n` +
-    `Recommendation: ${record.recommendation}\n` +
-    `Answers:\n${JSON.stringify(record.answers, null, 2)}\n`
-  );
+    // 按需加载，打破循环引用
+    const { buildDoc } = require('../utils/doc');
+
+    // 支持 ?format=txt，预留 docx 等
+    const format = (req.query.format || 'txt').toLowerCase();
+    const { path, cleanup, mime, ext } = await buildDoc(ass, format);
+
+    res.type(mime).download(path, `assessment-${ass.id}.${ext}`, cleanup);
+  } catch (e) { next(e); }
 });
 
-module.exports = router;
+/* --------------- 导出 --------------- */
+module.exports           = router;
 module.exports.assessments = assessments;
