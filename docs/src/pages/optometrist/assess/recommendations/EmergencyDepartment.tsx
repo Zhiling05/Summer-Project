@@ -5,10 +5,11 @@ import {
   createAssessment,
   exportAssessment,
   sendReport,
+  fetchReportText,        // ① NEW —— 在 src/api/index.ts 里已补充
   Answer,
   UserRole,
 } from '../../../../api'
-import { saveAs } from 'file-saver'               // ← 新增
+import { saveAs } from 'file-saver'
 import '../../../../styles/question.css'
 import NHSLogo  from '../../../../assets/NHS_LOGO.jpg'
 import DIPPLogo from '../../../../assets/DIPP_Study_logo.png'
@@ -16,23 +17,26 @@ import DIPPLogo from '../../../../assets/DIPP_Study_logo.png'
 interface LocationState {
   answers: Answer[]
   patientId: string
-  recommendation: string           // 'EmergencyDepartment'
+  recommendation: string   // 'EmergencyDepartment'
 }
 
 export default function EmergencyDepartment() {
-  const navigate          = useNavigate()
-  const { state }         = useLocation() as { state: LocationState }
+  const navigate           = useNavigate()
+  const { state }          = useLocation() as { state: LocationState }
 
   /* --- 本地 UI 状态 --- */
   const [saving,  setSaving]  = useState(true)
   const [error,   setError]   = useState<string | null>(null)
-  const [assessId, setId]     = useState<string | null>(null)   // 保存成功后拿到 id
-  const [sending, setSending] = useState(false)                 // 发邮件按钮 loading
+  const [assessId, setId]     = useState<string | null>(null)
+  const [sending, setSending] = useState(false)
+
+  /* ↓ 预览/复制相关 */
+  const [report, setReport]   = useState<string>('')   // 文本内容
+  const [show,   setShow]     = useState(false)        // 预览面板开关
+  const hasReport             = !!report
 
   /* ---- 首次挂载：保存到后端 ---- */
   useEffect(() => {
-    console.log('EmergencyDepartment state =>', state)
-
     if (!state?.answers?.length || !state.patientId) {
       setError('缺少答题数据，请重新开始 Assessment')
       setSaving(false)
@@ -47,9 +51,8 @@ export default function EmergencyDepartment() {
           answers: state.answers,
           recommendation: state.recommendation,
         })
-        setId(id)                 // 记住后端返回的 id
+        setId(id)
       } catch (e) {
-        console.error(e)
         setError((e as Error).message)
       } finally {
         setSaving(false)
@@ -65,6 +68,34 @@ export default function EmergencyDepartment() {
       saveAs(blob, `assessment-${assessId}.txt`)
     } catch (e) {
       alert('下载失败：' + (e as Error).message)
+    }
+  }
+
+  /* ---- 预览 or 复制：第一次点击时请求文本，之后复用缓存 ---- */
+  async function ensureReport() {
+    if (!assessId) return ''
+    if (report) return report
+    const txt = await fetchReportText(assessId)
+    setReport(txt)
+    return txt
+  }
+
+  async function handlePreview() {
+    try {
+      await ensureReport()
+      setShow(true)
+    } catch (e) {
+      alert('获取报告失败：' + (e as Error).message)
+    }
+  }
+
+  async function handleCopy() {
+    try {
+      const txt = await ensureReport()
+      await navigator.clipboard.writeText(txt)
+      alert('已复制到剪贴板')
+    } catch (e) {
+      alert('复制失败：' + (e as Error).message)
     }
   }
 
@@ -86,88 +117,82 @@ export default function EmergencyDepartment() {
 
   /* ---- 保存中 / 错误 ---- */
   if (saving) return <div>正在保存你的 Assessment…</div>
-  if (error)
-    return (
-      <div>
-        <p>保存失败：{error}</p>
-        <button onClick={() => window.location.reload()}>重试</button>
-      </div>
-    )
+  if (error)  return (
+    <div>
+      <p>保存失败：{error}</p>
+      <button onClick={() => window.location.reload()}>重试</button>
+    </div>
+  )
 
   /* ---------- 正常渲染 ---------- */
   return (
     <>
       {/* 顶栏 */}
-      <header className="nhs-header" style={{ backgroundColor: '#005eb8', color: 'white', padding: '12px 0' }}>
-        <div className="nhs-header__inner" style={{ maxWidth: '960px', margin: '0 auto', padding: '0 16px', display: 'flex', alignItems: 'center' }}>
-          <img className="logo nhs-logo"  src={NHSLogo}  alt="NHS logo"  style={{ height: '40px' }} />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" style={{ height: '40px', marginLeft: '20px' }} />
-          <span className="nhs-header__service" style={{ marginLeft: 'auto', fontSize: '1.2rem', fontWeight: 'bold' }}>
+      <header className="nhs-header" style={{ backgroundColor:'#005eb8', color:'#fff', padding:'12px 0' }}>
+        <div className="nhs-header__inner" style={{ maxWidth:960, margin:'0 auto', padding:'0 16px',
+          display:'flex', alignItems:'center' }}>
+          <img className="logo nhs-logo"  src={NHSLogo}  alt="NHS logo"  style={{ height:40 }} />
+          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" style={{ height:40, marginLeft:20 }} />
+          <span className="nhs-header__service" style={{ marginLeft:'auto', fontSize:'1.2rem', fontWeight:'bold' }}>
             DIPP Assessment
           </span>
         </div>
       </header>
 
       {/* 粉色背景区域 */}
-      <div style={{ backgroundColor: '#ffe4e6', minHeight: 'calc(100vh - 120px)', padding: '2rem 0', width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 16px' }}>
-          <section className="question-box" style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-            <h1 className="nhsuk-heading-l" style={{ color: '#d03838', borderBottom: '4px solid #d03838', paddingBottom: '0.5rem' }}>
+      <div style={{ backgroundColor:'#ffe4e6', minHeight:'calc(100vh - 120px)', padding:'2rem 0', width:'100vw',
+        marginLeft:'calc(-50vw + 50%)' }}>
+        <div style={{ maxWidth:960, margin:'0 auto', padding:'0 16px' }}>
+          <section className="question-box" style={{ backgroundColor:'#fff', padding:'2rem',
+            borderRadius:4, boxShadow:'0 2px 4px rgba(0,0,0,0.1)' }}>
+            <h1 className="nhsuk-heading-l" style={{ color:'#d03838', borderBottom:'4px solid #d03838',
+              paddingBottom:'0.5rem' }}>
               Immediate Referral
             </h1>
             <p>Send patient to <strong>Emergency Department</strong> Context XXXXX</p>
             <ul className="nhsuk-list nhsuk-list--bullet">
-              <li>Context XXXXX</li>
-              <li>Context XXXXX</li>
-              <li>Context XXXXX</li>
+              <li>Context XXXXX</li><li>Context XXXXX</li><li>Context XXXXX</li>
             </ul>
 
             {/* 动作按钮 */}
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '1.5rem' }}>
-              <button className="continue-button" onClick={() => navigate('/optometrist/assess/')} style={{ backgroundColor: '#d03838' }}>
-                Return to Home
-              </button>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:12, marginTop:'1.5rem' }}>
+              <button className="continue-button" style={{ backgroundColor:'#d03838' }}
+                onClick={() => navigate('/optometrist/assess/')}>Return to Home</button>
 
               <button className="continue-button" disabled={!assessId} onClick={handleDownload}>
-                Download TXT
+                Download&nbsp;TXT
+              </button>
+
+              <button className="continue-button" disabled={!assessId} onClick={handlePreview}>
+                Preview&nbsp;Report
+              </button>
+
+              <button className="continue-button" disabled={!assessId} onClick={handleCopy}>
+                Copy&nbsp;Report
               </button>
 
               <button className="continue-button" disabled={!assessId || sending} onClick={handleSendMail}>
-                {sending ? 'Sending…' : 'Send by Email'}
+                {sending ? 'Sending…' : 'Send&nbsp;by&nbsp;Email'}
               </button>
             </div>
           </section>
         </div>
       </div>
 
-      <footer className="nhs-footer">
-        <div className="footer-inner">
-          <p>
-            Other ways to contact DIPP if you have a hearing problem or need help in other languages&nbsp;
-            <a href="#/" target="_blank" rel="noopener noreferrer">
-              (opens in a new tab)
-            </a>.
-          </p>
-          <hr />
-          <ul className="footer-links">
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Privacy statement
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Terms and conditions
-              </a>
-            </li>
-            <li>
-              <a href="#/" target="_blank" rel="noopener noreferrer">
-                Accessibility statement
-              </a>
-            </li>
-          </ul>
+      {/* 预览弹层（极简实现） */}
+      {show && (
+        <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex',
+          alignItems:'center', justifyContent:'center', zIndex:9999 }}>
+          <div style={{ background:'#fff', padding:24, maxWidth:800, maxHeight:'80vh', overflow:'auto',
+            borderRadius:4, whiteSpace:'pre-wrap', lineHeight:1.4, fontFamily:'monospace' }}>
+            <h2>Report Preview</h2>
+            <pre>{report || 'Loading…'}</pre>
+            <div style={{ textAlign:'right', marginTop:12 }}>
+              <button className="continue-button" onClick={() => setShow(false)}>Close</button>
+            </div>
+          </div>
         </div>
-      </footer>
+      )}
     </>
-  );
+  )
 }

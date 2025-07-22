@@ -1,7 +1,7 @@
 // docs/src/pages/optometrist/assess/questions/Q2.tsx
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import type { Answer } from '../../../../api'                 // ← 类型
+import type { Answer } from '../../../../api'
 import '../../../../styles/question.css'
 import BottomNav  from '../../../../components/BottomNav'
 import NHSLogo    from '../../../../assets/NHS_LOGO.jpg'
@@ -15,15 +15,12 @@ interface LocationState {
 export default function Q2() {
   const navigate = useNavigate()
 
-  /* 读取上一题带过来的 state ---------------------------------- */
-  const { state } = useLocation() as { state: LocationState }
-  const prevAnswers: Answer[] = state?.answers ?? []
+  /* ---------- 上一题带过来的 state ---------- */
+  const { state }   = useLocation() as { state: LocationState }
+  const prevAnswers = state?.answers ?? []
+  const patientId   = state?.patientId ?? `pid-${Date.now().toString(36)}`
 
-  /* 如果还没有 patientId，第一次生成一个 ---------------------- */
-  const patientId =
-    state?.patientId ?? `pid-${Date.now().toString(36)}`
-
-  /* 本题交互 --------------------------------------------------- */
+  /* ---------- 本题内容 ---------- */
   const [answer, setAnswer] = useState('')
 
   const question =
@@ -39,17 +36,22 @@ export default function Q2() {
     'None of the above',
   ]
 
+  /* ---------- 下一步 ---------- */
   const handleNext = () => {
     if (!answer) return
 
-    /* 把本题写入新的 answers 数组 */
+    /* 把本题答案加入数组（含题干 question） */
     const newAnswers: Answer[] = [
       ...prevAnswers,
-      { questionId: 'Q2', answer },
+      {
+        questionId: 'Q2',
+        question,     // 题干一起送后端
+        answer,
+      },
     ]
 
     if (answer !== 'None of the above') {
-      /* 红旗症状 → 立即转急诊 */
+      /* 红旗症状 -> 直接跳急诊推荐页 */
       navigate('../../recommendations/emergency-department', {
         state: {
           answers: newAnswers,
@@ -58,7 +60,7 @@ export default function Q2() {
         },
       })
     } else {
-      /* 正常流程 → 下一题 Q3 */
+      /* 正常流程 -> 下一题 Q3 */
       navigate('../Q3', {
         state: {
           answers: newAnswers,
@@ -68,7 +70,7 @@ export default function Q2() {
     }
   }
 
-  /* ----------------------------  JSX  ---------------------------- */
+  /* ---------- JSX ---------- */
   return (
     <>
       <header className="nhs-header">
@@ -88,8 +90,9 @@ export default function Q2() {
           <section className="question-box">
             <h1 className="nhsuk-heading-l">{question}</h1>
             <p className="hint">Select one option</p>
+
             <ul className="radio-list">
-              {opts.map((opt) => (
+              {opts.map(opt => (
                 <li key={opt}>
                   <label className="radio-label">
                     <input

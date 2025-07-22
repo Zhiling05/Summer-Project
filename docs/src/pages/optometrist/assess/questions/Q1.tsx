@@ -45,9 +45,13 @@ const Q1 = () => {
 
     /** ① 把当前答案并入数组 */
     const nextAnswers: Answer[] = [
-      ...prevAnswers,
-      { questionId: "Q1", answer },
-    ];
+    ...prevAnswers,
+    {
+      questionId: 'Q1',
+      question,            //  新增，题干一并送到后端
+      answer,
+    },
+  ];
 
     /** ② 计算下一页 id -> nextId */
     let nextId: string | undefined;

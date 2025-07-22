@@ -2,6 +2,8 @@
 // —— Types —— //
 export interface Answer {
   questionId: string;
+   /* ★ 新增：把题干也发给后台，方便导出 / 预览 */
+  question: string;
   answer: string;
 }
 
@@ -106,6 +108,15 @@ export async function exportAssessment(
   );
   if (!res.ok) throw new Error(`Export failed: ${res.statusText}`);
   return res.blob();
+}
+
+// 3️⃣-b  获取纯文本报告（预览 / 复制）
+export async function fetchReportText(id: string): Promise<string> {
+  const res = await fetch(`${API_BASE}/assessments/${id}/report`, {
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(`Fetch report failed: ${res.statusText}`);
+  return res.text();
 }
 
 // 4. 发送报告邮件
