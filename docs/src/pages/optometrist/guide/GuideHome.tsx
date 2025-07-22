@@ -302,13 +302,10 @@ export default function GuideHome() {
     console.log(`Selected: ${cardType}`);
     if (cardType === 'gallery') {
       navigate('gallery');
+    } else if (cardType === 'tutorial') {
+      navigate('tutorial');
     }
-    // 待添加：导航逻辑
-    // if (cardType === 'tutorial') {
-    //   navigate('/tutorial');
-    // } else if (cardType === 'gallery') {
-    //   navigate('/gallery');
-    // }
+
   };
 
   return (
