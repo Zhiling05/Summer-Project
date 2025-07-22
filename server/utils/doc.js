@@ -17,7 +17,11 @@ async function buildDoc(assessment, format = 'txt') {
     `Date      : ${assessment.createdAt}`,
     `Role      : ${assessment.role}`,
     '----------------------------------------',
-    ...assessment.answers.map(a => `${a.questionId}: ${a.answer}`),
+    ...assessment.answers.map(
+      a =>
+        `${a.questionId}: ${a.question || '(question text missing)'}\n` +
+        `Answer    : ${a.answer}\n`
+    ),
     '----------------------------------------',
     `Recommendation: ${assessment.recommendation}`,
     '',
