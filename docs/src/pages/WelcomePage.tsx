@@ -1,44 +1,55 @@
-// docs/src/pages/WelcomePage.tsx
+import { useEffect, useState } from 'react';//ycl
 import { useNavigate } from 'react-router-dom';
-import '../styles/question.css';
-// import NHSLogo from '../assets/NHS_LOGO.jpg';   // lzl：使用header通用组件
-// import DIPPLogo from '../assets/DIPP_Study_logo.png';
-import Header from '../components/Header';
+import '../styles/welcome.css';   // 只引入本页专属样式ycl2
+
+//换成3张新的logo
+// import NHSLogo from '../assets/NHSLogo2.png';
+// import DIPPLogoLight from '../assets/DIPPLogo2.png';   
+// import DIPPLogoDark from '../assets/DIPPLogo2_2.png';   
+import NHSLogo from '../assets/NHS_LOGO.jpg';
+import DIPPLogo from '../assets/DIPP_Study_logo.png'; 
 
 export default function WelcomePage() {
   const navigate = useNavigate();
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/*-----------lzl修改：使用header组件 ------------- */
-      /* <header className="nhs-header">
-        <div className="nhs-header__inner">
-          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">Welcome</span>
-        </div>
-      </header> */}
-      <Header title="Welcome" />
+  //ycl2 动画缩放
+  const [animate, setAnimate] = useState(false);
 
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div className="nhsuk-width-container">
-          <h1 className="nhsuk-heading-l">WelcomePage</h1>
-          <p>context line 1</p>
-          <p>context line 2</p>
-          <p>context line 3</p>
-          <button
-            className="continue-button"
-            onClick={() => navigate('/select-role')}
-          >
-            Start now
-          </button>
-        </div>
+  useEffect(() => {
+    // 触发缩放动画
+    setAnimate(true);
+
+    // 3 秒后自动跳转到用户选择页
+    const timer = setTimeout(() => {
+      navigate('/select-role');
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
+  return (
+    //ycl2logo
+    <div className={`welcome-screen ${animate ? 'zooming' : ''}`}>
+      <div className="logo-group">
+        <img
+          src={NHSLogo}
+          alt="NHS logo"
+          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
+        />
+        <img
+          src={DIPPLogo}
+          alt="DIPP Study logo"
+          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
+        />
+        {/* <img
+          src={DIPPLogoLight}
+          alt="DIPP Study logo light"
+          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
+        />
+        <img
+          src={DIPPLogoDark}
+          alt="DIPP Study logo dark"
+          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
+        /> */}
       </div>
     </div>
   );
