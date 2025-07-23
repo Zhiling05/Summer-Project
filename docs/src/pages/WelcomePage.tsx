@@ -21,7 +21,7 @@ export default function WelcomePage() {
     // 3 秒后自动跳转到用户选择页
     const timer = setTimeout(() => {
       navigate('/select-role');
-    }, 3000);
+    }, 3500);
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -33,12 +33,12 @@ export default function WelcomePage() {
         <img
           src={NHSLogo}
           alt="NHS logo"
-          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
+          className={`logo logo-small ${animate ? 'welcome-animate' : ''}`}  // ycl2
         />
         <img
           src={DIPPLogo}
           alt="DIPP Study logo"
-          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
+          className={`logo logo-large ${animate ? 'welcome-animate' : ''}`}  // ycl2
         />
         {/* <img
           src={DIPPLogoLight}

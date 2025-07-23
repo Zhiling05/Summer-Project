@@ -20,14 +20,14 @@
     animation: screenFadeIn 300ms ease-out forwards; /* ycl2 */
 }
 
-
 /* 缩放阶段（群组层面） */
 .welcome-screen.zooming .logo-group {
-    animation: logosZoom 800ms ease-out forwards;    /* ycl2 */
+    animation: logosZoom 900ms ease-out forwards;    /* ycl2 */
 }
 
 /* 停留阶段 */
 .welcome-screen.hold .logo-group {
+    animation: holdFade 600ms ease-in forwards; 
     transform: scale(1.3);                           /* ycl2：最终悬停时更大 */
 }
 
@@ -39,27 +39,39 @@
 /* Logo 容器，并排布局 */
 .logo-group {
     display: flex;
-    gap: 2rem;                                       /* ycl2 */
-    transform: scale(1.5);                           /* ycl2：初始更大 */
+    flex-direction: column;    /* ycl2：改为上下排列 */
+    align-items: center;       /* ycl2：水平居中对齐 */
+    gap: 2.3rem;               /* ycl2：上下间距，原来是 2rem，可酌量调整 */
+    transform: scale(1.5);     /* ycl2：初始更大 */
 }
 
-/* 单个 Logo 大小，保持原有长宽比 */
+/* 通用 logo：去掉 max-width/max-height，改为自适应 */
 .logo {
-    max-width: 150px;    /* ycl2：最大宽度，不超过此值 */
-    max-height: 80px;    /* ycl2：最大高度，不超过此值 */
-    width: auto;         /* ycl2：按比例自适应 */
-    height: auto;        /* ycl2：按比例自适应 */
+    width: auto;             /* ycl2：按比例自适应宽度/高度 */
+    height: auto;            /* ycl2：按比例自适应宽度/高度 */
+}
+
+/* 第一张 NHS 缩得更小，保持长宽比 */
+.logo-small {               /* ycl2 */
+    width: 70px;             /* ycl2：再缩小至 40px 宽 */
+    height: auto;            /* ycl2：高度自适应 */
+}
+
+/* 第二张 DIPP 缩得更大，保持长宽比 */
+.logo-large {               /* ycl2 */
+    width: 90px;            /* ycl2：固定宽度 240px */
+    height: 150px;            /* ycl2：高度自适应 */
 }
 
 /* 单个 logo 缩放动画 */
-.logo.welcome-animate {                                    /* ycl2 */
-    animation: logosZoom 800ms ease-out forwards;            /* ycl2 */
+.logo.welcome-animate {     /* ycl2 */
+    animation: logosZoom 800ms ease-out forwards;    /* ycl2 */
 }
 
 /* —— 动画关键帧 —— */
 @keyframes logosZoom {
-    from { transform: scale(1.6); }                  /* ycl2 */
-    to   { transform: scale(1.3); }                  /* ycl2 */
+    from { transform: scale(1.6); }  /* ycl2 */
+    to   { transform: scale(1.3); }  /* ycl2 */
 }
 
 @keyframes screenFadeIn {
