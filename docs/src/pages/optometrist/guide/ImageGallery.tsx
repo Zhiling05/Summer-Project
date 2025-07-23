@@ -17,7 +17,6 @@ export default function ImageGallery() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
-
   const imageItems: ImageItem[] = [
     {
       id: 1,
@@ -200,86 +199,90 @@ export default function ImageGallery() {
             Reference Image Gallery
           </h1>
 
-          {/* 搜索栏 */}
-          <div style={{ marginBottom: '24px' }}>
-            <div style={{ position: 'relative' }}>
-              <svg
-                style={{
-                  position: 'absolute',
-                  left: '16px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#768692',
-                }}
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-              </svg>
-              <input
-                type="text"
-                placeholder="Search images, conditions, symptoms..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px 12px 48px',
-                  border: '2px solid #d8dde0',
-                  borderRadius: '25px',
-                  fontSize: '16px',
-                  background: 'white',
-                  boxSizing: 'border-box',
-                }}
-              />
-            </div>
-          </div>
-
-          {/* 分类导航 */}
-          <div style={{ marginBottom: '24px' }}>
-            <h2
-              style={{
-                color: '#212b32',
-                fontSize: '1.4rem',
-                marginTop: '32px',
-                marginBottom: '16px',
-                fontWeight: '700',
-              }}
-            >
-              Browse by Condition Type
-            </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {[
-                { key: 'all', label: 'All Images' },
-                { key: 'true', label: 'Papilloedema' },
-                { key: 'pseudo', label: 'Pseudopapilloedema' },
-                { key: 'uncertain', label: 'Uncertain appearance'},
-                { key: 'normal', label: 'Normal appearance'},
-              ].map(({ key, label }) => (
-                <div
-                  key={key}
-                  onClick={() => setActiveCategory(key)}
+          {/* 筛选栏 - 参考Records页面的样式 */}
+          <section className="filter-bar" style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            marginBottom: '24px',
+            flexWrap: 'wrap'
+          }}>
+            <label style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              color: '#212b32'
+            }}>
+              Search Images
+              <div style={{ position: 'relative' }}>
+                <svg
                   style={{
-                    background: activeCategory === key ? '#005eb8' : 'white',
-                    border: '2px solid #005eb8',
-                    color: activeCategory === key ? 'white' : '#005eb8',
-                    padding: '8px 16px',
-                    borderRadius: '20px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    position: 'absolute',
+                    left: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#768692',
+                    zIndex: 1
                   }}
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
                 >
-                  {label}
-                </div>
-              ))}
-            </div>
-          </div>
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search conditions, symptoms..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                    border: '2px solid #d8dde0',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
+                    background: 'white',
+                    boxSizing: 'border-box',
+                    minWidth: '240px'
+                  }}
+                />
+              </div>
+            </label>
+            
+            <label style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              color: '#212b32'
+            }}>
+              Condition Type
+              <select 
+                value={activeCategory} 
+                onChange={(e) => setActiveCategory(e.target.value)}
+                style={{
+                  padding: '0.75rem',
+                  border: '2px solid #d8dde0',
+                  borderRadius: '4px',
+                  fontSize: '0.9rem',
+                  background: 'white',
+                  cursor: 'pointer',
+                  minWidth: '200px'
+                }}
+              >
+                <option value="all">All Images</option>
+                <option value="true">Papilloedema</option>
+                <option value="pseudo">Pseudopapilloedema</option>
+                <option value="uncertain">Uncertain Appearance</option>
+                <option value="normal">Normal Appearance</option>
+              </select>
+            </label>
+          </section>
 
           {/* 图片卡片网格 */}
           <div className="image-cards-grid">

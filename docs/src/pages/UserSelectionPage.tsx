@@ -89,10 +89,10 @@ export default function UserSelectionPage() {
                   className="base-card"
                   onClick={() => navigate(role.route)}
                   style={{
-                    padding: '1rem 1.5rem',
-                    width: '50vw',
-                    maxWidth: '600px',
-                    minWidth: '300px'
+                    padding: '1rem 2rem', // 增加内边距，让卡片看起来更大
+                    width: '80vw', // 统一设为80%屏幕宽度
+                    maxWidth: '50rem', // 800px ÷ 16 = 50rem
+                    minWidth: '20rem' // 320px ÷ 16 = 20rem
                   }}
                 >
                   <div className="card-content">
