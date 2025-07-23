@@ -11,45 +11,42 @@ import DIPPLogo from '../assets/DIPP_Study_logo.png';
 
 export default function WelcomePage() {
   const navigate = useNavigate();
-  //ycl2 动画缩放
-  const [animate, setAnimate] = useState(false);
+  //ycl2 多阶段动画状态
+  const [phase, setPhase] = useState<'zooming'|'hold'|'fadeout'>('zooming'); // ycl2
 
   useEffect(() => {
-    // 触发缩放动画
-    setAnimate(true);
+    // 1. zooming 完成后进入 hold
+    const t1 = setTimeout(() => {
+      setPhase('hold'); // ycl2
+      // 2. hold 完成后进入 fadeout
+      const t2 = setTimeout(() => {
+        setPhase('fadeout'); // ycl2
+        // 3. fadeout 完成后跳转
+        const t3 = setTimeout(() => {
+          navigate('/select-role');
+        }, 200); // ycl2：fadeout 持续 1000ms
+        return () => clearTimeout(t3);
+      }, 2000); // ycl2：hold 持续 2000ms
+      return () => clearTimeout(t2);
+    }, 1000); // ycl2：zooming 持续 1000ms
 
-    // 3 秒后自动跳转到用户选择页
-    const timer = setTimeout(() => {
-      navigate('/select-role');
-    }, 3500);
-
-    return () => clearTimeout(timer);
+    return () => clearTimeout(t1);
   }, [navigate]);
 
   return (
-    //ycl2logo
-    <div className={`welcome-screen ${animate ? 'zooming' : ''}`}>
+    //ycl2 根据 phase 切换 class
+    <div className={`welcome-screen ${phase}`}>
       <div className="logo-group">
         <img
           src={NHSLogo}
           alt="NHS logo"
-          className={`logo logo-small ${animate ? 'welcome-animate' : ''}`}  // ycl2
+          className="logo logo-small"  // ycl2
         />
         <img
           src={DIPPLogo}
           alt="DIPP Study logo"
-          className={`logo logo-large ${animate ? 'welcome-animate' : ''}`}  // ycl2
+          className="logo logo-large"  // ycl2
         />
-        {/* <img
-          src={DIPPLogoLight}
-          alt="DIPP Study logo light"
-          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
-        />
-        <img
-          src={DIPPLogoDark}
-          alt="DIPP Study logo dark"
-          className={`logo ${animate ? 'welcome-animate' : ''}`}  // ycl2
-        /> */}
       </div>
     </div>
   );
