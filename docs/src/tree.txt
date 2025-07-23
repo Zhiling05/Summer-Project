@@ -31,7 +31,41 @@
 │   ├── UserSelectionPage.tsx
 │   ├── WelcomePage.tsx
 │   ├── gp
-│   │   └── GPApp.tsx
+│   │   ├── GPApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
+│   ├── neurologist
+│   │   ├── NeurologistApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
+│   ├── ophthalmology
+│   │   ├── OphthalmologyApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
 │   ├── optometrist
 │   │   ├── OptometristApp.tsx
 │   │   ├── Records.tsx
@@ -74,7 +108,17 @@
 │   │       ├── Tutorial3.tsx
 │   │       └── TutorialRouter.tsx
 │   ├── patient
-│   │   └── PatientApp.tsx
+│   │   ├── PatientApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
 │   └── sidebar
 │       ├── AboutPage.tsx
 │       ├── ContactPage.tsx
@@ -124,4 +168,4 @@
 │   └── ValidationLogic.ts
 └── vite-env.d.ts
 
-27 directories, 98 files
+41 directories, 128 files
