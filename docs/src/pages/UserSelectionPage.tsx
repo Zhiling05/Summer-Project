@@ -34,7 +34,7 @@ export default function UserSelectionPage() {
     {
       id: 'optometrist',
       title: 'I am an Optometrist',
-      route: '/optometrist'
+      route: '/optometrist/assess/start-page'
     },
     {
       id: 'patient',
