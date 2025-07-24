@@ -1,44 +1,52 @@
-// docs/src/pages/WelcomePage.tsx
+import { useEffect, useState } from 'react';//ycl
 import { useNavigate } from 'react-router-dom';
-import '../styles/question.css';
-// import NHSLogo from '../assets/NHS_LOGO.jpg';   // lzl：使用header通用组件
-// import DIPPLogo from '../assets/DIPP_Study_logo.png';
-import Header from '../components/Header';
+import '../styles/welcome.css';   // 只引入本页专属样式ycl2
+
+//换成3张新的logo
+// import NHSLogo from '../assets/NHSLogo2.png';
+// import DIPPLogoLight from '../assets/DIPPLogo2.png';   
+// import DIPPLogoDark from '../assets/DIPPLogo2_2.png';   
+import NHSLogo from '../assets/NHS_LOGO.jpg';
+import DIPPLogo from '../assets/DIPP_Study_logo.png'; 
 
 export default function WelcomePage() {
   const navigate = useNavigate();
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/*-----------lzl修改：使用header组件 ------------- */
-      /* <header className="nhs-header">
-        <div className="nhs-header__inner">
-          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">Welcome</span>
-        </div>
-      </header> */}
-      <Header title="Welcome" />
+  //ycl2 多阶段动画状态
+  const [phase, setPhase] = useState<'zooming'|'hold'|'fadeout'>('zooming'); // ycl2
 
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <div className="nhsuk-width-container">
-          <h1 className="nhsuk-heading-l">WelcomePage</h1>
-          <p>context line 1</p>
-          <p>context line 2</p>
-          <p>context line 3</p>
-          <button
-            className="continue-button"
-            onClick={() => navigate('/select-role')}
-          >
-            Start now
-          </button>
-        </div>
+  useEffect(() => {
+    // 1. zooming 完成后进入 hold
+    const t1 = setTimeout(() => {
+      setPhase('hold'); // ycl2
+      // 2. hold 完成后进入 fadeout
+      const t2 = setTimeout(() => {
+        setPhase('fadeout'); // ycl2
+        // 3. fadeout 完成后跳转
+        const t3 = setTimeout(() => {
+          navigate('/select-role');
+        }, 200); // ycl2：fadeout 持续 1000ms
+        return () => clearTimeout(t3);
+      }, 2000); // ycl2：hold 持续 2000ms
+      return () => clearTimeout(t2);
+    }, 1000); // ycl2：zooming 持续 1000ms
+
+    return () => clearTimeout(t1);
+  }, [navigate]);
+
+  return (
+    //ycl2 根据 phase 切换 class
+    <div className={`welcome-screen ${phase}`}>
+      <div className="logo-group">
+        <img
+          src={NHSLogo}
+          alt="NHS logo"
+          className="logo logo-small"  // ycl2
+        />
+        <img
+          src={DIPPLogo}
+          alt="DIPP Study logo"
+          className="logo logo-large"  // ycl2
+        />
       </div>
     </div>
   );

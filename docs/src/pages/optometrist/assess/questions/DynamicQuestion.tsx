@@ -8,6 +8,7 @@ import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
 import BottomNav from "../../../../components/BottomNav";
+import Header from "../../../../components/Header"; // ycl2
 
 import questionnaire from "../../../../data/questionnaire.json";
 import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
@@ -160,9 +161,12 @@ const DynamicQuestion = () => {
   /* ——— 题目不存在 —— */
   if (!currentQuestion)
     return (
+      <>
+        <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h2>Question not found: {questionId}</h2>
       </div>
+      </>
     );
 
   /* ---------------------------------------------------------------
@@ -175,21 +179,8 @@ const DynamicQuestion = () => {
   ) {
     return (
       <>
-        {/* —— 顶栏 —— */}
-        <header className="nhs-header">
-          <div className="nhs-header__inner">
-            {/* ycl: 使用变量引用，避免写死路径 */}
-            <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-            <img
-              className="logo dipp-logo"
-              src={DIPPLogo}
-              alt="DIPP Study logo"
-            />
-            <span className="nhs-header__service">DIPP Assessment</span>
-          </div>
-        </header>
+        <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
 
-        {/* —— 主体 —— */}
         <div className="nhsuk-width-container">
           <main id="maincontent" className="nhsuk-main-wrapper">
             <section className="question-box">
@@ -217,22 +208,11 @@ const DynamicQuestion = () => {
 
   return (
     <>
-      {/* 顶栏 */}
-      <header className="nhs-header">
-        <div className="nhs-header__inner">
-          <img className="logo nhs-logo" src={NHSLogo} alt="NHS logo" />
-          <img className="logo dipp-logo" src={DIPPLogo} alt="DIPP Study logo" />
-          <span className="nhs-header__service">DIPP Assessment</span>
-        </div>
-      </header>
+      <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
 
-      {/* 主体 */}
       <div className="nhsuk-width-container">
         <main id="maincontent" className="nhsuk-main-wrapper">
-          <button className="back-button" onClick={() => navigate(-1)}>
-            ← Go back
-          </button>
-
+          {/* 已移除手写 header，使用统一 Header 组件 // ycl-sprint2.2 */}
           <section className="question-box">
             <h1 className="nhsuk-heading-l">{currentQuestion.question}</h1>
             {currentQuestion.hint && (
@@ -251,7 +231,9 @@ const DynamicQuestion = () => {
                     <label className="radio-label">
                       <input
                         type={
-                          currentQuestion.type === "single" ? "radio" : "checkbox"
+                          currentQuestion.type === "single"
+                            ? "radio"
+                            : "checkbox"
                         }
                         name={currentQuestion.id}
                         value={o.value}

@@ -1,42 +1,83 @@
 /* ——— 统一header样式 ——— */
 .nhs-header {
   background: var(--core-blue);
+  width: 100vw;
   position: relative;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  width: 100vw;
+  z-index: 10;
 }
 
+/* —— 内部内容 三栏布局 —— */
 .nhs-header__inner {
   max-width: var(--container-max);
   margin: 0 auto;
   padding: var(--space-m) var(--space-l);
   display: flex;
   align-items: center;
-  gap: var(--space-m);
-  position: relative;
+  justify-content: space-between; /* 左中右各占一格 */
 }
 
-.logo { 
+/* 左 / 中 / 右 区域都使用 flex 对齐 */
+.nhs-header__left,
+.nhs-header__center,
+.nhs-header__right {
+  display: flex;
+  align-items: center;
+}
+
+/* 左侧 Logos */
+.nhs-header__left {
+  flex: 1;
+}
+
+.nhs-logo,
+.dipp-logo { 
   height: 42px; 
+width: auto;
+  margin-right: var(--space-m);
+}
+.nhs-logo:last-child,
+.dipp-logo:last-child {
+  margin-right: 0;
 }
 
-.nhs-header__service {
-  margin-left: auto;
+/* 响应式 logo 高度 */
+@media (max-width: 640px) {
+  .nhs-logo,
+  .dipp-logo {
+    height: 36px;
+  }
+}
+
+/* 中间标题 */
+.nhs-header__center {
+  flex: 1;
+  justify-content: center;
   color: var(--text-inverse);
   font-size: 1.125rem;
   font-weight: 600;
 }
 
-@media (max-width: 640px) {
-  .logo { 
-    height: 36px; 
+/* 右侧返回按钮区域 */
+.nhs-header__right {
+  flex: 1;
+  justify-content: flex-end; 
   }
   
-  .nhs-header__inner {
-    padding-left: var(--space-m);
-    padding-right: var(--space-m);
-  }
+  /* 返回按钮样式 */
+.nhs-header__back {
+    background: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+    padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.nhs-header__back:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
