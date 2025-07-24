@@ -1,0 +1,76 @@
+## Sprint 2 Retrospective
+
+| Field | Contents |
+| ----- | -------- |
+| **Purpose** | To review progress, address bottlenecks, and improve collaboration and delivery quality. |
+| **Focus** | Optometrist module completion, logic structure refinement, architecture scaling, and preparation for multi-role deployment. |
+| **Attendees** | Full development team: Scrum Master, Product Owner, Architecture Lead, Backend Dev, Frontend Devs, UI/UX Designers, Test Coordinator |
+| **Output / Outcome** | 
+- Optometrist v1.5 (Assessment, Records, Guide, Home) complete  
+- Frontend/backend integration initiated  
+- DB schema designed  
+- Local record logic and email sending working  
+- Functional demo presented to client  
+- GP/patient logic under planning |
+| **When It Happens** | End of Sprint 2: 23 July 2025 |
+| **Duration** | 1 Hour |
+| **Key Question** | How can we maintain a scalable and clear decision logic across roles while improving team execution quality? |
+| **Goal** | Deliver a stable, interactive optometrist prototype and prepare cross-role extension (GP, Patient). |
+| **Artifacts or Tools** | GitHub, Overleaf, Teams, Localhost demo |
+| **Example Questions Asked** | 
+- Is the “Go Back” logic stable across devices?  
+- Are UI details consistent and mobile-optimized?  
+- How to split JSON/data paths for role-specific branching? |
+
+### What Went Well
+
+- Development speed improved compared to Sprint 1.
+- Task division became more structured and efficient; responsibilities were clearer.
+- The Optometrist module UI was completed with all four major sections.
+- The team used the KANO model and urgency-based task triaging to guide feature prioritization.
+- Architecture group flexibly reallocated human resources to resolve key front-end issues earlier.
+- Functional demo was presented to clients; deployment pipeline under testing.
+- Local record logic and email functionality were implemented successfully.
+
+### What Didn’t Go Well
+
+- Some members delayed tasks until the deadline, affecting collaboration pace.
+- A few task hand-ins were late and lacked time for peer review.
+- UI inconsistencies (e.g., question box sizes, component placement) affected visual experience.
+- Multi-role structure caused confusion in shared components and navigation logic.
+- Report summary content was still hard-coded and lacked parsing logic.
+
+### Suggestions for Improvement
+
+- Encourage more frequent intra-group sync-ups (e.g., every 1–2 days).
+- Use inline code comments to support shared development.
+- Pull latest branch updates before development to avoid conflicts.
+- Clearly report task progress in group channels.
+- Separate front-end logic and styling completely across roles to simplify maintenance.
+- Plan task cycles better to avoid last-minute rushes.
+
+### Challenges & Blockers
+
+- Navigation logic (e.g., "Go Back") caused regression in route state.
+- Report output parser not yet fully implemented.
+- Cross-role JSON branching structure still under refactoring.
+- Final image sets for the Guide page were missing, affecting visual tagging system.
+- Mobile UI polish still under revision.
+
+### Action Items (24.07–31.07)
+
+- Finalize parser logic and DB integration
+- Finish sidebar and launch animation
+- Build GP version UI based on Optometrist logic
+- Guide visual tagging improvements
+- Implement “Continue from Last Question” logic
+
+### Sprint Sentiment
+
+- **Average Scores**:  
+  - Efficiency: 4.44  
+  - Collaboration: 4.42  
+  - Output: 4.60  
+  - Overall: 4.49
+
+> Compared to Sprint 1 (4.44), team performance improved slightly, with significant gains in output. However, efficiency is still hindered by last-minute task clustering and mid-sprint sync gaps.
