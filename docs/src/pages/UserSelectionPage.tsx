@@ -35,7 +35,7 @@ export default function UserSelectionPage() {
     {
       id: 'optometrist',
       title: 'I am an Optometrist',
-      route: '/optometrist'
+      route: '/optometrist/assess/start-page'
     },
     {
       id: 'patient',
@@ -91,10 +91,10 @@ export default function UserSelectionPage() {
                   className="base-card"
                   onClick={() => navigate(role.route)}
                   style={{
-                    padding: '1rem 1.5rem',
-                    width: '50vw',
-                    maxWidth: '600px',
-                    minWidth: '300px'
+                    padding: '1rem 2rem', 
+                    width: '80vw', 
+                    maxWidth: '50rem', 
+                    minWidth: '20rem' 
                   }}
                 >
                   <div className="card-content">

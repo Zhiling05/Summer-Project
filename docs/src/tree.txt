@@ -1,0 +1,171 @@
+.
+├── App.css
+├── App.tsx
+├── Core
+│   └── flow.ts
+├── api
+│   └── index.ts
+├── assets
+│   ├── DIPP_Study_logo.png
+│   ├── DIPP_Study_logo_black.png
+│   ├── NHS_LOGO.jpg
+│   ├── icons
+│   │   ├── Assess.svg
+│   │   ├── Guide.svg
+│   │   ├── Home.svg
+│   │   └── Records.svg
+│   └── react.svg
+├── components
+│   ├── ArrowIcon.tsx
+│   ├── BackButton.tsx
+│   ├── BottomNav.tsx
+│   └── Header.tsx
+├── data
+│   ├── questionnaire.json
+│   ├── recommendations.json
+│   └── records.json
+├── index.css
+├── main.tsx
+├── pages
+│   ├── LogoPage.tsx
+│   ├── UserSelectionPage.tsx
+│   ├── WelcomePage.tsx
+│   ├── gp
+│   │   ├── GPApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
+│   ├── neurologist
+│   │   ├── NeurologistApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
+│   ├── ophthalmology
+│   │   ├── OphthalmologyApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
+│   ├── optometrist
+│   │   ├── OptometristApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   ├── StartPage.tsx
+│   │   │   ├── questions
+│   │   │   │   ├── DynamicQuestion.tsx
+│   │   │   │   ├── Q1.tsx
+│   │   │   │   ├── Q10.tsx
+│   │   │   │   ├── Q11.tsx
+│   │   │   │   ├── Q12.tsx
+│   │   │   │   ├── Q13.tsx
+│   │   │   │   ├── Q14.tsx
+│   │   │   │   ├── Q15.tsx
+│   │   │   │   ├── Q16.tsx
+│   │   │   │   ├── Q17.tsx
+│   │   │   │   ├── Q18.tsx
+│   │   │   │   ├── Q19.tsx
+│   │   │   │   ├── Q2.tsx
+│   │   │   │   ├── Q3.tsx
+│   │   │   │   ├── Q4.tsx
+│   │   │   │   ├── Q5.tsx
+│   │   │   │   ├── Q6.tsx
+│   │   │   │   ├── Q7.tsx
+│   │   │   │   ├── Q8.tsx
+│   │   │   │   ├── Q9.tsx
+│   │   │   │   └── QuestionsRouter.tsx
+│   │   │   └── recommendations
+│   │   │       ├── DynamicRecommendation.tsx
+│   │   │       └── PreviewReport.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   ├── GuideRouter.tsx
+│   │   │   ├── ImageGallery.tsx
+│   │   │   └── OptAppTutorial.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       ├── Tutorial2.tsx
+│   │       ├── Tutorial3.tsx
+│   │       └── TutorialRouter.tsx
+│   ├── patient
+│   │   ├── PatientApp.tsx
+│   │   ├── Records.tsx
+│   │   ├── assess
+│   │   │   ├── AssessRouter.tsx
+│   │   │   └── StartPage.tsx
+│   │   ├── guide
+│   │   │   ├── GuideHome.tsx
+│   │   │   └── GuideRouter.tsx
+│   │   └── tutorial
+│   │       ├── Tutorial1.tsx
+│   │       └── TutorialRouter.tsx
+│   └── sidebar
+│       ├── AboutPage.tsx
+│       ├── ContactPage.tsx
+│       ├── SettingsPage.tsx
+│       └── index.tsx
+├── styles
+│   ├── bottomnav.css
+│   ├── card.css
+│   ├── header.css
+│   ├── image-card.css
+│   ├── question.css
+│   ├── recommendation.css
+│   └── records.css
+├── tests
+│   └── unit_tests
+│       ├── AboutPage.test.tsx
+│       ├── ContactPage.test.tsx
+│       ├── SettingPage.test.tsx
+│       ├── UserSelectionPage.test.tsx
+│       ├── WelcomePage.test.tsx
+│       ├── __snapshots__
+│       │   ├── AboutPage.test.tsx.snap
+│       │   ├── ContactPage.test.tsx.snap
+│       │   ├── SettingPage.test.tsx.snap
+│       │   └── index.test.tsx.snap
+│       ├── components
+│       │   └── BackButton.test.tsx
+│       ├── index.test.tsx
+│       ├── roles
+│       │   └── optometrist_tests
+│       │       ├── Guide.test.tsx
+│       │       ├── OptometristApp.test.tsx
+│       │       ├── OptometristHome.test.tsx
+│       │       ├── Records.test.tsx
+│       │       └── assess
+│       │           ├── AssessRouter.test.tsx
+│       │           └── StartPage.test.tsx
+│       └── test_dummy.test.ts
+├── tree.txt
+├── types
+│   ├── assessment.ts
+│   ├── images.d.ts
+│   ├── json.d.ts
+│   └── recommendation.ts
+├── utils
+│   ├── NavigationLogic.ts
+│   └── ValidationLogic.ts
+└── vite-env.d.ts
+
+41 directories, 128 files

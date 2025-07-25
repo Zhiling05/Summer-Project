@@ -78,7 +78,9 @@ const BottomNav = () => {
 
   const items = [
     { label: "Home", to: "/select-role", Icon: HomeIcon },
-    { label: "Assess", to: "/optometrist/assess/start", Icon: AssessIcon },
+    // { label: "Assess", to: "/optometrist/assess/start", Icon: AssessIcon },
+      //姚璟：这里路径要想有点问题，之前一直写的是start，导航到Q1会出现bug，我改了一下，这里是在AssessRouter里面定义的
+    { label: "Assess", to: "/optometrist/assess/start-page", Icon: AssessIcon },
     { label: "Records", to: "/optometrist/records", Icon: RecordsIcon },
     { label: "Guide", to: "/optometrist/guide", Icon: GuideIcon },
   ];
