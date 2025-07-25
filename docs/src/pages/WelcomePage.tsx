@@ -4,6 +4,8 @@ import '../styles/question.css';
 // import NHSLogo from '../assets/NHS_LOGO.jpg';   // lzl：使用header通用组件
 // import DIPPLogo from '../assets/DIPP_Study_logo.png';
 import Header from '../components/Header';
+import Sidebar from '../components/SideBar'; //zkx：sidebar侧栏
+
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export default function WelcomePage() {
         </div>
       </header> */}
       <Header title="Welcome" />
+      <Sidebar /> {/* 使用 Sidebar 组件zkx */}
 
       <div
         style={{

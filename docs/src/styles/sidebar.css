@@ -1,0 +1,68 @@
+/* 侧边栏样式 */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: rgba(126, 130, 145, 0.7); /* 半透明的灰色背景 */
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* 侧边栏链接样式 */
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 15px 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.sidebar a:hover {
+  color: #f0f0f0;
+}
+
+/* 汉堡菜单按钮样式 */
+.toggle-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: transparent;  /* 没有背景 */
+  color: black; /* 按钮颜色 */
+  border: none;  /* 没有边框 */
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+/* 汉堡菜单的图标 */
+.hamburger-icon {
+  width: 30px;
+  height: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger-icon .bar {
+  width: 30px;
+  height: 5px;
+  background-color: white; /* 更改为白色 */
+  transition: 0.3s ease;
+}
+
+/* 侧边栏展开时，隐藏汉堡菜单图标 */
+.hamburger-icon.hide {
+  display: none;
+}

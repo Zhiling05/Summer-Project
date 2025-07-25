@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/card.css';
+import Sidebar from '../components/SideBar'; //zkx：sidebar侧栏
 
 export default function UserSelectionPage() {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ export default function UserSelectionPage() {
   return (
     <>
       <Header title="Select Role" />
+      <Sidebar /> {/* 使用 Sidebar 组件zkx */}
       
       <div style={{ 
         minHeight: 'calc(100vh - 80px)',

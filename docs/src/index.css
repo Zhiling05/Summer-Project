@@ -2,7 +2,7 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
+  font-size: var(--font-size, 16px); /* 使用 --font-size 作为动态字体大小 */
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -11,15 +11,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
@@ -67,8 +58,9 @@ button:focus-visible {
   }
 }
 
+
 /* 全局基础设置 */
-html {
-  overflow-y: scroll;    /* 强制显示垂直滚动条 */
-  overflow-x: hidden;    /* 隐藏水平滚动条 */
-}
+/*html {
+  overflow-y: scroll;  
+  overflow-x: hidden;  
+}*/

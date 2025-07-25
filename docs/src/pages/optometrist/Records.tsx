@@ -4,12 +4,16 @@ import Header from "../../components/Header";   // lzl: 新增header组件
 // import NHSLogo from "../../assets/NHS_LOGO.jpg";
 // import DIPPLogo from "../../assets/DIPP_Study_logo.png"; 
 import BottomNav from "../../components/BottomNav";
+import Sidebar from '../../components/SideBar'; //zkx：sidebar侧栏
+
+
 export default function Records() {
   const navigate = useNavigate();
 
   return (
     <>
       <Header title="Records" />
+      <Sidebar /> {/* 使用 Sidebar 组件zkx */}
 
       <div style={{ 
         backgroundColor: "#f0f4f5",
