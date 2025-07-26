@@ -131,6 +131,16 @@ export function sendReport(
   });
 }
 
+export async function listAssessments(limit = 50) {
+  const res = await fetch(`/api/assessments?limit=${limit}`, {
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(`List failed: ${res.statusText}`);
+  return res.json() as Promise<{
+    records: { id: string; date: string; risk: string }[];
+  }>;
+}
+
 // 5. 统计 - 使用次数
 export function getUsageStatistics(
   startDate: string,

@@ -21,7 +21,7 @@ export default function AssessRouter() {
 
       {/* 纯文本报告预览页（供推荐页跳转） */}
       <Route
-        path="recommendations/report-preview"
+        path="recommendations/report-preview/:id"
         element={<PreviewReport />}
       />
 
