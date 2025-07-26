@@ -1,9 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { parseISO } from "date-fns";
+import { listAssessments } from "../../api";
+
 
 import Header from "../../components/Header";
 import BottomNav from "../../components/BottomNav";
@@ -59,11 +62,30 @@ export default function Records() {
   const navigate = useNavigate();
 
   //把all类型标注为normalized，TS 就知道 rec.risk 属于 RiskLabel，可以安全地写 RISK_TO_LEVEL[rec.risk]，LEVEL_UI[lvl]，stats[lvl] 等索引都不会再报。
-  const all: NormalizedRecord[] = (recordsJson as RawRecord[]).map(r => {
-    const norm = normalizeRisk(r.risk);
-    const finalRisk = (norm in RISK_TO_LEVEL ? norm : "no-referral") as RiskLabel;
-    return { id: r.id, date: r.date, risk: finalRisk };
-    });
+
+  const localRecords: NormalizedRecord[] = (recordsJson as RawRecord[]).map(r => {
+  const norm = normalizeRisk(r.risk);
+  const finalRisk = (norm in RISK_TO_LEVEL ? norm : "no-referral") as RiskLabel;
+  return { id: r.id, date: r.date, risk: finalRisk };
+});
+
+const [remoteRecs, setRemoteRecs] = useState<NormalizedRecord[]>([]);
+
+useEffect(() => {
+  listAssessments(50)
+    .then(({ records }) => {
+      const normalized = records.map(r => ({
+        id:   r.id,
+        date: r.date,
+        risk: (normalizeRisk(r.risk) as RiskLabel) || "no-referral",
+      }));
+      setRemoteRecs(normalized);
+    })
+    .catch(console.error);
+}, []);
+
+
+  const all: NormalizedRecord[] = remoteRecs.length ? remoteRecs : localRecords;
 
 
   // —— 筛选 state ——
@@ -176,7 +198,7 @@ export default function Records() {
                       <td>
                         <button
                             className="view-btn"
-                            onClick={() => navigate(`/optometrist/records/${r.id}`)}
+                            onClick={() => navigate(`/optometrist/assess/recommendations/report-preview/${r.id}`)}
                         >
                           View Details
                         </button>
