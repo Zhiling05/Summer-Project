@@ -1,70 +1,66 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import '/src/styles/sidebar.css';
-
-const AboutPage = () => {
-  return <h1>About Us Page</h1>;
-};
-
-const ContactPage = () => {
-  return <h1>Contact Us Page</h1>;
-};
+import "/src/styles/sidebar.css";
 
 const SideBar: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isMenuIconVisible, setIsMenuIconVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const toggleSideBar = () => {
-    setIsVisible(!isVisible);
-    setIsMenuIconVisible(!isMenuIconVisible); // 切换图标显示状态
-  };
+  /* —— 切换 —— */
+  const toggle = () => setIsOpen((v) => !v);
 
-  // 监听点击页面的任意地方，收起 sidebar
+  // /* —— 展开时锁定 body 滚动 —— */
+  // useEffect(() => {
+  //   document.body.style.overflow = isOpen ? "hidden" : "auto";
+  //   return () => (document.body.style.overflow = "auto");
+  // }, [isOpen]);
+
+  /* —— 点击空白处自动收起 —— */
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isVisible && event.target instanceof HTMLElement) {
-        // 判断 event.target 是否为 HTMLElement 类型
-        if (!event.target.closest('.sidebar') && !event.target.closest('.toggle-btn')) {
-          setIsVisible(false);
-          setIsMenuIconVisible(true); // 收起时恢复图标显示
-        }
-      }
+    const handleClick = (e: MouseEvent) => {
+      if (
+        isOpen &&
+        e.target instanceof HTMLElement &&
+        !e.target.closest(".sidebar") &&
+        !e.target.closest(".hamburger-btn")
+      )
+        setIsOpen(false);
     };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [isVisible]);
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, [isOpen]);
 
   return (
-    <div>
-      {/* 按钮控制侧边栏显示与隐藏 */}
-      {isMenuIconVisible && (
-        <button onClick={toggleSideBar} className="toggle-btn">
-          {/* 汉堡菜单图标 */}
-          <div className="hamburger-icon">
-            <div className="bar"></div>
-            <div className="bar"></div>
-            <div className="bar"></div>
-          </div>
-        </button>
-      )}
+    <>
+      {/* 汉堡按钮 */}
+      <button
+        aria-label={isOpen ? "Close navigation" : "Open navigation"}
+        className={`hamburger-btn ${isOpen ? "active" : ""}`}
+        onClick={toggle}
+      >
+        <span className="bar" />
+        <span className="bar" />
+        <span className="bar" />
+      </button>
 
-      {/* 侧边栏内容 */}
-      {isVisible && (
-        <div className="sidebar">
-          <ul>
-            <li><Link to="/about-us">About Us</Link></li>
-            <li><Link to="/settings">Settings</Link></li>
-            <li><Link to="/contact-us">Contact Us</Link></li>
-          </ul>
-        </div>
-      )}
-    </div>
+      {/* 遮罩层 */}
+      {isOpen && <div className="sidebar-overlay" onClick={toggle} />}
+
+      {/* 侧边栏 */}
+      <nav className={`sidebar ${isOpen ? "open" : ""}`}>
+        <ul className="sidebar-links">
+          <li>
+            <Link to="/about-us">About&nbsp;Us</Link>
+          </li>
+          <li>
+            <Link to="/settings">Settings</Link>
+          </li>
+          <li>
+            <Link to="/contact-us">Contact&nbsp;Us</Link>
+          </li>
+        </ul>
+      </nav>
+    </>
   );
 };
 
-export { AboutPage, ContactPage };
 export default SideBar;

@@ -1,69 +1,96 @@
-/* 侧边栏样式 */
+:root {
+  --nhs-blue: #005eb8;
+  --nhs-focus-yellow: #ffeb3b;
+  --sidebar-width: 240px; /* 桌面宽度 */
+}
+
+/* ——— Off-canvas ——— */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 180px;
-  height: 100%;
-  background-color: rgba(126, 130, 145, 0.7); /* 半透明的灰色背景 */
-  color: white;
-  padding: 20px;
-  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out;
+  height: 100dvh;
+  width: var(--sidebar-width);
+  background: var(--nhs-blue);
+  color: #fff;
+  padding: 96px 24px 32px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
+.sidebar.open {
+  transform: translateX(0);
 }
 
-/* 侧边栏链接样式 */
-.sidebar ul {
-  list-style-type: none;
+.sidebar-links {
+  list-style: none;
+  margin: 0;
   padding: 0;
-  margin-top: 100px; /* 向下平移，避开header */
 }
-
-.sidebar li {
-  margin: 15px 0;
+.sidebar-links li {
+  margin-bottom: 24px;
 }
-
-.sidebar a {
-  color: white;
+.sidebar-links a {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
   text-decoration: none;
-  font-size: 1.2rem;
+}
+.sidebar-links a:hover,
+.sidebar-links a:focus {
+  text-decoration: underline;
 }
 
-.sidebar a:hover {
-  color: #f0f0f0;
+/* ——— 移动端宽度 75 vw ——— */
+@media (max-width: 480px) {
+  :root {
+    --sidebar-width: 75vw;
+  }
 }
 
-/* 汉堡菜单按钮样式 */
-.toggle-btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  background-color: transparent;  /* 没有背景 */
-  color: black; /* 按钮颜色 */
-  border: none;  /* 没有边框 */
-  position: absolute;
-  top: 15px;
-  left: 10px;
-  z-index: 1000;
+/* 遮罩 */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 998;
 }
 
-/* 汉堡菜单的图标 */
-.hamburger-icon {
-  width: 30px;
-  height: 25px;
+/* ——— 汉堡按钮 ——— */
+.hamburger-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  width: 40px;
+  height: 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1000;
+}
+/* —— 汉堡按钮条改成白色，更容易在蓝色 header 上看到 —— */
+.hamburger-btn .bar {
+  height: 4px;
+  width: 100%;
+  background: #ffffff;   /* ← 改为白色 */
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.hamburger-icon .bar {
-  width: 30px;
-  height: 5px;
-  background-color: white; /* 更改为白色 */
-  transition: 0.3s ease;
+/* 动画 → X */
+.hamburger-btn.active .bar:nth-child(1) {
+  transform: translateY(14px) rotate(45deg);
+}
+.hamburger-btn.active .bar:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-btn.active .bar:nth-child(3) {
+  transform: translateY(-14px) rotate(-45deg);
 }
 
-/* 侧边栏展开时，隐藏汉堡菜单图标 */
-.hamburger-icon.hide {
-  display: none;
-}
