@@ -1,7 +1,5 @@
-// src/pages/sidebar/SettingsPage.tsx
 import React, { useState } from "react";
-import Header from '../../components/Header';    // zkx:使用header组件
-import BackButton from '../../components/BackButton';
+import Header from '../../components/Header';    // 使用 Header 组件
 import { useFontSize } from './FontSizeContext'; // 引用正确路径
 
 export default function SettingsPage() {
@@ -13,8 +11,7 @@ export default function SettingsPage() {
 
   return (
     <div>
-      <Header title="Settings Page" />
-      <BackButton />
+      <Header title="Settings Page" showBack={true} /> {/* 使用 Header 中的返回按钮 */}
       <h1>Settings Page</h1>
 
       <section>

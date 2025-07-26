@@ -1,83 +1,106 @@
-/* ——— 统一header样式 ——— */
+/* docs/src/styles/header.css 
+
+/* —— 统一header样式 —— */
 .nhs-header {
   background: var(--core-blue);
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  z-index: 10;
-}
-
-/* —— 内部内容 三栏布局 —— */
-.nhs-header__inner {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: var(--space-m) var(--space-l);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; /* 保证 header 在最上层 */
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: space-between; /* 左中右各占一格 */
+  padding: var(--space-m);
 }
 
-/* 左 / 中 / 右 区域都使用 flex 对齐 */
-.nhs-header__left,
-.nhs-header__center,
-.nhs-header__right {
-  display: flex;
-  align-items: center;
-}
-
-/* 左侧 Logos */
+/* Logo与汉堡菜单区域 */
 .nhs-header__left {
+  display: flex;
+  align-items: center;
   flex: 1;
 }
 
 .nhs-logo,
-.dipp-logo { 
-  height: 42px; 
-width: auto;
+.dipp-logo,
+.humbug-logo { 
+  height: 42px;
+  width: auto;
   margin-right: var(--space-m);
 }
-.nhs-logo:last-child,
-.dipp-logo:last-child {
-  margin-right: 0;
-}
 
-/* 响应式 logo 高度 */
-@media (max-width: 640px) {
-  .nhs-logo,
-  .dipp-logo {
-    height: 36px;
-  }
-}
-
-/* 中间标题 */
+/* 中间标题区域 */
 .nhs-header__center {
-  flex: 1;
-  justify-content: center;
+  flex: 2;
   color: var(--text-inverse);
   font-size: 1.125rem;
   font-weight: 600;
+  text-align: center;
+  display: block; /* 默认显示标题 */
 }
 
-/* 右侧返回按钮区域 */
+/* 返回按钮区域 */
 .nhs-header__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   flex: 1;
-  justify-content: flex-end; 
-  }
-  
-  /* 返回按钮样式 */
+}
+
 .nhs-header__back {
-    background: transparent;
+  background: transparent;
   border: 1px solid #ffffff;
   color: #ffffff;
-    padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 4px;
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.2s;
 }
-.nhs-header__back:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+
+/* —— 移动端适配 —— */
+@media (max-width: 640px) {
+  .nhs-logo,
+  .dipp-logo,
+  .humbug-logo {
+    height: 36px;
+  }
+
+  .nhs-header__center {
+    display: none; /* 移动端隐藏标题 */
+  }
+
+  
+  /* 汉堡按钮 */
+  .hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 9999; /* 提高z-index，确保汉堡按钮可点击 */
+    position: fixed; /* 确保汉堡按钮固定在顶部栏 */
+    top: 16px;
+    left: 16px; /* 确保汉堡按钮在屏幕左上角 */
+  }
+
+  .hamburger-btn .bar {
+    height: 4px;
+    width: 30px;
+    background-color: white;
+  }
+
+  /* 返回按钮仍然显示，并且为箭头形态 */
+  .nhs-header__back {
+    display: inline-flex; /* 确保按钮显示 */
+  }
+
+  .nhs-header__back .back-arrow {
+    font-size: 1.2rem; /* 显示为三角形箭头 */
+  }
+
+  /* logo与汉堡菜单在一行 */
+  .nhs-header__left,
+  .nhs-header__right {
+    flex: 0 1 auto; /* 自适应，不占用太多空间 */
+  }
 }

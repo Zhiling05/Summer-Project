@@ -1,12 +1,9 @@
-// src/pages/sidebar/ContactPage.tsx
 import Header from '../../components/Header';
-import BackButton from '../../components/BackButton';
 
 export default function ContactPage() {
   return (
     <div className="contact-container">
-      <Header title="Contact Us" />
-      <BackButton />
+      <Header title="Contact Us" showBack={true} /> {/* 使用 Header 中的返回按钮 */}
       <h1 className="contact-title">Contact Us</h1>
 
       <section className="contact-section">

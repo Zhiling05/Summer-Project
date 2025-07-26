@@ -1,13 +1,10 @@
 // src/pages/sidebar/AboutPage.tsx
 import Header from '../../components/Header';
-import BackButton from '../../components/BackButton';
-
 
 export default function AboutPage() {
   return (
     <div className="about-page">
-      <Header title="About Us" />
-            <BackButton />
+      <Header title="About Us" showBack={true} /> {/* 直接使用 Header 中的返回按钮 */}
       <h1 className="about-title">About Us Page</h1>
       
       <section className="about-section">

@@ -1,18 +1,14 @@
+//docs/src/components/SideBar.tsx
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "/src/styles/sidebar.css";
 
 const SideBar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // 控制菜单是否打开
 
   /* —— 切换 —— */
   const toggle = () => setIsOpen((v) => !v);
-
-  // /* —— 展开时锁定 body 滚动 —— */
-  // useEffect(() => {
-  //   document.body.style.overflow = isOpen ? "hidden" : "auto";
-  //   return () => (document.body.style.overflow = "auto");
-  // }, [isOpen]);
 
   /* —— 点击空白处自动收起 —— */
   useEffect(() => {
@@ -21,9 +17,10 @@ const SideBar: React.FC = () => {
         isOpen &&
         e.target instanceof HTMLElement &&
         !e.target.closest(".sidebar") &&
-        !e.target.closest(".hamburger-btn")
-      )
+        !e.target.closest(".hamburger-btn") // 如果点击的地方不是侧边栏和汉堡按钮，关闭菜单
+      ) {
         setIsOpen(false);
+      }
     };
     window.addEventListener("click", handleClick);
     return () => window.removeEventListener("click", handleClick);

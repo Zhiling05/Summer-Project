@@ -1,3 +1,5 @@
+/* docs/src/styles/sidebar.css*/
+
 :root {
   --nhs-blue: #005eb8;
   --nhs-focus-yellow: #ffeb3b;
@@ -58,7 +60,9 @@
   z-index: 998;
 }
 
-/* ——— 汉堡按钮 ——— */
+/* docs/src/styles/sidebar.css */
+
+/* Add z-index to manage stacking order */
 .hamburger-btn {
   position: fixed;
   top: 16px;
@@ -72,18 +76,19 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 1000; /* Ensure it’s on top */
 }
-/* —— 汉堡按钮条改成白色，更容易在蓝色 header 上看到 —— */
+
+/* Ensure bar visibility is toggled based on the active state */
 .hamburger-btn .bar {
   height: 4px;
   width: 100%;
-  background: #ffffff;   /* ← 改为白色 */
+  background: #ffffff; /* Change bar color */
   border-radius: 2px;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* 动画 → X */
+/* Apply specific transformations when active
 .hamburger-btn.active .bar:nth-child(1) {
   transform: translateY(14px) rotate(45deg);
 }
@@ -92,5 +97,4 @@
 }
 .hamburger-btn.active .bar:nth-child(3) {
   transform: translateY(-14px) rotate(-45deg);
-}
-
+} */
