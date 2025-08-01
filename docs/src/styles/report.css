@@ -1,0 +1,78 @@
+/* -------------------------------------------------
+ *  Assessment Report – visual style (match Records)
+ * ------------------------------------------------*/
+
+/* ⬅︎ 左侧色条 + 淡渐变背景（High / Moderate / Low） */
+.report-red {
+  border-inline-start: 10px solid #d03838;
+  background: linear-gradient(
+    135deg,
+    rgba(208, 56, 56, .04) 0%,
+    rgba(208, 56, 56, .02) 100%
+  );
+}
+.report-orange {
+  border-inline-start: 10px solid #e67e00;
+  background: linear-gradient(
+    135deg,
+    rgba(230, 126, 0, .04) 0%,
+    rgba(230, 126, 0, .02) 100%
+  );
+}
+.report-green {
+  border-inline-start: 10px solid #007f3b;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 127, 59, .04) 0%,
+    rgba(0, 127, 59, .02) 100%
+  );
+}
+
+/* —— 版心 —— */
+.report-main {
+  padding: var(--space-xl) var(--space-l) 80px;   /* 底部给 BottomNav */
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+/* —— 卡片统一外观 —— */
+.report-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem 2rem;
+  margin-block: 1.25rem;
+  overflow-x: auto;
+
+  /* --- hover 动效（与 .stats-card 一致） --- */
+  transition: transform .15s, box-shadow .15s;
+  cursor: default;
+}
+.report-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .14);
+}
+
+/* —— 小标题 —— */
+.report-heading {
+  font-family: var(--font-sans, "Inter", "Noto Sans", sans-serif);
+  font-size: 1.05rem;      /* ≈ 17 px */
+  font-weight: 700;
+  margin: 0 0 .75rem;
+  color: var(--text-body);
+}
+
+/* —— 正文 —— */
+.report-text {
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: .95rem;       /* ≈ 15 px */
+  line-height: 1.45;
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--text-body);
+}
+
+/* —— 窄屏收紧内边距 —— */
+@media (max-width: 640px) {
+  .report-main { padding: var(--space-l) var(--space-m) 80px; }
+}

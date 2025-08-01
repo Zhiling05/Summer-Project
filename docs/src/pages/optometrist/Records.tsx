@@ -11,7 +11,7 @@ import { listAssessments } from "../../api";
 import Header from "../../components/Header";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/records.css";
-import recordsJson from "../../data/records.json";
+//import recordsJson from "../../data/records.json";
 import { AssessmentRecommendations } from "../../types/recommendation";
 import Sidebar from '../../components/SideBar'; //zkx：sidebar侧栏
 
@@ -63,11 +63,11 @@ export default function Records() {
 
   //把all类型标注为normalized，TS 就知道 rec.risk 属于 RiskLabel，可以安全地写 RISK_TO_LEVEL[rec.risk]，LEVEL_UI[lvl]，stats[lvl] 等索引都不会再报。
 
-  const localRecords: NormalizedRecord[] = (recordsJson as RawRecord[]).map(r => {
-  const norm = normalizeRisk(r.risk);
-  const finalRisk = (norm in RISK_TO_LEVEL ? norm : "no-referral") as RiskLabel;
-  return { id: r.id, date: r.date, risk: finalRisk };
-});
+//   const localRecords: NormalizedRecord[] = (recordsJson as RawRecord[]).map(r => {
+//   const norm = normalizeRisk(r.risk);
+//   const finalRisk = (norm in RISK_TO_LEVEL ? norm : "no-referral") as RiskLabel;
+//   return { id: r.id, date: r.date, risk: finalRisk };
+// });
 
 const [remoteRecs, setRemoteRecs] = useState<NormalizedRecord[]>([]);
 
@@ -85,7 +85,8 @@ useEffect(() => {
 }, []);
 
 
-  const all: NormalizedRecord[] = remoteRecs.length ? remoteRecs : localRecords;
+  //const all: NormalizedRecord[] = remoteRecs.length ? remoteRecs : localRecords;
+  const all: NormalizedRecord[] = remoteRecs;   // 为空数组时即表示还没有记录
 
 
   // —— 筛选 state ——
