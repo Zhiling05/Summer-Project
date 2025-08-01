@@ -76,3 +76,57 @@
 @media (max-width: 640px) {
   .report-main { padding: var(--space-l) var(--space-m) 80px; }
 }
+
+
+/* ───────── Sticky Summary Bar ───────── */
+.summary-bar {
+  position: sticky;
+  top: 56px;                     /* Header 高度 */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  margin-block: 0 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  background: #fff;
+  font-size: .95rem;
+}
+.summary-bar .badge {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.summary-bar .summary-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50%;
+}
+.summary-bar .summary-date { opacity: .6; font-size: .85rem; }
+.summary-bar .actions button {
+  background: none; border: none; cursor: pointer;
+  font-size: 1.1rem; line-height: 1;
+  padding: 2px 6px; border-radius: 6px;
+  transition: background .15s;
+}
+.summary-bar .actions button:hover { background: rgba(0,0,0,.08); }
+
+/* 继承每种风险色的渐变底色 */
+.summary-bar.report-red    { background: linear-gradient(135deg, rgba(208,56,56,.05) 0%, rgba(208,56,56,.03) 100%); }
+.summary-bar.report-orange { background: linear-gradient(135deg, rgba(230,126,0,.05) 0%, rgba(230,126,0,.03) 100%); }
+.summary-bar.report-green  { background: linear-gradient(135deg, rgba(0,127,59,.05) 0%, rgba(0,127,59,.03) 100%); }
+
+/* ───────── Collapsible Card ───────── */
+.collapsible-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.chevron { font-size: .9rem; opacity: .7; }
+
+.report-card.collapsed {
+  padding-bottom: .75rem;        /* 只给标题留空间 */
+}
