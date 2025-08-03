@@ -1,5 +1,6 @@
 // server/index.js
-require('dotenv').config();   // 一定要在第一行
+require('dotenv').config();   // 一定要放在第一行加载环境变量
+
 const express = require('express');
 const cors    = require('cors');
 
@@ -8,14 +9,12 @@ app.use(cors());
 app.use(express.json());
 
 /* ───────── 业务路由 ───────── */
-app.use('/api', require('./routes/report'));      // 纯文本预览
-app.use('/api', require('./routes/assessments')); // POST /api/assessments + GET /:id
+app.use('/api', require('./routes/report'));        // 纯文本预览：GET /api/assessments/:id/report
+app.use('/api', require('./routes/assessments'));   // 提交+获取评估：POST /api/assessments, GET /api/assessments/:id
+app.use('/api', require('./routes/export'));        // 导出 PDF：GET /api/assessments/:id/export
+app.use('/api', require('./routes/mail'));          // 发送邮件：POST /api/send-report
 
-app.use('/api', require('./routes/export'));      // GET  /api/assessments/:id/export
-
-app.use('/api', require('./routes/mail'));        // POST /api/send-report
-
-/* ───────── 统计接口（仍放在这里） ───────── */
+/* ───────── 统计接口（Mock 示例）───────── */
 app.get('/api/statistics/usage', (req, res) => {
   res.json({
     startDate: req.query.startDate,
@@ -46,8 +45,8 @@ app.use((err, req, res, _next) => {
   res.status(err.status || 500).send(err.message);
 });
 
-/* ───────── 服务器启动 ───────── */
-const PORT = 4000;
+/* ───────── 启动服务器 ───────── */
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () =>
-  console.log(`Stub server listening on http://localhost:${PORT}`)
+  console.log(`🚀 Stub server listening on http://localhost:${PORT}`)
 );
