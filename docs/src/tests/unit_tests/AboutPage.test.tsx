@@ -1,29 +1,29 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import AboutPage from '../../pages/sidebar/AboutPage';
 
+// Mock Header 组件
+jest.mock('../../components/Header', () => ({ title }: { title: string }) => (
+  <div data-testid="header">{title}</div>
+));
 
-describe('AboutPage', () => {
-    it('renders without crashing', () => {
-        render(<AboutPage />);
-        // throws error
-    });
+describe('AboutPage Component', () => {
+  test('renders header, section title, description and team list', () => {
+    render(<AboutPage />);
 
-    it('renders the correct heading', () => {
-        render(<AboutPage />);
-        const heading = screen.getByRole('heading', { name: /SettingsPage/i });
-        expect(heading).toBeInTheDocument();
-    });
+    // Header
+    expect(screen.getByTestId('header')).toHaveTextContent('About Us');
+    expect(screen.getByRole('heading', { name: 'About Us Page' })).toBeInTheDocument();
 
-    it('does not render unexpected elements', () => {
-        render(<AboutPage />);
-        // make sure there's no other headings...
-        expect(screen.queryByRole('heading', { name: /About/i })).not.toBeInTheDocument();
-        expect(screen.queryByRole('button')).not.toBeInTheDocument();
-        expect(screen.queryByRole('link')).not.toBeInTheDocument();
-    });
+    // Section title & description
+    expect(screen.getByRole('heading', { name: 'DIPP Research Team' })).toBeInTheDocument();
+    expect(
+      screen.getByText(/The DIPP is led by a team of passionate researchers/i)
+    ).toBeInTheDocument();
 
-    it('matches snapshot', () => {
-        const { asFragment } = render(<AboutPage />);
-        expect(asFragment()).toMatchSnapshot();
-    });
+    // Team members
+    expect(screen.getByRole('heading', { name: 'Team members:' })).toBeInTheDocument();
+    const listItems = screen.getAllByRole('listitem');
+    expect(listItems.length).toBe(8);
+  });
 });

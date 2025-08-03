@@ -1,31 +1,45 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import SettingsPage from '../../pages/sidebar/SettingsPage';
 
+// Mock Header
+jest.mock('../../components/Header', () => ({ title }: { title: string }) => (
+  <div data-testid="header">{title}</div>
+));
 
-describe('SettingsPage', () => {
-    it('renders without crashing', () => {
-        render(<SettingsPage />);
-    });
+// Mock FontSizeContext
+const mockSetFontSize = jest.fn();
+jest.mock('../../pages/sidebar/FontSizeContext', () => ({
+  useFontSize: () => ({
+    fontSize: '18px',
+    setFontSize: mockSetFontSize,
+  }),
+}));
 
-    it('renders the correct heading', () => {
-        render(<SettingsPage />);
-        const heading = screen.getByRole('heading', { name: /SettingsPage/i });
-        expect(heading).toBeInTheDocument();
-    });
+describe('SettingsPage Component', () => {
+  test('renders header and font size buttons', () => {
+    render(<SettingsPage />);
 
-    it('does not render unexpected elements', () => {
-        render(<SettingsPage />);
-        // no other elements expected
-        expect(screen.queryByRole('button')).not.toBeInTheDocument();
-        expect(screen.queryByRole('link')).not.toBeInTheDocument();
-        expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
-    });
+    expect(screen.getByTestId('header')).toHaveTextContent('Settings Page');
+    expect(screen.getByRole('heading', { name: 'Settings Page' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Font Size' })).toBeInTheDocument();
+    expect(screen.getByText('Choose your preferred font size:')).toBeInTheDocument();
 
-    it('matches snapshot', () => {
-        const { asFragment } = render(<SettingsPage />);
-        expect(asFragment()).toMatchSnapshot();
-    });
+    expect(screen.getByRole('button', { name: 'Small' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Medium' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Large' })).toBeInTheDocument();
+  });
+
+  test('clicking font size buttons calls setFontSize with correct values', () => {
+    render(<SettingsPage />);
+
+    fireEvent.click(screen.getByText('Small'));
+    expect(mockSetFontSize).toHaveBeenCalledWith('13px');
+
+    fireEvent.click(screen.getByText('Medium'));
+    expect(mockSetFontSize).toHaveBeenCalledWith('18px');
+
+    fireEvent.click(screen.getByText('Large'));
+    expect(mockSetFontSize).toHaveBeenCalledWith('24px');
+  });
 });
-
-
-// 未来等待测试项：设置项的list，buttons.....
