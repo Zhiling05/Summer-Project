@@ -1,7 +1,6 @@
 // /// <reference types="@testing-library/jest-dom" />
 // //测试内容：默认重定向[path="" → start-page]，子路由有没有正确渲染……这里子组件不用参与逻辑验证，只要测试路由就可以
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import AssessRouter from '../../../../../pages/optometrist/assess/AssessRouter';
 
 
