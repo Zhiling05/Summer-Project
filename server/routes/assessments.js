@@ -1,6 +1,6 @@
-// server/routes/assessments.js
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
+const Assessment = require('../models/Assessment');
 
 /** 临时内存存储，后续可替换为真正的 DB(Model) */
 const assessments = new Map();
@@ -152,12 +152,16 @@ router.post('/assessments', (req, res) => {
   res.json({ id, createdAt });
 });
 
-/* ---------- GET /api/assessments/:id ---------- */
-router.get('/assessments/:id', (req, res) => {
-  const record = assessments.get(req.params.id);
-  if (!record) return res.status(404).json({ error: 'Not found' });
-  res.json(record);
+// 获取所有记录
+router.get('/', async (req, res) => {
+  try {
+    const assessments = await Assessment.find();
+    res.json(assessments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
+
 
 router.get('/assessments', (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 50;
@@ -180,20 +184,11 @@ router.get('/assessments', (req, res) => {
  * ---------------------------------------------- */
 router.get('/assessments/:id/export', async (req, res, next) => {
   try {
-    const ass = assessments.get(req.params.id);
-    if (!ass) return res.status(404).send('Not found');
-
-    // 按需加载，打破循环引用
-    const { buildDoc } = require('../utils/doc');
-
-    // 支持 ?format=txt，预留 docx 等
-    const format = (req.query.format || 'txt').toLowerCase();
-    const { path, cleanup, mime, ext } = await buildDoc(ass, format);
-
-    res.type(mime).download(path, `assessment-${ass.id}.${ext}`, cleanup);
-  } catch (e) { next(e); }
+    const a = await Assessment.findById(req.params.id);
+    res.json(a);
+  } catch (err) {
+    res.status(404).json({ error: 'Not found' });
+  }
 });
 
-/* --------------- 导出 --------------- */
-module.exports           = router;
-module.exports.assessments = assessments;
+module.exports = router;

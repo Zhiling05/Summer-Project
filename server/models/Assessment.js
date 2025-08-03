@@ -1,19 +1,20 @@
-// server/models/Assessment.js
-// =================================
-// 伪造一个 Mongoose 风格的 Model，只实现 findById
-// 数据来源同 routes/assessments.js 里的那个 Map
-// =================================
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const { assessments } = require('../routes/assessments');
+const AssessmentSchema = new Schema({
+  role: { type: String, enum: ['optometrist', 'gp', 'patient'] },
+  createdAt: { type: Date, default: Date.now },
+  patientId: String,
+  content: String, // 示例字段
+});
 
-module.exports = {
-  /**
-   * Stub for Assessment.findById(id)
-   * @param {string} id
-   * @returns {Promise<object|null>}
-   */
-  findById: async function(id) {
-    // Map.get 如果没找到就返回 undefined → 转成 null
-    return assessments.get(id) || null;
+// 仅清理验光师数据：90天
+AssessmentSchema.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: 60 * 60 * 24 * 90,
+    partialFilterExpression: { role: 'optometrist' }
   }
-};
+);
+
+module.exports = mongoose.model('Assessment', AssessmentSchema);
