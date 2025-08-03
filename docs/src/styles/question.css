@@ -130,6 +130,7 @@ body {
 }
 .footer-links li { margin: 4px 0; }
 
+
 /* ===========================================================
    2. 主内容区
    =========================================================== */
@@ -153,7 +154,7 @@ body {
 /* 让里面的元素（尤其是返回按钮）靠左，不被拉伸 */
 display:flex;
 flex-direction:column;
-align-items:flex-start;   /* 关键：子项横向不再 stretch，而是按自身宽度 */
+align-items:stretch;   /* 关键：子项横向拉伸填满宽度 */
 /* 给固定的底部导航保留空间（64px 导航高 + 16px 缓冲）*/
 padding-bottom: calc(64px + 16px);
 }
@@ -171,6 +172,7 @@ padding-bottom: calc(64px + 16px);
   transition: all .15s;
   width:auto;           /* 禁止百分百拉伸，保持内容宽度 */
   display:inline-flex;  /* 和原先行为一致 */
+  align-self: flex-start;
 }
 .back-button:hover,
 .back-button:focus-visible {
@@ -179,14 +181,45 @@ padding-bottom: calc(64px + 16px);
   outline: none;
 }
 
-/* —— 问题卡片 —— */
-.question-box {
-  background: var(--text-inverse);
-  border-left: 4px solid var(--core-blue);
-  padding: var(--space-xl) var(--space-xl) calc(var(--space-xl) + 8px);
-  box-shadow: var(--shadow-card);
-  border-radius: var(--radius-m) 0 0 var(--radius-m);
+/* ===========================================================
+   问题卡片 – v6.1 统一宽度 & 视觉强化
+   =========================================================== */
+.question-box{
+  /* 结构 */
+  display:flex;               /* 纵向排版：题干→选项→按钮 */
+  flex-direction:column;
+  align-items:flex-start;
+  gap:var(--space-l);          /* 元素垂直留白 */
+
+  /* 尺寸：所有题统一  */
+  width:100%;
+  max-width:720px;             /* 桌面端固定卡片宽 */
+  margin-inline:auto;          /* 水平居中 */
+  min-height:44vh;             /* 稍微拔高，避免跳动 */
+
+  /* 视觉 */
+  background:var(--text-inverse);
+  border-left:4px solid var(--core-blue);
+  border-radius:var(--radius-m) 0 0 var(--radius-m);
+  box-shadow:var(--shadow-card);
+
+  /* 内边距：左右一致，顶部略大 */
+  padding:calc(var(--space-xl) + 4px) var(--space-xl) var(--space-xl);
+
+  /* 轻微浮起动效 */
+  transition:transform .15s ease, box-shadow .15s ease;
 }
+.question-box:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+
+/* 深色模式微调 */
+@media (prefers-color-scheme: dark){
+  .question-box{background:#101418;}
+}
+
+
 .nhsuk-heading-l {
   font-size: 1.95rem;
   font-weight: 700;
@@ -224,6 +257,8 @@ padding-bottom: calc(64px + 16px);
   border-radius: var(--radius-s);
   cursor: pointer;
   transition: background .15s, color .15s;
+  width: 100%;                 /* every option row spans the full card width for visual consistency */
+  justify-content: flex-start; /* keep label text left‑aligned */
 }
 .radio-label:hover,
 .radio-label:focus-within {

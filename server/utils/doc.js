@@ -8,11 +8,23 @@
 const fs  = require('fs-extra');
 const tmp = require('tmp-promise');
 
+/* ---------- 推荐代码 → 可读文本 ---------- */
+const RECOMMEND_TEXT = {
+  EMERGENCY_DEPARTMENT: 'Send patient to Emergency Department immediately',
+  IMMEDIATE           : 'Immediate referral to Eye Emergency On-Call',
+  URGENT_TO_OPH       : 'Urgent referral to Ophthalmology',
+  URGENT_TO_GP_OR_NEUR: 'Urgent referral to GP or Neurology',
+  TO_GP               : 'Refer to General Practitioner',
+  NO_REFERRAL         : 'No referral required',
+  OTHER_EYE_CONDITIONS_GUIDANCE: 'Referral to other department',
+};
+
+
 /* ---------- 1. 转成纯文本 ---------- */
 function buildText(ass) {
-  return [
+  const lines = [
     `Assessment ${ass.id}`,
-    `Patient   : ${ass.patientId}`,
+    //`Patient   : ${ass.patientId}`,
     `Date      : ${ass.createdAt}`,
     `Role      : ${ass.role}`,
     '----------------------------------------',
@@ -21,10 +33,22 @@ function buildText(ass) {
         `${a.questionId}: ${a.question || '(question text missing)'}\n` +
         `Answer    : ${a.answer}\n`
     ),
+
+    /* ---------- Symptoms ---------- */
+    ...(ass.symptoms?.length
+        ? [
+            '----------------------------------------',
+            'Symptoms:',
+            ...ass.symptoms.map(s => `- ${s}`),
+          ]
+        : []),
+
     '----------------------------------------',
-    `Recommendation: ${ass.recommendation}`,
+    `Recommendation: ${RECOMMEND_TEXT[ass.recommendation] || ass.recommendation}`,
     '',
-  ].join('\n');
+  ];
+
+  return lines.join('\n');
 }
 
 /* ---------- 2. 生成临时文件 ---------- */

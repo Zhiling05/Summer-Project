@@ -1,4 +1,30 @@
 // src/pages/sidebar/AboutPage.tsx
+import Header from '../../components/Header';
+
 export default function AboutPage() {
-  return <h1>About us page</h1>;
+  return (
+    <div className="about-page">
+      <Header title="About Us" showBack={true} /> {/* 直接使用 Header 中的返回按钮 */}
+      <h1 className="about-title">About Us Page</h1>
+      
+      <section className="about-section">
+        <h2 className="about-heading">DIPP Research Team</h2>
+        <p className="about-description">
+          The DIPP is led by a team of passionate researchers dedicated to improving healthcare.
+        </p>
+        
+        <h3 className="team-title">Team members:</h3>
+        <ul className="team-list">
+          <li>XXX - XXXXXXX</li>
+          <li>XXX - XXXXXXX</li>
+          <li>XXX - XXXXXXX</li>
+          <li>XXX - XXXXXXX</li>
+          <li>XXX - XXXXXXX</li>
+          <li>XXX - XXXXXXX</li>
+          <li>XXX - XXXXXXX</li>
+          <li>XXX - XXXXXXX</li>
+        </ul>
+      </section>
+    </div>
+  );
 }
