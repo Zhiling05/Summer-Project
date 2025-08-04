@@ -115,7 +115,7 @@ const DynamicRecommendation: React.FC = () => {
     try {
       const txt = await ensureReport();
       navigate(
-        "/optometrist/assess/recommendations/report-preview",
+        `/optometrist/assess/recommendations/report-preview/${assessId}`,
         { state: { text: txt } }
       );
     } catch (e) {
