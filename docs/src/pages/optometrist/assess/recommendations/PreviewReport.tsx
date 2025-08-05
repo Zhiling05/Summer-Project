@@ -77,9 +77,10 @@ const recBody  = clean(recRawAll);        // Recommendation 正文
 const cards = [
   { title: "Basic information",   body: metaBlock },
   { title: "Question responses",  body: qaBlock  },
+  { title: "Question responses",  body: "", hidden: true }, // ← 加回来，但标记 hidden
   symBlock && { title: "Patient symptoms", body: symBlock },
   { title: "Recommendation",      body: recBody },
-].filter(Boolean) as {title:string;body:string}[];
+].filter(Boolean) as {title:string;body:string;hidden?: boolean;}[];
 
   const colorCls = `report-${COLOR_MAP[recCode] ?? "green"}`;
 
@@ -89,8 +90,8 @@ const cards = [
       <Header title="Assessment Report" />
       <Sidebar />
       <main className="report-main">
-        {cards.map(({ title, body }) => (
-          <article key={title} className={`report-card ${colorCls}`}>
+        {cards.map(({ title, body, hidden }) => (
+          <article key={title} className={`report-card ${colorCls} ${hidden ? "report-hidden" : ""}`}>
             <h2 className="report-heading">{title}</h2>
             <pre className="report-text">{body}</pre>
           </article>

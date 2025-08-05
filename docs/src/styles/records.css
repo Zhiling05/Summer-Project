@@ -212,3 +212,17 @@
 
     .records-table th, .records-table td { padding: 10px 12px; }
 }
+
+
+
+
+/* 让 ID 列使用等宽字体且左对齐 */
+.records-table .id-cell {
+  /* 已有 ↓ */
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+
+  /* 新增 ↓ —— 指定系统一定存在的等宽字体 */
+  font-family: "Courier New", Consolas, Menlo, monospace !important;
+  white-space: nowrap;       /* 防止下划线位置被自动换行影响 */
+}

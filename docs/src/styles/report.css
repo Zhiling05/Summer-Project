@@ -29,11 +29,7 @@
 }
 
 /* —— 版心 —— */
-.report-main {
-  padding: var(--space-xl) var(--space-l) 80px;   /* 底部给 BottomNav */
-  max-width: 900px;
-  margin-inline: auto;
-}
+
 
 /* —— 卡片统一外观 —— */
 .report-card {
@@ -41,6 +37,7 @@
   border-radius: 16px;
   box-shadow: var(--shadow-card);
   padding: 1.5rem 2rem;
+  width: 100% !important;          /* ← 新增：让卡片在 flex 容器里占满横向 */
   margin-block: 1.25rem;
   overflow-x: auto;
 
@@ -74,59 +71,31 @@
 
 /* —— 窄屏收紧内边距 —— */
 @media (max-width: 640px) {
-  .report-main { padding: var(--space-l) var(--space-m) 80px; }
+  .report-main { padding: var(--space-l) var(--space-m) 80px;  }
 }
 
 
-/* ───────── Sticky Summary Bar ───────── */
-.summary-bar {
-  position: sticky;
-  top: 56px;                     /* Header 高度 */
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  margin-block: 0 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.06);
-  background: #fff;
-  font-size: .95rem;
+/* 放在文件最后即可 */
+.report-hidden {
+  visibility: hidden;    /* 不显示内容 */
+  height: 0 !important;  /* 折叠高度 */
+  margin: 0 !important;  /* 没空隙 */
+  padding: 0 !important; /* 没内边距 */
+  border: none !important;
 }
-.summary-bar .badge {
-  font-weight: 700;
-  text-transform: capitalize;
-}
-.summary-bar .summary-text {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 50%;
-}
-.summary-bar .summary-date { opacity: .6; font-size: .85rem; }
-.summary-bar .actions button {
-  background: none; border: none; cursor: pointer;
-  font-size: 1.1rem; line-height: 1;
-  padding: 2px 6px; border-radius: 6px;
-  transition: background .15s;
-}
-.summary-bar .actions button:hover { background: rgba(0,0,0,.08); }
 
-/* 继承每种风险色的渐变底色 */
-.summary-bar.report-red    { background: linear-gradient(135deg, rgba(208,56,56,.05) 0%, rgba(208,56,56,.03) 100%); }
-.summary-bar.report-orange { background: linear-gradient(135deg, rgba(230,126,0,.05) 0%, rgba(230,126,0,.03) 100%); }
-.summary-bar.report-green  { background: linear-gradient(135deg, rgba(0,127,59,.05) 0%, rgba(0,127,59,.03) 100%); }
 
-/* ───────── Collapsible Card ───────── */
-.collapsible-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+/* —— 强制 Report 版心与卡片全宽 —— */
+.report-main{
+  display:block !important;     /* 不再用 flex，子元素自然 100% 宽 */
+  max-width:none !important;    /* 取消 900px 上限 */
+  width:100% !important;        /* 在极窄屏也占满 */
+  padding-left:var(--space-l);
+  padding-right:var(--space-l); /* 保留左右留白 */
 }
-.chevron { font-size: .9rem; opacity: .7; }
 
-.report-card.collapsed {
-  padding-bottom: .75rem;        /* 只给标题留空间 */
+.report-card{
+  width:100% !important;        /* 跟随父元素 */
+  margin-inline:0 !important;   /* 去掉左右 auto 造成的居中 */
+  box-sizing:border-box !important;
 }

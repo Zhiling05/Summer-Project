@@ -2,6 +2,8 @@
 const express = require('express');
 const router  = express.Router();
 
+const buildCustomId = require('../utils/id');
+
 /** 临时内存存储，后续可替换为真正的 DB(Model) */
 const assessments = new Map();
 
@@ -107,8 +109,10 @@ const SYMPTOM_RULES = {
 };
 
 router.post('/assessments', (req, res) => {
-  const id        = Date.now().toString();
+  
   const createdAt = new Date().toISOString();
+
+
 
   /* --- Recommendation → risk 逻辑（保持原样） --- */
   const normKey = (req.body.recommendation || 'no_referral')
@@ -123,6 +127,20 @@ router.post('/assessments', (req, res) => {
     'to-gp':                  'to-gp',
     'no-referral':            'no-referral',
   }[normKey] || 'no-referral';
+
+  /* -------- ③ risk → 颜色 (red/orange/green) -------- */
+  const RISK_COLOR = {
+    'emergency-department': 'red',
+    immediate:              'red',
+    'urgent-to-oph':        'orange',
+    'urgent-to-gp-or-neur': 'orange',
+    'to-gp':                'orange',
+    'no-referral':          'green',
+  };
+  const severity = RISK_COLOR[risk] || 'red';
+
+  /* -------- ④ 自定义 ID -------- */
+  const id = buildCustomId(severity, createdAt);   // << 现在只有这一处声明 id
 
   /* --- 症状提取 --- */
   const symptoms = req.body.answers.flatMap(a => {
