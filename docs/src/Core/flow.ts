@@ -75,17 +75,10 @@ export function resetAssessment(): void {
 
 /** 找到第一个未答的题目 ID，或返回 undefined */
 export function getFirstUnanswered(): string | undefined {
-  // // 这里同样先把 flow 断言为 Questionnaire
-  // const dataArray = (flow as Questionnaire).questions;
-  // for (const q of dataArray) {
-  //   if (!answers[q.id]) {
-  //     return q.id;
-  //   }
-  // }
-  for (const q of questions) {
-    if (!answers[q.id]) {
-      return q.id;
-    }
+  const dataArray = (questionnaire as Questionnaire).questions;
+  for (const q of dataArray) {
+    if (!answers[q.id]) return q.id;
   }
   return undefined;
 }
+

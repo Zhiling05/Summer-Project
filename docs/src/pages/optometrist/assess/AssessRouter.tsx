@@ -7,34 +7,6 @@ import DynamicQuestion       from './questions/DynamicQuestion';
 import DynamicRecommendation from './recommendations/DynamicRecommendation';
 import PreviewReport         from './recommendations/PreviewReport';   // ★ 新增
 
-// export default function AssessRouter() {
-//   return (
-//     <Routes>
-//       {/* 默认跳到 start-page */}
-//       <Route path=""           element={<Navigate to="start-page" replace />} />
-//       <Route path="start-page" element={<StartPage />} />
-//
-//       {/* 所有题目：由 DynamicQuestion 统一处理 */}
-//       <Route
-//         path="questions/:questionId"
-//         element={<DynamicQuestion />}
-//       />
-//
-//       {/* 纯文本报告预览页（供推荐页跳转） */}
-//       <Route
-//         path="recommendations/report-preview/:id"
-//         element={<PreviewReport />}
-//       />
-//
-//       {/* 各种推荐结果页 */}
-//       <Route
-//         path="recommendations/:resultId"
-//         element={<DynamicRecommendation />}
-//       />
-//     </Routes>
-//   );
-// }
-
 // ← 你的弹窗组件
 import PopupWindow from "../../../components/PopupWindow";
 
@@ -50,22 +22,51 @@ export default function AssessRouter(): JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // useEffect(() => {
+    //     const started = sessionStorage.getItem("assessStarted") === "true";
+    //     const visited = sessionStorage.getItem("assessVisited") === "true";
+    //
+    //     if (started && visited) {
+    //         setShowModal(true);
+    //     }
+    //     // 始终标记“访问过”，下一次 AssessRouter 重新挂载时才会弹窗
+    //     sessionStorage.setItem("assessVisited", "true");
+    // }, []); // ← 空数组，只有第一次挂载时执行
     useEffect(() => {
-        const started = sessionStorage.getItem("assessStarted") === "true";
-        const visited = sessionStorage.getItem("assessVisited") === "true";
+        const path = location.pathname;
+        const inFlow =
+            /\/assess\/start-page$/.test(path) ||
+            /\/assess\/questions\//.test(path);
 
-        if (started && visited) {
-            setShowModal(true);
+        if (!inFlow) {
+            setShowModal(false);
+            return;
         }
-        // 始终标记“访问过”，下一次 AssessRouter 重新挂载时才会弹窗
-        sessionStorage.setItem("assessVisited", "true");
-    }, []); // ← 空数组，只有第一次挂载时执行
+
+        // ⬇️ 一次性抑制：如果刚点击了 Continue/Restart，则本次不再弹窗
+        if (sessionStorage.getItem('suppressAssessModalOnce') === '1') {
+            sessionStorage.removeItem('suppressAssessModalOnce');
+            setShowModal(false);
+            return;
+        }
+
+        const started = sessionStorage.getItem('assessStarted') === 'true';
+        const visited = sessionStorage.getItem('assessVisited') === 'true';
+
+        if (started && visited) setShowModal(true);
+
+        // 只在问卷流程里标记已访问
+        sessionStorage.setItem('assessVisited', 'true');
+    }, [location.pathname]);
+
 
 
     const handleContinue = () => {
         // const nextQ = getFirstUnanswered() ?? "Q1";
         const last = sessionStorage.getItem("lastQuestionId");
         const nextQ = last ?? getFirstUnanswered() ?? "Q1";
+
+        sessionStorage.setItem('suppressAssessModalOnce', '1');
 
         setShowModal(false);
         // ← 用绝对路径，避免按当前路径再 append
@@ -77,6 +78,7 @@ export default function AssessRouter(): JSX.Element {
         sessionStorage.removeItem("assessStarted");
         sessionStorage.removeItem("assessVisited");
         sessionStorage.removeItem("lastQuestionId");
+        sessionStorage.setItem('suppressAssessModalOnce', '1');
         setShowModal(false);
         // ← 同样改成绝对路径
         navigate(`/optometrist/assess/start-page`, { replace: true });
@@ -99,8 +101,8 @@ export default function AssessRouter(): JSX.Element {
                     element={<PreviewReport />}
                 />
                 <Route
-                    path="recommendations/:resultId"
-                    element={<DynamicRecommendation />}
+                    path="recommendations/:resultId/:assessmentId"
+                    element={<DynamicRecommendation />}  //yj添加/:assessmentId传参
                 />
             </Routes>
         </>

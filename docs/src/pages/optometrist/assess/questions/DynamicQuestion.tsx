@@ -124,7 +124,6 @@ const DynamicQuestion = () => {
       updatedHistory
     );
 
-
     /* ② fallback：按 navigation.defaultNext */
     if (!nextId && currentQuestion.navigation?.defaultNext) {
       nextId = currentQuestion.navigation.defaultNext;
@@ -136,50 +135,45 @@ const DynamicQuestion = () => {
      * 如果 nextId 是推荐页（不是 Q 开头）——先保存 assessment
      * ======================================================= */
     if (!nextId.startsWith("Q")) {
-      // try {
-      //   /* ★ 把 answerHistory 转成 Answer[] 结构，供后端保存 */
-      //   const answersArr = Object.entries(updatedHistory).map(([qid, ans]) => {
-      //     const qObj = questionsList.find((q) => q.id === qid) ?? {};
-      //     return {
-      //       questionId: qid,
-      //       question: (qObj as any).question ?? "",
-      //       answer: Array.isArray(ans) ? ans.join(", ") : ans,
-      //     };
-      //   });
-      // ★ 先在外面声明并计算 answersArr，保证 try/catch 都能访问
-          const answersArr = Object.entries(updatedHistory).map(([qid, ans]) => {
+      const answersArr = Object.entries(updatedHistory).map(([qid, ans]) => {
         const qObj = questionsList.find((q) => q.id === qid) ?? {};
         return {
-            questionId: qid,
-            question: (qObj as any).question ?? "",
-            answer: Array.isArray(ans) ? ans.join(", ") : ans,
-            };
-        });
+          questionId: qid,
+          question: (qObj as any).question ?? "",
+          answer: Array.isArray(ans) ? ans.join(", ") : ans,
+        };
+      });
 
+      const contentStr = answersArr
+          .map(a => `${a.questionId}: ${a.answer}`)
+          .join("; ");
 
-          try {  // yj添加
-        /* ★ 保存 assessment，拿到 id */
+      try {
         const { id: assessmentId } = await createAssessment({
           role: "optometrist",
           patientId,
           answers: answersArr,
-          recommendation: nextId, // 例如 EMERGENCY_DEPARTMENT
+          recommendation: nextId,
+          content: contentStr     // ← 新增
         });
 
-        /* ★ 带 assessmentId 跳推荐页 */
         // navigate(`/optometrist/assess/recommendations/${nextId}`, {
-          navigate(`/optometrist/assess/recommendations/${assessmentId}`, {
-          state: { assessmentId, patientId, answers: answersArr },
+        //   state: { assessmentId, patientId, answers: answersArr },
+        // });
+        navigate(`/optometrist/assess/recommendations/${nextId}/${assessmentId}`, {
+          state: { patientId, answers: answersArr },
         });
+
+
       } catch (e) {
-        // alert("Save failed: " + (e as Error).message);
-            console.error("Save failed:", e);
-            navigate(`/optometrist/assess/recommendations/report-preview/LOCAL`, {
-              state: { patientId, answers: answersArr },
-            });
+        console.error("Save failed:", e);
+        navigate(`/optometrist/assess/recommendations/report-preview/LOCAL`, {
+          state: { patientId, answers: answersArr },
+        });
       }
-      return; // 推荐页已跳转，不再往下执行
+      return;
     }
+
 
     /* ---------- 普通题目：继续问卷流程 ---------- */
     navigate(`/optometrist/assess/questions/${nextId}`, {
