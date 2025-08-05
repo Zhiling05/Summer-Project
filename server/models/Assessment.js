@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const Schema = mongoose.Schema;
 
 const AssessmentSchema = new Schema({
-  role: { type: String, enum: ['optometrist', 'gp', 'patient'] },
-  createdAt: { type: Date, default: Date.now },
+  role: {
+    type: String,
+    enum: ['optometrist', 'gp', 'patient'],
+    required: true
+  },
+  content: { type: String, required: true },
   patientId: String,
-  content: String, // 示例字段
+  createdAt: { type: Date, default: Date.now }
 });
 
-// 仅清理验光师数据：90天
 AssessmentSchema.index(
   { createdAt: 1 },
   {
