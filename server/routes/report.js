@@ -1,17 +1,29 @@
-// server/routes/report.js
-const express      = require('express');
-const { assessments } = require('./assessments');
-const router       = express.Router();
+const express = require('express');
+const router = express.Router();
+const Assessment = require('../models/Assessment');
 
-/* GET /api/assessments/:id/report —— 返回纯文本 */
-router.get('/assessments/:id/report', (req, res) => {
-  const { buildText, buildDoc } = require('../utils/doc');   // 每次请求即时拿，避开循环引用
-  console.log('utils/doc keys =', Object.keys(require('../utils/doc')));  // <— 调试
+router.get('/assessments/:id/report', async (req, res) => {
+  try {
+    const record = await Assessment.findById(req.params.id);
+    if (!record) {
+      console.warn('[report] ID not found:', req.params.id);
+      return res.status(404).send('No report found');
+    }
 
-  const ass = assessments.get(req.params.id);
-  if (!ass) return res.status(404).send('Not Found');
+    const reportText = `
+===== ASSESSMENT REPORT =====
 
-  res.type('text/plain').send(buildText(ass));
+Role       : ${record.role}
+Patient ID : ${record.patientId || 'N/A'}
+Content    : ${record.content}
+Created At : ${new Date(record.createdAt).toLocaleString()}
+`;
+
+    res.type('text/plain').send(reportText);
+  } catch (err) {
+    console.error('[report error]', err);
+    res.status(500).send('Report preview failed');
+  }
 });
 
 module.exports = router;
