@@ -124,6 +124,8 @@ const DynamicQuestion = () => {
       updatedHistory
     );
 
+    console.log("nextId after", questionId, "→", nextId);
+
     /* ② fallback：按 navigation.defaultNext */
     if (!nextId && currentQuestion.navigation?.defaultNext) {
       nextId = currentQuestion.navigation.defaultNext;
