@@ -7,6 +7,9 @@ import DynamicQuestion       from './questions/DynamicQuestion';
 import DynamicRecommendation from './recommendations/DynamicRecommendation';
 import PreviewReport         from './recommendations/PreviewReport';   // ★ 新增
 
+// 弹窗问题
+import { useNavigationType } from 'react-router-dom';
+
 // ← 你的弹窗组件
 import PopupWindow from "../../../components/PopupWindow";
 
@@ -23,41 +26,84 @@ export default function AssessRouter(): JSX.Element {
     const location = useLocation();
 
     // useEffect(() => {
-    //     const started = sessionStorage.getItem("assessStarted") === "true";
-    //     const visited = sessionStorage.getItem("assessVisited") === "true";
+    //     const path = location.pathname;
     //
-    //     if (started && visited) {
-    //         setShowModal(true);
+    //     // 仅在问卷流程里考虑弹窗
+    //     const inFlow =
+    //         path.endsWith('/assess/start-page') ||
+    //         path.includes('/assess/questions/');
+    //
+    //     if (!inFlow) {
+    //         setShowModal(false);
+    //         return;
     //     }
-    //     // 始终标记“访问过”，下一次 AssessRouter 重新挂载时才会弹窗
-    //     sessionStorage.setItem("assessVisited", "true");
-    // }, []); // ← 空数组，只有第一次挂载时执行
+    //
+    //     // 1) 刚点击了 Continue/Restart：本次不弹，并清除一次性标记
+    //     if (sessionStorage.getItem('suppressAssessModalOnce') === '1') {
+    //         sessionStorage.removeItem('suppressAssessModalOnce');
+    //         setShowModal(false);
+    //         return;
+    //     }
+    //
+    //     // 2) 已完成一次评估：不弹
+    //     if (sessionStorage.getItem('assessmentComplete') === 'true') {
+    //         setShowModal(false);
+    //         return;
+    //     }
+    //
+    //     // 3) 仅当真的有“未完成进度”时才弹
+    //     const started = sessionStorage.getItem('assessStarted') === 'true';
+    //     const lastQ = sessionStorage.getItem('lastQuestionId');
+    //     const progressed =
+    //         !!lastQ ||
+    //         (typeof hasProgress === 'function' && !!hasProgress());
+    //
+    //     if (started && progressed) {
+    //         setShowModal(true);
+    //     } else {
+    //         setShowModal(false);
+    //     }
+    // }, [location.pathname]);
+    const navType = useNavigationType();
+
     useEffect(() => {
         const path = location.pathname;
-        const inFlow =
-            /\/assess\/start-page$/.test(path) ||
-            /\/assess\/questions\//.test(path);
+        const isStart    = path.endsWith('/assess/start-page');
+        const isQuestion = path.includes('/assess/questions/');
 
-        if (!inFlow) {
+        // 只对 StartPage / Questions 这两种路由生效
+        if (!isStart && !isQuestion) {
             setShowModal(false);
             return;
         }
 
-        // ⬇️ 一次性抑制：如果刚点击了 Continue/Restart，则本次不再弹窗
-        if (sessionStorage.getItem('suppressAssessModalOnce') === '1') {
-            sessionStorage.removeItem('suppressAssessModalOnce');
+        // 已完成过一次就不再弹
+        if (sessionStorage.getItem('assessmentComplete') === 'true') {
             setShowModal(false);
             return;
         }
 
+        // 进度判断：必须开始过且有 lastQuestionId
         const started = sessionStorage.getItem('assessStarted') === 'true';
-        const visited = sessionStorage.getItem('assessVisited') === 'true';
+        const lastQ   = sessionStorage.getItem('lastQuestionId');
+        if (!started || !lastQ) {
+            setShowModal(false);
+            return;
+        }
 
-        if (started && visited) setShowModal(true);
+        if (isQuestion) {
+            // 在题目页，仅 POP（后退/返回）时弹
+            if (navType === 'POP') {
+                setShowModal(true);
+            } else {
+                setShowModal(false);
+            }
+        } else {
+            // 在 StartPage，只要进度在（且没完成），无论 PUSH/POP 都弹
+            setShowModal(true);
+        }
+    }, [location.pathname, navType]);
 
-        // 只在问卷流程里标记已访问
-        sessionStorage.setItem('assessVisited', 'true');
-    }, [location.pathname]);
 
 
 
@@ -65,9 +111,7 @@ export default function AssessRouter(): JSX.Element {
         // const nextQ = getFirstUnanswered() ?? "Q1";
         const last = sessionStorage.getItem("lastQuestionId");
         const nextQ = last ?? getFirstUnanswered() ?? "Q1";
-
         sessionStorage.setItem('suppressAssessModalOnce', '1');
-
         setShowModal(false);
         // ← 用绝对路径，避免按当前路径再 append
         navigate(`/optometrist/assess/questions/${nextQ}`, { replace: true });
@@ -78,6 +122,7 @@ export default function AssessRouter(): JSX.Element {
         sessionStorage.removeItem("assessStarted");
         sessionStorage.removeItem("assessVisited");
         sessionStorage.removeItem("lastQuestionId");
+        sessionStorage.removeItem("assessmentComplete");//修复弹窗bug
         sessionStorage.setItem('suppressAssessModalOnce', '1');
         setShowModal(false);
         // ← 同样改成绝对路径
