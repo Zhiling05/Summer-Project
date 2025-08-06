@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';//zkx
 import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import BackButton from '../../../components/BackButton';
-import SkipGuideButton from '../../../components/SkipGuideButton';//zkx
+//import SkipGuideButton from '../../../components/SkipGuideButton';//zkx
 
 export default function OptAppTutorial() {
   const [isOverviewStage, setIsOverviewStage] = useState(true);
@@ -353,7 +353,7 @@ export default function OptAppTutorial() {
             </button>
           </div>
 
-          {/* Skip Guide Button */}
+          {/* Skip Guide Button 
           <div style={{ marginTop: '16px', textAlign: 'center' }}>
             <button
               onClick={() => navigate('/assess')} // 👉 替换路径为你需要跳转的位置
@@ -368,7 +368,7 @@ export default function OptAppTutorial() {
             >
               Skip Guide
             </button>
-          </div>
+          </div>*/}
 
         </div>
         

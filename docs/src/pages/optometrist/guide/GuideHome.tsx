@@ -4,7 +4,7 @@ import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import '../../../styles/card.css';
 import BackButton from '../../../components/BackButton';//zkx
-import SkipGuideButton from '../../../components/SkipGuideButton';//zkx
+//import SkipGuideButton from '../../../components/SkipGuideButton';//zkx
 
 
 export default function GuideHome() {
@@ -127,7 +127,6 @@ export default function GuideHome() {
       </div>
 
       <BottomNav />
-      <SkipGuideButton />
     </>
   );
 }
