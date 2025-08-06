@@ -185,7 +185,7 @@ export default function ImageGallery() {
           padding: '40px 24px 80px 24px',
         }}
       >
-        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 8px' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 8px',marginTop: '80px' }}>{/* zkx加了80px上边距放go back */}
           
           {/* 主标题 */}
           <h1

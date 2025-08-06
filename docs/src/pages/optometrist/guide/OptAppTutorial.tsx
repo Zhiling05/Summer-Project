@@ -1,12 +1,16 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';//zkx
 import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import BackButton from '../../../components/BackButton';
+import SkipGuideButton from '../../../components/SkipGuideButton';//zkx
 
 export default function OptAppTutorial() {
   const [isOverviewStage, setIsOverviewStage] = useState(true);
   const [currentModule, setCurrentModule] = useState('home');
   const [currentStep, setCurrentStep] = useState(1);
+
+  const navigate = useNavigate();//zkx
 
   const modules = {
     home: { name: 'Home', steps: 1 },
@@ -126,10 +130,10 @@ export default function OptAppTutorial() {
           marginLeft: 'calc(-50vw + 50%)',
           minHeight: 'calc(100vh - 120px)',
           boxSizing: 'border-box',
-          padding: '40px 24px 80px 24px',
+          padding: '40px 24px 80px 24px'
         }}
       >
-        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 8px' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 8px',marginTop: '80px'}}>{/* zkx加了80px上边距 */}
           
           {/* 主标题 */}
           <h1
@@ -348,7 +352,26 @@ export default function OptAppTutorial() {
                'Complete Tutorial' : 'Next →'}
             </button>
           </div>
+
+          {/* Skip Guide Button */}
+          <div style={{ marginTop: '16px', textAlign: 'center' }}>
+            <button
+              onClick={() => navigate('/assess')} // 👉 替换路径为你需要跳转的位置
+              style={{
+                background: 'transparent',
+                color: '#005eb8',
+                border: 'none',
+                fontSize: '0.95rem',
+                textDecoration: 'underline',
+                cursor: 'pointer'
+              }}
+            >
+              Skip Guide
+            </button>
+          </div>
+
         </div>
+        
       </div>
 
       <BottomNav />

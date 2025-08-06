@@ -141,6 +141,7 @@ body {
   justify-content: center;              /* question-box 垂直居中 */
   /*  顶部留 var(--space-xl)，底部给导航让路  */
   padding: var(--space-xl) 0 calc(64px + 128px);
+  margin-top: 80px; /* zkx加，新增上边距，放置 go back*/
 }
 
 /* —— 内容栅格 —— */

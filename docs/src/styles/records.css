@@ -6,12 +6,28 @@
     flex-direction: column;
     gap: var(--space-xl);
 }
+@media (max-width: 768px) {
+    .records-main {
+        padding: var(--space-l) var(--space-m) calc(48px + var(--space-l));
+    }
+}
+@media (max-width: 480px) {
+    .records-main {
+        padding: var(--space-m) var(--space-s) calc(32px + var(--space-m));
+    }
+}
 
 .records-title {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--core-blue);
     margin: 0;
+    margin-top: 110px; /* zkx新增上边距，放置 go back*/
+}
+@media (max-width: 768px) {
+    .records-title {
+        margin-top: 80px;
+    }
 }
 
 /* -----------------------------------------------------------
@@ -21,6 +37,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--space-l);
+}
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .stats-card {
@@ -55,12 +76,17 @@
 .stats-num   { font-size: 2.4rem; font-weight: 700; line-height: 1; }
 .stats-desc  { font-size: .95rem; color: var(--text-body); opacity: .8; }
 
-/* 2. 筛选蓝*/
+/* 2. 筛选蓝,添加响应式*/
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-l);
     align-items: center;
+}
+@media (max-width: 768px) {
+    .filter-bar {
+        gap: var(--space-m);
+    }
 }
 
 .filter-bar label {
@@ -162,7 +188,7 @@
 /* 让主容器始终占据视口的 80% 宽度，水平居中，并保留左右内边距 */
 .page-container,
 .records-main {
-    width: 90%;              /* 直接用百分比宽度 */
+    width: 80%;              /* 直接用百分比宽度 zkx改，之前是90% */
     max-width: none;         /* 取消固定像素上限（可选） */
     margin: 0 auto;          /* 水平居中 */
     padding: 0 var(--space-l); /* 两侧保留一点内边距 */

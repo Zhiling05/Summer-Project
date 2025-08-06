@@ -1,0 +1,21 @@
+/* 浅色主题 */
+:root {
+    --page-bg: #e5ecef;
+    --container-bg: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #768692;
+    --button-primary-bg: #005eb8;
+    --button-primary-text: #ffffff;
+}
+
+/* 深色主题 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --page-bg: #1e1e1e;
+        --container-bg: #2c2c2c;
+        --text-primary: #ffffff;
+        --text-secondary: #a0a0a0;
+        --button-primary-bg: #339cff;
+        --button-primary-text: #ffffff;
+    }
+}

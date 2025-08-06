@@ -1,0 +1,238 @@
+[33mcommit a70c721e01c4588cdb192f9d8d9e6da91e63d94f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mKexin_develop[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/Kexin_develop[m[33m, [m[1;32mdevelop[m[33m)[m
+Merge: 5f1ff1c 4f6beef
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Mon Aug 4 12:19:51 2025 +0100
+
+    Merge branch 'Songying_develop' into develop
+
+[33mcommit 4f6beef4f1df6c8d69e0c8de15fb4190cc298288[m[33m ([m[1;31morigin/Songying_develop[m[33m)[m
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Mon Aug 4 12:18:29 2025 +0100
+
+    fix(flow): correctly use questionnaire.questions array
+
+[33mcommit ee011d78e83fb08eb5301473fa244c46cdb19cd1[m
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Mon Aug 4 10:53:16 2025 +0100
+
+    fix: correct preview-report route with template literal
+
+[33mcommit 5f1ff1c6ec9805c952cec34725b9b279ca1092db[m[33m ([m[1;31morigin/Junjie_develop[m[33m)[m
+Merge: 0147583 d7c023e
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Sun Aug 3 16:48:33 2025 +0100
+
+    Merge pull request #118 from Zhiling05/Junjie_develop
+    
+    database_Junjie
+
+[33mcommit d7c023e805b2c812e47a0979ec14fe9ea54b7ee5[m
+Merge: 0f7b16a 0147583
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Sun Aug 3 16:47:17 2025 +0100
+
+    Merge branch 'develop' into Junjie_develop
+
+[33mcommit 0f7b16a6b4d82fd9b012be21f0dcbb4715475d4e[m
+Author: JJackyan <yanjunjie@fudan.edu.cn>
+Date:   Sun Aug 3 23:41:25 2025 +0800
+
+    database_Junjie
+
+[33mcommit 01475832fba0f7c363c8d713b5446ec7d2ad5426[m
+Merge: 381a144 96c49ee
+Author: Charlynlynlyn <1163240699@qq.com>
+Date:   Sun Aug 3 19:10:18 2025 +0800
+
+    Merge pull request #117 from Zhiling05/cailing_develop
+    
+    Cailing develop
+
+[33mcommit 96c49ee9c2f2269ad6910a1040767251100af900[m[33m ([m[1;31morigin/cailing_develop[m[33m)[m
+Author: Charlyn <1163240699@qq.com>
+Date:   Sun Aug 3 18:54:30 2025 +0800
+
+    Update test files AssessRouter、StartPage.test.tsx、WelcomePage.test.tsx、UserSelectionPage.test.tsx、SettingPage.test.tsx、ContactPage.test.tsx、AboutPage.test.tsx、Records、OptometristApp.test.tsx、Guide.test.tsx
+
+[33mcommit b54b244c85cf533298bdecab378c07fe6bb111c6[m
+Author: Charlyn <1163240699@qq.com>
+Date:   Sun Aug 3 18:50:25 2025 +0800
+
+    modify test files:1.1 AssessRouter.test.tsx,1.2 StartPage.test.tsx,1.3 WelcomePage.test.tsx,1.4 UserSelectionPage.test.tsx,1.5 SettingPage.test.tsx,1.7 ContactPage.test.tsx,1.8 AboutPage.test.tsx,1.10 Records,1.11 OptometristApp.test.tsx,1.12 Guide.test.tsx
+
+[33mcommit 381a144e1b44751350a5a7c231910d709822063f[m
+Merge: 5f94c36 cdc5bd4
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Fri Aug 1 11:22:08 2025 +0100
+
+    Merge Songying_develop into develop
+
+[33mcommit cdc5bd458d344fd9484c850cb4889ade0ed2f22b[m
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Fri Aug 1 11:19:46 2025 +0100
+
+    style: tweak report.css (hover card effect & placeholders)
+
+[33mcommit b0a26fdebd7ed1491b96f2460b3fb9709e456eb4[m
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Fri Aug 1 10:36:53 2025 +0100
+
+    feat: connect Records to backend & improve PreviewReport + add report.css
+
+[33mcommit 5f94c363e0cd84ad304581bde5e3b71efd3c55d9[m
+Author: Zhiling05 <liuzhilingwh@gmail.com>
+Date:   Fri Aug 1 15:40:18 2025 +0800
+
+    feature: unit tests for navigation logic and validation logic; update: validation.ts
+
+[33mcommit 2a7cc60af43b7f161d5a319985fe3734a7325e86[m
+Merge: a7b770f eca0687
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Sun Jul 27 18:39:33 2025 +0100
+
+    Merge branch 'Songying_develop' into develop
+
+[33mcommit eca068779ef40ed9ebdf4424ae1fbe9c625ac647[m
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Sun Jul 27 18:38:21 2025 +0100
+
+    Linked backend and Records interface, modified the Records Symptoms section.
+
+[33mcommit a7b770f2941d25a819a98ff992292b79f15f5890[m
+Merge: 974f84d c97754b
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Sat Jul 26 16:03:40 2025 +0100
+
+    Merge branch 'Songying_develop' into develop
+
+[33mcommit c97754b80ac95adbc1f4242a9c9543f515eeb77e[m
+Author: SONGYING LI <SongyingLi.uk@gmail.com>
+Date:   Sat Jul 26 16:02:22 2025 +0100
+
+    feat: wire up Records live data and PreviewReport routing
+
+[33mcommit 974f84d583e4b8ada6934f01bd9303a0d706c7c3[m[33m ([m[1;31morigin/SHUAOCT-patch[m[33m)[m
+Author: SHUAOCT <mustzack@outlook.com>
+Date:   Sat Jul 26 18:53:44 2025 +0800
+
+     change app.tsx; header both;sidebar both;aboutpag.tsx;contactpage.tsx;settingpage.tsx
+
+[33mcommit ffd890f87cd8c774dc3e6695a01048d2fe6929c3[m
+Author: SHUAOCT <mustzack@outlook.com>
+Date:   Sat Jul 26 16:25:02 2025 +0800
+
+    change sidebar.css and tsx;and question.css by ZSA
+
+[33mcommit 5cd736e73495c42e34688f721d0db30a719d6030[m
+Author: SHUAOCT <mustzack@outlook.com>
+Date:   Wed Jul 23 22:19:51 2025 +0800
+
+    Add files via upload
+
+[33mcommit feb2d9b892b9ac19dcc22361f9d21d93e517bd99[m
+Author: Zhiling05 <liuzhilingwh@gmail.com>
+Date:   Fri Jul 25 15:36:48 2025 +0100
+
+    file: planning of spring 2
+
+[33mcommit 90d0ab71add82de20dc5ff3bf0a95aba98932bab[m
+Merge: 4254e08 b9fd8c9
+Author: XR017ZKX <你的邮箱>
+Date:   Fri Jul 25 11:38:59 2025 +0100
+
+    Add sidebar
+
+[33mcommit 4254e084526954052c981c31cb308a8c197488db[m
+Author: XR017ZKX <你的邮箱>
+Date:   Fri Jul 25 11:04:32 2025 +0100
+
+     Changes for sidebar
+
+[33mcommit b9fd8c9cd92bcc60df26307a29a3dba568f23b39[m
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Fri Jul 25 00:48:49 2025 +0100
+
+    Rename Sprint_2_Retrospective.md to Sprint2_Retrospective.md
+
+[33mcommit b439fb6047febcf694f9c452688caeaab7c3e787[m
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Fri Jul 25 00:48:15 2025 +0100
+
+    Create Sprint_2_Retrospective.md
+    
+    Create Sprint_2_Retrospective_JunjieYan
+
+[33mcommit 6d0daf5e60d1ecfb8a4b7fc00a694851e1b968fc[m
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Fri Jul 25 00:45:50 2025 +0100
+
+    Delete project_management/sprint/sprint2/Sprint 2 Retrospective
+
+[33mcommit e9fa501fb979d5420cb24600dd8bf33c07ff575f[m
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Fri Jul 25 00:44:46 2025 +0100
+
+    Create Sprint 2 Retrospective
+
+[33mcommit d7a191194f402d153a5e19577c60d26a4ce6c552[m
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Fri Jul 25 00:42:47 2025 +0100
+
+    Delete project_management/sprint/Sprint2
+
+[33mcommit 3ad34f633eee9e4551bcc87e80f8b1c256d6ecd6[m
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Fri Jul 25 00:41:35 2025 +0100
+
+    Sprint2 Retrospective_JunjieYan
+
+[33mcommit 9d117a7f63967aacab479ee5b7a743c124e4a7bc[m
+Merge: 60a1ffb 117d223
+Author: Charlynlynlyn <1163240699@qq.com>
+Date:   Fri Jul 25 00:24:01 2025 +0100
+
+    Merge pull request #113 from Zhiling05/cailing_develop
+    
+    Cailing develop
+
+[33mcommit 60a1ffb40383bb2ea3ef93a172fe2449b7f16dda[m
+Author: Zhiling05 <liuzhilingwh@gmail.com>
+Date:   Thu Jul 24 12:38:46 2025 +0100
+
+    chore: remove some useless files and move some files to the right folder
+
+[33mcommit dbbb2a5efd74c20dce11b83e22f72fa20c29445d[m
+Author: Zhiling05 <liuzhilingwh@gmail.com>
+Date:   Thu Jul 24 12:31:24 2025 +0100
+
+    delete: Q1 - Q19 files in assess folder
+
+[33mcommit 117d2231b14136f13a2b56b80da1c0250d5383c9[m
+Author: Charlyn <1163240699@qq.com>
+Date:   Wed Jul 23 18:27:25 2025 +0100
+
+    modify welcomepage
+
+[33mcommit 0d4c0e5953f756dc24d93b61ea4d867a8b8ac519[m
+Merge: 52ffea4 0c8b0a3
+Author: Junjie <96880769+Junjie818@users.noreply.github.com>
+Date:   Wed Jul 23 18:05:30 2025 +0100
+
+    Merge pull request #112 from Zhiling05/Junjie_develop
+    
+    Architecture_3.0_JunjieYan
+
+[33mcommit 0c8b0a32841715e8a4d8ae537e823e4211c9ea51[m
+Author: JJackyan <yanjunjie@fudan.edu.cn>
+Date:   Wed Jul 23 18:03:32 2025 +0100
+
+    Architecture_3.0_JunjieYan
+
+[33mcommit d6357efed230708c7eedc89c902f6c30c46febd6[m
+Author: Charlyn <1163240699@qq.com>
+Date:   Wed Jul 23 17:56:38 2025 +0100
+
+    modify welcomepage
+
+[33mcommit e95d18904fa07bedec217ff946bd7257b00d7b08[m
+Author: JJackyan <yanjunji

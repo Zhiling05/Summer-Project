@@ -1,21 +1,28 @@
-// routes/export.js
 const express = require('express');
-const { buildDoc } = require('../utils/doc');
 const router = express.Router();
+const Assessment = require('../models/Assessment');
 
-// 复用 assessments.js 里的 Map
-const { assessments } = require('./assessments');  // ← 先在 assessments.js 导出它
-
-router.get('/:id/export', async (req, res, next) => {
+router.get('/assessments/:id/export', async (req, res) => {
   try {
-    const format = (req.query.format || 'txt').toLowerCase();
-    const assessment = assessments.get(req.params.id);   // 直接从 Map 取
-    if (!assessment) return res.status(404).send('Not found');
+    const record = await Assessment.findById(req.params.id);
+    if (!record) return res.status(404).send('Not found');
 
-    const { path, cleanup, mime, ext } = await buildDoc(assessment, format);
-    res.type(mime);
-    res.download(path, `assessment-${assessment.id}.${ext}`, cleanup);
-  } catch (e) { next(e); }
+    const filename = `report_${record._id}.txt`;
+    const content = `
+===== ASSESSMENT EXPORT =====
+
+Role       : ${record.role}
+Patient ID : ${record.patientId || 'N/A'}
+Content    : ${record.content}
+Created At : ${new Date(record.createdAt).toLocaleString()}
+`;
+
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.type('text/plain').send(content);
+  } catch (err) {
+    console.error('[export error]', err);
+    res.status(500).send('Export failed');
+  }
 });
 
 module.exports = router;

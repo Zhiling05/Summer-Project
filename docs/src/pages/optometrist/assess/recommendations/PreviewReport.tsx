@@ -18,16 +18,45 @@ const COLOR_MAP: Record<string, "red" | "orange" | "green"> = {
   NO_REFERRAL          : "green",
 };
 
+function generateLocalPreview(state: any) {
+  if (!state) return "本地预览数据缺失";
+  const answers = state.answers || [];
+  const recommendation = state.recommendation || "";
+  return (
+      "===== LOCAL PREVIEW =====\n\n" +
+      "Recommendation: " + recommendation + "\n\n" +
+      answers.map((a: any) => `${a.questionId}: ${a.answer}`).join("\n")
+  );
+}
+
 export default function PreviewReport() {
   const { id = "" } = useParams<{ id: string }>();
-  const { state }   = useLocation() as { state?: { text?: string } };
+  // const { state }   = useLocation() as { state?: { text?: string } };
+  // yj添加：修改state类型定义，之前的text，string太狭窄了
+  const { state } = useLocation() as {
+    state?: { text?: string; answers?: any[]; recommendation?: string }
+  };
+
 
   const [raw,     setRaw]     = useState(state?.text ?? "");
   const [recCode, setRecCode] = useState("");
   const [err,     setErr]     = useState<string | null>(null);
 
+
+
   /* 拉数据（文本 + 详情） */
   useEffect(() => {
+
+    //yj添加：解决LOCAL报错问题
+    // 1. 如果是 LOCAL，本地渲染，无需请求后端
+    if (id === "LOCAL") {
+      // 这里你可以自定义本地预览文本
+      setRaw(generateLocalPreview(state));
+      setRecCode(state?.recommendation ?? "");
+      return;
+    }
+
+
     if (!id) return;
     (async () => {
       try {

@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import '../../../styles/card.css';
+import BackButton from '../../../components/BackButton';//zkx
+import SkipGuideButton from '../../../components/SkipGuideButton';//zkx
+
 
 export default function GuideHome() {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
@@ -64,6 +67,7 @@ export default function GuideHome() {
   return (
     <>
       <Header title="Guide" />
+      <BackButton />
       
       <div style={{ 
         minHeight: 'calc(100vh - 80px - 64px)', // 减去header(80px)和底部导航栏(64px)
@@ -123,6 +127,7 @@ export default function GuideHome() {
       </div>
 
       <BottomNav />
+      <SkipGuideButton />
     </>
   );
 }

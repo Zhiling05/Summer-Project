@@ -1,5 +1,5 @@
 // docs/src/pages/optometrist/assess/recommendations/DynamicRecommendation.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import {
   fetchReportText,
@@ -77,15 +77,25 @@ interface Recommendation {
 /* =============================================================== */
 
 const DynamicRecommendation: React.FC = () => {
+
+  useEffect(() => {
+    // 标记完成，之后不再弹
+    sessionStorage.setItem('assessmentComplete', 'true');
+    sessionStorage.removeItem('assessStarted');
+    sessionStorage.removeItem('lastQuestionId');
+  }, []);
+
   /* —— 路由参数 —— */
-  const { resultId } = useParams<{ resultId: string }>();
+  // const { resultId } = useParams<{ resultId: string }>();
+  const { resultId, assessmentId: paramAssessmentId } = useParams<{ resultId: string; assessmentId?: string }>(); //yj添加：调用assessmentID，修复report的bug
   const rec = (recommendationsData as Recommendation[]).find(
     (r) => r.id === resultId
   );
 
   /* —— assessmentId 来自 DynamicQuestion 跳转时的 state —— */
   const { state }   = useLocation() as { state?: { assessmentId?: string } };
-  const assessId    = state?.assessmentId ?? "";
+  // const assessId    = state?.assessmentId ?? "";
+  const assessId  = paramAssessmentId ?? state?.assessmentId ?? ""; //yj添加
 
   /* —— 缓存纯文本报告 —— */
   const [report,   setReport]   = useState("");

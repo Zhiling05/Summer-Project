@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import AboutPage from '../../pages/sidebar/AboutPage';
+import AboutPage from '../../pages/sidebar/AboutPage.tsx';
 
 // Mock Header 组件
 jest.mock('../../components/Header', () => ({ title }: { title: string }) => (
