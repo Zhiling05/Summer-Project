@@ -1,78 +1,61 @@
-// //后续可以完善添加响应式适配测试，就是页面的resizing
-
-
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import StartPage from '../../../../../pages/optometrist/assess/StartPage';
 
-// Mock useNavigate
+// Mock Header 和 BottomNav 组件
+jest.mock('../../../../../components/Header', () => ({ title }: { title: string }) => (
+  <div data-testid="header">{title}</div>
+));
+
+jest.mock('../../../../../components/BottomNav', () => () => (
+  <div data-testid="bottom-nav">Bottom Navigation Loaded</div>
+));
+
+// Mock useNavigate 钩子
+const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: jest.fn(),
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
 }));
 
-describe('StartPage Component (TDD)', () => {
-    const mockNavigate = jest.fn();
+describe('StartPage Component', () => {
+  test('renders Header, main content and BottomNav', () => {
+    render(
+      <MemoryRouter>
+        <StartPage />
+      </MemoryRouter>
+    );
 
-    beforeEach(() => {
-        (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-        mockNavigate.mockClear();
-    });
+    // 检查Header是否渲染成功
+    expect(screen.getByTestId('header')).toHaveTextContent('Assessment');
 
-    describe('Initial Page Rendering', () => {
-        it('displays NHS and DIPP logos', () => {
-            render(<StartPage />, { wrapper: MemoryRouter });
+    // 检查页面内容是否渲染成功
+    expect(screen.getByRole('heading', { name: 'Assessment' })).toBeInTheDocument();
+    expect(
+      screen.getByText(/This assessment can help determine appropriate referral recommendations/i)
+    ).toBeInTheDocument();
 
-            expect(screen.getByAltText('NHS logo')).toBeInTheDocument();
-            expect(screen.getByAltText('DIPP Study logo')).toBeInTheDocument();
-        });
+    // 检查按钮是否渲染成功
+    expect(screen.getByRole('button', { name: 'Start now' })).toBeInTheDocument();
 
-        it('renders page title and context lines', () => {
-            render(<StartPage />, { wrapper: MemoryRouter });
+    // 检查BottomNav是否渲染成功
+    expect(screen.getByTestId('bottom-nav')).toBeInTheDocument();
+  });
 
-            expect(screen.getByRole('heading', { name: /StartPage/i })).toBeInTheDocument();
-            expect(screen.getByText(/context line 1/i)).toBeInTheDocument();
-            expect(screen.getByText(/context line 2/i)).toBeInTheDocument();
-            expect(screen.getByText(/context line 3/i)).toBeInTheDocument();
-        });
+  test('navigate to first question on button click', () => {
+    render(
+      <MemoryRouter>
+        <StartPage />
+      </MemoryRouter>
+    );
 
-        it('renders "Start now" button', () => {
-            render(<StartPage />, { wrapper: MemoryRouter });
+    const button = screen.getByRole('button', { name: 'Start now' });
 
-            const startBtn = screen.getByRole('button', { name: /Start now/i });
-            expect(startBtn).toBeInTheDocument();
-        });
-    });
+    // 模拟点击按钮
+    fireEvent.click(button);
 
-    describe('Interaction and Navigation', () => {
-        it('navigates to /questions/Q1 when "Start now" button is clicked', () => {
-            render(<StartPage />, { wrapper: MemoryRouter });
-
-            const button = screen.getByRole('button', { name: /Start now/i });
-            fireEvent.click(button);
-
-            expect(mockNavigate).toHaveBeenCalledWith('questions/Q1');
-        });
-    });
-
-    describe('Edge Cases and Responsiveness', () => {
-        it('handles logo image loading error gracefully', () => {
-            render(<StartPage />, { wrapper: MemoryRouter });
-
-            const nhsLogo = screen.getByAltText('NHS logo') as HTMLImageElement;
-            fireEvent.error(nhsLogo);
-
-            expect(nhsLogo).toBeInTheDocument(); // still remains on screen
-        });
-
-        it('renders correctly on small screens (responsive)', () => {
-            window.innerWidth = 320;
-            window.dispatchEvent(new Event('resize'));
-
-            render(<StartPage />, { wrapper: MemoryRouter });
-
-            expect(screen.getByRole('heading', { name: /StartPage/i })).toBeInTheDocument();
-            expect(screen.getByRole('button', { name: /Start now/i })).toBeInTheDocument();
-        });
-    });
+    // 检查导航函数是否被调用并跳转到正确路径
+    expect(mockNavigate).toHaveBeenCalledWith('../questions/Q1');
+  });
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/card.css';
+import Sidebar from '../components/SideBar'; //zkx：sidebar侧栏
 
 export default function UserSelectionPage() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function UserSelectionPage() {
     {
       id: 'optometrist',
       title: 'I am an Optometrist',
-      route: '/optometrist'
+      route: '/optometrist/assess/start-page'
     },
     {
       id: 'patient',
@@ -46,6 +47,7 @@ export default function UserSelectionPage() {
   return (
     <>
       <Header title="Select Role" />
+      <Sidebar /> {/* 使用 Sidebar 组件zkx */}
       
       <div style={{ 
         minHeight: 'calc(100vh - 80px)',
@@ -89,10 +91,10 @@ export default function UserSelectionPage() {
                   className="base-card"
                   onClick={() => navigate(role.route)}
                   style={{
-                    padding: '1rem 2rem', // 增加内边距，让卡片看起来更大
-                    width: '80vw', // 统一设为80%屏幕宽度
-                    maxWidth: '50rem', // 800px ÷ 16 = 50rem
-                    minWidth: '20rem' // 320px ÷ 16 = 20rem
+                    padding: '1rem 2rem', 
+                    width: '80vw', 
+                    maxWidth: '50rem', 
+                    minWidth: '20rem' 
                   }}
                 >
                   <div className="card-content">

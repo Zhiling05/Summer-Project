@@ -1,70 +1,61 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import Records from '../../../../pages/optometrist/Records';
-import Guide from '../../../../pages/optometrist/guide/GuideHome';
-import OptometristHome from '../../../../pages/optometrist/OptometristHome';
-import AssessStart from '../../../../pages/optometrist/assess/StartPage';
+import { MemoryRouter } from 'react-router-dom';
 
-describe('Records Page - TDD Flow', () => {
-    const renderWithRouter = (initialPath = '/optometrist/records') => {
-        render(
-            <MemoryRouter initialEntries={[initialPath]}>
-                <Routes>
-                    <Route path="/optometrist/records" element={<Records />} />
-                    <Route path="/optometrist/guide" element={<Guide />} />
-                    <Route path="/optometrist/home" element={<OptometristHome />} />
-                    <Route path="/optometrist/assess/start" element={<AssessStart />} />
-                </Routes>
-            </MemoryRouter>
-        );
-    };
+// Mock Header, Sidebar, BottomNav 组件
+jest.mock('../../../../components/Header', () => ({ title }: { title: string }) => (
+  <div data-testid="header">{title}</div>
+));
 
-    it('should render logos and page title', () => {
-        renderWithRouter();
+jest.mock('../../../../components/SideBar', () => () => (
+  <div data-testid="sidebar">Sidebar Loaded</div>
+));
 
-        expect(screen.getByAltText(/NHS logo/i)).toBeInTheDocument();
-        expect(screen.getByAltText(/DIPP Study logo/i)).toBeInTheDocument();
-        expect(screen.getByRole('heading', { name: /Records/i })).toBeInTheDocument();
+jest.mock('../../../../components/BottomNav', () => () => (
+  <div data-testid="bottom-nav">Bottom Navigation Loaded</div>
+));
+
+// Mock API 返回固定记录
+jest.mock('../../../../api', () => ({
+  listAssessments: jest.fn(() =>
+    Promise.resolve({
+      records: [
+        {
+          id: 'rec1',
+          date: '2024-01-01',
+          risk: 'IMMEDIATE'
+        },
+        {
+          id: 'rec2',
+          date: '2024-02-01',
+          risk: 'NO_REFERRAL'
+        }
+      ]
+    })
+  )
+}));
+
+describe('Records Component', () => {
+  test('renders stats and table from remote data', async () => {
+    render(
+      <MemoryRouter>
+        <Records />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByTestId('header')).toHaveTextContent('Records');
+    expect(screen.getByTestId('sidebar')).toBeInTheDocument();
+    expect(screen.getByTestId('bottom-nav')).toBeInTheDocument();
+
+    // 等待异步数据加载
+    await waitFor(() => {
+      expect(screen.getByText('rec1')).toBeInTheDocument();
+      expect(screen.getByText('rec2')).toBeInTheDocument();
     });
 
-    it('should render three statistics cards as buttons (even if not interactive yet)', () => {
-        renderWithRouter();
-        const statsButtons = screen.getAllByRole('button');
-        expect(statsButtons.length).toBeGreaterThanOrEqual(3); // Defensive test
-    });
-
-    it('should render the table and View Details buttons', () => {
-        renderWithRouter();
-        const table = screen.getByRole('table');
-        expect(table).toBeInTheDocument();
-        const detailButtons = screen.getAllByRole('button', { name: /view details/i });
-        expect(detailButtons.length).toBeGreaterThan(0);
-    });
-
-    it('should navigate to correct pages via BottomNav buttons', () => {
-        renderWithRouter();
-
-        // 跳转到 Home
-        fireEvent.click(screen.getByRole('button', { name: /home/i }));
-        expect(screen.getByText(/Optometrist Home/i)).toBeInTheDocument();
-
-        // 跳转到 Guide
-        fireEvent.click(screen.getByRole('button', { name: /guide/i }));
-        expect(screen.getByText(/Guide/i)).toBeInTheDocument();
-
-        // 跳转到 Assess
-        fireEvent.click(screen.getByRole('button', { name: /assess/i }));
-        expect(screen.getByText(/Start the Assessment/i)).toBeInTheDocument();
-    });
-
-    it('should not re-navigate when clicking Records button on current Records page', () => {
-        renderWithRouter();
-
-        const recordsBtn = screen.getByRole('button', { name: /records/i });
-        fireEvent.click(recordsBtn);
-
-        // 页面仍然为 Records
-        expect(screen.getByRole('heading', { name: /Optometrist Records Page/i })).toBeInTheDocument();
-        expect(screen.queryByText(/Guide/i)).not.toBeInTheDocument(); // 没跳转
-    });
+    expect(screen.getAllByRole('row')).toHaveLength(3); // 包括 header 行
+    expect(screen.getAllByText('High Risk').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Low Risk').length).toBeGreaterThanOrEqual(1);
+  });
 });

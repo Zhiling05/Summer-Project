@@ -14,7 +14,8 @@ import "../../../../styles/recommendation.css";
 import NHSLogo  from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
-import BackButton from "../../../../components/BackButton";
+//import BackButton from "../../../../components/BackButton";
+import Header from "../../../../components/Header"; // ycl2
 
 import BottomNav  from "../../../../components/BottomNav";
 
@@ -114,7 +115,7 @@ const DynamicRecommendation: React.FC = () => {
     try {
       const txt = await ensureReport();
       navigate(
-        "/optometrist/assess/recommendations/report-preview",
+        `/optometrist/assess/recommendations/report-preview/${assessId}`,
         { state: { text: txt } }
       );
     } catch (e) {
@@ -152,13 +153,7 @@ const DynamicRecommendation: React.FC = () => {
   if (!rec) {
     return (
       <div className="recommendation-container">
-        <header className="nhs-header">
-          <div className="nhs-header__inner">
-            <img src={NHSLogo}  className="logo" alt="NHS"  />
-            <img src={DIPPLogo} className="logo" alt="DIPP" />
-            <span className="nhs-header__service">DIPP Assessment</span>
-          </div>
-        </header>
+        <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
 
         <main className="recommendation-main">
           <div className="recommendation-card">
@@ -184,14 +179,8 @@ const DynamicRecommendation: React.FC = () => {
       style={{ backgroundColor: rec.backgroundColor }}
     >
       {/* 顶栏 */}
-      <BackButton />
-      <header className="nhs-header">
-        <div className="nhs-header__inner">
-          <img src={NHSLogo}  className="logo" alt="NHS"  />
-          <img src={DIPPLogo} className="logo" alt="DIPP" />
-          <span className="nhs-header__service">DIPP Assessment</span>
-        </div>
-      </header>
+      {/* <BackButton /> // ycl 移除多余的返回按钮 */}
+      <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
 
       {/* 主体卡片 */}
       <main className="recommendation-main">

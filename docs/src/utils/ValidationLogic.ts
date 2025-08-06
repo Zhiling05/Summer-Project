@@ -7,6 +7,11 @@ export function validateSingleSelection(
     selections: string[]
   ): string[] {
     const errors: string[] = [];
+
+    // lzl：添加防御性检查，避免 null/undefined 引发 .length 报错
+    if (!Array.isArray(selections)) {
+      selections = [];
+    }
   
     if (!selections || selections.length === 0) {
       //errors.push('必须选择一个选项。');
@@ -31,6 +36,11 @@ export function validateSingleSelection(
     max?: number
   ): string[] {
     const errors: string[] = [];
+
+    // lzl: 添加防御性检查，确保 selections 是数组，避免 includes 报错
+    if (!Array.isArray(selections)) {
+      selections = [];
+    }
   
     // 互斥校验：如果选择了 “None of the above”，则不能再选其他
     const noneLabel = 'None of the above';
@@ -59,7 +69,15 @@ export function validateSingleSelection(
     selections: string[],
     optionsCount?: number
   ): string[] {
-    const t = type.toLowerCase();
+
+    // lzl: 添加防御性检查， 避免 type 为 null 时 .toLowerCase() 报错
+    const t = (type || '').toLowerCase();
+
+    // lzl: 添加防御性检查，确保 selections 为数组，兼容边界输入
+    if (!Array.isArray(selections)) {
+      selections = [];
+    }
+
     if (t.startsWith('single')) {
       return validateSingleSelection(selections);
     }
