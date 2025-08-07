@@ -1,81 +1,95 @@
-/* ===== 页面主容器 ===== */
+/* ===== 主容器 ===== */
 .report-main{
-  flex:1;
-  background:var(--page-grey);
-  padding:var(--space-xl) var(--space-l) calc(64px + var(--space-xl));
-  display:flex;
-  flex-direction:column;
-  gap:var(--space-xl);
+  flex: 1 0 auto;
+
+  width: 100%;
+  background: var(--page-grey);
+  padding: var(--space-xl) var(--space-l) calc(64px + var(--space-xl));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  align-items: stretch;
 }
 
-/* ========== 1. 顶部大卡 ========== */
+/* ---------- 顶部大卡 ---------- */
 .report-card{
-  border-radius:24px;
-  padding:var(--space-xl) var(--space-xl) var(--space-l);
-  box-shadow:var(--shadow-card);
-  color:var(--text-inverse);
-  display:flex;
-  flex-direction:column;
-  gap:var(--space-l);
+  border-radius: 24px;
+  padding: var(--space-xl) var(--space-xl) var(--space-l);
+  box-shadow: var(--shadow-card);
+  color: var(--text-inverse);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
 }
 .report-title{margin:0;font-size:1.8rem;font-weight:700;line-height:1.3;}
 .report-meta{list-style:none;margin:0;padding:0;font-size:.95rem;opacity:.9;display:flex;flex-direction:column;gap:4px;}
 .report-btn-group{display:flex;gap:var(--space-m);margin-top:var(--space-s);}
 .report-btn-group button{
-  flex:1;
-  background:rgba(255,255,255,.15);
-  border:none;
-  color:var(--text-inverse);
-  padding:10px 0;
-  font-size:.9rem;
-  font-weight:600;
-  border-radius:var(--radius-s);
-  cursor:pointer;
-  transition:background .15s;
+  flex:1;background:rgba(255,255,255,.15);border:none;color:var(--text-inverse);
+  padding:10px 0;font-size:.9rem;font-weight:600;border-radius:var(--radius-s);cursor:pointer;
 }
 .report-btn-group button:hover{background:rgba(255,255,255,.25);}
 
-/* 渐变颜色 */
-.report-card.red   {background:linear-gradient(135deg,rgba(208,56,56,1) 0%,rgba(208,56,56,.85) 100%);}
-.report-card.orange{background:linear-gradient(135deg,rgba(230,126,0,1) 0%,rgba(230,126,0,.85) 100%);}
-.report-card.green {background:linear-gradient(135deg,rgba(0,127,59,1) 0%,rgba(0,127,59,.85) 100%);}
+/* 渐变色 */
+.report-card.red   {background:linear-gradient(135deg,#d03838 0%,rgba(208,56,56,.85) 100%);}
+.report-card.orange{background:linear-gradient(135deg,#e67e00 0%,rgba(230,126,0,.85) 100%);}
+.report-card.green {background:linear-gradient(135deg,#007f3b 0%,rgba(0,127,59,.85) 100%);}
 
-/* ========== 2. 折叠卡片 ========== */
+/* ---------- 折叠卡 ---------- */
 .collapse-wrapper{display:flex;flex-direction:column;gap:var(--space-l);}
 .collapse-card{
-  background:var(--text-inverse);
-  border-radius:16px;
-  box-shadow:var(--shadow-card);
-  overflow:hidden;
-  transition:box-shadow .15s;
+  background:var(--text-inverse);border-radius:16px;box-shadow:var(--shadow-card);
+  overflow:hidden;transition:box-shadow .15s;
 }
 .collapse-card.open{box-shadow:0 6px 16px rgba(0,0,0,.14);}
-
-/* header */
 .collapse-card-header{
-  padding:var(--space-m) var(--space-l);
-  font-size:1.05rem;
-  font-weight:600;
-  color:var(--text-body);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  cursor:pointer;
+  padding:var(--space-m) var(--space-l);font-size:1.05rem;font-weight:600;
+  display:flex;justify-content:space-between;align-items:center;cursor:pointer;
 }
 .collapse-card-header:hover{background:rgba(0,0,0,.03);}
-.collapse-icon{font-size:1.4rem;line-height:1;width:24px;text-align:center;user-select:none;}
-
-/* body */
-.collapse-card-body{
-  padding:var(--space-m) var(--space-l) var(--space-l);
-  font-size:.95rem;
-  color:var(--text-body);
-}
+.collapse-icon{font-size:1.4rem;width:24px;text-align:center;}
+.collapse-card-body{padding:var(--space-m) var(--space-l) var(--space-l);font-size:.95rem;}
 .info-list{margin:0;padding-left:1.1em;}
 
-/* ========== 响应式 ========== */
+/* ---------- 响应式：≤640px（手机） ---------- */
 @media (max-width:640px){
-  .report-main{padding:var(--space-l) var(--space-m) calc(64px + var(--space-l));}
+  .report-main{
+    padding:var(--space-l) var(--space-m) calc(64px + var(--space-l));
+  }
   .report-title{font-size:1.5rem;}
   .collapse-card-header{font-size:1rem;}
+
+  /* 手机端卡片横向撑满 */
+  .report-main > .report-card,
+  .report-main > .collapse-wrapper > .collapse-card{
+    width:100% !important;
+    max-width:none !important;
+    margin-inline:0 !important;
+    align-self:stretch !important;
+  }
+}
+
+/* ---------- 透明占位文字：防止绿/橙标题被收缩 ---------- */
+.report-card.green  .report-title::after,
+.report-card.orange .report-title::after{
+  content:"Send patient to Emergency Department immediately";
+  opacity:0;
+  pointer-events:none;
+}
+
+/* ---------- ≥641px（平板 / 桌面）统一宽度 ---------- */
+@media (min-width:641px){
+  .report-main > .report-card,
+  .report-main > .collapse-wrapper > .collapse-card{
+    width:auto !important;          /* 覆盖手机端 100% 规则 */
+    max-width:960px !important;     /* 改这里可调整体宽度 */
+    margin-inline:auto;             /* 居中 */
+  }
+
+  /* 折叠卡：直接撑满同一行（最多 960px），视觉一致 */
+  .report-main > .collapse-wrapper > .collapse-card{
+    width:100% !important;          /* ← 新增这一行 */
+    max-width:960px !important;
+    margin-inline:auto;
+  }
 }

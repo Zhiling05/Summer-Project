@@ -1,10 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-import Header    from "../../../../components/Header";
-import BottomNav from "../../../../components/BottomNav";
-import Sidebar   from "../../../../components/SideBar";
-
+import Header     from "../../../../components/Header";
+import BottomNav  from "../../../../components/BottomNav";
+import Sidebar    from "../../../../components/SideBar";
 import "../../../../styles/preview-report.css";
 
 /* ---------- 风险配色 ---------- */
@@ -24,15 +23,15 @@ const RISK_TO_LEVEL: Record<string, Level> = {
 };
 const RECOMMEND_TEXT: Record<string, string> = {
   EMERGENCY_DEPARTMENT: "Send patient to Emergency Department immediately",
-  IMMEDIATE:             "Immediate referral to Eye Emergency On-Call",
-  URGENT_TO_OPH:         "Urgent referral to Ophthalmology",
-  URGENT_TO_GP_OR_NEUR:  "Urgent referral to GP or Neurology",
-  TO_GP:                 "Refer to General Practitioner",
-  NO_REFERRAL:           "No referral required",
+  IMMEDIATE:            "Immediate referral to Eye Emergency On-Call",
+  URGENT_TO_OPH:        "Urgent referral to Ophthalmology",
+  URGENT_TO_GP_OR_NEUR: "Urgent referral to GP or Neurology",
+  TO_GP:                "Refer to General Practitioner",
+  NO_REFERRAL:          "No referral required",
   OTHER_EYE_CONDITIONS_GUIDANCE: "Referral to other department",
 };
 
-/* ---------- 折叠卡组件 ---------- */
+/* ---------- 折叠卡 ---------- */
 function CollapsibleCard({
   title,
   defaultOpen = false,
@@ -54,12 +53,13 @@ function CollapsibleCard({
   );
 }
 
-/* ---------- 主页面 ---------- */
+/* ---------- 主组件 ---------- */
 export default function PreviewReport() {
   const { id } = useParams();
   const [ass, setAss] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
+  /* 获取详情 */
   useEffect(() => {
     if (!id) return;
     fetch(`/api/assessments/${id}`)
@@ -72,18 +72,19 @@ export default function PreviewReport() {
   if (loading) return <p style={{ padding: "2rem" }}>Loading…</p>;
   if (!ass)    return <p style={{ padding: "2rem" }}>Not found.</p>;
 
-  const level: Level = RISK_TO_LEVEL[ass.risk] || "low";
-  const colourCss    = LEVEL_UI[level].css;
-  const recText      = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation;
+  const level: Level  = RISK_TO_LEVEL[ass.risk] || "low";
+  const colourCss     = LEVEL_UI[level].css;
+  const recText       = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation;
 
-  /* —— 复制 / 下载 / 邮件 —— */
+  /* —— 交互按钮 —— */
   const copyReport = async () => {
     const txt = await fetch(`/api/assessments/${id}/report`).then(r => r.text());
     await navigator.clipboard.writeText(txt);
     alert("Copied!");
   };
-  const download = () => window.open(`/api/assessments/${id}/export?format=txt`, "_blank");
-  const email    = () => alert("TODO: email API");
+  const download = () =>
+    window.open(`/api/assessments/${id}/export?format=txt`, "_blank");
+  const email = () => alert("TODO: email API");
 
   return (
     <>
@@ -109,7 +110,7 @@ export default function PreviewReport() {
             </div>
           </article>
 
-          {/* ——— 单一 Full Report 折叠卡 ——— */}
+          {/* ——— 单一 Full-Report 折叠卡 ——— */}
           <section className="collapse-wrapper">
             <CollapsibleCard title="Full Report" defaultOpen>
               {/* Basic */}
