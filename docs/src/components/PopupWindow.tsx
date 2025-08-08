@@ -31,4 +31,8 @@ export default function ConfirmModal({
             </div>
         </div>
     );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/Jing-develop

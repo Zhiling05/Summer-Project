@@ -25,45 +25,6 @@ export default function AssessRouter(): JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // useEffect(() => {
-    //     const path = location.pathname;
-    //
-    //     // 仅在问卷流程里考虑弹窗
-    //     const inFlow =
-    //         path.endsWith('/assess/start-page') ||
-    //         path.includes('/assess/questions/');
-    //
-    //     if (!inFlow) {
-    //         setShowModal(false);
-    //         return;
-    //     }
-    //
-    //     // 1) 刚点击了 Continue/Restart：本次不弹，并清除一次性标记
-    //     if (sessionStorage.getItem('suppressAssessModalOnce') === '1') {
-    //         sessionStorage.removeItem('suppressAssessModalOnce');
-    //         setShowModal(false);
-    //         return;
-    //     }
-    //
-    //     // 2) 已完成一次评估：不弹
-    //     if (sessionStorage.getItem('assessmentComplete') === 'true') {
-    //         setShowModal(false);
-    //         return;
-    //     }
-    //
-    //     // 3) 仅当真的有“未完成进度”时才弹
-    //     const started = sessionStorage.getItem('assessStarted') === 'true';
-    //     const lastQ = sessionStorage.getItem('lastQuestionId');
-    //     const progressed =
-    //         !!lastQ ||
-    //         (typeof hasProgress === 'function' && !!hasProgress());
-    //
-    //     if (started && progressed) {
-    //         setShowModal(true);
-    //     } else {
-    //         setShowModal(false);
-    //     }
-    // }, [location.pathname]);
     const navType = useNavigationType();
 
     useEffect(() => {

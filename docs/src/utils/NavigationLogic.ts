@@ -85,7 +85,7 @@ function getNextByCrossQuestionRules(
     let passed = true;
 
     for (const [key, expected] of Object.entries(rule)) {
-      //if (key === "next") continue;
+      // if (key === "next") continue;
       // 跳过“下一个目标”、运算符和值字段
       if (key === "next" || key === "operator" || key === "value") continue;
 
@@ -127,6 +127,7 @@ function getNextByCrossQuestionRules(
     if (passed) return rule.next;
   }
   
+
 
   return defaultNext;
 }
