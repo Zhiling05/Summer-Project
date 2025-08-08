@@ -22,7 +22,7 @@
     font-weight: 700;
     color: var(--core-blue);
     margin: 0;
-    margin-top: 110px; /* zkx新增上边距，放置 go back*/
+    margin-top: 150px; /* zkx新增上边距，放置 go back*/
 }
 @media (max-width: 768px) {
     .records-title {
