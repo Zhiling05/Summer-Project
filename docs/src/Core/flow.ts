@@ -80,9 +80,5 @@ export function getFirstUnanswered(): string | undefined {
     if (!answers[q.id]) return q.id;
   }
   return undefined;
-<<<<<<< HEAD
-}
-=======
 }
 
->>>>>>> origin/Jing-develop
