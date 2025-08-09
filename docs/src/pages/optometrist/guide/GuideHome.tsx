@@ -64,43 +64,18 @@ export default function GuideHome() {
   return (
     <>
       <Header title="Guide" />
-      
-      <div style={{ 
-        minHeight: 'calc(100vh - 80px - 64px)', // 减去header(80px)和底部导航栏(64px)
-        display: 'flex', 
-        flexDirection: 'column'
-      }}>
-        <div style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '1rem'
-        }}>
-          <div style={{ 
-            maxWidth: '960px', 
-            margin: '0 auto', 
-            padding: '0 1.5rem',
-            width: '100%'
-          }}>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '2rem',
-              width: '100%',
-              alignItems: 'center'
-            }}>
+
+      <div className="guide-main-container">
+        <div className="guide-flex-content">
+          <div className="guide-wrapper">
+            <div className="guide-card-stack">
               {cards.map((card) => (
-                <div
-                  key={card.id}
-                  className="base-card"
-                  onClick={() => handleCardClick(card.id)}
-                  style={{
-                    padding: '1.5rem 2rem',
-                    width: '80vw',
-                    maxWidth: '50rem',
-                    minWidth: '20rem'
-                  }}
+                  <div
+                      key={card.id}
+                      className="base-card guide-card"
+                      onClick={() => handleCardClick(card.id)}
+
+
                 >
                   <div className="card-content">
                     <h3 className="card-title card-title--with-description">

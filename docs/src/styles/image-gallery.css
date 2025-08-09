@@ -1,0 +1,78 @@
+.gallery-container {
+    background: var(--bg-color);
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: calc(100vh - 120px);
+    box-sizing: border-box;
+    padding: 40px 24px 80px 24px;
+}
+
+.gallery-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 8px;
+}
+
+.gallery-heading {
+    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.filter-input-wrapper {
+    position: relative;
+}
+
+.filter-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--icon-color);
+    z-index: 1;
+}
+
+.filter-input {
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background: var(--input-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
+    min-width: 240px;
+}
+
+.filter-select {
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background: var(--input-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.gallery-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted-color);
+}
