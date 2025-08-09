@@ -1,7 +1,7 @@
 /* optAppTutorial.css */
 
 .tutorial-container {
-    background: #f0f4f5;
+    background: var(--page-grey);
     width: 100vw;
     margin-left: calc(-50vw + 50%);
     min-height: calc(100vh - 120px);
@@ -16,7 +16,7 @@
 }
 
 .tutorial-h1 {
-    color: #212b32;
+    color:var(--text-body);
     font-size: 2rem;
     font-weight: 700;
     margin: 0 0 16px 0;
@@ -24,7 +24,7 @@
 
 .tutorial-tabs {
     padding: 24px 0 16px 0;
-    border-bottom: 2px solid #E8EDEE;
+    border-bottom: 2px solid var(--border-grey);
     margin-bottom: 8px;
     display: flex;
     gap: 32px;
@@ -38,7 +38,7 @@
     border-radius: 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #768692;
+    color: var(--text-muted);
     cursor: pointer;
     transition: all 0.2s ease;
     text-transform: capitalize;
@@ -48,13 +48,13 @@
 }
 
 .tutorial-tab:hover {
-    border-bottom: 2px solid #7C2855;
-    color: #7C2855;
+    border-bottom: 2px solid var(--text-hover);
+    color: var(--text-hover);
 }
 
 .tutorial-tab.active {
-    border-bottom: 2px solid #005eb8;
-    color: #005eb8;
+    border-bottom: 2px solid var(--core-blue);
+    color: var(--core-blue);
 }
 
 .tutorial-content {
@@ -67,13 +67,13 @@
 .tutorial-h2 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #212b32;
+    color: var(--text-guide);
     margin: 0 0 8px 0;
 }
 
 .tutorial-text {
     font-size: 1rem;
-    color: #212b32;
+    color: var(--text-body);
     line-height: 1.6;
 }
 
@@ -87,7 +87,7 @@
     align-items: center;
     margin-top: 8px;
     padding-top: 16px;
-    border-top: 2px solid #E8EDEE;
+    border-top: 2px solid var(--border-grey);
     gap: 16px;
 }
 
@@ -110,20 +110,31 @@
 }
 
 .tutorial-button--prev {
-    background: #768692;
-    border: 2px solid #768692;
+    background: var(--border-grey);
+    border: 2px solid var(--border-grey);
 }
 
 .tutorial-button--prev:hover:enabled {
-    background: #425563;
-    border-color: #425563;
+    background: var(--text-muted);
+    border-color: var(--text-muted);
 }
 
 .tutorial-button--next {
-    background: #005eb8;
-    border: 2px solid #003087;
+    background: var(--core-blue);
+    border: 2px solid var(--core-blue);
 }
 
 .tutorial-button--next:hover:enabled {
     background: #003087;
 }
+
+/* 补齐概述里小标题的视觉（等同原内联） */
+.tutorial-text h3{
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-guide);
+    margin: 24px 0 12px 0;
+}
+
+
+.tutorial-button:disabled { opacity: .5; cursor:not-allowed; }

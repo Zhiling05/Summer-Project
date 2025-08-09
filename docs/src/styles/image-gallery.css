@@ -1,78 +1,99 @@
 .gallery-container {
-    background: var(--bg-color);
+    background: var(--page-grey);
     width: 100vw;
     margin-left: calc(-50vw + 50%);
     min-height: calc(100vh - 120px);
     box-sizing: border-box;
-    padding: 40px 24px 80px 24px;
+    padding: var(--space-xl) var(--space-l) calc(64px + var(--space-xl));
 }
 
 .gallery-wrapper {
-    max-width: 960px;
+    max-width: var(--container-max);
     margin: 0 auto;
-    padding: 0 8px;
+    padding: 0 var(--space-s);
+    box-sizing: border-box;
 }
 
 .gallery-heading {
-    color: var(--text-color);
+    color: var(--text-body);
     font-size: 2rem;
     font-weight: 700;
-    margin: 0 0 24px 0;
-}
-
-.filter-bar {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-.filter-input-wrapper {
-    position: relative;
-}
-
-.filter-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--icon-color);
-    z-index: 1;
-}
-
-.filter-input {
-    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-    border: 2px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 0.9rem;
-    background: var(--input-bg);
-    color: var(--text-color);
-    box-sizing: border-box;
-    min-width: 240px;
-}
-
-.filter-select {
-    padding: 0.75rem;
-    border: 2px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 0.9rem;
-    background: var(--input-bg);
-    color: var(--text-color);
-    cursor: pointer;
-    min-width: 200px;
+    margin: 0 0 var(--space-l) 0;
 }
 
 .gallery-empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: var(--muted-color);
+    color: var(--text-body);
+    opacity: 0.6;
+}
+
+/* ---------------------
+   Filter Bar
+---------------------- */
+.filter-bar {
+    display: flex;
+    gap: var(--space-l);
+    margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-body);
+    flex: 0 0 auto;
+}
+
+.filter-input-wrapper {
+    position: relative;
+    height: 45px;
+    overflow: hidden;
+}
+
+/* 输入框和下拉框 */
+.filter-input,
+.filter-select {
+    width: 310px !important;
+    height: 45px !important;
+    border: 2px solid var(--border-grey);
+    border-radius: var(--radius-s);
+    font-size: 0.9rem;
+    background: var(--card-bg);
+    color: var(--text-body);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.filter-input {
+    padding: 0 12px 0 44px !important;
+}
+
+.filter-select {
+    padding: 0 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* 图标颜色 */
+.filter-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    display: block;
+    line-height: 0;
+    color: var(--border-grey);
+    z-index: 1;
+    pointer-events: none;
 }

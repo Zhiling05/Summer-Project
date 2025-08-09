@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import '../../../styles/card.css';
+import '../../../styles/guidehome.css';
+
 
 export default function GuideHome() {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);

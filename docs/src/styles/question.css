@@ -10,7 +10,7 @@
   --core-green:       #007f3b;
   --dark-green:       #005a30;
   --warm-yellow:      #fae100;
-  --error-red:       #d4351c;         /* NHS error red */
+  --urgent-red:       #d4351c;         /* NHS error red */
 
   --page-grey:        #e5ecef;
   --border-grey:      #aeb7bd;
@@ -37,7 +37,7 @@
     --text-body:        #e9ecef;
     --text-inverse:     #0d1215;
     --shadow-card:      0 2px 6px rgba(0,0,0,.35);
-    --error-red:        #ff5f56;
+    --urgent-red:        #ff5f56;
   }
 }
 
@@ -229,7 +229,7 @@ padding-bottom: calc(64px + 16px);
 /* —— 黄色提示条 —— */
 .hint {
   display: inline-block;
-  background: var(--warm-yellow);
+  background: #9e6107;
   color: var(--text-body);
   font-size: .95rem;
   font-weight: 600;
@@ -385,7 +385,7 @@ img {
   transform: translateX(-50%);
   max-width: 420px;
   width: calc(100% - 32px);
-  background: var(--error-red);
+  background: var(--urgent-red);
   color: var(--text-inverse);
   padding: var(--space-s) var(--space-m);
   border-radius: var(--radius-s);
@@ -429,7 +429,7 @@ img {
 }
 .error-modal {
   background: var(--text-inverse);
-  border-left: 4px solid var(--error-red);
+  border-left: 4px solid var(--urgent-red);
   border-radius: var(--radius-m) 0 0 var(--radius-m);
   box-shadow: var(--shadow-card);
   max-width: 500px;
@@ -441,7 +441,7 @@ img {
   font-size: 1.35rem;
   font-weight: 700;
   margin: 0 0 var(--space-m);
-  color: var(--error-red);
+  color: var(--urgent-red);
 }
 .error-modal__actions {
   margin-top: var(--space-l);
@@ -452,10 +452,10 @@ img {
 
 /* —— 表单校验 —— */
 .is-invalid {
-  border-color: var(--error-red) !important;
+  border-color: var(--urgent-red) !important;
 }
 .error-text {
-  color: var(--error-red);
+  color: var(--urgent-red);
   font-size: .9rem;
   margin-top: 4px;
 }

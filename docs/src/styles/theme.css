@@ -1,21 +1,127 @@
-/* 浅色主题 */
+/* ===========================================================
+   Global Theme – Light & Dark Mode
+   Reference: question.css
+   =========================================================== */
+
+/* —— 全局变量：浅色模式 —— */
 :root {
-    --page-bg: #e5ecef;
-    --container-bg: #ffffff;
-    --text-primary: #000000;
-    --text-secondary: #768692;
-    --button-primary-bg: #005eb8;
-    --button-primary-text: #ffffff;
+    --core-blue:        #005eb8;
+    --light-blue:       #41b6e6;
+    --core-green:       #009639;
+    --dark-green:       #006747;
+    --warm-yellow:      #fae100;
+    --urgent-red:        #DA291C;
+    --risk-green: #006747;
+    --risk-orange: #e67e00;
+
+    --page-grey:        #e5ecef;
+    --card-bg:          #ffffff;
+    --card-title:       #005eb8;
+    --border-grey:      #aeb7bd;
+    --text-hover:   #7C2855;
+
+    --text-body:        #231f20;
+    --text-heading: #003366;
+    --text-inverse:     #ffffff;
+    --text-muted:       #6c757d;
+    --text-guide:       #161b1f;
+    --card-bg-hover: #e6edf3;
+
+
+    --radius-s:         4px;
+    --radius-m:         6px;
+    --shadow-card:      0 2px 6px rgba(0,0,0,.06);
+
+    --container-max:    960px;
+    --space-xs:         4px;
+    --space-s:          8px;
+    --space-m:          16px;
+    --space-l:          24px;
+    --space-xl:         32px;
+
+    --image-placeholder-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    --overlay-dark: rgba(0, 0, 0, 0.7);
 }
 
-/* 深色主题 */
+/* —— 深色模式 —— */
 @media (prefers-color-scheme: dark) {
     :root {
-        --page-bg: #1e1e1e;
-        --container-bg: #2c2c2c;
-        --text-primary: #ffffff;
-        --text-secondary: #a0a0a0;
-        --button-primary-bg: #339cff;
-        --button-primary-text: #ffffff;
+        --core-blue:        #005eb8;
+        --light-blue:       #63b6ff;
+        --core-green:       #2ec47e;
+        --dark-green:       #19945d;
+        --warm-yellow:      #ffdf3e;
+        --urgent-red:        #ff5f56;
+
+        --page-grey:        #161b1f;
+        --card-bg:          #273036;
+        --card-title:       #63b6ff;
+        --border-grey:      #768692;
+        --text-body:        #E8EDEE;
+        --text-hover:       #AE2573;
+        --text-inverse:     #0d1215;
+        --card-bg-hover:    #136faa;
+        --shadow-card:      0 2px 6px rgba(0,0,0,.35);
     }
+}
+
+/* —— 卡片 / 模块通用背景 —— */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-card);
+    color: var(--text-body);
+}
+
+/* —— 表单输入 —— */
+input,
+select,
+textarea {
+    background: var(--card-bg);
+    color: var(--text-body);
+    border: 2px solid var(--border-grey);
+    border-radius: var(--radius-s);
+    font-size: 1rem;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    transition: border 0.2s ease;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--core-blue);
+    outline: 3px solid var(--core-blue);
+    outline-offset: 2px;
+}
+
+/* —— 主背景和文字 —— */
+body {
+    background: var(--page-grey);
+    color: var(--text-body);
+    transition: background 0.3s ease, color 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* —— 按钮样式 —— */
+button {
+    background: var(--core-blue);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-s);
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+button:hover {
+    background: var(--page-grey);
+}
+
+/* —— 链接 —— */
+a {
+    color: var(--core-blue);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }

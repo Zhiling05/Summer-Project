@@ -1,6 +1,6 @@
 /* 底部导航栏容器 */
 .bottom-nav {
-  background: #fff; /* 白色背景 */
+  background: var(--page-grey); /* 白色背景 */
   border-top: 4px solid var(--core-blue); /* 改为 NHS 蓝色粗线 */
   display: flex;
   justify-content: space-around; /* 平均分布四个按钮 */
@@ -21,7 +21,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #015EB8; /* NHS 主蓝色 */
+  color: var(--core-blue);
   font-weight: bold;
   font-size: 0.9rem;
   cursor: pointer;
@@ -48,18 +48,18 @@
 
 /* 悬停时：可选是否也加背景，不需要可删掉 */
 .bottom-nav button:hover::before {
-  background: #F2F8FF;          /* 若想只有选中才填色，就删除这一段 */
+  background: var(--card-bg);          /* 若想只有选中才填色，就删除这一段 */
 }
 
 /* 选中时：淡蓝色方形背景 */
 .bottom-nav button.active::before {
-  background: #F2F8FF;
+  background: var(--card-bg);
 }
 
 /* ——— 文字 / 图标颜色 ——— */
-.bottom-nav button { color: #015EB8; }         /* 默认深蓝 */
-.bottom-nav button:hover { color: #015EB8; }  /* 悬停浅蓝 */
-.bottom-nav button.active { color: #015EB8; }  /* 选中保持深蓝 */
+.bottom-nav button { color: var(--core-blue); }         /* 默认深蓝 */
+.bottom-nav button:hover { color: var(--light-blue); }  /* 悬停浅蓝 */
+.bottom-nav button.active { color: var(--core-blue); }  /* 选中保持深蓝 */
 
 /* ——— 图标 ——— */
 .nav-icon {

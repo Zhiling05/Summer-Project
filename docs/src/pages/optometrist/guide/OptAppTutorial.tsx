@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import BackButton from '../../../components/BackButton';
+import '../../../styles/opt-app-tutorial.css';
+
 
 export default function OptAppTutorial() {
   const [isOverviewStage, setIsOverviewStage] = useState(true);
