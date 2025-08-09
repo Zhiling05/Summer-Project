@@ -2,8 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import DynamicQuestion from '../../pages/optometrist/assess/questions/DynamicQuestion';
-import { createAssessment } from '../../api';
+import DynamicQuestion from '../../../../../pages/optometrist/assess/questions/DynamicQuestion';
+import { createAssessment } from '../../../../../api';
 const mockCreateAssessment = jest.mocked(createAssessment);
 
 // Mock window.alert 来避免 JSDOM 错误

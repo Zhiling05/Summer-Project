@@ -2,8 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import DynamicRecommendation from '../../pages/optometrist/assess/recommendations/DynamicRecommendation';
-import { fetchReportText, exportAssessment, sendReport } from '../../api';
+import DynamicRecommendation from '../../../../../pages/optometrist/assess/recommendations/DynamicRecommendation';
+import { fetchReportText, exportAssessment, sendReport } from '../../../../../api';
 
 // Mock window.alert to avoid JSDOM errors
 Object.defineProperty(window, 'alert', {
