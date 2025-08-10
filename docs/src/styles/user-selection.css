@@ -41,12 +41,12 @@
     width: 80vw;
     max-width: 50rem;
     min-width: 20rem;
-    background-color: var(--card-bg);
+    background-color: var(--lighter-base);
     color: var(--text-body);
     transition: background-color 0.3s;
 }
 
 .user-selection-card:hover {
-    background-color: var(--card-bg-hover, #e8f0f8);
+    background-color: var(--components-hover, #e8f0f8);
     cursor: pointer;
 }

@@ -1,0 +1,40 @@
+.cm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.cm-container {
+    background: #fff;
+    padding: 3rem;
+    border-radius: 0.5rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /*text-align: center;        !* 整个容器内文字居中 *!*/
+}
+.cm-title {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.cm-desc  {
+    margin-bottom: 1.5rem;
+    color: #555;
+    text-align: center;
+}
+.cm-actions {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+.cm-actions button {
+    min-width: 120px;
+}

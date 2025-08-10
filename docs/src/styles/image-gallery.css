@@ -1,5 +1,5 @@
 .gallery-container {
-    background: var(--page-grey);
+    background: var(--page-base);
     width: 100vw;
     margin-left: calc(-50vw + 50%);
     min-height: calc(100vh - 120px);
@@ -66,7 +66,7 @@
     border: 2px solid var(--border-grey);
     border-radius: var(--radius-s);
     font-size: 0.9rem;
-    background: var(--card-bg);
+    background: var(--lighter-base);
     color: var(--text-body);
     box-sizing: border-box;
     transition: border-color 0.2s ease;

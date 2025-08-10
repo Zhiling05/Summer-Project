@@ -1,6 +1,6 @@
 .records-main {
     flex: 1;
-    background: var(--page-grey);
+    background: var(--page-base);
     padding: var(--space-xl) var(--space-l) calc(64px + var(--space-xl));
     display: flex;
     flex-direction: column;
@@ -45,7 +45,7 @@
 }
 
 .stats-card {
-    background: var(--card-bg);
+    background: var(--lighter-base);
     border-radius: 16px;
     padding: var(--space-l) var(--space-xl);
     box-shadow: var(--shadow-card);
@@ -101,7 +101,7 @@
     font-size: 1rem;
     border: 2px solid var(--border-grey);
     border-radius: var(--radius-s);
-    background: var(--card-bg);
+    background: var(--lighter-base);
     color: var(--text-body);
     transition: border-color .15s;
 }
@@ -130,7 +130,7 @@
 .records-table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--card-bg);
+    background: var(--lighter-base);
     box-shadow: var(--shadow-card);
     border-radius: var(--radius-s);
     overflow: hidden;
@@ -138,7 +138,7 @@
 }
 
 .records-table thead {
-    background: var(--card-bg);
+    background: var(--lighter-base);
 }
 
 .records-table th,
@@ -156,7 +156,7 @@
 }
 
 .records-table tbody tr:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--page-base);
 }
 
 .records-table th:nth-child(1),
@@ -197,9 +197,9 @@
 
 /* 详情按钮 */
 .view-btn {
-    background: none;
-    border: 2px solid var(--core-blue);
-    color: var(--core-blue);
+    background: var(--lighter-base);
+    border: 2px solid var(--light-blue);
+    color: var(--light-blue);
     padding: 6px 14px;
     font-size: .9rem;
     border-radius: var(--radius-s);
@@ -208,7 +208,7 @@
 }
 .view-btn:hover {
     background: var(--core-blue);
-    color: var(--text-inverse);
+    color: var(--text-body);
 }
 
 /* 响应式 */

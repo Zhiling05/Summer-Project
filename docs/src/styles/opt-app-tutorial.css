@@ -1,7 +1,7 @@
 /* optAppTutorial.css */
 
 .tutorial-container {
-    background: var(--page-grey);
+    background: var(--page-base);
     width: 100vw;
     margin-left: calc(-50vw + 50%);
     min-height: calc(100vh - 120px);
@@ -67,7 +67,7 @@
 .tutorial-h2 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--text-guide);
+    color: var(--text-body);
     margin: 0 0 8px 0;
 }
 
@@ -132,7 +132,7 @@
 .tutorial-text h3{
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--text-guide);
+    color: var(--text-body);
     margin: 24px 0 12px 0;
 }
 

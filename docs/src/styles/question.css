@@ -12,7 +12,7 @@
   --warm-yellow:      #fae100;
   --urgent-red:       #d4351c;         /* NHS error red */
 
-  --page-grey:        #e5ecef;
+  --page-base:        #e5ecef;
   --border-grey:      #aeb7bd;
   --text-body:        #0b0c0c;
   --text-inverse:     #ffffff;
@@ -32,7 +32,7 @@
 /* —— 杜绝夜间爆闪：暗色模式自定义变量 —— */
 @media (prefers-color-scheme: dark) {
   :root {
-    --page-grey:        #0d1215;
+    --page-base:        #0d1215;
     --border-grey:      #273036;
     --text-body:        #e9ecef;
     --text-inverse:     #0d1215;
@@ -52,7 +52,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
                Arial, sans-serif;
-  background: var(--page-grey);
+  background: var(--page-base);
   color: var(--text-body);
   -webkit-font-smoothing: antialiased;
 
@@ -230,7 +230,7 @@ padding-bottom: calc(64px + 16px);
 /* —— 黄色提示条 —— */
 .hint {
   display: inline-block;
-  background: #9e6107;
+  background:var(--risk-orange);
   color: var(--text-body);
   font-size: .95rem;
   font-weight: 600;

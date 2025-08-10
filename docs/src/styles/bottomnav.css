@@ -1,6 +1,6 @@
 /* 底部导航栏容器 */
 .bottom-nav {
-  background: var(--page-grey); /* 白色背景 */
+  background: var(--page-base); /* 白色背景 */
   border-top: 4px solid var(--core-blue); /* 改为 NHS 蓝色粗线 */
   display: flex;
   justify-content: space-around; /* 平均分布四个按钮 */
@@ -48,12 +48,12 @@
 
 /* 悬停时：可选是否也加背景，不需要可删掉 */
 .bottom-nav button:hover::before {
-  background: var(--card-bg);          /* 若想只有选中才填色，就删除这一段 */
+  background: var(--lighter-base);          /* 若想只有选中才填色，就删除这一段 */
 }
 
 /* 选中时：淡蓝色方形背景 */
 .bottom-nav button.active::before {
-  background: var(--card-bg);
+  background: var(--lighter-base);
 }
 
 /* ——— 文字 / 图标颜色 ——— */

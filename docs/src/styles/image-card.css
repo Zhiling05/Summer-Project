@@ -1,7 +1,7 @@
 /* src/styles/image-card.css */
 /* 图片卡片容器 */
 .image-card {
-  background: var(--card-bg);
+  background: var(--lighter-base);
   border: 1px solid var(--border-grey);
   border-bottom: 4px solid var(--border-grey);
   border-radius: var(--radius-m);

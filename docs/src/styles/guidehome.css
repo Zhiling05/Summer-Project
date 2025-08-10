@@ -2,7 +2,7 @@
     min-height: calc(100vh - 80px - 64px); /* header + bottom nav */
     display: flex;
     flex-direction: column;
-    background: var(--page-grey);
+    background: var(--page-base);
     color: var(--text-body);
 }
 
@@ -31,7 +31,7 @@
 }
 
 .guide-card {
-    background: var(--card-bg);
+    background: var(--lighter-base);
     color: var(--text-body);
     padding: var(--space-l) var(--space-xl);
     width: 80vw;

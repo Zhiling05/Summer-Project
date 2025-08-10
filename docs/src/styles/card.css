@@ -1,7 +1,7 @@
 /* src/styles/card.css */
 /* 基础卡片样式 */
 .base-card {
-  background-color: var(--card-bg);
+  background-color: var(--lighter-base);
   border: 1px solid var(--border-grey);
   border-bottom: 4px solid var(--border-grey);
   border-radius: var(--radius-s);
