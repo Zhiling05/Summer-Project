@@ -1,7 +1,6 @@
-/* styles/back-button.css */
 .back-button {
     position: absolute;
-    top: 13%;
+    top: 15%;
     left: 10%;
     transform: translateY(-50%);
     border: none;
@@ -11,10 +10,12 @@
     font-size: 25px;
     font-weight: 600;
     border-radius: 4px;
-    color: var(--light-blue);
+    cursor: pointer;
+    color: var(--core-blue); /* 原代码中没指定颜色，默认黑色。根据需要可以改成你的变量，例如 var(--light-blue) */
 }
 
+/* 如果你原来有 hover 效果 */
 .back-button:hover {
-    color: var(--core-blue); /* 悬停颜色 */
+    color: var(--text-body);
     background: transparent;
 }
