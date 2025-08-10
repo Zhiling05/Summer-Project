@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import BackButton from '../../components/BackButton';//zkx
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { parseISO } from "date-fns";
@@ -123,9 +124,11 @@ useEffect(() => {
   return (
       <>
         <Header title="Records" />
+        <BackButton />{/* 使用 goback 组件zkx */}
         <Sidebar /> {/* 使用 Sidebar 组件zkx */}
         <div className="page-container">
         <main className="records-main">
+          <div className="records-wrapper">
           <h1 className="records-title">Records</h1>
 
           {/* 统计卡 */}
@@ -216,6 +219,7 @@ useEffect(() => {
               )}
               </tbody>
             </table>
+          </div>
           </div>
         </main>
         </div>

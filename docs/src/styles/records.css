@@ -1,17 +1,33 @@
 .records-main {
     flex: 1;
-    background: var(--page-grey);
-    padding: var(--space-xl) var(--space-l) calc(64px + var(--space-xl));
+    background: var(--page-base);
+    padding: var(--space-s) var(--space-l) calc(64px + var(--space-xl));
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);
+}
+@media (max-width: 768px) {
+    .records-main {
+        padding: var(--space-l) var(--space-m) calc(48px + var(--space-l));
+    }
+}
+@media (max-width: 480px) {
+    .records-main {
+        padding: var(--space-m) var(--space-s) calc(32px + var(--space-m));
+    }
 }
 
 .records-title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--core-blue);
+    color: var(--light-blue);
     margin: 0;
+    margin-top: 150px; /* zkx新增上边距，放置 go back*/
+}
+@media (max-width: 768px) {
+    .records-title {
+        margin-top: 80px;
+    }
 }
 
 /* -----------------------------------------------------------
@@ -22,9 +38,14 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--space-l);
 }
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 .stats-card {
-    background: var(--text-inverse);
+    background: var(--lighter-base);
     border-radius: 16px;
     padding: var(--space-l) var(--space-xl);
     box-shadow: var(--shadow-card);
@@ -37,30 +58,29 @@
 }
 .stats-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,.14);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
 }
 
-/* 颜色映射 */
+/* 风险色标签变量 */
 .stats-card.red    { --stats-clr: #d03838; color: var(--stats-clr); }
 .stats-card.orange { --stats-clr: #e67e00; color: var(--stats-clr); }
 .stats-card.green  { --stats-clr: #007f3b; color: var(--stats-clr); }
 
-/* 渐变淡背景（使用同色调 4% 透明度） */
-.stats-card.red    { background: linear-gradient(135deg, rgba(208,56,56,.04) 0%, rgba(208,56,56,.02) 100%); }
-.stats-card.orange { background: linear-gradient(135deg, rgba(230,126,0,.04) 0%, rgba(230,126,0,.02) 100%); }
-.stats-card.green  { background: linear-gradient(135deg, rgba(0,127,59,.04) 0%, rgba(0,127,59,.02) 100%); }
-
-/* 文本css */
 .stats-title { font-size: 1.05rem; font-weight: 600; color: var(--text-body); }
 .stats-num   { font-size: 2.4rem; font-weight: 700; line-height: 1; }
 .stats-desc  { font-size: .95rem; color: var(--text-body); opacity: .8; }
 
-/* 2. 筛选蓝*/
+/* 2. 筛选栏 */
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-l);
     align-items: center;
+}
+@media (max-width: 768px) {
+    .filter-bar {
+        gap: var(--space-m);
+    }
 }
 
 .filter-bar label {
@@ -81,7 +101,8 @@
     font-size: 1rem;
     border: 2px solid var(--border-grey);
     border-radius: var(--radius-s);
-    background: var(--text-inverse);
+    background: var(--lighter-base);
+    color: var(--text-body);
     transition: border-color .15s;
 }
 
@@ -103,21 +124,21 @@
     box-sizing: border-box;   /* 确保 width 包括了 padding */
 }
 
-
-/* 3. 记录表格 */
+/* 3. 表格 */
 .table-wrapper { overflow-x: auto; }
 
 .records-table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--text-inverse);
+    background: var(--lighter-base);
     box-shadow: var(--shadow-card);
     border-radius: var(--radius-s);
     overflow: hidden;
+    table-layout: fixed;
 }
 
 .records-table thead {
-    background: #f8f9fa;
+    background: var(--lighter-base);
 }
 
 .records-table th,
@@ -125,7 +146,8 @@
     padding: 14px 20px;
     text-align: left;
     font-size: .95rem;
-    border-bottom: 1px solid #edf0f2;
+    border-bottom: 1px solid var(--border-grey);
+    color: var(--text-body);
 }
 
 .records-table th:last-child,
@@ -134,16 +156,8 @@
 }
 
 .records-table tbody tr:hover {
-    background: rgba(0,0,0,.035);
-    /*cursor: pointer;*/
+    background: var(--page-base);
 }
-
-/* ── 保证表格始终撑满父容器 ── */
-.records-table {
-    width: 100%;
-    table-layout: fixed;
-}
-
 
 .records-table th:nth-child(1),
 .records-table td:nth-child(1) { width: 25%; }
@@ -152,26 +166,32 @@
 .records-table th:nth-child(3),
 .records-table td:nth-child(3) { width: 25%; }
 
-
-/* 让「No Matching…」这一行的单元格文字也垂直居中且不换行 */
 .records-table td[colspan] {
     text-align: center;
     white-space: nowrap;
 }
 
 /* 让主容器始终占据视口的 80% 宽度，水平居中，并保留左右内边距 */
-.page-container,
-.records-main {
-    width: 90%;              /* 直接用百分比宽度 */
-    max-width: none;         /* 取消固定像素上限（可选） */
-    margin: 0 auto;          /* 水平居中 */
-    padding: 0 var(--space-l); /* 两侧保留一点内边距 */
-    box-sizing: border-box;  /* 让 padding 算入宽度 */
-    padding-bottom: 60px;
+/*.page-container,*/
+/*.records-main {*/
+/*    width: 90%;*/
+/*    max-width: none;*/
+/*    margin: 0 auto;*/
+/*    padding: 0 var(--space-l);*/
+/*    box-sizing: border-box;*/
+/*    padding-bottom: 60px;*/
+/*}*/
+.records-wrapper {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-l);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 
-/* 风险标签小块 */
+
+/* 风险标签 */
 .tag-pill {
     display: inline-block;
     padding: 2px 8px;
@@ -186,9 +206,9 @@
 
 /* 详情按钮 */
 .view-btn {
-    background: none;
-    border: 2px solid var(--core-blue);
-    color: var(--core-blue);
+    background: var(--lighter-base);
+    border: 2px solid var(--light-blue);
+    color: var(--light-blue);
     padding: 6px 14px;
     font-size: .9rem;
     border-radius: var(--radius-s);
@@ -197,18 +217,30 @@
 }
 .view-btn:hover {
     background: var(--core-blue);
-    color: var(--text-inverse);
+    color: var(--text-body);
 }
 
-
-
-/*响应式*/
+/* 响应式 */
 @media (max-width: 640px) {
     .records-main { padding: var(--space-l) var(--space-m) calc(64px + var(--space-l)); }
-
     .stats-grid { grid-template-columns: 1fr; }
-
     .filter-bar label { min-width: 140px; flex: 1 1 140px; }
-
     .records-table th, .records-table td { padding: 10px 12px; }
+}
+
+.records-title {
+    margin-top: 150px; /* 原有 */
+    margin-bottom: var(--space-xl); /* ✅ 新增：标题和统计卡之间的间距 */
+}
+
+.stats-grid {
+    margin-bottom: var(--space-xl); /* ✅ 卡片和 filter-bar 之间的间距 */
+}
+
+.filter-bar {
+    margin-bottom: var(--space-xl); /* ✅ filter-bar 和表格之间的间距 */
+}
+
+.table-wrapper {
+    margin-bottom: var(--space-xl); /* ✅ 表格和底部导航之间的空间 */
 }

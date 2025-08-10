@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
+import BackButton from '../../../../components/BackButton';//zkx
 // ycl: 改为从 src/assets 里 import，Vite 才能正确打包
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
@@ -23,9 +24,21 @@ const normalize = (opt: RawOption): { label: string; value: string } =>
   typeof opt === "string" ? { label: opt, value: opt } : opt;
 
 const DynamicQuestion = () => {
+
+  // yj新增：等用户进入任一道题时，记录一下评估已经开始了，方便后面记录进度
+  useEffect(() => {
+    sessionStorage.setItem("assessStarted", "true");
+  }, []);
+
+
   /* ——— 路由 & 参数 ——— */
   const { questionId = "" } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
+
+  // ─── 记录用户最后看到的题目 ID ───（yj添加）
+  useEffect(() => {
+    sessionStorage.setItem("lastQuestionId", questionId);
+    }, [questionId]);
 
   /* ——— 生成一次 patientId，整次问卷保持不变 ——— */
   const [patientId] = useState(() => `pid-${Date.now().toString(36)}`);
@@ -123,34 +136,45 @@ const DynamicQuestion = () => {
      * 如果 nextId 是推荐页（不是 Q 开头）——先保存 assessment
      * ======================================================= */
     if (!nextId.startsWith("Q")) {
-      try {
-        /* ★ 把 answerHistory 转成 Answer[] 结构，供后端保存 */
-        const answersArr = Object.entries(updatedHistory).map(([qid, ans]) => {
-          const qObj = questionsList.find((q) => q.id === qid) ?? {};
-          return {
-            questionId: qid,
-            question: (qObj as any).question ?? "",
-            answer: Array.isArray(ans) ? ans.join(", ") : ans,
-          };
-        });
+      const answersArr = Object.entries(updatedHistory).map(([qid, ans]) => {
+        const qObj = questionsList.find((q) => q.id === qid) ?? {};
+        return {
+          questionId: qid,
+          question: (qObj as any).question ?? "",
+          answer: Array.isArray(ans) ? ans.join(", ") : ans,
+        };
+      });
 
-        /* ★ 保存 assessment，拿到 id */
+      const contentStr = answersArr
+          .map(a => `${a.questionId}: ${a.answer}`)
+          .join("; ");
+
+      try {
         const { id: assessmentId } = await createAssessment({
           role: "optometrist",
           patientId,
           answers: answersArr,
-          recommendation: nextId, // 例如 EMERGENCY_DEPARTMENT
+          recommendation: nextId,
+          content: contentStr     // ← 新增
         });
 
-        /* ★ 带 assessmentId 跳推荐页 */
-        navigate(`/optometrist/assess/recommendations/${nextId}`, {
-          state: { assessmentId, patientId, answers: answersArr },
+        // navigate(`/optometrist/assess/recommendations/${nextId}`, {
+        //   state: { assessmentId, patientId, answers: answersArr },
+        // });
+        navigate(`/optometrist/assess/recommendations/${nextId}/${assessmentId}`, {
+          state: { patientId, answers: answersArr },
         });
+
+
       } catch (e) {
-        alert("Save failed: " + (e as Error).message);
+        console.error("Save failed:", e);
+        navigate(`/optometrist/assess/recommendations/report-preview/LOCAL`, {
+          state: { patientId, answers: answersArr },
+        });
       }
-      return; // 推荐页已跳转，不再往下执行
+      return;
     }
+
 
     /* ---------- 普通题目：继续问卷流程 ---------- */
     navigate(`/optometrist/assess/questions/${nextId}`, {
@@ -163,6 +187,7 @@ const DynamicQuestion = () => {
     return (
       <>
         <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
+        <BackButton />
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h2>Question not found: {questionId}</h2>
       </div>
@@ -180,6 +205,7 @@ const DynamicQuestion = () => {
     return (
       <>
         <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
+        <BackButton />
 
         <div className="nhsuk-width-container">
           <main id="maincontent" className="nhsuk-main-wrapper">
@@ -209,6 +235,7 @@ const DynamicQuestion = () => {
   return (
     <>
       <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
+      <BackButton />
 
       <div className="nhsuk-width-container">
         <main id="maincontent" className="nhsuk-main-wrapper">

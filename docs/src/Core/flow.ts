@@ -1,5 +1,21 @@
-/* ------------- src/core/flow.ts ------------- */
-import flow from "../data/questionnaire.json";
+import questionnaire from "../data/questionnaire.json";
+
+/** 这里直接解构出数组 */
+const { questions } = questionnaire as { questions: any[] };
+
+/** —— 在这里定义数据结构接口 —— */
+interface Question {
+  id: string;
+  type: string;
+  question: string;
+  navigation?: Record<string, unknown>;
+  rules?: Array<{ if?: Record<string, any>; next: string }>;
+  next?: string | Record<string, string>;
+}
+
+interface Questionnaire {
+  questions: Question[];
+}
 
 /** 全局答案，key=题号，value=当前题答案 */
 const answers: Record<string, any> = {};
@@ -9,42 +25,59 @@ export function recordAnswer(id: string, value: any) {
   answers[id] = value;
 }
 
-/** 计算下一题 id（只支持 equals / includesAny / includes / includesTwoOrMore / includesExactlyOneOf） */
-export function getNextId(currentId: string, currentValue: any): string | undefined {
-  const entry: any = (flow as any[]).find(e => e.id === currentId);
+/** 计算下一题 id（同原逻辑） */
+export function getNextId(
+    currentId: string,
+    currentValue: any
+): string | undefined {
+  const entry = questions.find(e => e.id === currentId);
   if (!entry) return;
 
-  /* 老式 {next:"Qx"} 或 {next:{Yes:"Q1"}} */
   if (entry.next) {
     return typeof entry.next === "string"
-      ? entry.next
-      : entry.next[currentValue];
+        ? entry.next
+        : entry.next[currentValue];
+
   }
 
-  /* 走 rules */
   for (const r of entry.rules ?? []) {
     const c = r.if ?? {};
+    let ok = true;
 
-    /* helpers */
-    const incAny  = (arr:string[]) => arr.some(k => currentValue.includes(k));
-    const incAll  = (arr:string[]) => arr.every(k => currentValue.includes(k));
+    for (const key in c) {
+      const value = c[key];
+      if (key === "equals") {
+        ok = currentValue === value;
+      } else if (key.endsWith(".includesAny")) {
+        ok = value.some((v: string) => currentValue.includes(v));
+      } else if (key.endsWith(".includesTwoOrMore")) {
+        ok = currentValue.filter((v: string) => value.includes(v)).length >= 2;
+      } else if (key.endsWith(".includesExactlyOneOf")) {
+        ok = currentValue.filter((v: string) => value.includes(v)).length === 1;
+      }
 
-    const ok =
-      (!c.equals) ||
-      (c.equals === currentValue) ||
-
-      (c["Q3.includesAny"] &&
-        incAny(c["Q3.includesAny"]) && (answers["Q3"]||[]).some((k:string)=>c["Q3.includesAny"].includes(k))) ||
-
-      (c["Q4.includes"] &&
-        incAny(c["Q4.includes"])) ||
-
-      (c["Q4.includesTwoOrMore"] &&
-        currentValue.filter((x:string)=>c["Q4.includesTwoOrMore"].includes(x)).length >= 2) ||
-
-      (c["Q4.includesExactlyOneOf"] &&
-        currentValue.filter((x:string)=>c["Q4.includesExactlyOneOf"].includes(x)).length === 1);
+      if (!ok) break;
+    }
 
     if (ok) return r.next;
   }
+}
+
+/** 是否已有未完成的评估 */
+export function hasProgress(): boolean {
+  return Object.keys(answers).length > 0;
+}
+
+/** 清空当前评估数据 */
+export function resetAssessment(): void {
+  Object.keys(answers).forEach((k) => delete answers[k]);
+}
+
+/** 找到第一个未答的题目 ID，或返回 undefined */
+export function getFirstUnanswered(): string | undefined {
+  const dataArray = (questionnaire as Questionnaire).questions;
+  for (const q of dataArray) {
+    if (!answers[q.id]) return q.id;
+  }
+  return undefined;
 }
