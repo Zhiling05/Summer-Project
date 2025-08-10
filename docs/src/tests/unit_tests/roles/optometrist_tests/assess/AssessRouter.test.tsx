@@ -64,4 +64,14 @@ describe('AssessRouter Component', () => {
     );
     expect(screen.getByTestId('preview-report')).toBeInTheDocument();
   });
+
+  // 新增的重定向检测
+  test('redirects unknown path to start-page', () => {
+    render(
+      <MemoryRouter initialEntries={['/some/unknown/path']}>
+        <AssessRouter />
+      </MemoryRouter>
+    );
+    expect(screen.getByTestId('start-page')).toBeInTheDocument();
+  });
 });
