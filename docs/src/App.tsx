@@ -8,11 +8,11 @@ import * as Sidebar from './pages/sidebar';  // 引入你自己的 Sidebar
 import OptometristApp from './pages/optometrist/OptometristApp';
 import PatientApp from './pages/patient/PatientApp';
 import GPApp from './pages/gp/GPApp';
-//import AboutPage from './pages/sidebar/AboutPage.tsx'; //zkx
 import ContactPage from './pages/sidebar/ContactPage'; //zkx
 import SettingsPage from './pages/sidebar/SettingsPage'; //zkx
 import { FontSizeProvider, useFontSize } from './pages/sidebar/FontSizeContext'; //zkx
 import SideBar from './components/SideBar';  // 引入你自己写的 SideBar 组件
+import './styles/theme.css'; //深浅色主题
 
 export default function App() {
   return (

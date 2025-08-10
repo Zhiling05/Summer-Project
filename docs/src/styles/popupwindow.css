@@ -9,7 +9,7 @@
 }
 
 .cm-container {
-    background: #fff;
+    background: var(--lighter-base);
     padding: 3rem;
     border-radius: 0.5rem;
     max-width: 500px;
@@ -27,7 +27,7 @@
 
 .cm-desc  {
     margin-bottom: 1.5rem;
-    color: #555;
+    color: var(--text-body);
     text-align: center;
 }
 .cm-actions {
