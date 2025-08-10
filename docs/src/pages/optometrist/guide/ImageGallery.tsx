@@ -3,6 +3,7 @@ import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import BackButton from '../../../components/BackButton';
 import '../../../styles/image-card.css';
+import '../../../styles/image-gallery.css';
 
 interface ImageItem {
   id: number;
@@ -170,157 +171,79 @@ export default function ImageGallery() {
   };
 
   return (
-    <>
-      <Header title="Reference Image Gallery" />
-      <BackButton />
+      <>
+        <Header title="Reference Image Gallery" />
+        <BackButton />
 
-      {/* 主内容区域 */}
-      <div
-        style={{
-          background: '#f0f4f5',
-          width: '100vw',
-          marginLeft: 'calc(-50vw + 50%)',
-          minHeight: 'calc(100vh - 120px)',
-          boxSizing: 'border-box',
-          padding: '40px 24px 80px 24px',
-        }}
-      >
-        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 8px',marginTop: '80px' }}>{/* zkx加了80px上边距放go back */}
-          
-          {/* 主标题 */}
-          <h1
-            style={{
-              color: '#212b32',
-              fontSize: '2rem',
-              fontWeight: '700',
-              margin: '0 0 24px 0',
-            }}
-          >
-            Reference Image Gallery
-          </h1>
+        <div className="gallery-container">
+          <div className="gallery-wrapper">
 
-          {/* 筛选栏 - 参考Records页面的样式 */}
-          <section className="filter-bar" style={{ 
-            display: 'flex', 
-            gap: '1rem', 
-            marginBottom: '24px',
-            flexWrap: 'wrap'
-          }}>
-            <label style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.5rem',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              color: '#212b32'
-            }}>
-              Search Images
-              <div style={{ position: 'relative' }}>
-                <svg
-                  style={{
-                    position: 'absolute',
-                    left: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: '#768692',
-                    zIndex: 1
-                  }}
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search conditions, symptoms..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{
-                    padding: '0.75rem 0.75rem 0.75rem 2.5rem',
-                    border: '2px solid #d8dde0',
-                    borderRadius: '4px',
-                    fontSize: '0.9rem',
-                    background: 'white',
-                    boxSizing: 'border-box',
-                    minWidth: '240px'
-                  }}
-                />
-              </div>
-            </label>
-            
-            <label style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.5rem',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              color: '#212b32'
-            }}>
-              Condition Type
-              <select 
-                value={activeCategory} 
-                onChange={(e) => setActiveCategory(e.target.value)}
-                style={{
-                  padding: '0.75rem',
-                  border: '2px solid #d8dde0',
-                  borderRadius: '4px',
-                  fontSize: '0.9rem',
-                  background: 'white',
-                  cursor: 'pointer',
-                  minWidth: '200px'
-                }}
-              >
-                <option value="all">All Images</option>
-                <option value="true">Papilloedema</option>
-                <option value="pseudo">Pseudopapilloedema</option>
-                <option value="uncertain">Uncertain Appearance</option>
-                <option value="normal">Normal Appearance</option>
-              </select>
-            </label>
-          </section>
+            <h1 className="gallery-heading">Reference Image Gallery</h1>
 
-          {/* 图片卡片网格 */}
-          <div className="image-cards-grid">
-            {filteredItems.map((item) => (
-              <div
-                key={item.id}
-                className="image-card"
-                // onClick={() => handleItemClick(item)}
-              >
-                {renderImageArea(item)}
-                
-                <div className="image-card__content">
-                  <h3 className="image-card__title">
-                    {item.title}
-                  </h3>
-                  <p className="image-card__description">
-                    {item.description}
-                  </p>
+            <section className="filter-bar">
+              <label className="filter-group">
+                Search Images
+                <div className="filter-input-wrapper">
+                  <svg
+                      className="filter-icon"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                  <input
+                      type="text"
+                      placeholder="Search conditions, symptoms..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="filter-input"
+                  />
                 </div>
-              </div>
-            ))}
-          </div>
+              </label>
 
-          {/* 空状态 */}
-          {filteredItems.length === 0 && (
-            <div style={{
-              textAlign: 'center',
-              padding: '60px 20px',
-              color: '#768692'
-            }}>
-              <h3>No images found</h3>
-              <p>Try adjusting your search terms or category filter</p>
+              <label className="filter-group">
+                Condition Type
+                <select
+                    value={activeCategory}
+                    onChange={(e) => setActiveCategory(e.target.value)}
+                    className="filter-select"
+                >
+                  <option value="all">All Images</option>
+                  <option value="true">Papilloedema</option>
+                  <option value="pseudo">Pseudopapilloedema</option>
+                  <option value="uncertain">Uncertain Appearance</option>
+                  <option value="normal">Normal Appearance</option>
+                </select>
+              </label>
+            </section>
+
+            <div className="image-cards-grid">
+              {filteredItems.map((item) => (
+                  <div key={item.id} className="image-card">
+                    {renderImageArea(item)}
+                    <div className="image-card__content">
+                      <h3 className="image-card__title">{item.title}</h3>
+                      <p className="image-card__description">{item.description}</p>
+                    </div>
+                  </div>
+              ))}
             </div>
-          )}
-        </div>
-      </div>
 
-      <BottomNav />
-    </>
+            {filteredItems.length === 0 && (
+                <div className="gallery-empty-state">
+                  <h3>No images found</h3>
+                  <p>Try adjusting your search terms or category filter</p>
+                </div>
+            )}
+          </div>
+        </div>
+
+        <BottomNav />
+      </>
   );
 }

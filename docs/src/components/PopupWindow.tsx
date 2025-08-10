@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/PopupWindow.css";
+import "../styles/popupwindow.css";
 
 interface ConfirmModalProps {
     open: boolean;
