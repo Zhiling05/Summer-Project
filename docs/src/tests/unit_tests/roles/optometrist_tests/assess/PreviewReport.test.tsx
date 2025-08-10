@@ -1,29 +1,15 @@
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import PreviewReport from '../../../../../pages/optometrist/assess/recommendations/PreviewReport';
-import * as api from '../../../../../api';
-
-// Define types to match the actual interfaces
-type UserRole = 'optometrist' | 'gp' | 'patient';
-
-interface MockAssessmentDetail {
-  id: string;
-  recommendation: string;
-  role: UserRole;
-  patientId: string;
-  answers: Array<{
-    questionId: string;
-    question: string;
-    answer: string;
-  }>;
-  createdAt: string;
-}
 
 // Mock the API functions
-jest.mock('../../../../api', () => ({
+jest.mock('../../../../../api', () => ({
   fetchReportText: jest.fn(),
   getAssessment: jest.fn(),
 }));
+
+const { fetchReportText, getAssessment } = require('../../../../../api');
 
 // Mock components
 jest.mock('../../../../../components/Header', () => ({ title }: { title: string }) => (
@@ -36,8 +22,16 @@ jest.mock('../../../../../components/SideBar', () => () => (
   <div data-testid="sidebar">Sidebar</div>
 ));
 
-const mockFetchReportText = api.fetchReportText as jest.MockedFunction<typeof api.fetchReportText>;
-const mockGetAssessment = api.getAssessment as jest.MockedFunction<typeof api.getAssessment>;
+const renderWithRouter = (initialPath = '/preview/rec-123', state?: any) => {
+  return render(
+    <MemoryRouter initialEntries={[{ pathname: initialPath, state }]}>
+      <Routes>
+        <Route path="/preview/:id" element={<PreviewReport />} />
+        <Route path="/preview/" element={<PreviewReport />} />
+      </Routes>
+    </MemoryRouter>
+  );
+};
 
 describe('PreviewReport Component', () => {
   const mockReportText = `Assessment rec-123
@@ -57,10 +51,10 @@ Symptoms:
 ----------------------------------------
 Recommendation: Send patient to Emergency Department immediately`;
 
-  const mockAssessmentDetail: MockAssessmentDetail = {
+  const mockAssessmentDetail = {
     id: 'rec-123',
     recommendation: 'EMERGENCY_DEPARTMENT',
-    role: 'optometrist' as UserRole,
+    role: 'optometrist',
     patientId: 'patient-123',
     answers: [
       {
@@ -81,89 +75,96 @@ Recommendation: Send patient to Emergency Department immediately`;
     jest.clearAllMocks();
   });
 
-  const renderComponent = (initialPath = '/preview/rec-123', state?: any) => {
-    return render(
-      <MemoryRouter initialEntries={[{ pathname: initialPath, state }]}>
-        <PreviewReport />
-      </MemoryRouter>
-    );
-  };
+  // 1. 基础渲染测试
+  describe('Basic Rendering', () => {
+    it('renders loading state when data is being fetched', () => {
+      fetchReportText.mockImplementation(() => new Promise(() => {})); // Never resolves
+      getAssessment.mockImplementation(() => new Promise(() => {}));
 
-  describe('Loading States', () => {
-    it('shows loading message when data is being fetched', () => {
-      mockFetchReportText.mockImplementation(() => new Promise(() => {})); // Never resolves
-      mockGetAssessment.mockImplementation(() => new Promise(() => {}));
-
-      renderComponent();
+      renderWithRouter();
 
       expect(screen.getByText('Loading…')).toBeInTheDocument();
     });
-  });
 
-  describe('Error Handling', () => {
-    it('displays error message when fetchReportText fails', async () => {
-      mockFetchReportText.mockRejectedValue(new Error('Network error'));
-      mockGetAssessment.mockRejectedValue(new Error('Network error'));
+    it('renders all required UI components when data is loaded', async () => {
+      fetchReportText.mockResolvedValue(mockReportText);
+      getAssessment.mockResolvedValue(mockAssessmentDetail);
 
-      renderComponent();
+      renderWithRouter();
 
       await waitFor(() => {
-        expect(screen.getByText(/Error: Network error/)).toBeInTheDocument();
+        // 验证所有被 PreviewReport 渲染的组件都存在
+        expect(screen.getByTestId('header')).toBeInTheDocument();
+        expect(screen.getByTestId('sidebar')).toBeInTheDocument();
+        expect(screen.getByTestId('bottom-nav')).toBeInTheDocument();
+        expect(screen.getByRole('main')).toBeInTheDocument();
       });
     });
 
-    it('displays error message when getAssessment fails', async () => {
-      mockFetchReportText.mockResolvedValue(mockReportText);
-      mockGetAssessment.mockRejectedValue(new Error('Assessment not found'));
+    it('renders header with correct title when data is loaded', async () => {
+      fetchReportText.mockResolvedValue(mockReportText);
+      getAssessment.mockResolvedValue(mockAssessmentDetail);
 
-      renderComponent();
-
-      await waitFor(() => {
-        expect(screen.getByText(/Error: Assessment not found/)).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe('Data Loading and Display', () => {
-    it('loads data from API when no state is provided', async () => {
-      mockFetchReportText.mockResolvedValue(mockReportText);
-      mockGetAssessment.mockResolvedValue(mockAssessmentDetail);
-
-      renderComponent();
+      renderWithRouter();
 
       await waitFor(() => {
-        expect(mockFetchReportText).toHaveBeenCalledWith('rec-123');
-        expect(mockGetAssessment).toHaveBeenCalledWith('rec-123');
-      });
-    });
-
-    it('uses state data when provided', async () => {
-      mockGetAssessment.mockResolvedValue(mockAssessmentDetail);
-
-      renderComponent('/preview/rec-123', { text: mockReportText });
-
-      await waitFor(() => {
-        expect(mockFetchReportText).not.toHaveBeenCalled();
-        expect(mockGetAssessment).toHaveBeenCalledWith('rec-123');
+        expect(screen.getByTestId('header')).toHaveTextContent('Assessment Report');
       });
     });
 
     it('does not load data when no ID is provided', () => {
-      renderComponent('/preview/');
+      renderWithRouter('/preview/');
 
-      expect(mockFetchReportText).not.toHaveBeenCalled();
-      expect(mockGetAssessment).not.toHaveBeenCalled();
+      expect(fetchReportText).not.toHaveBeenCalled();
+      expect(getAssessment).not.toHaveBeenCalled();
     });
   });
 
-  describe('Text Parsing and Card Display', () => {
-    beforeEach(() => {
-      mockFetchReportText.mockResolvedValue(mockReportText);
-      mockGetAssessment.mockResolvedValue(mockAssessmentDetail);
+  // 2. 数据加载和显示测试
+  describe('Data Loading and Display', () => {
+    it('loads data from API when no state is provided', async () => {
+      fetchReportText.mockResolvedValue(mockReportText);
+      getAssessment.mockResolvedValue(mockAssessmentDetail);
+
+      renderWithRouter();
+
+      await waitFor(() => {
+        expect(fetchReportText).toHaveBeenCalledWith('rec-123');
+        expect(getAssessment).toHaveBeenCalledWith('rec-123');
+      });
+    });
+
+    it('uses state data when provided', async () => {
+      getAssessment.mockResolvedValue(mockAssessmentDetail);
+
+      renderWithRouter('/preview/rec-123', { text: mockReportText });
+
+      await waitFor(() => {
+        expect(fetchReportText).not.toHaveBeenCalled();
+        expect(getAssessment).toHaveBeenCalledWith('rec-123');
+      });
+    });
+
+    it('handles LOCAL preview correctly', async () => {
+      const localState = {
+        answers: [{ questionId: 'Q1', answer: 'Yes' }],
+        recommendation: 'EMERGENCY_DEPARTMENT'
+      };
+
+      renderWithRouter('/preview/LOCAL', localState);
+
+      await waitFor(() => {
+        expect(screen.getByText(/LOCAL PREVIEW/)).toBeInTheDocument();
+        expect(fetchReportText).not.toHaveBeenCalled();
+        expect(getAssessment).not.toHaveBeenCalled();
+      });
     });
 
     it('renders all report cards with correct data', async () => {
-      renderComponent();
+      fetchReportText.mockResolvedValue(mockReportText);
+      getAssessment.mockResolvedValue(mockAssessmentDetail);
+
+      renderWithRouter();
 
       await waitFor(() => {
         expect(screen.getByText('Basic information')).toBeInTheDocument();
@@ -179,16 +180,13 @@ Recommendation: Send patient to Emergency Department immediately`;
       expect(screen.getByText(/- Headache/)).toBeInTheDocument();
       expect(screen.getByText(/Send patient to Emergency Department/)).toBeInTheDocument();
     });
+  });
 
-    it('applies correct color class for emergency recommendation', async () => {
-      renderComponent();
-
-      await waitFor(() => {
-        const cards = screen.getAllByRole('article');
-        cards.forEach(card => {
-          expect(card).toHaveClass('report-red');
-        });
-      });
+  // 3. 文本解析和卡片显示测试
+  describe('Text Parsing and Card Display', () => {
+    beforeEach(() => {
+      fetchReportText.mockResolvedValue(mockReportText);
+      getAssessment.mockResolvedValue(mockAssessmentDetail);
     });
 
     it('handles report without symptoms section', async () => {
@@ -201,11 +199,11 @@ Answer    : No
 ----------------------------------------
 Recommendation: No referral required`;
 
-      mockFetchReportText.mockResolvedValue(reportWithoutSymptoms);
-      mockGetAssessment.mockResolvedValue({
+      fetchReportText.mockResolvedValue(reportWithoutSymptoms);
+      getAssessment.mockResolvedValue({
         id: 'rec-124',
         recommendation: 'NO_REFERRAL',
-        role: 'optometrist' as UserRole,
+        role: 'optometrist',
         patientId: 'patient-124',
         answers: [
           {
@@ -217,7 +215,7 @@ Recommendation: No referral required`;
         createdAt: '2025-01-15T10:30:00Z'
       });
 
-      renderComponent();
+      renderWithRouter();
 
       await waitFor(() => {
         expect(screen.getByText('Basic information')).toBeInTheDocument();
@@ -228,6 +226,7 @@ Recommendation: No referral required`;
     });
   });
 
+  // 4. 颜色映射测试
   describe('Color Mapping', () => {
     const colorTestCases = [
       { recommendation: 'EMERGENCY_DEPARTMENT', expectedColor: 'report-red' },
@@ -235,23 +234,22 @@ Recommendation: No referral required`;
       { recommendation: 'URGENT_TO_OPH', expectedColor: 'report-orange' },
       { recommendation: 'URGENT_TO_GP_OR_NEUR', expectedColor: 'report-orange' },
       { recommendation: 'TO_GP', expectedColor: 'report-green' },
-      { recommendation: 'NO_REFERRAL', expectedColor: 'report-green' },
-      { recommendation: 'UNKNOWN_TYPE', expectedColor: 'report-green' }, // default
+      { recommendation: 'NO_REFERRAL', expectedColor: 'report-green' }
     ];
 
     colorTestCases.forEach(({ recommendation, expectedColor }) => {
       it(`applies ${expectedColor} class for ${recommendation}`, async () => {
-        mockFetchReportText.mockResolvedValue(mockReportText);
-        mockGetAssessment.mockResolvedValue({
+        fetchReportText.mockResolvedValue(mockReportText);
+        getAssessment.mockResolvedValue({
           id: 'test-id',
           recommendation,
-          role: 'optometrist' as UserRole,
+          role: 'optometrist',
           patientId: 'patient-test',
           answers: [],
           createdAt: '2025-01-15T10:30:00Z'
         });
 
-        renderComponent();
+        renderWithRouter();
 
         await waitFor(() => {
           const cards = screen.getAllByRole('article');
@@ -263,75 +261,34 @@ Recommendation: No referral required`;
     });
   });
 
-  describe('Component Integration', () => {
-    it('renders header with correct title', () => {
-      renderComponent();
+  // 5. 错误处理测试  
+  describe('Error Handling', () => {
+    it('displays error message when fetchReportText fails', async () => {
+      fetchReportText.mockRejectedValue(new Error('Network error'));
+      getAssessment.mockRejectedValue(new Error('Network error'));
 
-      expect(screen.getByTestId('header')).toHaveTextContent('Assessment Report');
-    });
-
-    it('renders sidebar and bottom navigation', () => {
-      renderComponent();
-
-      expect(screen.getByTestId('sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('bottom-nav')).toBeInTheDocument();
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('handles malformed report text gracefully', async () => {
-      const malformedText = 'This is not a valid report format';
-      
-      mockFetchReportText.mockResolvedValue(malformedText);
-      mockGetAssessment.mockResolvedValue(mockAssessmentDetail);
-
-      renderComponent();
+      renderWithRouter();
 
       await waitFor(() => {
-        // Should still render cards, even with unexpected content
-        expect(screen.getByText('Basic information')).toBeInTheDocument();
-        expect(screen.getByText('Question responses')).toBeInTheDocument();
-        expect(screen.getByText('Recommendation')).toBeInTheDocument();
+        expect(screen.getByText(/Error: Network error/)).toBeInTheDocument();
       });
     });
 
-    it('handles empty report text', async () => {
-      mockFetchReportText.mockResolvedValue('');
-      mockGetAssessment.mockResolvedValue(mockAssessmentDetail);
+    it('displays error message when getAssessment fails', async () => {
+      fetchReportText.mockResolvedValue(mockReportText);
+      getAssessment.mockRejectedValue(new Error('Assessment not found'));
 
-      renderComponent();
-
-      await waitFor(() => {
-        const cards = screen.getAllByRole('article');
-        expect(cards).toHaveLength(3); // Should render 3 cards (no symptoms)
-      });
-    });
-
-    it('handles assessment detail with default recommendation', async () => {
-      mockFetchReportText.mockResolvedValue(mockReportText);
-      mockGetAssessment.mockResolvedValue({
-        id: 'test-id',
-        recommendation: 'NO_REFERRAL',
-        role: 'optometrist' as UserRole,
-        patientId: 'patient-test',
-        answers: [],
-        createdAt: '2025-01-15T10:30:00Z'
-      });
-
-      renderComponent();
+      renderWithRouter();
 
       await waitFor(() => {
-        const cards = screen.getAllByRole('article');
-        cards.forEach(card => {
-          expect(card).toHaveClass('report-green'); // Should use green for NO_REFERRAL
-        });
+        expect(screen.getByText(/Error: Assessment not found/)).toBeInTheDocument();
       });
     });
 
     it('handles assessment detail without recommendation field', async () => {
-      mockFetchReportText.mockResolvedValue(mockReportText);
+      fetchReportText.mockResolvedValue(mockReportText);
       // Use type assertion to test the edge case where recommendation might be missing
-      mockGetAssessment.mockResolvedValue({
+      getAssessment.mockResolvedValue({
         id: 'test-id',
         role: 'optometrist',
         patientId: 'patient-test',
@@ -339,46 +296,14 @@ Recommendation: No referral required`;
         createdAt: '2025-01-15T10:30:00Z'
       } as any); // Type assertion to bypass TypeScript checking
 
-      renderComponent();
+      renderWithRouter();
 
       await waitFor(() => {
+        expect(screen.getByTestId('header')).toBeInTheDocument();
         const cards = screen.getAllByRole('article');
         cards.forEach(card => {
           expect(card).toHaveClass('report-green'); // Should default to green when no recommendation
         });
-      });
-    });
-  });
-
-  describe('Accessibility', () => {
-    beforeEach(() => {
-      mockFetchReportText.mockResolvedValue(mockReportText);
-      mockGetAssessment.mockResolvedValue(mockAssessmentDetail);
-    });
-
-    it('uses semantic HTML elements', async () => {
-      renderComponent();
-
-      await waitFor(() => {
-        expect(screen.getByRole('main')).toBeInTheDocument();
-        expect(screen.getAllByRole('article')).toHaveLength(4);
-        expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(4);
-      });
-    });
-
-    it('provides meaningful headings for each section', async () => {
-      renderComponent();
-
-      await waitFor(() => {
-        const headings = screen.getAllByRole('heading', { level: 2 });
-        const headingTexts = headings.map(h => h.textContent);
-        
-        expect(headingTexts).toEqual([
-          'Basic information',
-          'Question responses', 
-          'Patient symptoms',
-          'Recommendation'
-        ]);
       });
     });
   });

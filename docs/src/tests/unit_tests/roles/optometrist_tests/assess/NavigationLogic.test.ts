@@ -1,4 +1,4 @@
-import { getNextId, AnswerHistory } from '../../utils/NavigationLogic';
+import { getNextId, AnswerHistory } from '../../../../../utils/NavigationLogic';
 
 describe('NavigationLogic', () => {
   describe('Simple navigation rules', () => {

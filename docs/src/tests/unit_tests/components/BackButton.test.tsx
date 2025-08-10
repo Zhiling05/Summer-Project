@@ -1,46 +1,30 @@
-import React from 'react';
-// import { Mock } from 'jest-mock';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import BackButton from '../../../components/BackButton';
-import '@testing-library/jest-dom';
 
+const mockNavigate = jest.fn();
 
-
-import { useNavigate } from 'react-router-dom';
 jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    // mock useNavigate
-    useNavigate: jest.fn(),
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate
 }));
 
-describe('BackButton components testing', () => {
-    // reset mockNavigate before each testing
-    const mockNavigate = jest.fn();
+describe('BackButton Component', () => {
+  beforeEach(() => {
+    mockNavigate.mockClear();
+  });
 
-    beforeEach(() => {
-        (useNavigate as unknown as jest.Mock).mockReturnValue(mockNavigate);
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    it('BackButton should render correctly', () => {
-        render(<BackButton />);
-        // check button
-        const button = screen.getByRole('button');
-        expect(button).toBeInTheDocument();
-        // check text on the button
-        expect(button).toHaveTextContent('← Go back');
-    });
-
-    it('Clicking the button should call navigate(-1)', () => {
-        render(<BackButton />);
-        const button = screen.getByRole('button');
-        // mock user click
-        fireEvent.click(button);
-        // check whether navigate(-1) has been called
-        expect(mockNavigate).toHaveBeenCalledWith(-1);
-        expect(mockNavigate).toHaveBeenCalledTimes(1);
-    });
+  it('calls navigate(-1) when clicked', () => {
+    render(
+      <MemoryRouter>
+        <BackButton />
+      </MemoryRouter>
+    );
+    
+    const button = screen.getByText('← Go back');
+    fireEvent.click(button);
+    
+    expect(mockNavigate).toHaveBeenCalledWith(-1);
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
+  });
 });
