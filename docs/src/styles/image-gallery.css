@@ -8,6 +8,7 @@
 }
 
 .gallery-wrapper {
+    width: 80vw;
     max-width: var(--container-max);
     margin: 0 auto;
     padding: 0 var(--space-s);

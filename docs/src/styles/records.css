@@ -1,7 +1,7 @@
 .records-main {
     flex: 1;
     background: var(--page-base);
-    padding: var(--space-xl) var(--space-l) calc(64px + var(--space-xl));
+    padding: var(--space-s) var(--space-l) calc(64px + var(--space-xl));
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);
@@ -20,7 +20,7 @@
 .records-title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--core-blue);
+    color: var(--light-blue);
     margin: 0;
     margin-top: 150px; /* zkx新增上边距，放置 go back*/
 }
@@ -172,15 +172,24 @@
 }
 
 /* 让主容器始终占据视口的 80% 宽度，水平居中，并保留左右内边距 */
-.page-container,
-.records-main {
-    width: 90%;
-    max-width: none;
+/*.page-container,*/
+/*.records-main {*/
+/*    width: 90%;*/
+/*    max-width: none;*/
+/*    margin: 0 auto;*/
+/*    padding: 0 var(--space-l);*/
+/*    box-sizing: border-box;*/
+/*    padding-bottom: 60px;*/
+/*}*/
+.records-wrapper {
+    max-width: var(--container-max);
     margin: 0 auto;
     padding: 0 var(--space-l);
+    width: 100%;
     box-sizing: border-box;
-    padding-bottom: 60px;
 }
+
+
 
 /* 风险标签 */
 .tag-pill {
@@ -217,4 +226,21 @@
     .stats-grid { grid-template-columns: 1fr; }
     .filter-bar label { min-width: 140px; flex: 1 1 140px; }
     .records-table th, .records-table td { padding: 10px 12px; }
+}
+
+.records-title {
+    margin-top: 150px; /* 原有 */
+    margin-bottom: var(--space-xl); /* ✅ 新增：标题和统计卡之间的间距 */
+}
+
+.stats-grid {
+    margin-bottom: var(--space-xl); /* ✅ 卡片和 filter-bar 之间的间距 */
+}
+
+.filter-bar {
+    margin-bottom: var(--space-xl); /* ✅ filter-bar 和表格之间的间距 */
+}
+
+.table-wrapper {
+    margin-bottom: var(--space-xl); /* ✅ 表格和底部导航之间的空间 */
 }
