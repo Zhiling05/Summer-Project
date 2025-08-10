@@ -126,6 +126,7 @@ function getNextByCrossQuestionRules(
 
     if (passed) return rule.next;
   }
+  
 
 
   return defaultNext;

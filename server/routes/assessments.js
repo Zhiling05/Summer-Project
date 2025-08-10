@@ -93,4 +93,13 @@ router.post('/assessments', async (req, res) => {
   }
 });
 
+router.post('/assessments', async (req, res) => {
+  try {
+    const newRecord = await Assessment.create(req.body);
+    res.status(201).json(newRecord);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

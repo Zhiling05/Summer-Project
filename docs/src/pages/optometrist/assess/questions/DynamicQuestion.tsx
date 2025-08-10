@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
+import BackButton from '../../../../components/BackButton';//zkx
 // ycl: 改为从 src/assets 里 import，Vite 才能正确打包
 import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
 import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
@@ -186,6 +187,7 @@ const DynamicQuestion = () => {
     return (
       <>
         <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
+        <BackButton />
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h2>Question not found: {questionId}</h2>
       </div>
@@ -203,6 +205,7 @@ const DynamicQuestion = () => {
     return (
       <>
         <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
+        <BackButton />
 
         <div className="nhsuk-width-container">
           <main id="maincontent" className="nhsuk-main-wrapper">
@@ -232,6 +235,7 @@ const DynamicQuestion = () => {
   return (
     <>
       <Header title="DIPP Assessment" showBack /> {/* ycl-sprint2.2 */}
+      <BackButton />
 
       <div className="nhsuk-width-container">
         <main id="maincontent" className="nhsuk-main-wrapper">

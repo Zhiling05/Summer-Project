@@ -6,19 +6,42 @@
     flex-direction: column;
     gap: var(--space-xl);
 }
+@media (max-width: 768px) {
+    .records-main {
+        padding: var(--space-l) var(--space-m) calc(48px + var(--space-l));
+    }
+}
+@media (max-width: 480px) {
+    .records-main {
+        padding: var(--space-m) var(--space-s) calc(32px + var(--space-m));
+    }
+}
 
 .records-title {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--core-blue);
     margin: 0;
+    margin-top: 150px; /* zkx新增上边距，放置 go back*/
+}
+@media (max-width: 768px) {
+    .records-title {
+        margin-top: 80px;
+    }
 }
 
-/* 1. 风险统计卡 */
+/* -----------------------------------------------------------
+   1. 风险统计卡
+   ----------------------------------------------------------- */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--space-l);
+}
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .stats-card {
@@ -54,6 +77,11 @@
     gap: var(--space-l);
     align-items: center;
 }
+@media (max-width: 768px) {
+    .filter-bar {
+        gap: var(--space-m);
+    }
+}
 
 .filter-bar label {
     font-size: .95rem;
@@ -84,14 +112,16 @@
     border-color: var(--core-blue);
 }
 
-/* react-datepicker */
+/* ── 让 react-datepicker 的 wrapper 也固定宽度 ── */
 .filter-bar .react-datepicker-wrapper,
 .filter-bar .react-datepicker__input-container {
     width: 160px;
 }
+
+/* ── 让实际的 text input 填满 wrapper ── */
 .filter-bar .react-datepicker__input-container input {
     width: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box;   /* 确保 width 包括了 padding */
 }
 
 /* 3. 表格 */
@@ -141,7 +171,7 @@
     white-space: nowrap;
 }
 
-/* 容器宽度 */
+/* 让主容器始终占据视口的 80% 宽度，水平居中，并保留左右内边距 */
 .page-container,
 .records-main {
     width: 90%;

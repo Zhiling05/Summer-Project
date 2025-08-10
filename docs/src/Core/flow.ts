@@ -81,4 +81,3 @@ export function getFirstUnanswered(): string | undefined {
   }
   return undefined;
 }
-

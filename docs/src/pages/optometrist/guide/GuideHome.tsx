@@ -4,7 +4,8 @@ import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import '../../../styles/card.css';
 import '../../../styles/guidehome.css';
-
+import BackButton from '../../../components/BackButton';//zkx
+//import SkipGuideButton from '../../../components/SkipGuideButton';//zkx
 
 export default function GuideHome() {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
@@ -66,6 +67,7 @@ export default function GuideHome() {
   return (
     <>
       <Header title="Guide" />
+      <BackButton />
 
       <div className="guide-main-container">
         <div className="guide-flex-content">
