@@ -1,11 +1,10 @@
 /* src/styles/card.css */
-
 /* 基础卡片样式 */
 .base-card {
-  background-color: #ffffff;
-  border: 1px solid #E8EDEE;
-  border-bottom: 4px solid #E8EDEE;
-  border-radius: 0;
+  background-color: var(--lighter-base);
+  border: 1px solid var(--border-grey);
+  border-bottom: 4px solid var(--border-grey);
+  border-radius: var(--radius-s);
   padding: 1rem 2rem;
   cursor: pointer;
   position: relative;
@@ -14,6 +13,7 @@
   justify-content: space-between;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 /* 不可点击的卡片 */
@@ -23,8 +23,8 @@
 
 /* 悬浮效果 */
 .base-card:hover {
-  border: 1px solid #768692;
-  border-bottom: 4px solid #768692;
+  border: 1px solid var(--core-blue);
+  border-bottom: 4px solid var(--core-blue);
 }
 
 /* 卡片内容容器 */
@@ -36,14 +36,15 @@
 .card-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #005eb8;
+  color: var(--card-title);
   margin: 0;
   line-height: 1.3;
+  transition: color 0.2s ease;
 }
 
 /* 卡片标题悬浮效果 */
 .base-card:hover .card-title {
-  color: #7C2855;
+  color: var(--text-hover);
   text-decoration: underline;
 }
 
@@ -53,9 +54,10 @@
 }
 
 /* 卡片描述 */
+
 .card-description {
   font-size: 1rem;
-  color: #212b32;
+  color: var(--text-body);
   margin: 0.5rem 0 0 0;
   line-height: 1.6;
 }
@@ -70,9 +72,10 @@
 .card-arrow-circle {
   width: 32px;
   height: 32px;
-  background-color: #005eb8;
+  background-color: var(--core-blue);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.2s ease;
 }

@@ -14,12 +14,12 @@
   align-items: center;
   padding: var(--space-m);
 }
-
 /* Logo与汉堡菜单区域 */
 .nhs-header__left {
   display: flex;
   align-items: center;
   flex: 1;
+  justify-content: space-between;
 }
 
 .nhs-logo,
@@ -27,17 +27,17 @@
 .humbug-logo { 
   height: 42px;
   width: auto;
-  margin-right: var(--space-m);
+  margin-right: 20%;
 }
-
 /* 中间标题区域 */
 .nhs-header__center {
   flex: 2;
   color: var(--text-inverse);
   font-size: 1.125rem;
   font-weight: 600;
-  text-align: center;
+  text-align: right; /* 文本已设置为右对齐 */
   display: block; /* 默认显示标题 */
+  margin-left: 40rem; /* 增加右边距，可以根据需要调整这个值 zkx */
 }
 
 /* 返回按钮区域 */
@@ -57,6 +57,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-right: 10%; /* 增加右边距 zkx*/
 }
 
 /* —— 移动端适配 —— */
@@ -69,6 +70,7 @@
 
   .nhs-header__center {
     display: none; /* 移动端隐藏标题 */
+    margin-right: 80%; /* 增加右边距 zkx*/
   }
 
   
@@ -89,13 +91,25 @@
     background-color: white;
   }
 
+  /* 新增返回按钮容器样式 */
+  .back-container {
+    position: fixed;
+    top: 70px; /* 根据header高度调整 */
+    left: 20px;
+    z-index: 9; /* 比header低一层 */
+    background-color: transparent;
+    padding: 10px;
+  }
+  
   /* 返回按钮仍然显示，并且为箭头形态 */
   .nhs-header__back {
     display: inline-flex; /* 确保按钮显示 */
+    margin-right: 20%; /* 增加右边距 zkx*/
   }
 
   .nhs-header__back .back-arrow {
     font-size: 1.2rem; /* 显示为三角形箭头 */
+    margin-right: 20%; /* 增加右边距 zkx*/
   }
 
   /* logo与汉堡菜单在一行 */

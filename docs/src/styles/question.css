@@ -10,9 +10,9 @@
   --core-green:       #007f3b;
   --dark-green:       #005a30;
   --warm-yellow:      #fae100;
-  --error-red:       #d4351c;         /* NHS error red */
+  --urgent-red:       #d4351c;         /* NHS error red */
 
-  --page-grey:        #e5ecef;
+  --page-base:        #e5ecef;
   --border-grey:      #aeb7bd;
   --text-body:        #0b0c0c;
   --text-inverse:     #ffffff;
@@ -32,12 +32,12 @@
 /* —— 杜绝夜间爆闪：暗色模式自定义变量 —— */
 @media (prefers-color-scheme: dark) {
   :root {
-    --page-grey:        #0d1215;
+    --page-base:        #0d1215;
     --border-grey:      #273036;
     --text-body:        #e9ecef;
     --text-inverse:     #0d1215;
     --shadow-card:      0 2px 6px rgba(0,0,0,.35);
-    --error-red:        #ff5f56;
+    --urgent-red:        #ff5f56;
   }
 }
 
@@ -52,7 +52,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
                Arial, sans-serif;
-  background: var(--page-grey);
+  background: var(--page-base);
   color: var(--text-body);
   -webkit-font-smoothing: antialiased;
 
@@ -141,6 +141,7 @@ body {
   justify-content: center;              /* question-box 垂直居中 */
   /*  顶部留 var(--space-xl)，底部给导航让路  */
   padding: var(--space-xl) 0 calc(64px + 128px);
+  margin-top: 80px; /* zkx加，新增上边距，放置 go back*/
 }
 
 /* —— 内容栅格 —— */
@@ -229,7 +230,7 @@ padding-bottom: calc(64px + 16px);
 /* —— 黄色提示条 —— */
 .hint {
   display: inline-block;
-  background: var(--warm-yellow);
+  background:var(--risk-orange);
   color: var(--text-body);
   font-size: .95rem;
   font-weight: 600;
@@ -385,7 +386,7 @@ img {
   transform: translateX(-50%);
   max-width: 420px;
   width: calc(100% - 32px);
-  background: var(--error-red);
+  background: var(--urgent-red);
   color: var(--text-inverse);
   padding: var(--space-s) var(--space-m);
   border-radius: var(--radius-s);
@@ -429,7 +430,7 @@ img {
 }
 .error-modal {
   background: var(--text-inverse);
-  border-left: 4px solid var(--error-red);
+  border-left: 4px solid var(--urgent-red);
   border-radius: var(--radius-m) 0 0 var(--radius-m);
   box-shadow: var(--shadow-card);
   max-width: 500px;
@@ -441,7 +442,7 @@ img {
   font-size: 1.35rem;
   font-weight: 700;
   margin: 0 0 var(--space-m);
-  color: var(--error-red);
+  color: var(--urgent-red);
 }
 .error-modal__actions {
   margin-top: var(--space-l);
@@ -452,10 +453,10 @@ img {
 
 /* —— 表单校验 —— */
 .is-invalid {
-  border-color: var(--error-red) !important;
+  border-color: var(--urgent-red) !important;
 }
 .error-text {
-  color: var(--error-red);
+  color: var(--urgent-red);
   font-size: .9rem;
   margin-top: 4px;
 }

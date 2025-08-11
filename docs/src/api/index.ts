@@ -14,6 +14,7 @@ export interface CreateAssessmentRequest {
   patientId: string;
   answers: Answer[];
   recommendation: string;
+  content: string; // yj添加：解决500报错
   timestamp?: string;
 }
 
@@ -62,7 +63,8 @@ export interface GetReferralStatisticsResponse {
 }
 
 // —— Helpers —— //
-const API_BASE = '/api';
+// const API_BASE = '/api';
+const API_BASE = 'http://localhost:4000/api';
 
 async function request<T>(url: string, opts: RequestInit = {}): Promise<T> {
   const res = await fetch(API_BASE + url, {
@@ -131,15 +133,37 @@ export function sendReport(
   });
 }
 
+// export async function listAssessments(limit = 50) {
+//   const res = await fetch(`/api/assessments?limit=${limit}`, {
+//     credentials: 'include',
+//   });
+//   if (!res.ok) throw new Error(`List failed: ${res.statusText}`);
+//   return res.json() as Promise<{
+//     records: { id: string; date: string; risk: string }[];
+//   }>;
+// }
+// docs/src/api/index.ts
 export async function listAssessments(limit = 50) {
-  const res = await fetch(`/api/assessments?limit=${limit}`, {
-    credentials: 'include',
+  const res = await fetch(`${API_BASE}/assessments?limit=${limit}`, {
   });
   if (!res.ok) throw new Error(`List failed: ${res.statusText}`);
-  return res.json() as Promise<{
+
+  const json = await res.json();
+
+  // 兼容后端可能返回数组，或 { records: [...] }
+  const arr = Array.isArray(json) ? json : json.records;
+
+  const records = (arr ?? []).map((d: any) => ({
+    id:   d.id ?? d._id,                       // 统一为 id
+    date: d.date ?? d.createdAt,               // 统一为 date
+    risk: d.risk ?? d.recommendation ?? 'no-referral', // 统一为 risk
+  }));
+
+  return { records } as {
     records: { id: string; date: string; risk: string }[];
-  }>;
+  };
 }
+
 
 // 5. 统计 - 使用次数
 export function getUsageStatistics(

@@ -2,7 +2,7 @@ import {
   validateSingleSelection, 
   validateMultipleSelection, 
   validateByType 
-} from '../../utils/ValidationLogic';
+} from '../../../utils/ValidationLogic';
 
 describe('ValidationLogic', () => {
   describe('validateSingleSelection', () => {

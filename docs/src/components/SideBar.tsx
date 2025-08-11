@@ -1,23 +1,38 @@
-//docs/src/components/SideBar.tsx
-
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "/src/styles/sidebar.css";
 
 const SideBar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false); // 控制菜单是否打开
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const prevPathRef = useRef(location.pathname);
 
-  /* —— 切换 —— */
-  const toggle = () => setIsOpen((v) => !v);
+  // 监听路径变化
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const prevPath = prevPathRef.current;
 
-  /* —— 点击空白处自动收起 —— */
+    // 进入设置/联系我们页面时关闭侧边栏
+    if (['/settings', '/contact-us'].includes(currentPath)) {
+      setIsOpen(false);
+    } 
+    // 从设置/联系我们页面返回时打开侧边栏:ml-citation{ref="7" data="citationList"}
+    else if (['/settings', '/contact-us'].includes(prevPath)) {
+      setIsOpen(true);
+    }
+
+    prevPathRef.current = currentPath;
+  }, [location.pathname]);
+
+  // 外部点击关闭
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (
         isOpen &&
         e.target instanceof HTMLElement &&
         !e.target.closest(".sidebar") &&
-        !e.target.closest(".hamburger-btn") // 如果点击的地方不是侧边栏和汉堡按钮，关闭菜单
+        !e.target.closest(".hamburger-btn")
       ) {
         setIsOpen(false);
       }
@@ -26,34 +41,29 @@ const SideBar: React.FC = () => {
     return () => window.removeEventListener("click", handleClick);
   }, [isOpen]);
 
+  // 判断是否显示汉堡按钮
+  const shouldShowHamburger = !['/settings', '/contact-us'].includes(location.pathname);
+
   return (
     <>
-      {/* 汉堡按钮 */}
-      <button
-        aria-label={isOpen ? "Close navigation" : "Open navigation"}
-        className={`hamburger-btn ${isOpen ? "active" : ""}`}
-        onClick={toggle}
-      >
-        <span className="bar" />
-        <span className="bar" />
-        <span className="bar" />
-      </button>
+      {shouldShowHamburger && (
+        <button
+          aria-label={isOpen ? "Close navigation" : "Open navigation"}
+          className={`hamburger-btn ${isOpen ? "active" : ""}`}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="bar" />
+          <span className="bar" />
+          <span className="bar" />
+        </button>
+      )}
 
-      {/* 遮罩层 */}
-      {isOpen && <div className="sidebar-overlay" onClick={toggle} />}
+      {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)} />}
 
-      {/* 侧边栏 */}
       <nav className={`sidebar ${isOpen ? "open" : ""}`}>
         <ul className="sidebar-links">
-          <li>
-            <Link to="/about-us">About&nbsp;Us</Link>
-          </li>
-          <li>
-            <Link to="/settings">Settings</Link>
-          </li>
-          <li>
-            <Link to="/contact-us">Contact&nbsp;Us</Link>
-          </li>
+          <li><Link to="/settings">Settings</Link></li>
+          <li><Link to="/contact-us">Contact Us</Link></li>
         </ul>
       </nav>
     </>

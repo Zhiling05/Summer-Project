@@ -1,0 +1,140 @@
+/* optAppTutorial.css */
+
+.tutorial-container {
+    background: var(--page-base);
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    min-height: calc(100vh - 120px);
+    box-sizing: border-box;
+    padding: 40px 24px 80px 24px;
+}
+
+.tutorial-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 8px;
+}
+
+.tutorial-h1 {
+    color:var(--text-body);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+}
+
+.tutorial-tabs {
+    padding: 24px 0 16px 0;
+    border-bottom: 2px solid var(--border-grey);
+    margin-bottom: 8px;
+    display: flex;
+    gap: 32px;
+    justify-content: flex-start;
+}
+
+.tutorial-tab {
+    padding: 4px 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: capitalize;
+    outline: none;
+    box-shadow: none;
+    border-bottom: 2px solid transparent;
+}
+
+.tutorial-tab:hover {
+    border-bottom: 2px solid var(--text-hover);
+    color: var(--text-hover);
+}
+
+.tutorial-tab.active {
+    border-bottom: 2px solid var(--core-blue);
+    color: var(--core-blue);
+}
+
+.tutorial-content {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+}
+
+.tutorial-h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-body);
+    margin: 0 0 8px 0;
+}
+
+.tutorial-text {
+    font-size: 1rem;
+    color: var(--text-body);
+    line-height: 1.6;
+}
+
+.tutorial-text p {
+    margin: 0 0 16px 0;
+}
+
+.tutorial-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 2px solid var(--border-grey);
+    gap: 16px;
+}
+
+.tutorial-button {
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+}
+
+.tutorial-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.tutorial-button--prev {
+    background: var(--border-grey);
+    border: 2px solid var(--border-grey);
+}
+
+.tutorial-button--prev:hover:enabled {
+    background: var(--text-muted);
+    border-color: var(--text-muted);
+}
+
+.tutorial-button--next {
+    background: var(--core-blue);
+    border: 2px solid var(--core-blue);
+}
+
+.tutorial-button--next:hover:enabled {
+    background: #003087;
+}
+
+/* 补齐概述里小标题的视觉（等同原内联） */
+.tutorial-text h3{
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-body);
+    margin: 24px 0 12px 0;
+}
+
+
+.tutorial-button:disabled { opacity: .5; cursor:not-allowed; }

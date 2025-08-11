@@ -1,5 +1,5 @@
 // docs/src/pages/optometrist/assess/recommendations/DynamicRecommendation.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import {
   fetchReportText,
@@ -10,9 +10,6 @@ import { saveAs } from "file-saver";
 
 import recommendationsData from "../../../../data/recommendations.json";
 import "../../../../styles/recommendation.css";
-
-import NHSLogo  from "../../../../assets/NHS_LOGO.jpg";
-import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
 
 //import BackButton from "../../../../components/BackButton";
 import Header from "../../../../components/Header"; // ycl2
@@ -67,25 +64,32 @@ const EmailModal: React.FC<{
 interface Recommendation {
   id: string;
   title: string;
-  description: string;
-  bulletPoints: string[];
   themeColor: string;
   backgroundColor: string;
-  actions: string[];
 }
 
 /* =============================================================== */
 
 const DynamicRecommendation: React.FC = () => {
+
+  useEffect(() => {
+    // 标记完成，之后不再弹
+    sessionStorage.setItem('assessmentComplete', 'true');
+    sessionStorage.removeItem('assessStarted');
+    sessionStorage.removeItem('lastQuestionId');
+  }, []);
+
   /* —— 路由参数 —— */
-  const { resultId } = useParams<{ resultId: string }>();
+  // const { resultId } = useParams<{ resultId: string }>();
+  const { resultId, assessmentId: paramAssessmentId } = useParams<{ resultId: string; assessmentId?: string }>(); //yj添加：调用assessmentID，修复report的bug
   const rec = (recommendationsData as Recommendation[]).find(
     (r) => r.id === resultId
   );
 
   /* —— assessmentId 来自 DynamicQuestion 跳转时的 state —— */
   const { state }   = useLocation() as { state?: { assessmentId?: string } };
-  const assessId    = state?.assessmentId ?? "";
+  // const assessId    = state?.assessmentId ?? "";
+  const assessId  = paramAssessmentId ?? state?.assessmentId ?? ""; //yj添加
 
   /* —— 缓存纯文本报告 —— */
   const [report,   setReport]   = useState("");
@@ -199,9 +203,9 @@ const DynamicRecommendation: React.FC = () => {
 
           {/* 正文 & 按钮 */}
           <div className="recommendation-body">
-            <p className="recommendation-description">
+            {/* <p className="recommendation-description"> ------------lzl: 这里的硬编码我先删除了--------
               Send patient to <strong>Emergency Department</strong>.
-            </p>
+            </p> */}
 
             <div className="recommendation-actions">
               <button className="btn-primary"  onClick={handlePreview}>

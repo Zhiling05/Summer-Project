@@ -16,3 +16,5 @@ export async function submitAssessment(data: {
 
   return await response.json();
 }
+
+export { submitAssessment as createAssessment };
