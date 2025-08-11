@@ -1,4 +1,6 @@
-@import "./styles/question.css";
+/*@import "./styles/question.css";*/
+/*ZSA 0811 */
+@import "./styles/theme.css";
 @import "./styles/records.css";
 /*上面是姚璟添加，为了满足records样式与question保持一致*/
 

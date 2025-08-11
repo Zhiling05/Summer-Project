@@ -1,6 +1,7 @@
 // docs/src/pages/optometrist/OptometristApp.tsx
 import { Routes, Route, Navigate } from 'react-router-dom';
-import '../../styles/question.css';
+//import '../../styles/question.css';ZSA 0811 注释掉，因为这个文件已经被融合进theme.css
+import '../../styles/theme.css'; // ZSA 0811 确保引入主题
 import AssessRouter from './assess/AssessRouter';  
 import GuideRouter from './guide/GuideRouter';
 import Records from './Records';
