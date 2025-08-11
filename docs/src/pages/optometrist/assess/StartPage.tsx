@@ -1,7 +1,8 @@
 // docs/src/pages/optometrist/assess/StartPage.tsx
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../../styles/question.css';
+//import '../../../styles/question.css';ZSA 0811 注释掉，因为这个文件已经被融合进theme.css
+import '../../../styles/theme.css'; // ZSA 0811 确保引入主题
 import '../../../styles/startpage.css'; // ✅ 新增 StartPage 独立样式
 import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
