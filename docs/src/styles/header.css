@@ -1,10 +1,16 @@
 /* docs/src/styles/header.css 
 
 /* —— 统一header样式 —— */
+
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .nhs-header {
   background: var(--core-blue);
   width: 100%;
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   right: 0;
@@ -80,7 +86,7 @@
     flex-direction: column;
     gap: 5px;
     z-index: 9999; /* 提高z-index，确保汉堡按钮可点击 */
-    position: fixed; /* 确保汉堡按钮固定在顶部栏 */
+    position: absolute; /* 确保汉堡按钮固定在顶部栏 */
     top: 16px;
     left: 16px; /* 确保汉堡按钮在屏幕左上角 */
   }

@@ -13,7 +13,7 @@ import SettingsPage from './pages/sidebar/SettingsPage'; //zkx
 import { FontSizeProvider, useFontSize } from './pages/sidebar/FontSizeContext'; //zkx
 import SideBar from './components/SideBar';  // 引入你自己写的 SideBar 组件
 import './styles/theme.css'; //深浅色主题
-
+import TutorialPage from './pages/optometrist/tutorial/TutorialRouter'; 
 export default function App() {
   return (
     <FontSizeProvider>
@@ -43,6 +43,7 @@ const FontSizeAwareApp = () => {
         <Route path="/optometrist/*" element={<OptometristApp />} />
         <Route path="/patient/*" element={<PatientApp />} />
         <Route path="/gp/*" element={<GPApp />} />
+        <Route path="/tutorial" element={<TutorialPage />} />  
       </Routes>
     </BrowserRouter>
   );

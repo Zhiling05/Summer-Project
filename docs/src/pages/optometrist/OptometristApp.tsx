@@ -4,6 +4,7 @@ import '../../styles/question.css';
 import AssessRouter from './assess/AssessRouter';  
 import GuideRouter from './guide/GuideRouter';
 import Records from './Records';
+import TutorialRouter from './tutorial/TutorialRouter';
 
 export default function OptometristApp() {
   return (
@@ -19,6 +20,7 @@ export default function OptometristApp() {
 
       {/* /optometrist/records → Records 页面 */}
       <Route path="records" element={<Records />} />
+      <Route path="tutorial/*" element={<TutorialRouter />} /> 
     </Routes>
   );
 }

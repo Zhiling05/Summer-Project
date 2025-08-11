@@ -4,6 +4,7 @@ import NHSLogo from '../assets/NHS_LOGO.jpg';
 import DIPPLogo from '../assets/DIPP_Study_logo.png';
 import HumbugLogo from '../assets/humbug.png';
 import '../styles/header.css';
+import SideBar from './SideBar'; 
 
 interface HeaderProps {
   title: string;
@@ -38,6 +39,7 @@ export default function Header({
       <div className="nhs-header__left">
         {shouldShowHamburger && (
           <button
+            id="hamburger-menu" // ✅ 引导用的唯一 id zkx做tutorial用
             aria-label="Open navigation"
             className="hamburger-btn"
             onClick={() => navigate('/sidebar')} // 假设点击汉堡按钮跳转到侧边栏页面
@@ -65,6 +67,7 @@ export default function Header({
 
       <div className="nhs-header__right">
       </div>
+      <SideBar />
     </header>
   );
 }
