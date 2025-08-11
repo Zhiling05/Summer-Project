@@ -1,4 +1,5 @@
 // docs/src/pages/optometrist/assess/StartPage.tsx
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/question.css';
 import '../../../styles/startpage.css'; // ✅ 新增 StartPage 独立样式
@@ -7,6 +8,14 @@ import BottomNav from '../../../components/BottomNav';
 
 export default function StartPage() {
     const navigate = useNavigate();
+
+    // ✅ 首次进入 assess 时自动跳到 /optometrist/tutorial/1  zkx
+  useEffect(() => {
+        const seen = localStorage.getItem('seenAssessmentGuide') === 'true';
+        if (!seen) {
+        navigate('/optometrist/tutorial/1', { replace: true });
+        }
+    }, [navigate]);
 
     return (
         <div className="startpage-page">
@@ -21,6 +30,7 @@ export default function StartPage() {
                         This assessment can help determine appropriate referral recommendations based on the patient's symptoms.
                     </p>
                     <button
+                        id="start-now" // ✅ 给引导用的定位 id zkx
                         className="continue-button startpage-button"
                         onClick={() => navigate('../questions/Q1')}
                     >
