@@ -79,7 +79,7 @@
 
 /* Add z-index to manage stacking order */
 .hamburger-btn {
-  position: fixed;
+  position: absolute;
   top: 16px;
   left: 16px;
   width: 40px;

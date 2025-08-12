@@ -1,6 +1,7 @@
 // docs/src/pages/patient/PatientApp.tsx
 import { useNavigate } from 'react-router-dom';
-import '../../styles/question.css';
+//import '../../styles/question.css';ZSA 0811 注释掉，因为这个文件已经被融合进theme.css
+import '../../styles/theme.css'; // ZSA 0811 确保引入主题
 import NHSLogo from '../../assets/NHS_LOGO.jpg';
 import DIPPLogo from '../../assets/DIPP_Study_logo.png';
 import BackButton from '../../components/BackButton';
