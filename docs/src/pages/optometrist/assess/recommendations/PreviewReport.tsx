@@ -1,130 +1,158 @@
-import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import Header     from "../../../../components/Header";
 import BottomNav  from "../../../../components/BottomNav";
 import Sidebar    from "../../../../components/SideBar";
-import { fetchReportText, getAssessment } from "../../../../api";
+import "../../../../styles/preview-report.css";
 
-import "../../../../styles/report.css";
-
-/* 推荐结果 ➜ 颜色（同 Records） */
-const COLOR_MAP: Record<string, "red" | "orange" | "green"> = {
-  EMERGENCY_DEPARTMENT : "red",
-  IMMEDIATE            : "red",
-  URGENT_TO_OPH        : "orange",
-  URGENT_TO_GP_OR_NEUR : "orange",
-  TO_GP                : "green",
-  NO_REFERRAL          : "green",
+/* ---------- 风险配色 ---------- */
+export type Level = "high" | "medium" | "low";
+const LEVEL_UI: Record<Level, { css: "red" | "orange" | "green" }> = {
+  high:   { css: "red"    },
+  medium: { css: "orange" },
+  low:    { css: "green"  },
+};
+const RISK_TO_LEVEL: Record<string, Level> = {
+  "emergency-department": "high",
+  immediate:              "high",
+  "urgent-to-oph":        "medium",
+  "urgent-to-gp-or-neur": "medium",
+  "to-gp":                "low",
+  "no-referral":          "low",
+};
+const RECOMMEND_TEXT: Record<string, string> = {
+  EMERGENCY_DEPARTMENT: "Send patient to Emergency Department immediately",
+  IMMEDIATE:            "Immediate referral to Eye Emergency On-Call",
+  URGENT_TO_OPH:        "Urgent referral to Ophthalmology",
+  URGENT_TO_GP_OR_NEUR: "Urgent referral to GP or Neurology",
+  TO_GP:                "Refer to General Practitioner",
+  NO_REFERRAL:          "No referral required",
+  OTHER_EYE_CONDITIONS_GUIDANCE: "Referral to other department",
 };
 
-function generateLocalPreview(state: any) {
-  if (!state) return "本地预览数据缺失";
-  const answers = state.answers || [];
-  const recommendation = state.recommendation || "";
+/* ---------- 折叠卡 ---------- */
+function CollapsibleCard({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-      "===== LOCAL PREVIEW =====\n\n" +
-      "Recommendation: " + recommendation + "\n\n" +
-      answers.map((a: any) => `${a.questionId}: ${a.answer}`).join("\n")
+    <article className={`collapse-card${open ? " open" : ""}`}>
+      <header className="collapse-card-header" onClick={() => setOpen(!open)}>
+        <span>{title}</span>
+        <span className="collapse-icon">{open ? "−" : "+"}</span>
+      </header>
+      {open && <div className="collapse-card-body">{children}</div>}
+    </article>
   );
 }
 
+/* ---------- 主组件 ---------- */
 export default function PreviewReport() {
-  const { id = "" } = useParams<{ id: string }>();
-  // const { state }   = useLocation() as { state?: { text?: string } };
-  // yj添加：修改state类型定义，之前的text，string太狭窄了
-  const { state } = useLocation() as {
-    state?: { text?: string; answers?: any[]; recommendation?: string }
-  };
+  const { id } = useParams();
+  const [ass, setAss] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
 
-
-  const [raw,     setRaw]     = useState(state?.text ?? "");
-  const [recCode, setRecCode] = useState("");
-  const [err,     setErr]     = useState<string | null>(null);
-
-
-
-  /* 拉数据（文本 + 详情） */
+  /* 获取详情 */
   useEffect(() => {
-
-    //yj添加：解决LOCAL报错问题
-    // 1. 如果是 LOCAL，本地渲染，无需请求后端
-    if (id === "LOCAL") {
-      // 这里你可以自定义本地预览文本
-      setRaw(generateLocalPreview(state));
-      setRecCode(state?.recommendation ?? "");
-      return;
-    }
-
-
     if (!id) return;
-    (async () => {
-      try {
-        const [txt, detail] = await Promise.all([
-          raw ? Promise.resolve(raw) : fetchReportText(id),
-          getAssessment(id),
-        ]);
-        setRaw(txt);
-        setRecCode(detail.recommendation);
-      } catch (e: any) {
-        setErr(e.message || String(e));
-      }
-    })();
+    fetch(`/api/assessments/${id}`)
+      .then(r => (r.ok ? r.json() : Promise.reject()))
+      .then(setAss)
+      .catch(() => alert("Failed to load assessment."))
+      .finally(() => setLoading(false));
   }, [id]);
 
-  if (err)  return <p style={{ color: "red", padding: "2rem" }}>Error: {err}</p>;
-  if (!raw) return <p style={{ padding: "2rem" }}>Loading…</p>;
+  if (loading) return <p style={{ padding: "2rem" }}>Loading…</p>;
+  if (!ass)    return <p style={{ padding: "2rem" }}>Not found.</p>;
 
-  /* ---------- 文本拆块 ---------- */
-  /* ---------- 文本拆块（兼容没有 Symptoms: 的报告） ---------- */
-const SEP  = "\n----------------------------------------\n";
-const clean = (s: string) =>
-  s.replace(/^[- ]+$/gm, "")        // 清掉横线
-   .replace(/\n{3,}/g, "\n\n")      // 连续空行折叠
-   .trim();
+  const RECOMM_TO_LEVEL: Record<string, Level> = {
+  EMERGENCY_DEPARTMENT: "high",
+  IMMEDIATE:            "high",
+  URGENT_TO_OPH:        "medium",
+  URGENT_TO_GP_OR_NEUR: "medium",
+  TO_GP:                "low",
+  NO_REFERRAL:          "low",
+  OTHER_EYE_CONDITIONS_GUIDANCE: "low",
+};
 
-/* ① meta / 其余 ------------------ */
-const firstSep   = raw.indexOf(SEP);
-const metaBlock  = clean(raw.slice(0, firstSep));
-const afterMeta  = raw.slice(firstSep + SEP.length);
+const level: Level =
+  RECOMM_TO_LEVEL[ass.recommendation as keyof typeof RECOMM_TO_LEVEL] ?? "low";
 
-/* ② QA / 其余（Symptoms 可能不存在） */
-const [qaRaw = "", restAfterQa = ""] =
-      afterMeta.split(/^Symptoms:/m);
+const colourCss = LEVEL_UI[level].css;
+const recText   = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation;
 
-const qaBlock = clean(qaRaw);
+  /* —— 交互按钮 —— */
+  const copyReport = async () => {
+    const txt = await fetch(`/api/assessments/${id}/report`).then(r => r.text());
+    await navigator.clipboard.writeText(txt);
+    alert("Copied!");
+  };
+  const download = () =>
+    window.open(`/api/assessments/${id}/export?format=txt`, "_blank");
+  const email = () => alert("TODO: email API");
 
-/* ③ Symptoms / Recommendation ------------------------------ *
- *    如果找不到 Symptoms:，symRaw 为空串，recRaw 就是剩余全文  */
-const [symRaw = "", recRawAll = restAfterQa] =
-      restAfterQa.split(/^Recommendation:/m);
-
-const symBlock = clean(symRaw);
-const recBody  = clean(recRawAll);        // Recommendation 正文
-
-  /* ---------- 卡片数据 ---------- */
-const cards = [
-  { title: "Basic information",   body: metaBlock },
-  { title: "Question responses",  body: qaBlock  },
-  symBlock && { title: "Patient symptoms", body: symBlock },
-  { title: "Recommendation",      body: recBody },
-].filter(Boolean) as {title:string;body:string}[];
-
-  const colorCls = `report-${COLOR_MAP[recCode] ?? "green"}`;
-
-  /* ---------- 渲染 ---------- */
   return (
     <>
       <Header title="Assessment Report" />
       <Sidebar />
-      <main className="report-main">
-        {cards.map(({ title, body }) => (
-          <article key={title} className={`report-card ${colorCls}`}>
-            <h2 className="report-heading">{title}</h2>
-            <pre className="report-text">{body}</pre>
+
+      <div className="page-container">
+        <main className="report-main">
+          {/* ——— 风险摘要条 ——— */}
+          <article className={`report-card ${colourCss}`}>
+            <h2 className="report-title">{recText}</h2>
+
+            <ul className="report-meta">
+              <li>Assessment <b>{ass.id}</b></li>
+              <li>Date : {ass.createdAt}</li>
+              <li>Role : {ass.role}</li>
+            </ul>
+
+            <div className="report-btn-group">
+              <button onClick={copyReport}>📋 Copy</button>
+              <button onClick={download}>⬇️ Download</button>
+              <button onClick={email}>✉️ Email</button>
+            </div>
           </article>
-        ))}
-      </main>
+
+          {/* ——— 单一 Full-Report 折叠卡 ——— */}
+          <section className="collapse-wrapper">
+            <CollapsibleCard title="Full Report" defaultOpen>
+              {/* Basic */}
+              <p style={{ fontWeight: 600, margin: "0 0 .4rem" }}>Basic information</p>
+              <ul className="info-list" style={{ marginBottom: "1rem" }}>
+                <li><b>ID:</b> {ass.id}</li>
+                <li><b>Date:</b> {ass.createdAt}</li>
+                <li><b>Role:</b> {ass.role}</li>
+              </ul>
+
+              {/* Symptoms */}
+              <p style={{ fontWeight: 600, margin: "0 0 .4rem" }}>Patient symptoms</p>
+              {ass.symptoms?.length ? (
+                <ul className="info-list" style={{ marginBottom: "1rem" }}>
+                  {ass.symptoms.map((s: string, i: number) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ marginBottom: "1rem" }}>No symptom recorded.</p>
+              )}
+
+              {/* Recommendation */}
+              <p style={{ fontWeight: 600, margin: "0 0 .4rem" }}>Recommendation</p>
+              <p>{recText}</p>
+            </CollapsibleCard>
+          </section>
+        </main>
+      </div>
+
       <BottomNav />
     </>
   );
