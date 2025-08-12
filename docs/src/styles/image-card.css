@@ -69,7 +69,7 @@
 
 /* 标签颜色 */
 .image-card__category-badge--true {
-  background: var(--uegent-red);
+  background: var(--urgent-red);
 }
 .image-card__category-badge--pseudo {
   background: var(--risk-green);
