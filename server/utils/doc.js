@@ -1,10 +1,4 @@
 // server/utils/doc.js
-/* ---------------------------------------------------------
- * 负责把一条 assessment
- *   ① 转成纯文本（buildText）
- *   ② （目前仅支持 txt）写入临时文件并返回下载信息（buildDoc）
- * --------------------------------------------------------*/
-
 const fs  = require('fs-extra');
 const tmp = require('tmp-promise');
 
@@ -19,59 +13,91 @@ const RECOMMEND_TEXT = {
   OTHER_EYE_CONDITIONS_GUIDANCE: 'Referral to other department',
 };
 
+/* ---------- Full Report 风格文本（和页面一致） ---------- */
+function buildFullReportText(ass) {
+  const iso = ass.createdAt
+    ? new Date(ass.createdAt).toISOString()
+    : '';
 
-/* ---------- 1. 转成纯文本 ---------- */
+  const symptoms = (ass.symptoms && ass.symptoms.length)
+    ? ass.symptoms.map(s => `- ${s}`).join('\n')
+    : 'No symptom recorded.';
+
+  const rec = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation || '';
+
+  return [
+    'Full Report',
+    '',
+    'Basic information',
+    '',
+    `ID: ${ass.id || ''}`,
+    `Date: ${iso}`,
+    `Role: ${ass.role || ''}`,
+    '',
+    'Patient symptoms',
+    '',
+    symptoms,
+    '',
+    'Recommendation',
+    '',
+    rec,
+    '',
+  ].join('\n');
+}
+
+/* ---------- 旧版详细问答文本（保留以免别处使用） ---------- */
 function buildText(ass) {
   const lines = [
     `Assessment ${ass.id}`,
-    //`Patient   : ${ass.patientId}`,
     `Date      : ${ass.createdAt}`,
     `Role      : ${ass.role}`,
     '----------------------------------------',
-    ...ass.answers.map(
+    ...(ass.answers || []).map(
       a =>
         `${a.questionId}: ${a.question || '(question text missing)'}\n` +
         `Answer    : ${a.answer}\n`
     ),
-
-    /* ---------- Symptoms ---------- */
     ...(ass.symptoms?.length
-        ? [
-            '----------------------------------------',
-            'Symptoms:',
-            ...ass.symptoms.map(s => `- ${s}`),
-          ]
-        : []),
-
+      ? [
+          '----------------------------------------',
+          'Symptoms:',
+          ...ass.symptoms.map(s => `- ${s}`),
+        ]
+      : []),
     '----------------------------------------',
     `Recommendation: ${RECOMMEND_TEXT[ass.recommendation] || ass.recommendation}`,
     '',
   ];
-
   return lines.join('\n');
 }
 
-/* ---------- 2. 生成临时文件 ---------- */
+/* ---------- 写详细问答版到临时 txt 文件 ---------- */
 async function buildDoc(ass, format = 'txt') {
   if (format !== 'txt') {
-    const err      = new Error('only txt supported');
-    err.status     = 501;      // 501 Not Implemented
+    const err  = new Error('only txt supported');
+    err.status = 501;
     throw err;
   }
-
   const { path, cleanup } = await tmp.file({ postfix: '.txt' });
-  await fs.writeFile(path, buildText(ass), 'utf8');
+  await fs.writeFile(path, buildText(ass), 'utf8'); 
+  return { path, cleanup, mime: 'text/plain', ext: 'txt' };
+}
 
+/* ---------- 工具：把任意文本写成临时 txt 文件 ---------- */
+async function buildDocFromText(text) {
+  const { path, cleanup } = await tmp.file({ postfix: '.txt' });
+  await fs.writeFile(path, text, 'utf8');
   return {
-    path,            // 临时文件路径
-    cleanup,         // 调用后删除
+    path,
+    cleanup,
     mime: 'text/plain',
-    ext : 'txt',
+    ext: 'txt',
   };
 }
 
-/* ---------- 3. 统一导出（只此一次！） ---------- */
 module.exports = {
-  buildText,
-  buildDoc,
+  buildText,            // 旧：问答版
+  buildDoc,             // 旧：写问答版到临时txt
+  buildFullReportText,  // 新：Full Report 文本
+  buildDocFromText,     // 新：把任意文本写临时txt
 };

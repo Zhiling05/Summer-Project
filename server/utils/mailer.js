@@ -1,5 +1,5 @@
 // utils/mailer.js
-console.log('[mailer] loaded');           // ★调试
+console.log('[mailer] loaded');  // 启动后端时就会看到这行日志
 
 const nodemailer = require('nodemailer');
 
