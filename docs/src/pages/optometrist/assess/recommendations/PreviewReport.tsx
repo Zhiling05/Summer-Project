@@ -5,6 +5,9 @@ import Header     from "../../../../components/Header";
 import BottomNav  from "../../../../components/BottomNav";
 import Sidebar    from "../../../../components/SideBar";
 import "../../../../styles/preview-report.css";
+import { sendReport } from "../../../../api";               // 发送邮件的 API
+import "../../../../styles/recommendation.css";             // 复用弹窗样式
+
 
 /* ---------- 风险配色 ---------- */
 export type Level = "high" | "medium" | "low";
@@ -53,11 +56,83 @@ function CollapsibleCard({
   );
 }
 
+
+//lsy复用zsa邮件发送模态框
+/* ---------- 邮件发送模态框 ---------- */
+const EmailModal: React.FC<{
+  open: boolean;
+  loading: boolean;
+  onClose: () => void;
+  onSend: (email: string) => void;
+}> = ({ open, loading, onClose, onSend }) => {
+  if (!open) return null;
+
+  const [email, setEmail] = useState("");
+
+
+  return (
+    <div className="email-modal-overlay" onClick={onClose}>
+      <div
+        className="email-modal"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="email-modal__title">Send report via email</h3>
+
+        <input
+          type="email"
+          placeholder="name@example.com"
+          className="email-modal__input"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <div className="email-modal__actions">
+          <button
+            className="btn-primary"
+            disabled={loading || !email}
+            onClick={() => onSend(email)}
+          >
+            {loading ? "Sending…" : "Send"}
+          </button>
+          <button className="btn-outline" onClick={onClose}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
 /* ---------- 主组件 ---------- */
 export default function PreviewReport() {
   const { id } = useParams();
   const [ass, setAss] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+
+
+  // 控制邮件发送模态框
+const [showEmailModal, setShowEmailModal] = useState(false);
+const [sending, setSending] = useState(false);
+
+const openEmailModal  = () => setShowEmailModal(true);
+const closeEmailModal = () => { if (!sending) setShowEmailModal(false); };
+
+const sendEmail = async (email: string) => {
+  if (!ass?.id) return;
+  try {
+    setSending(true);
+    await sendReport(ass.id, email, "txt");
+    alert("Email sent!");
+    setShowEmailModal(false);
+  } catch (e: any) {
+    alert("Send failed: " + (e?.message || e));
+  } finally {
+    setSending(false);
+  }
+};
+
 
   /* 获取详情 */
   useEffect(() => {
@@ -96,7 +171,7 @@ const recText   = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation;
   };
   const download = () =>
     window.open(`/api/assessments/${id}/export?format=txt`, "_blank");
-  const email = () => alert("TODO: email API");
+  //const email = () => alert("TODO: email API");
 
   return (
     <>
@@ -118,7 +193,7 @@ const recText   = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation;
             <div className="report-btn-group">
               <button onClick={copyReport}>📋 Copy</button>
               <button onClick={download}>⬇️ Download</button>
-              <button onClick={email}>✉️ Email</button>
+              <button onClick={openEmailModal}>✉️ Email</button>
             </div>
           </article>
 
@@ -151,6 +226,13 @@ const recText   = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation;
             </CollapsibleCard>
           </section>
         </main>
+        <EmailModal
+          open={showEmailModal}
+          loading={sending}
+          onClose={closeEmailModal}
+          onSend={sendEmail}
+        />
+
       </div>
 
       <BottomNav />

@@ -58,6 +58,8 @@ app.get('/healthz', (_req, res) => {
 app.use('/api', require('./routes/assessments'));
 app.use('/api', require('./routes/report'));
 app.use('/api', require('./routes/export'));
+app.use('/api', require('./routes/mail'));     // lsy新增：挂载发邮件路由
+console.log('[index] mounted /routes/mail under /api'); // 加这一行
 
 /** ----- 启动 ----- **/
 const PORT = process.env.PORT || 4000; // Railway/Render 会注入 PORT
