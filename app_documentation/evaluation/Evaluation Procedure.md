@@ -15,7 +15,7 @@
   - Randomly fill in one round of the questionnaire until redirected to the recommendation page (e.g., *Immediate Referral*)  
   - Try going back to a previous question from the middle of the questionnaire or restarting from the results page  
 
-- **Task 3:** View and export the report (functionality not yet confirmed)  
+- **Task 3:** View and export the report
   - On the recommendation page, click `"Preview Report"`  
   - Try clicking `"Download TXT"` or `"Send via Email"`  
 
