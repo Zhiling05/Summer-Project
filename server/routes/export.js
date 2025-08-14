@@ -1,26 +1,34 @@
+// server/routes/export.js
 const express = require('express');
 const router = express.Router();
 const Assessment = require('../models/Assessment');
 
+const { extractSymptoms }   = require('../utils/symptoms');
+const { buildFullReportText } = require('../utils/doc');
+
 router.get('/assessments/:id/export', async (req, res) => {
-  const { id } = req.params; // 新增解构
-  console.log('[export.js] id =', id); // 新增打印
+  const { id } = req.params;
   if (id === 'LOCAL') {
-    return res.status(400).json({ error: "report.js :LOCAL is for preview only" });
+    return res.status(400).send('export.js: LOCAL is for preview only');
   }
   try {
-    const record = await Assessment.findById(req.params.id);
+    const record = await Assessment.findById(id);
     if (!record) return res.status(404).send('Not found');
 
-    const filename = `report_${record._id}.txt`;
-    const content = `
-===== ASSESSMENT EXPORT =====
+    const symptoms = (record.symptoms && record.symptoms.length)
+      ? record.symptoms
+      : extractSymptoms(record.answers || []);  // 兜底
 
-Role       : ${record.role}
-Patient ID : ${record.patientId || 'N/A'}
-Content    : ${record.content}
-Created At : ${new Date(record.createdAt).toLocaleString()}
-`;
+    const payload = {
+      id: record._id.toString(),
+      createdAt: record.createdAt ? new Date(record.createdAt).toISOString() : '',
+      role: record.role || '',
+      symptoms,
+      recommendation: record.recommendation || '',
+    };
+
+    const filename = `report_${record._id}.txt`;
+    const content  = buildFullReportText(payload);
 
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.type('text/plain').send(content);
