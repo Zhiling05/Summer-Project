@@ -1,12 +1,24 @@
-/* docs/src/styles/sidebar.css*/
 :root {
-  --nhs-blue: #005eb8;
+  --nhs-blue: #005eb8; /* 初始蓝色，适用于浅色模式 */
   --nhs-focus-yellow: #ffeb3b;
-  --sidebar-width: 280px; /* 增大桌面端宽度 */
+  --sidebar-width: 280px;
   --header-height: 64px;
   --transition-speed: 0.3s;
+  --page-width: 90%; /* 页面宽度为记录页面的一致宽度 */
+  --content-max-width: 1200px; /* 设置内容最大宽度 */
+  --side-padding: 24px; /* 页面左右边距 */
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --core-blue: #005eb8; /* 核心蓝色 */
+  --text-body: #231f20; /* 正文颜色 */
+  --text-inverse: #ffffff; /* 白色文字 */
+  --border-grey: #aeb7bd; /* 浅色模式下的边框颜色 */
+  --card-bg: #ffffff; /* 卡片背景色（浅色模式） */
+  --card-bg-dark: #273036; /* 卡片背景色（暗色模式） */
 }
-/* ——— Off-canvas ——— */
+
+/* ——— Off-canvas Sidebar ——— */
 .sidebar {
   display: grid;
   grid-template-rows: auto 1fr auto; /* 顶部、内容、底部 */
@@ -16,16 +28,17 @@
   left: 0;
   height: 100dvh;
   width: var(--sidebar-width);
-  background: var(--nhs-blue);
+  background: var(--nhs-blue); /* 浅色模式背景 */
   color: #fff;
   padding: 96px 24px 32px;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0, 0.2);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%); /* 初始状态隐藏 */
+  transition: transform var(--transition-speed) ease;
   z-index: 999;
 }
+
 .sidebar.open {
-  transform: translateX(0);
+  transform: translateX(0); /* 打开时显示 */
 }
 
 /* 链接区域优化 */
@@ -37,20 +50,24 @@
   flex-direction: column;
   gap: 16px;
 }
+
 .sidebar-links li {
   margin-bottom: 24px;
-}.sidebar-links a {
+}
+
+.sidebar-links a {
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 1.15rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9); /* 链接文字颜色 */
   text-decoration: none;
   padding: 12px 16px;
   border-radius: 6px;
   transition: all 0.2s ease;
 }
+
 .sidebar-links a:hover,
 .sidebar-links a:focus {
   background: rgba(255, 255, 255, 0.15);
@@ -59,14 +76,14 @@
   transform: translateX(4px);
 }
 
-/* ——— 移动端宽度 75 vw ——— */
+/* ——— 移动端：宽度 75vw ——— */
 @media (max-width: 480px) {
   :root {
-    --sidebar-width: 75vw;
+    --sidebar-width: 75vw; /* 移动端侧边栏宽度为 75% 屏幕宽度 */
   }
 }
 
-/* 遮罩 */
+/* 遮罩效果 */
 .sidebar-overlay {
   position: fixed;
   inset: 0;
@@ -75,15 +92,13 @@
   z-index: 998;
 }
 
-/* docs/src/styles/sidebar.css */
-
-/* Add z-index to manage stacking order */
+/* ——— 菜单按钮（汉堡按钮） ——— */
 .hamburger-btn {
   position: absolute;
   top: 16px;
-  left: 16px;
-  width: 40px;
-  height: 32px;
+  left: 30px;
+  width: 45px;
+  height: 35px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -91,67 +106,149 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  z-index: 1000; /* Ensure it’s on top */
-}
-.settings-page-container,
-.contact-page-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
-  gap: 32px;
-  margin-left: 0;
-  padding: var(--content-padding);
-  box-sizing: border-box;
-  padding-top: calc(var(--header-height) + var(--content-padding));
-  transition: margin-left 0.3s ease;
-  min-height: 60vh;
-  min-width: 110vh;
+  z-index: 1000; /* 确保它在顶部 */
 }
 
-.settings-page-container .text-content,
-.contact-page-container .text-content {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: var(--card-radius);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  margin: 100px;
-  width: 100%;
-  max-width: 900px;
+.hamburger-btn .bar {
+  height: 4px;
+  width: 80%;
+  background: #ffffff; /* 汉堡图标始终为白色 */
+  border-radius: 5px;
+  transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
 }
-/* 响应式调整 */
+
+/* 页面容器（适应侧边栏的布局） */
+.contact-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto; /* 水平居中 */
+  padding: var(--space-m);
+  box-sizing: border-box;
+  padding-top: calc(var(--header-height) + var(--space-m));
+  transition: margin-left var(--transition-speed) ease;
+  min-height: 60vh;
+  margin-top: -20px; /* 确保顶部无额外空白 */
+}
+
+/* 内容区域的样式 */
+.contact-page-container .text-content {
+  background-color: var(--card-bg); /* 使用背景色变量 */
+  padding: var(--space-l);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px; /* 最大宽度 */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  word-wrap: break-word; /* 强制换行，防止溢出 */
+  overflow-wrap: break-word;
+}
+
+/* ——— 深色模式下的样式覆盖 ——— */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nhs-blue: #1d2227; /* 深色模式下的背景颜色 */
+    --core-blue: #63b6ff; /* 深色模式下的蓝色 */
+    --text-body: #e8edee; /* 深色模式下的文字颜色 */
+    --text-inverse: #ffffff; /* 白色文字 */
+    --border-grey: #768692; /* 深色模式下的边框颜色 */
+    --card-bg: #273036; /* 深色模式下的卡片背景色 */
+  }
+
+  .sidebar {
+    background: var(--nhs-blue); /* 深色背景 */
+    color: var(--text-body);  /* 白色文字 */
+  }
+
+  .sidebar-links a {
+    color: var(--text-inverse);/* 链接文字颜色 */
+  }
+
+  .sidebar-links a:hover,
+  .sidebar-links a:focus {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-inverse); /* 浅色背景下的白色文字 */
+  }
+
+  .hamburger-btn .bar {
+    background: #ffffff; /* 汉堡图标始终为白色 */
+  }
+
+  .sidebar-overlay {
+    background: rgba(0, 0, 0, 0.6); /* 更暗的遮罩层 */
+  }
+
+  .contact-page-container .text-content {
+    background-color: var(--card-bg); /* 使用深色模式下的背景色 */
+    color: var(--text-inverse); /* 深色模式下的文字颜色 */
+    border: 1px solid var(--border-grey); /* 边框颜色 */
+  }
+}
+
+/* 响应式调整：宽屏设备 */
 @media (max-width: 1024px) {
-  .sidebar-open .settings-page-container,
   .sidebar-open .contact-page-container {
     margin-left: 0;
   }
 }
 
+/* 响应式调整：中等屏幕设备 */
 @media (max-width: 768px) {
-  .settings-page-container .text-content,
   .contact-page-container .text-content {
     padding: 24px;
     border-radius: 12px;
   }
 }
 
-
-
-/* Ensure bar visibility is toggled based on the active state */
-.hamburger-btn .bar {
-  height: 4px;
-  width: 100%;
-  background: #ffffff; /* Change bar color */
-  border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+/* 响应式：进一步适应移动端 */
+@media (max-width: 480px) {
+  .contact-page-container .text-content {
+    margin: 0 16px;
+    padding: 16px;
+    border-radius: 8px;
+  }
 }
 
-/* Apply specific transformations when active
-.hamburger-btn.active .bar:nth-child(1) {
-  transform: translateY(14px) rotate(45deg);
+/* —— Go Back 按钮 —— */
+.back-button {
+  background: transparent;
+  border: transparent;
+  color: var(--core-blue);
+  font-size: 1.8rem;
+  padding: 6px 14px;
+  margin: var(--space-l) 0 var(--space-m);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  width: 200px ! important; /* 固定宽度，确保按钮宽度一致 */
+  display: inline-flex;
+  align-self: flex-start;
+  
+  /* 使按钮相对于父容器定位 */
+  position: relative;
+  top: 10% !important;   /* 距离父容器顶部 10px */
+  left: 0 !important;   /* 距离父容器左边 10px */
+  z-index: 10; /* 确保按钮位于其他内容之上 */
 }
-.hamburger-btn.active .bar:nth-child(2) {
-  opacity: 0;
+
+/* 悬浮时的样式 */
+.back-button:hover,
+.back-button:focus-visible {
+  background: var(--core-blue);
+  color: var(--text-inverse);
+  outline: none;
+  width: 150px;  /* 确保悬浮时宽度不变 */
 }
-.hamburger-btn.active .bar:nth-child(3) {
-  transform: translateY(-14px) rotate(-45deg);
-} */
+
+
+/* 确保按钮宽度在悬浮时不会变化 */
+.back-button:hover {
+  width: auto;
+}

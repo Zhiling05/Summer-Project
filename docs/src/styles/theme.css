@@ -284,25 +284,43 @@ padding-bottom: calc(64px + 16px);
 }
 
 /* —— 返回按钮 —— */
+/* —— 返回按钮 —— */
 .back-button {
-  background: var(--text-inverse);
-  border: 2px solid var(--core-blue);
+  background: transparent;
+  border: transparent;
   color: var(--core-blue);
-  font-size: .95rem;
+  font-size: 1.8rem;
   padding: 6px 14px;
   margin: var(--space-l) 0 var(--space-m);
   border-radius: var(--radius-s);
   cursor: pointer;
   transition: all .15s;
-  width:auto;           /* 禁止百分百拉伸，保持内容宽度 */
-  display:inline-flex;  /* 和原先行为一致 */
+  width: auto;
+  display: inline-flex;
   align-self: flex-start;
+  
+  /* 使按钮相对于父容器定位 */
+  position: relative;
+  top: 40%;   /* 距离父容器顶部 10px */
+  left: 3%;  /* 距离父容器左边 10px */
+  z-index: 10; /* 确保按钮位于其他内容之上 */
 }
+
 .back-button:hover,
 .back-button:focus-visible {
   background: var(--core-blue);
   color: var(--text-inverse);
   outline: none;
+}
+
+/* 适应小屏幕（最大宽度 640px） */
+@media (max-width: 640px) {
+  .back-button {
+    position: relative;
+    top: 40%;    /* 更小的顶部百分比 */
+    left: 10%;   /* 更小的左侧百分比 */
+    font-size: 1.4rem; /* 进一步缩小字体大小 */
+  }
 }
 
 /* ===========================================================
@@ -314,6 +332,7 @@ padding-bottom: calc(64px + 16px);
   flex-direction:column;
   align-items:flex-start;
   gap:var(--space-l);          /* 元素垂直留白 */
+
 
   /* 尺寸：所有题统一  */
   width:100%;

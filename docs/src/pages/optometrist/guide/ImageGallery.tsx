@@ -173,7 +173,7 @@ export default function ImageGallery() {
   return (
       <>
         <Header title="Reference Image Gallery" />
-        <BackButton />
+        <BackButton className="tutorial-back-button" />
 
         <div className="gallery-container">
           <div className="gallery-wrapper">

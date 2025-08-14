@@ -160,27 +160,7 @@ align-items:stretch;   /* 关键：子项横向拉伸填满宽度 */
 padding-bottom: calc(64px + 16px);
 }
 
-/* —— 返回按钮 —— */
-.back-button {
-  background: var(--text-inverse);
-  border: 2px solid var(--core-blue);
-  color: var(--core-blue);
-  font-size: .95rem;
-  padding: 6px 14px;
-  margin: var(--space-l) 0 var(--space-m);
-  border-radius: var(--radius-s);
-  cursor: pointer;
-  transition: all .15s;
-  width:auto;           /* 禁止百分百拉伸，保持内容宽度 */
-  display:inline-flex;  /* 和原先行为一致 */
-  align-self: flex-start;
-}
-.back-button:hover,
-.back-button:focus-visible {
-  background: var(--core-blue);
-  color: var(--text-inverse);
-  outline: none;
-}
+/* —— 返回按钮  zkx删—— */
 
 /* ===========================================================
    问题卡片 – v6.1 统一宽度 & 视觉强化

@@ -21,6 +21,7 @@ export default function OptometristApp() {
 
       {/* /optometrist/records → Records 页面 */}
       <Route path="records" element={<Records />} />
+      {/* zkx0811 tutorial 页面 */}
       <Route path="tutorial/*" element={<TutorialRouter />} />
     </Routes>
   );
