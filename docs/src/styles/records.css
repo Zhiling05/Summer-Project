@@ -1,33 +1,38 @@
+/* 背景容器：只保留上下内边距，避免显宽 */
 .records-main {
     flex: 1;
     background: var(--page-base);
-    padding: var(--space-s) var(--space-l) calc(64px + var(--space-xl));
+    padding: var(--space-s) 0 calc(64px + var(--space-xl));
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);
-}
-@media (max-width: 768px) {
-    .records-main {
-        padding: var(--space-l) var(--space-m) calc(48px + var(--space-l));
-    }
+    box-sizing: border-box;
 }
 @media (max-width: 480px) {
     .records-main {
-        padding: var(--space-m) var(--space-s) calc(32px + var(--space-m));
+        padding: var(--space-s) 0 calc(32px + var(--space-m));
     }
 }
 
+/* 版心：对齐 user-selection */
+.records-wrapper {
+    width: 80vw;
+    max-width: 50rem;
+    min-width: 20rem;
+    margin: 0 auto;
+    padding: 0 var(--space-s);
+    box-sizing: border-box;
+}
+
+/* 标题顶距与 user-selection 一致（桌面/手机） */
 .records-title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--light-blue);
-    margin: 0;
-    margin-top: 150px; /* zkx新增上边距，放置 go back*/
+    color: var(--text-body);
+    margin: 100px 0 var(--space-xl) 0; /* 桌面 100px */
 }
-@media (max-width: 768px) {
-    .records-title {
-        margin-top: 80px;
-    }
+@media (max-width: 480px) {
+    .records-title { margin-top: 80px; }       /* 手机 80px */
 }
 
 /* -----------------------------------------------------------

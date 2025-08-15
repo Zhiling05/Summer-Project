@@ -1,8 +1,7 @@
 /* docs/src/pages/optometrist/assess/questions/DynamicQuestion.tsx */
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-//import "../../../../styles/question.css";ZSA 0811 注释掉，因为这个文件已经被融合进theme.css
-import "../../../../styles/theme.css"; // ZSA 0811 确保引入主题样式
+import "../../../../styles/question.css";
 
 import BackButton from '../../../../components/BackButton';//zkx
 // ycl: 改为从 src/assets 里 import，Vite 才能正确打包
@@ -15,7 +14,27 @@ import Header from "../../../../components/Header"; // ycl2
 import questionnaire from "../../../../data/questionnaire.json";
 import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
 import { validateByType } from "../../../../utils/ValidationLogic"; // ycl
-import { createAssessment } from "../../../../api";                // ⭐ 新增：保存 assessment
+import { createAssessment, type CreateAssessmentRequest } from "../../../../api";                // 新增：保存 assessment
+
+
+function buildLocalText(recCode: string, role = 'optometrist', answers: any[] = []) {
+  const lines = [
+    `Assessment LOCAL`,
+    `Date      : ${new Date().toISOString()}`,
+    `Role      : ${role}`,
+    '----------------------------------------',
+    ...answers.map(a =>
+      `${a.questionId}: ${a.question || ''}\nAnswer    : ${a.answer}`
+    ),
+    '----------------------------------------',
+    `Recommendation: ${recCode}`,
+    '',
+  ];
+  return lines.join('\n'); //lsy新增
+}
+
+
+
 
 /* ---------- 类型声明 ---------- */
 import { Question, RawOption } from "../../../../types/assessment.ts"; // zkx
@@ -151,28 +170,52 @@ const DynamicQuestion = () => {
           .join("; ");
 
       try {
-        const { id: assessmentId } = await createAssessment({
-          role: "optometrist",
-          patientId,
-          answers: answersArr,
-          recommendation: nextId,
-          content: contentStr     // ← 新增
-        });
+  // ① 你算好的推荐代码（要与 recommendations.json 里的 id 一致）
+  const recCode = nextId; // lsy改
 
-        // navigate(`/optometrist/assess/recommendations/${nextId}`, {
-        //   state: { assessmentId, patientId, answers: answersArr },
-        // });
-        navigate(`/optometrist/assess/recommendations/${nextId}/${assessmentId}`, {
-          state: { patientId, answers: answersArr },
-        });
+  // ② 组织后端需要的 payload
+  const payload: CreateAssessmentRequest = {
+    role: 'optometrist',
+    patientId,               // ← 你的患者ID变量
+    recommendation: recCode, // 保存推荐结果
+    answers: answersArr,     // ← 你收集的答案数组
+    content: contentStr, //lsy添加
+  };
 
+  // ③ 创建记录，拿到 newId（业务/数据库ID）
+  const { id: newId } = await createAssessment(payload);
 
-      } catch (e) {
-        console.error("Save failed:", e);
-        navigate(`/optometrist/assess/recommendations/report-preview/LOCAL`, {
-          state: { patientId, answers: answersArr },
-        });
-      }
+  // ④ 跳 “转诊建议页”，而不是直接预览；把 newId 带过去
+  navigate(`/optometrist/assess/recommendations/${recCode}/${newId}`, {
+    state: { assessmentId: newId },
+  });
+
+} catch (e) {
+  console.error('Save failed:', e);
+
+  const recCode  = nextId;   // 你已有的最终建议代码
+  const localTxt = buildLocalText(recCode, 'optometrist', answersArr);
+
+  // 组一个给预览页用的简版对象（你也可以更完整）
+  const previewObj = {
+  id: `LOCAL-${Date.now()}`,
+  createdAt: new Date().toISOString(),
+  role: 'optometrist',
+  symptoms: answersArr.map(a => a.answer),
+  recommendation: recCode,
+};
+// 这三个 key 里任选其一与你的 PreviewReport.tsx 对应（你现在用的是 assessmentForPreview）
+localStorage.setItem("assessmentForPreview", JSON.stringify(previewObj));
+
+  navigate(`/optometrist/assess/recommendations/${recCode}/LOCAL`, {
+    state: {
+      assessmentId: 'LOCAL',
+      text: localTxt,               // ★ 带上本地生成的纯文本
+      recommendation: recCode,      // ★ 带上建议代码（预览页配色/标题用）
+    },
+  });
+}
+
       return;
     }
 

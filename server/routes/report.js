@@ -1,46 +1,38 @@
+// server/routes/report.js
 const express = require('express');
 const router = express.Router();
 const Assessment = require('../models/Assessment');
 
+const { extractSymptoms }   = require('../utils/symptoms');
+const { buildFullReportText } = require('../utils/doc');
+
 router.get('/assessments/:id/report', async (req, res) => {
-  const { id } = req.params; // 新增解构
-  console.log('[report.js] id =', id); // 新增打印
+  const { id } = req.params;
+  if (id === 'LOCAL') {
+    return res.status(400).send('report.js: LOCAL is for preview only');
+  }
   try {
-    const record = await Assessment.findById(req.params.id);
-    if (!record) {
-      console.warn('[report] ID not found:', req.params.id);
-      return res.status(404).send('No report found');
-    }
+    const record = await Assessment.findById(id);
+    if (!record) return res.status(404).send('No report found');
 
-//     const reportText = `
-// ===== ASSESSMENT REPORT =====
-//
-// Role       : ${record.role}
-// Patient ID : ${record.patientId || 'N/A'}
-// Content    : ${record.content}
-// Created At : ${new Date(record.createdAt).toLocaleString()}
-// `;
+    const symptoms = (record.symptoms && record.symptoms.length)
+      ? record.symptoms
+      : extractSymptoms(record.answers || []);  // 兜底
 
-    const reportText = `
-===== ASSESSMENT REPORT =====
+    const payload = {
+      id: record._id.toString(),
+      createdAt: record.createdAt ? new Date(record.createdAt).toISOString() : '',
+      role: record.role || '',
+      symptoms,
+      recommendation: record.recommendation || '',
+    };
 
-Role       : ${record.role || 'N/A'}
-Patient ID : ${record.patientId || 'N/A'}
-Content    : ${record.content || '[no content]'}
-Created At : ${record.createdAt ? new Date(record.createdAt).toLocaleString() : '[no date]'}
-`;
-
-
-    res.type('text/plain').send(reportText);
-  // } catch (err) {
-  //   console.error('[report error]', err);
-  //   res.status(500).send('Report preview failed');
-  // }
+    const text = buildFullReportText(payload);
+    res.type('text/plain').send(text);
   } catch (err) {
-    console.error('[report error]', err, err.stack);
+    console.error('[report error]', err);
     res.status(500).send('Report preview failed');
   }
-
 });
 
 module.exports = router;

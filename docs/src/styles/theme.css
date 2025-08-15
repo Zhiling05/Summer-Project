@@ -24,6 +24,7 @@
     --text-inverse:     #ffffff; /* 这个与深背景色保持高对比度的文字颜色 */
     --text-muted:       #6c757d; /* 提示性文字，与背景色对比度低于正文文字 */
     --components-hover: #e6edf3; /* 所有组件或者卡片的悬浮灰色*/
+    --card-title:       #005eb8;
 
     --radius-s:         4px;
     --radius-m:         6px;
