@@ -52,6 +52,7 @@ const RISK_TO_LEVEL: Record<RiskLabel, Level> = {
   "urgent-to-gp-or-neur":   "medium",
   "to-gp":                  "low",
   "no-referral":            "low",
+  "other-eye-conditions-guidance":    "low",
 };
 
 const dateOnly = (iso: string) => iso.slice(0, 10);
