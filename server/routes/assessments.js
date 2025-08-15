@@ -140,7 +140,7 @@ router.get('/assessments', async (req, res) => {
       id: d._id.toString(),
       role: d.role,
       patientId: d.patientId || '',
-      recommendation: d.recommendation || '',
+      risk: d.recommendation || '',
       createdAt: d.createdAt
     }));
 
