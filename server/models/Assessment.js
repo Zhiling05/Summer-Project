@@ -19,6 +19,7 @@ const AssessmentSchema = new Schema({
   answers: [                                 // 新增
     { questionId: String, question: String, answer: String }
   ],
+  symptoms: [String],  
   createdAt: { type: Date, default: Date.now }
 });
 
