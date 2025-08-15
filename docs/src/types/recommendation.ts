@@ -8,5 +8,6 @@ export interface AssessmentRecommendations {
     | 'urgent-to-oph' 
     | 'urgent-to-gp-or-neur' 
     | 'to-gp'
-    | 'no-referral' ;
+    | 'no-referral' 
+    | 'other-eye-conditions-guidance';
 }
