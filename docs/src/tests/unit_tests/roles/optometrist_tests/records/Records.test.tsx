@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import Records from '../../../../pages/optometrist/Records';
+import Records from '../../../../../pages/optometrist/Records';
 import { MemoryRouter } from 'react-router-dom';
 
 // Mock Header, Sidebar, BottomNav 组件
