@@ -76,11 +76,17 @@ const [remoteRecs, setRemoteRecs] = useState<NormalizedRecord[]>([]);
 useEffect(() => {
   listAssessments(50)
     .then(({ records }) => {
-      const normalized = records.map(r => ({
-        id:   r.id,
-        date: r.date,
-        risk: (normalizeRisk(r.risk) as RiskLabel) || "no-referral",
-      }));
+      // const normalized = records.map(r => ({
+      //   id:   r.id,
+      //   date: r.date,
+      //   risk: (normalizeRisk(r.risk) as RiskLabel) || "no-referral",
+      // }));
+      const normalized = records.map((r: any) => {
+        const date = r.createdAt ?? r.date;            // 统一时间
+        const raw  = r.recommendation ?? r.risk;       // 统一推荐
+        const risk = (normalizeRisk(String(raw)) as RiskLabel) || "no-referral";
+        return { id: r.id, date, risk };
+      });
       setRemoteRecs(normalized);
     })
     .catch(console.error);

@@ -6,7 +6,10 @@ import BottomNav  from "../../../../components/BottomNav";
 import Sidebar    from "../../../../components/SideBar";
 import "../../../../styles/preview-report.css";
 import "../../../../styles/recommendation.css";             // 复用弹窗样式
-import { sendReport } from "../../../../api";               // 发送邮件的 API
+
+import { getAssessment, fetchReportText, exportAssessment, sendReport } from "../../../../api";
+import { saveAs } from "file-saver";
+
 
 /* ---------- LOCAL 预览：从本地读取 ---------- */
 // 如团队只使用其中某一个 key，请保留那一个并删掉其他即可
@@ -111,7 +114,8 @@ const EmailModal: React.FC<{
 
 /* ---------- 主组件 ---------- */
 export default function PreviewReport() {
-  const { id } = useParams();
+  // const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [ass, setAss] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -153,8 +157,14 @@ export default function PreviewReport() {
     }
 
     // 真实 id 才请求后端
-    fetch(`/api/assessments/${id}`)
-      .then(r => (r.ok ? r.json() : Promise.reject()))
+    // fetch(`/api/assessments/${id}`)
+    //   .then(r => (r.ok ? r.json() : Promise.reject()))
+    //   .then(setAss)
+    //   .catch(() => alert("Failed to load assessment."))
+    //   .finally(() => setLoading(false));
+
+// 真实 id 通过 index.ts API 加载
+    getAssessment(id!)
       .then(setAss)
       .catch(() => alert("Failed to load assessment."))
       .finally(() => setLoading(false));
@@ -199,7 +209,8 @@ export default function PreviewReport() {
       alert("Copied!");
       return;
     }
-    const txt = await fetch(`/api/assessments/${id}/report`).then(r => r.text());
+    // const txt = await fetch(`/api/assessments/${id}/report`).then(r => r.text());
+    const txt = await fetchReportText(id!);
     await navigator.clipboard.writeText(txt);
     alert("Copied!");
   };
@@ -215,7 +226,10 @@ export default function PreviewReport() {
       URL.revokeObjectURL(url);
       return;
     }
-    window.open(`/api/assessments/${id}/export?format=txt`, "_blank");
+    // window.open(`/api/assessments/${id}/export?format=txt`, "_blank");
+    exportAssessment(id!, "txt")
+      .then((blob) => saveAs(blob, `assessment-${id}.txt`))
+      .catch(() => alert("Download failed."));
   };
 
   // 对 LOCAL 禁用邮件发送（需要真实 id）

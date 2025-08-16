@@ -6,12 +6,10 @@
       "question": "Does the patient have a headache?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "headache" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q2",
-          "No": "Q9"
-        } 
+        "rules": { "Yes": "Q2", "No": "Q9" }
       }
     },
     {
@@ -20,21 +18,29 @@
       "question": "Has the patient experienced any of the following red flag symptoms?",
       "hint": "Choose any that apply",
       "options": [
-        "Impaired level or decreased consciousness", 
+        "Impaired level or decreased consciousness",
         "Seizures",
         "Stroke-like symptoms",
         "Sudden and abrupt onset headache reaching maximum intensity within 5 minutes (Thunderclap headache)",
         "New-onset headache and vomiting without other obvious cause",
         "New-onset objective neurological deficit",
         "Worsening headache and fever",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Impaired level or decreased consciousness": "impaired or decreased consciousness",
+          "Seizures": "seizures",
+          "Stroke-like symptoms": "stroke-like symptoms",
+          "Sudden and abrupt onset headache reaching maximum intensity within 5 minutes (Thunderclap headache)": "thunderclap headache",
+          "New-onset headache and vomiting without other obvious cause": "new-onset headache with vomiting",
+          "New-onset objective neurological deficit": "new-onset neurological deficit",
+          "Worsening headache and fever": "worsening headache with fever"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q3",
-          "ifAnySymptom": "EMERGENCY_DEPARTMENT"
-        } 
+        "rules": { "None of the above": "Q3", "ifAnySymptom": "EMERGENCY_DEPARTMENT" }
       }
     },
     {
@@ -43,15 +49,26 @@
       "question": "In relation to this patient's headache symptoms, please identify whether any of the following red flag symptoms are present.",
       "hint": "Choose any that apply",
       "options": [
-        "A substantial change in the characteristics of the patient' s headache", 
+        "A substantial change in the characteristics of the patient' s headache",
         "Headache that wakes them from sleep",
         "New-onset headache and a history of malignancy, especially if the malignancy is known to metastasize to the brain (lung, breast, melanoma, kidney, bowel)",
         "Progressively worsening headache with atypical presentation",
         "New-onset cognitive dysfunction (e.g. problems with memory, concentration, problem-solving, speaking, understanding)",
         "Behavioural change, appetite and energy change in children",
         "Change in co-ordination in children",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "A substantial change in the characteristics of the patient' s headache": "substantial change in headache characteristics",
+          "Headache that wakes them from sleep": "nocturnal headache",
+          "New-onset headache and a history of malignancy, especially if the malignancy is known to metastasize to the brain (lung, breast, melanoma, kidney, bowel)": "new-onset headache with cancer history",
+          "Progressively worsening headache with atypical presentation": "progressively worsening atypical headache",
+          "New-onset cognitive dysfunction (e.g. problems with memory, concentration, problem-solving, speaking, understanding)": "new-onset cognitive dysfunction",
+          "Behavioural change, appetite and energy change in children": "behaviour/appetite/energy change in children",
+          "Change in co-ordination in children": "coordination change in children"
+        }
+      },
       "navigation": {
         "type": "simple",
         "rules": "Q4"
@@ -63,26 +80,25 @@
       "question": "Does the patient also present with any of the following symptoms? ",
       "hint": "Choose any that apply",
       "options": [
-        "Change in personality", 
+        "Change in personality",
         "Headache worst in the morning",
         "Pulsatile tinnitus (pulsates in time with heart beat)",
         "New-onset headache and in someone with compromised immunity, caused, for example, by HIV or immunosuppressive drugs",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Change in personality": "personality change",
+          "Headache worst in the morning": "morning-worse headache",
+          "Pulsatile tinnitus (pulsates in time with heart beat)": "pulsatile tinnitus",
+          "New-onset headache and in someone with compromised immunity, caused, for example, by HIV or immunosuppressive drugs": "new-onset headache in immunocompromised"
+        }
+      },
       "navigation": {
         "type": "cross-question",
         "rules": [
-          {
-            "Q3.hasAnyExcept": "None of the above",
-            "next": "Q14"
-          },
-          {
-            "Q3.includesOnly": "None of the above",
-            "Q4.countExcept": "None of the above",
-            "operator": ">=",
-            "value": 2,
-            "next": "Q14"
-          }
+          { "Q3.hasAnyExcept": "None of the above", "next": "Q14" },
+          { "Q3.includesOnly": "None of the above", "Q4.countExcept": "None of the above", "operator": ">=", "value": 2, "next": "Q14" }
         ],
         "defaultNext": "Q5"
       }
@@ -93,12 +109,10 @@
       "question": "Does the patient report new-onset  TVO — that is, transient episodes of blurred vision, blackout or grey out/loss of vision,  typically precipitated by changes in posture or Valsalva manoeuvres (e.g. standing up, bending forward, coughing, or straining)?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "new-onset transient visual obscurations (TVO)" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q29",
-          "No": "Q6"
-        } 
+        "rules": { "Yes": "Q29", "No": "Q6" }
       }
     },
     {
@@ -107,12 +121,10 @@
       "question": "Does the patient have binocular double vision (disappears when closes either eye)?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "binocular double vision" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q7",
-          "No": "Q23"
-        } 
+        "rules": { "Yes": "Q7", "No": "Q23" }
       }
     },
     {
@@ -121,12 +133,10 @@
       "question": "Does the patient have a latent or manifest squint (heterophoria or heterotropia) or uncorrected refractive error to explain the double vision?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "latent or manifest squint or uncorrected refractive error explaining diplopia" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q23",
-          "No": "Q8"
-        } 
+        "rules": { "Yes": "Q23", "No": "Q8" }
       }
     },
     {
@@ -135,12 +145,10 @@
       "question": "Does the patient report separation of images increases in direction of action of a weak muscle (s) in a pattern suggestive of cranial nerve palsy?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "separation of images increases in direction of action of a weak muscle (s) in a pattern suggestive of cranial nerve palsy" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q29",
-          "No": "Q23"
-        } 
+        "rules": { "Yes": "Q29", "No": "Q23" }
       }
     },
     {
@@ -149,12 +157,10 @@
       "question": "Does the patient report new-onset  TVO — that is, transient episodes of blurred vision, blackout or grey out/loss of vision,  typically precipitated by changes in posture or Valsalva manoeuvres (e.g. standing up, bending forward, coughing, or straining)?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "new-onset transient visual obscurations (TVO)" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q29",
-          "No": "Q10"
-        } 
+        "rules": { "Yes": "Q29", "No": "Q10" }
       }
     },
     {
@@ -163,12 +169,10 @@
       "question": "Does the patient have binocular double vision (disappears when closes either eye)?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "binocular double vision" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q11",
-          "No": "Q13"
-        } 
+        "rules": { "Yes": "Q11", "No": "Q13" }
       }
     },
     {
@@ -177,12 +181,10 @@
       "question": "Does the patient the patient have a latent or manifest squint (heterophoria or heterotropia) or uncorrected refractive error to explain the double vision?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "latent or manifest squint or uncorrected refractive error explaining double vision" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q13",
-          "No": "Q12"
-        } 
+        "rules": { "Yes": "Q13", "No": "Q12" }
       }
     },
     {
@@ -191,12 +193,10 @@
       "question": "Does the patient report separation of images increases in direction of action of a weak muscle (s) in a pattern suggestive of cranial nerve palsy?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "separation of images increases in direction of action of a weak muscle (s) in a pattern suggestive of cranial nerve palsy" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q29",
-          "No": "Q13"
-        } 
+        "rules": { "Yes": "Q29", "No": "Q13" }
       }
     },
     {
@@ -205,12 +205,10 @@
       "question": "Does the patient report any other visual symptoms?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "other visual symptoms" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "OTHER_EYE_CONDITIONS_GUIDANCE", 
-          "No": "Q35"
-        } 
+        "rules": { "Yes": "OTHER_EYE_CONDITIONS_GUIDANCE", "No": "Q35" }
       }
     },
     {
@@ -219,12 +217,10 @@
       "question": "Is the disc elevated?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "disc elevation" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q15", 
-          "No": "URGENT_TO_GP_OR_NEUR"
-        } 
+        "rules": { "Yes": "Q15", "No": "URGENT_TO_GP_OR_NEUR" }
       }
     },
     {
@@ -233,16 +229,19 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Cotton wool spots on surface or around optic disc and affecting retina", 
+        "Cotton wool spots on surface or around optic disc and affecting retina",
         "Flame or blot haemorrhages on surface or around optic disc and affecting retina",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Cotton wool spots on surface or around optic disc and affecting retina": "cotton wool spots on surface or around optic disc and affecting retina",
+          "Flame or blot haemorrhages on surface or around optic disc and affecting retina": "flame or retinal haemorrhages on surface or around optic disc and affecting retina"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q16",
-          "ifAnySymptom": "IMMEDIATE"
-        } 
+        "rules": { "None of the above": "Q16", "ifAnySymptom": "IMMEDIATE" }
       }
     },
     {
@@ -251,18 +250,23 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Obscuration of blood vessels overlying disc", 
+        "Obscuration of blood vessels overlying disc",
         "Hyperaemia of small blood vessels overlying disc",
         "Peripapillary retinal folds",
         "Choroidal folds",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Obscuration of blood vessels overlying disc": "vessel obscuration over disc",
+          "Hyperaemia of small blood vessels overlying disc": "disc hyperaemia",
+          "Peripapillary retinal folds": "peripapillary retinal folds",
+          "Choroidal folds": "choroidal folds"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q17",
-          "ifAnySymptom": "URGENT_TO_OPH"
-        } 
+        "rules": { "None of the above": "Q17", "ifAnySymptom": "URGENT_TO_OPH" }
       }
     },
     {
@@ -271,12 +275,10 @@
       "question": "Has the patient previously been identified as having crowded or tilted optic discs, or PHOMS on OCT imaging?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "history of crowded/tilted discs or PHOMS" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q21",
-          "No": "Q18"
-        } 
+        "rules": { "Yes": "Q21", "No": "Q18" }
       }
     },
     {
@@ -285,12 +287,10 @@
       "question": "Has the patient previously been identified as having white-yellow bodies within the optic disc or signs compatible with drusen on OCT?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "history of optic disc drusen" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q21",
-          "No": "Q19"
-        } 
+        "rules": { "Yes": "Q21", "No": "Q19" }
       }
     },
     {
@@ -299,12 +299,10 @@
       "question": "Does the patient have crowded or tilted optic discs or PHOMS on OCT imaging, discovered at this visit?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "crowded/tilted discs or PHOMS on OCT" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q22",
-          "No": "Q20"
-        } 
+        "rules": { "Yes": "Q22", "No": "Q20" }
       }
     },
     {
@@ -313,12 +311,10 @@
       "question": "Does the patient have white-yellow bodies within the optic disc or signs compatible with drusen on OCT, discovered at this visit?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "optic disc drusen" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q22",
-          "No": "URGENT_TO_GP_OR_NEUR"
-        } 
+        "rules": { "Yes": "Q22", "No": "URGENT_TO_GP_OR_NEUR" }
       }
     },
     {
@@ -327,12 +323,10 @@
       "question": "Has there been any change in visual acuity or fields?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "change in visual acuity or fields" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "URGENT_TO_OPH",
-          "No": "URGENT_TO_GP_OR_NEUR"
-        } 
+        "rules": { "Yes": "URGENT_TO_OPH", "No": "URGENT_TO_GP_OR_NEUR" }
       }
     },
     {
@@ -341,6 +335,7 @@
       "question": "Has there been any change in visual acuity or fields?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "change in visual acuity or fields" },
       "navigation": {
         "type": "simple",
         "rules": "URGENT_TO_OPH"
@@ -352,12 +347,10 @@
       "question": "Is the disc elevated?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "disc elevation" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q24",
-          "No": "TO_GP"
-        } 
+        "rules": { "Yes": "Q24", "No": "TO_GP" }
       }
     },
     {
@@ -366,16 +359,19 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Cotton wool spots on surface or around optic disc and affecting retina", 
+        "Cotton wool spots on surface or around optic disc and affecting retina",
         "Flame or blot haemorrhages on surface or around optic disc and affecting retina",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Cotton wool spots on surface or around optic disc and affecting retina": "cotton wool spots on surface or around optic disc and affecting retina",
+          "Flame or blot haemorrhages on surface or around optic disc and affecting retina": "retinal haemorrhages on surface or around optic disc and affecting retina"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q25",
-          "ifAnySymptom": "IMMEDIATE"
-        } 
+        "rules": { "None of the above": "Q25", "ifAnySymptom": "IMMEDIATE" }
       }
     },
     {
@@ -384,18 +380,23 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Obscuration of blood vessels overlying disc", 
+        "Obscuration of blood vessels overlying disc",
         "Hyperaemia of small blood vessels overlying disc",
         "Peripapillary retinal folds",
         "Choroidal folds",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Obscuration of blood vessels overlying disc": "vessel obscuration over disc",
+          "Hyperaemia of small blood vessels overlying disc": "disc hyperaemia",
+          "Peripapillary retinal folds": "peripapillary retinal folds",
+          "Choroidal folds": "choroidal folds"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q26",
-          "ifAnySymptom": "URGENT_TO_OPH"
-        } 
+        "rules": { "None of the above": "Q26", "ifAnySymptom": "URGENT_TO_OPH" }
       }
     },
     {
@@ -404,12 +405,10 @@
       "question": "Does the patient have crowded or tilted optic discs or PHOMS on OCT imaging (discovered at this visit or previously known about)",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "crowded/tilted discs or PHOMS" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q28",
-          "No": "Q27"
-        } 
+        "rules": { "Yes": "Q28", "No": "Q27" }
       }
     },
     {
@@ -418,12 +417,10 @@
       "question": "Does the patient have white-yellow bodies within the optic disc or signs compatible with drusen on OCT?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "optic disc drusen" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q28",
-          "No": "TO_GP"
-        } 
+        "rules": { "Yes": "Q28", "No": "TO_GP" }
       }
     },
     {
@@ -432,12 +429,10 @@
       "question": "Has there been any change in visual acuity or  fields?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "change in visual acuity or fields" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "URGENT_TO_OPH",
-          "No": "TO_GP"
-        } 
+        "rules": { "Yes": "URGENT_TO_OPH", "No": "TO_GP" }
       }
     },
     {
@@ -446,12 +441,10 @@
       "question": "Is the disc elevated?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "disc elevation" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q30",
-          "No": "URGENT_TO_OPH"
-        } 
+        "rules": { "Yes": "Q30", "No": "URGENT_TO_OPH" }
       }
     },
     {
@@ -460,16 +453,19 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Cotton wool spots on surface or around optic disc and affecting retina", 
+        "Cotton wool spots on surface or around optic disc and affecting retina",
         "Flame or blot haemorrhages on surface or around optic disc and affecting retina",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Cotton wool spots on surface or around optic disc and affecting retina": "cotton wool spots",
+          "Flame or blot haemorrhages on surface or around optic disc and affecting retina": "retinal haemorrhages"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q31",
-          "ifAnySymptom": "IMMEDIATE"
-        } 
+        "rules": { "None of the above": "Q31", "ifAnySymptom": "IMMEDIATE" }
       }
     },
     {
@@ -478,18 +474,23 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Obscuration of blood vessels overlying disc", 
+        "Obscuration of blood vessels overlying disc",
         "Hyperaemia of small blood vessels overlying disc",
         "Peripapillary retinal folds",
         "Choroidal folds",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Obscuration of blood vessels overlying disc": "vessel obscuration over disc",
+          "Hyperaemia of small blood vessels overlying disc": "disc hyperaemia",
+          "Peripapillary retinal folds": "peripapillary retinal folds",
+          "Choroidal folds": "choroidal folds"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q32",
-          "ifAnySymptom": "URGENT_TO_OPH"
-        } 
+        "rules": { "None of the above": "Q32", "ifAnySymptom": "URGENT_TO_OPH" }
       }
     },
     {
@@ -498,12 +499,10 @@
       "question": "Does the patient have crowded or tilted optic discs or PHOMS on OCT imaging (discovered at this visit or previously known about)",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "crowded/tilted discs or PHOMS" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q34",
-          "No": "Q33"
-        } 
+        "rules": { "Yes": "Q34", "No": "Q33" }
       }
     },
     {
@@ -512,6 +511,7 @@
       "question": "Does the patient have white-yellow bodies within the optic disc or signs compatible with drusen on OCT?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "optic disc drusen" },
       "navigation": {
         "type": "simple",
         "rules": "Q34"
@@ -523,6 +523,7 @@
       "question": "Has there been any change in visual acuity or  fields?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "change in visual acuity or fields" },
       "navigation": {
         "type": "simple",
         "rules": "URGENT_TO_OPH"
@@ -534,12 +535,10 @@
       "question": "Is the disc elevated?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "disc elevation" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q36",
-          "No": "NO_REFERRAL"
-        } 
+        "rules": { "Yes": "Q36", "No": "NO_REFERRAL" }
       }
     },
     {
@@ -548,16 +547,19 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Cotton wool spots on surface or around optic disc and affecting retina", 
+        "Cotton wool spots on surface or around optic disc and affecting retina",
         "Flame or blot haemorrhages on surface or around optic disc and affecting retina",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Cotton wool spots on surface or around optic disc and affecting retina": "cotton wool spots",
+          "Flame or blot haemorrhages on surface or around optic disc and affecting retina": "retinal haemorrhages"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q37",
-          "ifAnySymptom": "IMMEDIATE"
-        } 
+        "rules": { "None of the above": "Q37", "ifAnySymptom": "IMMEDIATE" }
       }
     },
     {
@@ -566,18 +568,23 @@
       "question": "Are any of the following eye findings observed?",
       "hint": "Choose any that apply",
       "options": [
-        "Obscuration of blood vessels overlying disc", 
+        "Obscuration of blood vessels overlying disc",
         "Hyperaemia of small blood vessels overlying disc",
         "Peripapillary retinal folds",
         "Choroidal folds",
-        "None of the above"
+        { "label": "None of the above", "value": "None of the above", "isNone": true }
       ],
+      "meta": {
+        "optionSymptomMap": {
+          "Obscuration of blood vessels overlying disc": "vessel obscuration over disc",
+          "Hyperaemia of small blood vessels overlying disc": "disc hyperaemia",
+          "Peripapillary retinal folds": "peripapillary retinal folds",
+          "Choroidal folds": "choroidal folds"
+        }
+      },
       "navigation": {
         "type": "conditional",
-        "rules":{
-          "None of the above": "Q38",
-          "ifAnySymptom": "URGENT_TO_OPH"
-        } 
+        "rules": { "None of the above": "Q38", "ifAnySymptom": "URGENT_TO_OPH" }
       }
     },
     {
@@ -586,12 +593,10 @@
       "question": "Does the patient have crowded or tilted optic discs or PHOMS on OCT imaging (discovered at this visit or previously known about)",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "crowded/tilted discs or PHOMS" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q40",
-          "No": "Q39"
-        } 
+        "rules": { "Yes": "Q40", "No": "Q39" }
       }
     },
     {
@@ -600,12 +605,10 @@
       "question": "Does the patient have white-yellow bodies within the optic disc or signs compatible with drusen on OCT?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "optic disc drusen" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "Q40",
-          "No": "NO_REFERRAL"
-        } 
+        "rules": { "Yes": "Q40", "No": "NO_REFERRAL" }
       }
     },
     {
@@ -614,12 +617,10 @@
       "question": "Has there been any change in visual acuity or  fields?",
       "hint": "Select one option",
       "options": ["Yes", "No"],
+      "meta": { "symptomOnYes": "change in visual acuity or fields" },
       "navigation": {
         "type": "simple",
-        "rules":{
-          "Yes": "URGENT_TO_OPH",
-          "No": "NO_REFERRAL"
-        } 
+        "rules": { "Yes": "URGENT_TO_OPH", "No": "NO_REFERRAL" }
       }
     }
   ]

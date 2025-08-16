@@ -12,6 +12,7 @@ import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
 import { validateByType } from "../../../../utils/ValidationLogic"; // ycl
 import { createAssessment, type CreateAssessmentRequest } from "../../../../api";                // 新增：保存 assessment
 
+
 // 后端的report.js和doc.js已经实现了完整的报告生成逻辑
 // function buildLocalText(recCode: string, role = 'optometrist', answers: any[] = []) {
 //   // 提取症状（模拟后端的 extractSymptoms）
@@ -51,6 +52,61 @@ import { Question, RawOption } from "../../../../types/assessment.ts"; // zkx
 /* ---------- 工具函数 ---------- */
 const normalize = (opt: RawOption): { label: string; value: string } =>
   typeof opt === "string" ? { label: opt, value: opt } : opt;
+
+// 仅用 meta 提取症状
+function extractSymptomsFromMeta(
+    answersArr: Array<{ questionId: string; question: string; answer: string }>,
+    questionsList: Array<any>
+): string[] {
+  const qMap = new Map(questionsList.map(q => [q.id, q]));
+  const YES = /^(yes|y)$/i;
+  const NO  = /^(no|n)$/i;
+
+  const out: string[] = [];
+
+  const toArray = (ans: string | string[]) =>
+      Array.isArray(ans)
+          ? ans
+          : String(ans).split(",").map(s => s.trim()).filter(Boolean);
+
+  for (const a of answersArr) {
+    const q = qMap.get(a.questionId);
+    if (!q) continue;
+
+    const opts: { label: string; value: string; isNone?: boolean }[] =
+        (q.options || []).map((o: any) =>
+            typeof o === "string"
+                ? { label: o, value: o }
+                : (o as { label: string; value: string; isNone?: boolean })
+        );
+
+    const isNone = (v: string) =>
+        !!opts.find((o: { label: string; value: string; isNone?: boolean }) => o.value === v && o.isNone);
+
+    if (q.type === "single") {
+      const v = String(a.answer).trim();
+      if (YES.test(v) && q.meta?.symptomOnYes) {
+        out.push(q.meta.symptomOnYes);
+      } else if (!NO.test(v)) {
+        const mapped = q.meta?.optionSymptomMap?.[v];
+        if (mapped) out.push(mapped);
+      }
+    } else {
+      for (const v of toArray(a.answer)) {
+        if (NO.test(v) || isNone(v)) continue;
+        const mapped = q.meta?.optionSymptomMap?.[v];
+        if (mapped) out.push(mapped);
+      }
+    }
+  }
+
+  return Array.from(new Set(out)).filter(Boolean);
+}
+
+
+
+
+
 
 const DynamicQuestion = () => {
 
@@ -174,9 +230,9 @@ const DynamicQuestion = () => {
         };
       });
 
-      const contentStr = answersArr
-          .map(a => `${a.questionId}: ${a.answer}`)
-          .join("; ");
+      // const contentStr = answersArr
+      //     .map(a => `${a.questionId}: ${a.answer}`)
+      //     .join("; ");
 
       try {
   // ① 你算好的推荐代码（要与 recommendations.json 里的 id 一致）
@@ -185,41 +241,70 @@ const DynamicQuestion = () => {
     role: 'optometrist',
     recommendation: recCode, // 保存推荐结果
     answers: answersArr,     // ← 你收集的答案数组
-    content: contentStr, //lsy添加
+    // content: contentStr, //lsy添加
   };
 
   // ③ 创建记录，拿到 newId（业务/数据库ID）
   const { id: newId } = await createAssessment(payload);
 
   // ④ 跳 “转诊建议页”，而不是直接预览；把 newId 带过去
-  navigate(`/optometrist/assess/recommendations/${recCode}/${newId}`, {
+        sessionStorage.setItem('suppressAssessModalOnce', '1');
+        navigate(`/optometrist/assess/recommendations/${recCode}/${newId}`, {
     state: { assessmentId: newId },
   });
 
 } catch (e) {
   console.error('Save failed:', e);
 
-  const recCode  = nextId;   // 你已有的最终建议代码
-  // const localTxt = buildLocalText(recCode, 'optometrist', answersArr);
+  const recCode  = nextId;
+  //   const localSymptoms = answersArr
+  //   .map(a => a.answer)
+  //   .filter(v => v && v !== 'No' && v !== 'None of the above');
+        const localSymptoms = extractSymptomsFromMeta(answersArr, questionsList);
+        //预览报告里，只要第一题选了yes，就出现headache症状
+        const q1Yes = updatedHistory['Q1'] === 'Yes';
+        const q1Symptom = ((questionsList.find((q) => q.id === 'Q1') as any)?.meta?.symptomOnYes) ?? 'headache';
 
-  // 组一个给预览页用的简版对象（你也可以更完整）
-  const previewObj = {
-  id: `LOCAL-${Date.now()}`,
-  createdAt: new Date().toISOString(),
-  role: 'optometrist',
-  symptoms: answersArr.map(a => a.answer),
-  recommendation: recCode,
-};
+        if (q1Yes && !localSymptoms.includes(q1Symptom)) {
+          localSymptoms.unshift(q1Symptom);
+        }
+        const previewObj = {
+          id: `LOCAL-${Date.now()}`,
+          createdAt: new Date().toISOString(),
+          role: 'optometrist',
+          symptoms: localSymptoms,
+          recommendation: recCode,
+        };
+
+
+//   // const localTxt = buildLocalText(recCode, 'optometrist', answersArr);
+//
+//   // 组一个给预览页用的简版对象（你也可以更完整）
+//   const previewObj = {
+//   id: `LOCAL-${Date.now()}`,
+//   createdAt: new Date().toISOString(),
+//   role: 'optometrist',
+//   symptoms: answersArr.map(a => a.answer),
+//   recommendation: recCode,
+// };
+
+
+
+
 // 这三个 key 里任选其一与你的 PreviewReport.tsx 对应（你现在用的是 assessmentForPreview）
 localStorage.setItem("assessmentForPreview", JSON.stringify(previewObj));
-
-  navigate(`/optometrist/assess/recommendations/${recCode}/LOCAL`, {
-    state: {
-      assessmentId: 'LOCAL',
-      text: localTxt,               // ★ 带上本地生成的纯文本
-      recommendation: recCode,      // ★ 带上建议代码（预览页配色/标题用）
-    },
-  });
+  //
+  // navigate(`/optometrist/assess/recommendations/${recCode}/LOCAL`, {
+  //   state: {
+  //     assessmentId: 'LOCAL',
+  //     text: symptoms,               // ★ 带上本地生成的纯文本
+  //     recommendation: recCode,      // ★ 带上建议代码（预览页配色/标题用）
+  //   },
+  // });
+        sessionStorage.setItem('suppressAssessModalOnce', '1');
+        navigate(`/optometrist/assess/recommendations/${recCode}/LOCAL`, {
+      state: { assessmentId: 'LOCAL' }
+    });
 }
 
       return;
@@ -227,6 +312,7 @@ localStorage.setItem("assessmentForPreview", JSON.stringify(previewObj));
 
 
     /* ---------- 普通题目：继续问卷流程 ---------- */
+    sessionStorage.setItem('suppressAssessModalOnce', '1');
     navigate(`/optometrist/assess/questions/${nextId}`, {
       state: { patientId },
     });

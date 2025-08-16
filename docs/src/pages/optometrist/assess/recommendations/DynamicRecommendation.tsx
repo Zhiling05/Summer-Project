@@ -16,6 +16,40 @@ import Header from "../../../../components/Header"; // ycl2
 
 import BottomNav  from "../../../../components/BottomNav";
 
+
+// —— LOCAL 预览数据读取 + 纯文本构造 ——
+const LOCAL_KEYS = ["assessmentForPreview", "previewAssessment", "assessment_draft"];
+
+function readLocalAssessment() {
+  for (const k of LOCAL_KEYS) {
+    const v = localStorage.getItem(k) || sessionStorage.getItem(k);
+    if (v) { try { return JSON.parse(v); } catch {} }
+  }
+  return null;
+}
+
+function toPlainText(a: any) {
+  const MAP: Record<string,string> = {
+    EMERGENCY_DEPARTMENT: "Send patient to Emergency Department immediately",
+    IMMEDIATE: "Immediate referral to Eye Emergency On-Call",
+    URGENT_TO_OPH: "Urgent referral to Ophthalmology",
+    URGENT_TO_GP_OR_NEUR: "Urgent referral to GP or Neurology",
+    TO_GP: "Refer to General Practitioner",
+    NO_REFERRAL: "No referral required",
+    OTHER_EYE_CONDITIONS_GUIDANCE: "Referral to other department",
+  };
+  return [
+    `Assessment ID: ${a?.id ?? "(LOCAL)"}`,
+    `Date: ${a?.createdAt ?? ""}`,
+    `Role: ${a?.role ?? ""}`,
+    `Recommendation: ${MAP[a?.recommendation] || a?.recommendation || ""}`,
+    "Symptoms:",
+    ...(Array.isArray(a?.symptoms) && a.symptoms.length ? a.symptoms : ["(none)"]),
+  ].join("\n");
+}
+
+
+
 /* ---------- 邮件发送模态框 ---------- */
 const EmailModal: React.FC<{
   open: boolean;
@@ -73,7 +107,7 @@ interface Recommendation {
 const DynamicRecommendation: React.FC = () => {
 
   useEffect(() => {
-    // 标记完成，之后不再弹
+    // 标记完成，之后不再弹窗
     sessionStorage.setItem('assessmentComplete', 'true');
     sessionStorage.removeItem('assessStarted');
     sessionStorage.removeItem('lastQuestionId');
@@ -106,7 +140,7 @@ const DynamicRecommendation: React.FC = () => {
   const ensureReport = async () => {
     if (report) return report;
     if (!assessId) throw new Error("assessmentId missing");
-    const txt = await fetchReportText(assessId);
+    const txt = await fetchReportText(assessId!);
     setReport(txt);
     return txt;
   };
@@ -115,28 +149,60 @@ const DynamicRecommendation: React.FC = () => {
   const navigate = useNavigate();
 
   // 预览
+  // const handlePreview = async () => {
+  //   try {
+  //     const txt = await ensureReport();
+  //     navigate(
+  //       `/optometrist/assess/recommendations/report-preview/${assessId}`,
+  //       { state: { text: txt } }
+  //     );
+  //   } catch (e) {
+  //     alert("Fetch report failed: " + (e as Error).message);
+  //   }
+  // };
   const handlePreview = async () => {
+    if (!assessId || assessId === "LOCAL") {
+      navigate(`/optometrist/assess/recommendations/report-preview/LOCAL`);
+      return;
+    }
     try {
-      const txt = await ensureReport();
+      const txt = await fetchReportText(assessId!);
       navigate(
-        `/optometrist/assess/recommendations/report-preview/${assessId}`,
-        { state: { text: txt } }
+          `/optometrist/assess/recommendations/report-preview/${assessId}`,
+          { state: { text: txt } }
       );
-    } catch (e) {
-      alert("Fetch report failed: " + (e as Error).message);
+    } catch (e: any) {
+      alert("Fetch report failed: " + (e?.message || e));
     }
   };
 
+
   // 下载
+  // const handleDownload = async () => {
+  //   if (!assessId) return;
+  //   try {
+  //     const blob = await exportAssessment(assessId, "txt");
+  //     saveAs(blob, `assessment-${assessId}.txt`);
+  //   } catch (e) {
+  //     alert("Download failed: " + (e as Error).message);
+  //   }
+  // };
   const handleDownload = async () => {
-    if (!assessId) return;
+    if (!assessId || assessId === "LOCAL") {
+      const local = readLocalAssessment();
+      if (!local) { alert("No local preview data."); return; }
+      const blob = new Blob([toPlainText(local)], { type: "text/plain;charset=utf-8" });
+      saveAs(blob, `assessment-LOCAL.txt`);
+      return;
+    }
     try {
       const blob = await exportAssessment(assessId, "txt");
       saveAs(blob, `assessment-${assessId}.txt`);
-    } catch (e) {
-      alert("Download failed: " + (e as Error).message);
+    } catch (e: any) {
+      alert("Download failed: " + (e?.message || e));
     }
   };
+
 
   // 发送邮件（由 EmailModal 调用）
   const sendEmail = async (email: string) => {
@@ -218,7 +284,9 @@ const DynamicRecommendation: React.FC = () => {
 
               <button
                 className="btn-outline"
-                disabled={sending}
+                // disabled={sending}
+                disabled={sending || assessId === "LOCAL"}
+                title={assessId === "LOCAL" ? "LOCAL preview cannot send email." : ""}
                 onClick={openEmailModal}
               >
                 Send via Email

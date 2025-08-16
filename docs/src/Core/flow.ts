@@ -11,6 +11,7 @@ interface Question {
   navigation?: Record<string, unknown>;
   rules?: Array<{ if?: Record<string, any>; next: string }>;
   next?: string | Record<string, string>;
+  meta?: { symptomOnYes?: string; };
 }
 
 interface Questionnaire {
