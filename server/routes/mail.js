@@ -1,58 +1,80 @@
-// routes/mail.js
 const express = require('express');
 const router = express.Router();
+const Assessment = require('../models/Assessment');
+const { buildFullReportText, buildDocFromText } = require('../utils/doc');
+const { sendAssessmentMail } = require('../utils/mailer');
+const { extractSymptoms } = require('../utils/symptoms');
 
-// 看到这行说明文件被加载了
-console.log('[routes/mail] loaded');
-
-// 探针：判断路由是否挂上
+/**
+ * GET /send-report/ping - 检查邮件服务是否可用
+ * 用于监控和调试
+ */
 router.get('/send-report/ping', (_req, res) => {
   res.json({ ok: true, route: 'mail' });
 });
 
-const Assessment = require('../models/Assessment');
-const { buildFullReportText, buildDocFromText } = require('../utils/doc');
-const { sendAssessmentMail } = require('../utils/mailer');
-const { extractSymptoms } = require('../utils/symptoms'); // 复用同一套提取逻辑
-
+/**
+ * POST /send-report - 发送评估报告邮件
+ * 接收assessmentId和目标邮箱，发送报告作为附件
+ */
 router.post('/send-report', async (req, res, next) => {
   try {
     const { assessmentId, emailTo, format = 'txt' } = req.body;
-    if (!assessmentId) return res.status(400).json({ error: 'assessmentId is required' });
-    if (!emailTo)      return res.status(400).json({ error: 'emailTo is required' });
-    if (format !== 'txt') return res.status(400).json({ error: 'only txt supported for now' });
+    
+    // 参数验证
+    if (!assessmentId) {
+      return res.status(400).json({ error: 'assessmentId is required' });
+    }
+    if (!emailTo) {
+      return res.status(400).json({ error: 'emailTo is required' });
+    }
+    if (format !== 'txt') {
+      return res.status(400).json({ error: 'Only txt format is currently supported' });
+    }
 
+    // 查找评估记录
     const record = await Assessment.findById(assessmentId);
-    if (!record) return res.status(404).send('Not found');
+    if (!record) {
+      return res.status(404).json({ error: 'Assessment not found' });
+    }
 
-    // —— 症状兜底：优先用持久化字段，否则从 answers 提取（和页面/导出一致）——
+    // 确保有症状数据
     const symptoms = (record.symptoms && record.symptoms.length)
       ? record.symptoms
       : extractSymptoms(record.answers || []);
 
-    // —— 组装 Full Report 所需字段 —— 
+    // 准备报告数据 - 只包含需要的字段
     const payload = {
-      id: record._id.toString(),
-      createdAt: record.createdAt ? new Date(record.createdAt).toISOString() : '',
-      role: record.role || '',
+      createdAt: record.createdAt,
       symptoms,
       recommendation: record.recommendation || '',
     };
 
-    // —— 拼 Full Report 文本，并写入临时 txt —— 
+    // 生成报告文本并写入临时文件
     const text = buildFullReportText(payload);
     const { path, cleanup } = await buildDocFromText(text);
 
+    // 设置邮件主题和文件名
+    const date = new Date(record.createdAt).toLocaleDateString('en-GB');
+    const subject = `Assessment Report - ${date}`;
+    const filename = `assessment_report_${assessmentId}.txt`;
+
+    // 发送邮件
     await sendAssessmentMail({
       to: emailTo,
-      subject: `Assessment ${assessmentId}`,
-      text: 'See attachment.',
+      subject,
+      text: 'Please find attached your assessment report.',
       attachmentPath: path,
+      attachmentFilename: filename
     });
 
+    // 清理临时文件并返回成功响应
     cleanup();
-    res.json({ ok: true });
-  } catch (e) { next(e); }
+    res.json({ ok: true, message: 'Report sent successfully' });
+  } catch (err) {
+    console.error('[POST /send-report] error:', err);
+    res.status(500).json({ error: 'Failed to send report: ' + err.message });
+  }
 });
 
 module.exports = router;

@@ -1,26 +1,35 @@
-// utils/mailer.js
-console.log('[mailer] loaded');  // 启动后端时就会看到这行日志
-
 const nodemailer = require('nodemailer');
+const path = require('path');
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.ethereal.email',
-  port: Number(process.env.SMTP_PORT) || 587,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
-
-/** 发送带附件的邮件 */
-async function sendAssessmentMail({ to, subject, text, attachmentPath }) {
+/**
+ * 发送带附件的评估报告邮件
+ * @param {Object} options - 邮件选项
+ * @param {string} options.to - 收件人邮箱
+ * @param {string} options.subject - 邮件主题
+ * @param {string} options.text - 邮件正文
+ * @param {string} options.attachmentPath - 附件文件路径
+ * @param {string} [options.attachmentFilename] - 自定义附件文件名（可选）
+ * @returns {Promise<Object>} 发送结果
+ */
+async function sendAssessmentMail({ 
+  to, 
+  subject, 
+  text, 
+  attachmentPath,
+  attachmentFilename
+}) {
+  const filename = attachmentFilename || path.basename(attachmentPath);
+  
   return transporter.sendMail({
-    from: '"DIPP App" <no-reply@dipp.local>',
+    from: '"Papilloedema Assessment" <no-reply@dipp.local>',
     to,
     subject,
     text,
-    attachments: [{ filename: attachmentPath.split('/').pop(), path: attachmentPath }],
+    attachments: [{ 
+      filename,
+      path: attachmentPath 
+    }],
   });
 }
 
-module.exports = { sendAssessmentMail };  // ★仅此一行导出
+module.exports = { sendAssessmentMail };

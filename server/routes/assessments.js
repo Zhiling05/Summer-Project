@@ -1,150 +1,57 @@
 const express = require('express');
 const router = express.Router();
 const Assessment = require('../models/Assessment');
-
-// lsy新增：用公共的提取函数
 const { extractSymptoms } = require('../utils/symptoms');
 
-// /* ---------- 症状映射规则 ---------- */
-// const SYMPTOM_RULES = {
-//   /* 单选：Yes ⇒ Headache */
-//   Q1: { Yes: 'Headache' },
-
-//   /* 多选：保留原文，None of the above 忽略 */
-//   Q2: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-//   Q3: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-//   Q4: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-
-//   /* TVO / Double vision / Cranial nerve… */
-//   Q5: { Yes: 'Transient visual obscurations (TVO)' },
-//   Q6: { Yes: 'Binocular double vision' },
-//   Q7: { Yes: 'Latent/manifest squint or uncorrected refractive error present' },
-//   Q8: { Yes: 'Cranial nerve palsy pattern' },
-
-//   /* Q9 – Q13 与上面同义 */
-//   Q9 : { Yes: 'Transient visual obscurations (TVO)' },
-//   Q10: { Yes: 'Binocular double vision' },
-//   Q11: { Yes: 'Latent/manifest squint or uncorrected refractive error present' },
-//   Q12: { Yes: 'Cranial nerve palsy pattern' },
-//   Q13: { Yes: 'Other visual symptoms' },
-
-//   /* 视盘、眼底体征 */
-//   Q14: { Yes: 'Disc elevation' },
-//   Q15: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-//   Q16: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-
-//   /* 视盘异常 / Drusen */
-//   Q17: { Yes: 'Crowded/tilted discs or PHOMS (previously known)' },
-//   Q18: { Yes: 'Having white-yellow bodies within the optic disc or signs compatible with drusen on OCT (previously known)' },
-//   Q19: { Yes: 'Crowded/tilted discs or PHOMS (at this visit)' },
-//   Q20: { Yes: 'Having white-yellow bodies within the optic disc or signs compatible with drusen on OCT (at this visit)' },
-
-//   /* 视力 / 视野改变 */
-//   Q21: { Yes: 'Change in visual acuity or fields' },
-//   Q22: { Yes: 'Change in visual acuity or fields' },
-
-//   Q23: { Yes: 'Disc elevation' },
-
-  
-//   Q24: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-//   Q25: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-
-//   /* crowded / drusen / 视力改变 逻辑重复出现 */
-//   Q26: { Yes: 'Crowded/tilted discs or PHOMS (at/prev. visit)' },
-//   Q27: { Yes: 'Having white-yellow bodies within the optic disc or signs compatible with drusen on OCT' },
-//   Q28: { Yes: 'Change in visual acuity or fields' },
-
-//   /* 再次出现的 disc-elevation + 眼底体征组合 */
-//   Q29: { Yes: 'Disc elevation' },
-//   Q30: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-//   Q31: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-
-//   /* 又一轮 crowded / drusen / 视力改变 */
-//   Q32: { Yes: 'Crowded/tilted discs or PHOMS (at/prev. visit)' },
-//   Q33: { Yes: 'Having white-yellow bodies within the optic disc or signs compatible with drusen on OCT' },
-//   Q34: { Yes: 'Change in visual acuity or fields' },
-
-//   /* NO_REFERRAL 分支前的最后一套重复题 */
-//   Q35: { Yes: 'Disc elevation' },
-//   Q36: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-//   Q37: {
-//     'None of the above': null,
-//     '*': a => a.answer,
-//   },
-//   Q38: { Yes: 'Crowded/tilted discs or PHOMS (at/prev. visit)' },
-//   Q39: { Yes: 'Having white-yellow bodies within the optic disc or signs compatible with drusen on OCT' },
-//   Q40: { Yes: 'Change in visual acuity or fields' },
-// };
-
-// /* 从 answers 中提取 symptoms */
-// function extractSymptoms(answers = []) {
-//   const out = [];
-//   for (const a of answers) {
-//     const rule = SYMPTOM_RULES[a.questionId];
-//     if (!rule) continue;
-
-//     if (Object.prototype.hasOwnProperty.call(rule, a.answer)) {
-//       const v = rule[a.answer];
-//       if (v == null) continue;
-//       out.push(typeof v === 'function' ? v(a) : v);
-//       continue;
-//     }
-//     if (rule['*'] && a.answer) {
-//       const v = rule['*'];
-//       out.push(typeof v === 'function' ? v(a) : v);
-//     }
-//   }
-//   return [...new Set(out.filter(Boolean))]; // 去重 + 去空
-// }
-
 /**
- * GET /assessments  列表（可选 ?limit=50）
- * 返回精简字段，前端方便展示
+ * GET /assessments - 获取评估列表
+ * 支持参数：
+ * - limit: 限制返回数量，默认50
+ * - riskLevel: 按风险级别筛选 (high/medium/low/all)
+ * - startDate: 开始日期筛选
+ * - endDate: 结束日期筛选
  */
 router.get('/assessments', async (req, res) => {
-  try {
+   try {
     const limit = Math.max(1, Math.min(parseInt(req.query.limit || '50', 10), 200));
-    const docs = await Assessment.find().sort({ createdAt: -1 }).limit(limit);
-
+    const query = {};
+    
+    // 风险级别筛选
+    if (req.query.riskLevel && req.query.riskLevel !== 'all') {
+      const riskLevel = req.query.riskLevel;
+      // 将high/medium/low映射到实际的recommendation值
+      if (riskLevel === 'high') {
+        query.recommendation = { $in: ['EMERGENCY_DEPARTMENT', 'IMMEDIATE'] };
+      } else if (riskLevel === 'medium') {
+        query.recommendation = { $in: ['URGENT_TO_OPH', 'URGENT_TO_GP_OR_NEUR'] };
+      } else if (riskLevel === 'low') {
+        query.recommendation = { $in: ['TO_GP', 'NO_REFERRAL', 'OTHER_EYE_CONDITIONS_GUIDANCE'] };
+      }
+    }
+    
+    // 日期范围筛选
+    if (req.query.startDate || req.query.endDate) {
+      query.createdAt = {};
+      
+      if (req.query.startDate) {
+        query.createdAt.$gte = new Date(req.query.startDate);
+      }
+      
+      if (req.query.endDate) {
+        // 设置为当天结束时间
+        const endDate = new Date(req.query.endDate);
+        endDate.setHours(23, 59, 59, 999);
+        query.createdAt.$lte = endDate;
+      }
+    }
+    const docs = await Assessment.find(query).sort({ createdAt: -1 }).limit(limit);
     const records = docs.map(d => ({
       id: d._id.toString(),
-      role: d.role,
-      patientId: d.patientId || '',
-      risk: d.recommendation || '',
-      createdAt: d.createdAt
+      risk: d.recommendation || 'no-referral',
+      date: d.createdAt // 前端期望字段名为date
     }));
 
-    res.json(records);
+    res.json({ records });
   } catch (err) {
     console.error('[GET /assessments] error:', err);
     res.status(500).json({ error: err.message });
@@ -152,69 +59,87 @@ router.get('/assessments', async (req, res) => {
 });
 
 /**
- * GET /assessments/:id  单条详情
- * 返回 AssessmentDetail 需要的字段
+ * GET /assessments/:id - 获取单个评估详情
+ * 返回评估的完整信息
  */
 router.get('/assessments/:id', async (req, res) => {
   const { id } = req.params;
 
+  // 防止使用本地预览ID
   if (id === 'LOCAL') {
-    return res.status(400).json({ error: 'assessment.js: LOCAL is for preview only' });
+    return res.status(400).json({ error: 'LOCAL is for preview only' });
   }
 
   try {
-    const d = await Assessment.findById(id);
-    if (!d) return res.status(404).json({ error: 'Assessment not found' });
+    const assessment = await Assessment.findById(id);
+    
+    if (!assessment) {
+      return res.status(404).json({ error: 'Assessment not found' });
+    }
 
+    // 如果没有存储症状，则从答案中提取
+    const symptoms = (assessment.symptoms && assessment.symptoms.length) 
+      ? assessment.symptoms 
+      : extractSymptoms(assessment.answers || []);
+
+    // 返回AssessmentDetail格式
     res.json({
-      id: d._id.toString(),
-      role: d.role,
-      patientId: d.patientId || '',
-      answers: d.answers || [],
-      recommendation: d.recommendation || '',
-      symptoms: (d.symptoms && d.symptoms.length) ? d.symptoms : extractSymptoms(d.answers || []),
-      createdAt: d.createdAt
+      id: assessment._id.toString(),
+      role: assessment.role,
+      answers: assessment.answers || [],
+      symptoms: symptoms,
+      recommendation: assessment.recommendation || '',
+      createdAt: assessment.createdAt
     });
   } catch (err) {
     console.error('[GET /assessments/:id] error:', err);
     res.status(500).json({ error: err.message });
   }
-});
+})
 
 /**
- * POST /assessments  新建
- * 前端期望返回 { id, createdAt }
+ * POST /assessments - 创建新评估
+ * 接收评估数据并存储到数据库
  */
 router.post('/assessments', async (req, res) => {
   try {
     const {
       role,
-      patientId,
-      content = '',
-      recommendation,
-      answers = []
+      answers = [],
+      recommendation
     } = req.body || {};
 
-    // 简单校验（可按需扩展）
-    if (!role) return res.status(400).json({ error: 'role is required' });
-    // 如果模型里 content 是 required，请保证非空；否则可在模型里把 content 改为 default: ''
-    // if (!content) return res.status(400).json({ error: 'content is required' });
+    // 必填字段验证
+    if (!role) {
+      return res.status(400).json({ error: 'role is required' });
+    }
+    
+    if (!recommendation) {
+      return res.status(400).json({ error: 'recommendation is required' });
+    }
+    
+    if (!Array.isArray(answers) || answers.length === 0) {
+      return res.status(400).json({ error: 'answers array is required and cannot be empty' });
+    }
 
-    //新增这一行
+    // 从答案中提取症状
     const symptoms = extractSymptoms(answers);
 
+    // 创建新记录
     const newRecord = await Assessment.create({
       role,
-      patientId,
-      content,
-      recommendation, // ← 需要模型里有该字段
-      answers,          // ← 需要模型里有该字段
-      symptoms,      // ← lsy新增
+      answers,
+      recommendation,
+      symptoms,
     });
 
-    // 前端的 CreateAssessmentResponse 只用到 id / createdAt
+    // 返回完整的AssessmentDetail
     res.status(201).json({
       id: newRecord._id.toString(),
+      role: newRecord.role,
+      answers: newRecord.answers,
+      symptoms: newRecord.symptoms,
+      recommendation: newRecord.recommendation,
       createdAt: newRecord.createdAt
     });
   } catch (err) {
@@ -223,15 +148,60 @@ router.post('/assessments', async (req, res) => {
   }
 });
 
-// router.post('/assessments', async (req, res) => {
-//   try {
-//     const newRecord = await Assessment.create(req.body);
-//     res.status(201).json(newRecord);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
+/**
+ * POST /extract-symptoms - 从答案中提取症状
+ * 接收答案数组，返回提取的症状数组
+ */
+router.post('/extract-symptoms', async (req, res) => {
+  try {
+    const { answers } = req.body;
+    
+    if (!answers || !Array.isArray(answers)) {
+      return res.status(400).json({ error: 'answers array is required' });
+    }
+    
+    const symptoms = extractSymptoms(answers);
+    res.json(symptoms);
+  } catch (err) {
+    console.error('[POST /extract-symptoms] error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
+/**
+ * GET /statistics/risk-levels - 获取风险级别统计
+ * 返回各风险级别的记录数量
+ */
+router.get('/statistics/risk-levels', async (req, res) => {
+  try {
+    // 高风险统计
+    const highRiskCount = await Assessment.countDocuments({
+      recommendation: { $in: ['EMERGENCY_DEPARTMENT', 'IMMEDIATE'] }
+    });
+    
+    // 中风险统计
+    const mediumRiskCount = await Assessment.countDocuments({
+      recommendation: { $in: ['URGENT_TO_OPH', 'URGENT_TO_GP_OR_NEUR'] }
+    });
+    
+    // 低风险统计
+    const lowRiskCount = await Assessment.countDocuments({
+      recommendation: { $in: ['TO_GP', 'NO_REFERRAL', 'OTHER_EYE_CONDITIONS_GUIDANCE'] }
+    });
+    
+    // 总数统计
+    const totalCount = await Assessment.countDocuments();
+    
+    res.json({
+      high: highRiskCount,
+      medium: mediumRiskCount,
+      low: lowRiskCount,
+      total: totalCount
+    });
+  } catch (err) {
+    console.error('[GET /statistics/risk-levels] error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// router.extractSymptoms = extractSymptoms;
 module.exports = router;

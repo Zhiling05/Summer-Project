@@ -13,74 +13,41 @@ const RECOMMEND_TEXT = {
   OTHER_EYE_CONDITIONS_GUIDANCE: 'Referral to other department',
 };
 
-/* ---------- Full Report 风格文本（和页面一致） ---------- */
-function buildFullReportText(ass) {
-  const iso = ass.createdAt
-    ? new Date(ass.createdAt).toISOString()
-    : '';
 
+function buildFullReportText(ass) {
+  // 格式化日期为更易读的形式
+  const dateStr = ass.createdAt
+    ? new Date(ass.createdAt).toLocaleString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    : 'Date not available';
+
+  // 格式化症状列表
   const symptoms = (ass.symptoms && ass.symptoms.length)
     ? ass.symptoms.map(s => `- ${s}`).join('\n')
-    : 'No symptom recorded.';
+    : 'No symptoms recorded.';
 
-  const rec = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation || '';
+  // 获取推荐文本
+  const recommendation = RECOMMEND_TEXT[ass.recommendation] || ass.recommendation || 'No recommendation provided';
 
+  // 拼接简化版报告
   return [
-    'Full Report',
+    'ASSESSMENT REPORT',
+    '================',
     '',
-    'Basic information',
+    `Date: ${dateStr}`,
     '',
-    `ID: ${ass.id || ''}`,
-    `Date: ${iso}`,
-    `Role: ${ass.role || ''}`,
-    '',
-    'Patient symptoms',
-    '',
+    'SYMPTOMS:',
     symptoms,
     '',
-    'Recommendation',
-    '',
-    rec,
+    'RECOMMENDATION:',
+    recommendation,
     '',
   ].join('\n');
-}
-
-/* ---------- 旧版详细问答文本（保留以免别处使用） ---------- */
-function buildText(ass) {
-  const lines = [
-    `Assessment ${ass.id}`,
-    `Date      : ${ass.createdAt}`,
-    `Role      : ${ass.role}`,
-    '----------------------------------------',
-    ...(ass.answers || []).map(
-      a =>
-        `${a.questionId}: ${a.question || '(question text missing)'}\n` +
-        `Answer    : ${a.answer}\n`
-    ),
-    ...(ass.symptoms?.length
-      ? [
-          '----------------------------------------',
-          'Symptoms:',
-          ...ass.symptoms.map(s => `- ${s}`),
-        ]
-      : []),
-    '----------------------------------------',
-    `Recommendation: ${RECOMMEND_TEXT[ass.recommendation] || ass.recommendation}`,
-    '',
-  ];
-  return lines.join('\n');
-}
-
-/* ---------- 写详细问答版到临时 txt 文件 ---------- */
-async function buildDoc(ass, format = 'txt') {
-  if (format !== 'txt') {
-    const err  = new Error('only txt supported');
-    err.status = 501;
-    throw err;
-  }
-  const { path, cleanup } = await tmp.file({ postfix: '.txt' });
-  await fs.writeFile(path, buildText(ass), 'utf8'); 
-  return { path, cleanup, mime: 'text/plain', ext: 'txt' };
 }
 
 /* ---------- 工具：把任意文本写成临时 txt 文件 ---------- */
@@ -96,8 +63,6 @@ async function buildDocFromText(text) {
 }
 
 module.exports = {
-  buildText,            // 旧：问答版
-  buildDoc,             // 旧：写问答版到临时txt
-  buildFullReportText,  // 新：Full Report 文本
-  buildDocFromText,     // 新：把任意文本写临时txt
+  buildFullReportText,  // 简化版报告文本
+  buildDocFromText,     // 把任意文本写临时txt
 };

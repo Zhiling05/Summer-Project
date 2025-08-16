@@ -3,11 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../../../styles/question.css";
 
-import BackButton from '../../../../components/BackButton';//zkx
-// ycl: 改为从 src/assets 里 import，Vite 才能正确打包
-import NHSLogo from "../../../../assets/NHS_LOGO.jpg";
-import DIPPLogo from "../../../../assets/DIPP_Study_logo.png";
-
+import BackButton from '../../../../components/BackButton';
 import BottomNav from "../../../../components/BottomNav";
 import Header from "../../../../components/Header"; // ycl2
 
@@ -16,24 +12,37 @@ import { getNextId, AnswerHistory } from "../../../../utils/NavigationLogic.ts";
 import { validateByType } from "../../../../utils/ValidationLogic"; // ycl
 import { createAssessment, type CreateAssessmentRequest } from "../../../../api";                // 新增：保存 assessment
 
+// 后端的report.js和doc.js已经实现了完整的报告生成逻辑
+// function buildLocalText(recCode: string, role = 'optometrist', answers: any[] = []) {
+//   // 提取症状（模拟后端的 extractSymptoms）
+//   const symptoms = answers
+//     .filter(a => a.answer !== 'No' && a.answer !== 'None of the above')
+//     .map(a => `- ${a.answer}`);
 
-function buildLocalText(recCode: string, role = 'optometrist', answers: any[] = []) {
-  const lines = [
-    `Assessment LOCAL`,
-    `Date      : ${new Date().toISOString()}`,
-    `Role      : ${role}`,
-    '----------------------------------------',
-    ...answers.map(a =>
-      `${a.questionId}: ${a.question || ''}\nAnswer    : ${a.answer}`
-    ),
-    '----------------------------------------',
-    `Recommendation: ${recCode}`,
-    '',
-  ];
-  return lines.join('\n'); //lsy新增
-}
-
-
+//   // 使用与后端相同的格式
+//   const lines = [
+//     'ASSESSMENT REPORT (LOCAL PREVIEW)',
+//     '=================================',
+//     '',
+//     `Date: ${new Date().toLocaleString('en-GB', {
+//       day: '2-digit',
+//       month: 'short',
+//       year: 'numeric',
+//       hour: '2-digit',
+//       minute: '2-digit'
+//     })}`,
+//     '',
+//     'SYMPTOMS:',
+//     ...symptoms.length ? symptoms : ['No symptoms recorded.'],
+//     '',
+//     'RECOMMENDATION:',
+//     getRecommendationText(recCode), // 转换为可读文本
+//     '',
+//     '--- LOCAL PREVIEW ONLY ---'
+//   ];
+  
+//   return lines.join('\n');
+// }
 
 
 /* ---------- 类型声明 ---------- */
@@ -172,11 +181,8 @@ const DynamicQuestion = () => {
       try {
   // ① 你算好的推荐代码（要与 recommendations.json 里的 id 一致）
   const recCode = nextId; // lsy改
-
-  // ② 组织后端需要的 payload
   const payload: CreateAssessmentRequest = {
     role: 'optometrist',
-    patientId,               // ← 你的患者ID变量
     recommendation: recCode, // 保存推荐结果
     answers: answersArr,     // ← 你收集的答案数组
     content: contentStr, //lsy添加
@@ -194,7 +200,7 @@ const DynamicQuestion = () => {
   console.error('Save failed:', e);
 
   const recCode  = nextId;   // 你已有的最终建议代码
-  const localTxt = buildLocalText(recCode, 'optometrist', answersArr);
+  // const localTxt = buildLocalText(recCode, 'optometrist', answersArr);
 
   // 组一个给预览页用的简版对象（你也可以更完整）
   const previewObj = {
