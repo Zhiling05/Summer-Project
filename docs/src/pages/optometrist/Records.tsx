@@ -27,11 +27,11 @@ function normalizeRisk(raw: string): RiskLabel {
   return raw.toLowerCase().replace(/_/g, "-") as RiskLabel;
 }
 
-interface RawRecord {
-  id: string;
-  date: string;
-  risk: string;
-}
+// interface RawRecord {
+//   id: string;
+//   date: string;
+//   risk: string;
+// }
 type NormalizedRecord = {
   id: string;
   date: string;
