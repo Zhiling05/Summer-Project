@@ -5,11 +5,27 @@ import BackButton from '../../../components/BackButton';
 import '../../../styles/image-card.css';
 import '../../../styles/image-gallery.css';
 
+
+/*把image-gallery文件夹一次性全部导入进来*/
+const _IMG = import.meta.glob('../../../assets/image-gallery/**/*.{png,PNG,jpg,JPG,jpeg,JPEG,webp,WEBP}', {
+  eager: true,
+  import: 'default'
+}) as Record<string, string>;
+
+const byName: Record<string, string> = Object.fromEntries(
+    Object.entries(_IMG).map(([path, url]) => [path.split('/').pop()!.toLowerCase(), url])
+);
+
+/** 根据文件名取 URL；大小写不敏感，取不到时返回空串 */
+const pick = (filename: string) => byName[filename.toLowerCase()] ?? '';
+
+
+
 interface ImageItem {
   id: number;
   title: string;
   description: string;
-  category: 'true' | 'pseudo' | 'uncertain' | 'normal';
+  category: 'true' | 'pseudo' | 'normal';
   images?: string[]; // 图片URL数组，支持多张图片
   placeholderText?: string; // 占位符文字
 }
@@ -18,96 +34,174 @@ export default function ImageGallery() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
 
+  // const imageItems: ImageItem[] = [
+  //   {
+  //     id: 1,
+  //     title: 'Cotton wool spots on surface or around optic disc and affecting retina',
+  //     description: 'Eye finding that positively identifies papilloedema',
+  //     category: 'true',
+  //     placeholderText: 'Cotton Wool Spots',
+  //     images: [] // 暂时没有真实图片，用的占位符
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Flame or blot haemorrhages on surface or around optic disc and affecting retina',
+  //     description: 'Eye finding that positively identifies papilloedema',
+  //     category: 'true',
+  //     placeholderText: 'Flame Haemorrhages',
+  //     images: []
+  //   },
+  //   {
+  //     id: 7,
+  //     title: 'Crowded optic discs',
+  //     description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
+  //     category: 'pseudo',
+  //     placeholderText: 'Crowded Discs',
+  //     images: []
+  //   },
+  //   {
+  //     id: 8,
+  //     title: 'Obvious distinct white-yellow bodies(drusen) within the optic disc',
+  //     description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
+  //     category: 'pseudo',
+  //     placeholderText: 'Drusen Bodies',
+  //     images: []
+  //   },
+  //   {
+  //     id: 9,
+  //     title: 'PHOMS',
+  //     description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
+  //     category: 'pseudo',
+  //     placeholderText: 'PHOMS',
+  //     images: []
+  //   },
+  //   {
+  //     id: 10,
+  //     title: 'Tilted discs',
+  //     description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
+  //     category: 'pseudo',
+  //     placeholderText: 'Tilted Discs',
+  //     images: []
+  //   },
+  //   {
+  //     id: 11,
+  //     title: 'Normal optic disc',
+  //     description: 'Healthy optic disc appearance with normal characteristics',
+  //     category: 'normal',
+  //     placeholderText: 'Normal Disc',
+  //     images: ['docs/src/assets/image-gallery/normal-left.PNG']
+  //   }
+  // ];
+
   const imageItems: ImageItem[] = [
-    {
-      id: 1,
-      title: 'Cotton wool spots on surface or around optic disc and affecting retina',
-      description: 'Eye finding that positively identifies papilloedema',
-      category: 'true',
-      placeholderText: 'Cotton Wool Spots',
-      images: [] // 暂时没有真实图片，用的占位符
-    },
-    {
-      id: 2,
-      title: 'Flame or blot haemorrhages on surface or around optic disc and affecting retina', 
-      description: 'Eye finding that positively identifies papilloedema',
-      category: 'true',
-      placeholderText: 'Flame Haemorrhages',
-      images: [] 
-    },
-    {
-      id: 3,
-      title: 'Obscuration of blood vessels overlying disc',
-      description: 'Uncertain for papilloedema, requires further ophthalmology examination',
-      category: 'uncertain',
-      placeholderText: 'Blood Vessel Obscuration',
-      images: [] 
-    },
-    {
-      id: 4,
-      title: 'Hyperaemia of small blood vessels overlying disc',
-      description: 'Uncertain for papilloedema, requires further ophthalmology examination',
-      category: 'uncertain',
-      placeholderText: 'Vessel Hyperaemia',
-      images: []
-    },
-    {
-      id: 5,
-      title: 'Peripapillary retinal folds',
-      description: 'Uncertain for papilloedema, requires further ophthalmology examination',
-      category: 'uncertain',
-      placeholderText: 'Retinal Folds',
-      images: [] 
-    },
-    {
-      id: 6,
-      title: 'Choroidal folds',
-      description: 'Uncertain for papilloedema, requires further ophthalmology examination',
-      category: 'uncertain',
-      placeholderText: 'Choroidal Folds',
-      images: []
-    },
-    {
-      id: 7,
-      title: 'Crowded optic discs',
-      description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
-      category: 'pseudo',
-      placeholderText: 'Crowded Discs',
-      images: []
-    },
-    {
-      id: 8,
-      title: 'Obvious distinct white-yellow bodies(drusen) within the optic disc',
-      description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
-      category: 'pseudo',
-      placeholderText: 'Drusen Bodies',
-      images: []
-    },
-    {
-      id: 9,
-      title: 'PHOMS',
-      description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
-      category: 'pseudo',
-      placeholderText: 'PHOMS',
-      images: []
-    },
-    {
-      id: 10,
-      title: 'Tilted discs',
-      description: 'Eye finding that represents pseudopapilloedema (benign anatomical variation)',
-      category: 'pseudo',
-      placeholderText: 'Tilted Discs',
-      images: []
-    },
-    {
-      id: 11,
-      title: 'Normal optic disc',
-      description: 'Healthy optic disc appearance with normal characteristics',
-      category: 'normal',
-      placeholderText: 'Normal Disc',
-      images: []
-    }
+    /** ---------- TRUE：乳头水肿 / Swelling ---------- */
+    { id: 1,  title: 'Papilloedema — Swelling (Right, fundus)', description: '', category: 'true',
+      placeholderText: 'Swelling OD', images: [pick('1376 Right swelling.png')] },
+    { id: 2,  title: 'Papilloedema — Swelling (Left, fundus)', description: '', category: 'true',
+      placeholderText: 'Swelling OS', images: [pick('1376 Left swelling.png')] },
+    { id: 3,  title: 'Papilloedema — Swelling (Right, OCT)', description: '', category: 'true',
+      placeholderText: 'Swelling OCT OD', images: [pick('1376 Right swelling OCT.png')] },
+    { id: 4,  title: 'Papilloedema — Swelling (Left, OCT)', description: '', category: 'true',
+      placeholderText: 'Swelling OCT OS', images: [pick('1376 Left swelling OCT.png')] },
+
+    { id: 5,  title: 'Papilloedema — Swelling (Right, fundus)', description: '', category: 'true',
+      placeholderText: 'Swelling OD', images: [pick('5701 right swelling.PNG')] },
+    { id: 6,  title: 'Papilloedema — Swelling (Left, fundus)', description: '', category: 'true',
+      placeholderText: 'Swelling OS', images: [pick('5701 left swelling.PNG')] },
+    { id: 7,  title: 'Papilloedema — Swelling (Right, OCT)', description: '', category: 'true',
+      placeholderText: 'Swelling OCT OD', images: [pick('5701 Right swelling OCT.png')] },
+    { id: 8,  title: 'Papilloedema — Swelling (Left, OCT)', description: '', category: 'true',
+      placeholderText: 'Swelling OCT OS', images: [pick('5701 Left swelling OCT.png')] },
+
+    { id: 9,  title: 'Papilloedema — Swelling (Right, fundus)', description: '', category: 'true',
+      placeholderText: 'Swelling OD', images: [pick('7835 right swelling.PNG')] },
+    { id: 10,  title: 'Papilloedema — Swelling (Left, fundus)', description: '', category: 'true',
+      placeholderText: 'Swelling OS', images: [pick('7835 left swelling.PNG')] },
+    { id: 11,  title: 'Papilloedema — Swelling (Right, OCT)', description: '', category: 'true',
+      placeholderText: 'Swelling OCT OD', images: [pick('7835 Right swelling OCT.png')] },
+    { id: 12,  title: 'Papilloedema — Swelling (Left, OCT)', description: '', category: 'true',
+      placeholderText: 'Swelling OCT OS', images: [pick('7835 Left swelling OCT.png')] },
+
+    /** ---------- PSEUDO：假性乳头水肿（crowded / tilted+crowded / drusen） ---------- */
+    // Crowded disc
+    { id: 13,  title: 'Crowded optic disc (Right, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OD', images: [pick('0362 right crowded disc.PNG')] },
+    { id: 14,  title: 'Crowded optic disc (Left, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OS', images: [pick('0362 left crowded disc.PNG')] },
+    { id: 15,  title: 'Crowded optic disc (Right, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OD', images: [pick('0362 right crowded disc OCT.PNG')] },
+    { id: 16,  title: 'Crowded optic disc (Left, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OS', images: [pick('0362 left crowded disc OCT.PNG')] },
+
+    { id: 17,  title: 'Crowded optic disc (Right, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OD', images: [pick('3258 right crowded disc.PNG')] },
+    { id: 18,  title: 'Crowded optic disc (Left, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OS', images: [pick('3258 left crowded disc.PNG')] },
+    { id: 19,  title: 'Crowded optic disc (Right, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OD', images: [pick('3258 right crowded disc OCT.PNG')] },
+    { id: 20,  title: 'Crowded optic disc (Left, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OS', images: [pick('3258 left crowded disc  OCT.PNG')] },
+
+    { id: 21,  title: 'Crowded optic disc (Right, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OD', images: [pick('5955 right crowded disc.PNG')] },
+    { id: 22,  title: 'Crowded optic disc (Left, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OS', images: [pick('5955 left crowded disc.PNG')] },
+    { id: 23,  title: 'Crowded optic disc (Right, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OD', images: [pick('5955 right crowded optic disc OCT.PNG')] },
+    { id: 24,  title: 'Crowded optic disc (Left, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OS', images: [pick('5955 left crowded disc OCT.PNG')] },
+
+    { id: 25,  title: 'Crowded optic disc (Right, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OD', images: [pick('6023 right crowded disc.PNG')] },
+    { id: 26,  title: 'Crowded optic disc (Left, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OS', images: [pick('6023 left crowded disc.PNG')] },
+    { id: 27,  title: 'Crowded optic disc (Right, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OD', images: [pick('6023 right crowded disc OCT.PNG')] },
+    { id: 28,  title: 'Crowded optic disc (Left, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OS', images: [pick('6023 left crowded disc OCT.PNG')] },
+
+    { id: 29,  title: 'Crowded optic disc (Right, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OD', images: [pick('8209 right crowded disc.PNG')] },
+    { id: 30,  title: 'Crowded optic disc (Left, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OS', images: [pick('8209 left crowded disc.PNG')] },
+    { id: 31,  title: 'Crowded optic disc (Right, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OD', images: [pick('8209 right crowded disc OCT.PNG')] },
+    { id: 32,  title: 'Crowded optic disc (Left, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Crowded OCT OS', images: [pick('8209 left crowded disc OCT.PNG')] },
+
+
+
+    // Tilted + crowded
+    { id: 33,  title: 'Tilted + crowded discs (Right, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Tilted+Crowded OD', images: [pick('8514 right tilted and crowded disc.PNG')] },
+    { id: 34, title: 'Tilted + crowded discs (Left, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Tilted+Crowded OS', images: [pick('8514 left tilted and crowded disc.PNG')] },
+    { id: 35, title: 'Tilted + crowded discs (Right, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Tilted+Crowded OCT OD', images: [pick('8514 right tilted and crowded disc OCT.PNG')] },
+    { id: 36, title: 'Tilted + crowded discs (Left, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Tilted+Crowded OCT OS', images: [pick('8514 left tilted and crowded disc OCT.PNG')] },
+
+    // Drusen
+    { id: 37, title: 'Optic disc drusen (Right, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Drusen OD', images: [pick('1312 right drusen.PNG')] },
+    { id: 38, title: 'Optic disc drusen (Left, fundus)', description: '', category: 'pseudo',
+      placeholderText: 'Drusen OS', images: [pick('1213 left drusen.PNG')] },
+    { id: 39, title: 'Optic disc drusen (Right, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Drusen OCT OD', images: [pick('1312 right drusen OCT.PNG')] },
+    { id: 40, title: 'Optic disc drusen (Left, OCT)', description: '', category: 'pseudo',
+      placeholderText: 'Drusen OCT OS', images: [pick('1312 left drusen OCT.PNG')] },
+
+    /** ---------- NORMAL：正常 ---------- */
+    { id: 41, title: 'Normal optic disc (Right, fundus)', description: '', category: 'normal',
+      placeholderText: 'Normal OD', images: [pick('6332 normal right.PNG')] },
+    { id: 42, title: 'Normal optic disc (Left, fundus)', description: '', category: 'normal',
+      placeholderText: 'Normal OS', images: [pick('6332 normal left.PNG')] },
+    { id: 43, title: 'Normal optic disc (Right, OCT)', description: '', category: 'normal',
+      placeholderText: 'Normal OCT OD', images: [pick('6332 normal right OCT.PNG')] },
+    { id: 44, title: 'Normal optic disc (Left, OCT)', description: '', category: 'normal',
+      placeholderText: 'Normal OCT OS', images: [pick('6332 normal left OCT.PNG')] },
   ];
+
 
   // 筛选逻辑
   const filteredItems = imageItems.filter(item => {
@@ -130,7 +224,6 @@ export default function ImageGallery() {
     switch (category) {
       case 'true': return 'TRUE';
       case 'pseudo': return 'PSEUDO';
-      case 'uncertain': return 'UNCERTAIN';
       case 'normal': return 'NORMAL';
       default: return '';
     }
@@ -216,7 +309,6 @@ export default function ImageGallery() {
                   <option value="all">All Images</option>
                   <option value="true">Papilloedema</option>
                   <option value="pseudo">Pseudopapilloedema</option>
-                  <option value="uncertain">Uncertain Appearance</option>
                   <option value="normal">Normal Appearance</option>
                 </select>
               </label>

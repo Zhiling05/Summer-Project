@@ -34,7 +34,7 @@
     font-size: 2rem;
     font-weight: 700;
     margin: 70px 0 0.5rem 0;
-    color: var(--text-body);
+    color: var(--card-title);
 }
 
 .user-selection-cards {
