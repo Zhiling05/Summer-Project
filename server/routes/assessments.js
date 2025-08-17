@@ -13,7 +13,7 @@ const { extractSymptoms } = require('../utils/symptoms');
  */
 router.get('/assessments', async (req, res) => {
    try {
-    const limit = Math.max(1, Math.min(parseInt(req.query.limit || '50', 10), 200));
+    // const limit = Math.max(1, Math.min(parseInt(req.query.limit || '50', 10), 200));  不限制只有50个，否则会发生到了50后，新增的数据会把别的数据挤掉
     const query = {};
     
     // 风险级别筛选
@@ -44,7 +44,7 @@ router.get('/assessments', async (req, res) => {
         query.createdAt.$lte = endDate;
       }
     }
-    const docs = await Assessment.find(query).sort({ createdAt: -1 }).limit(limit);
+    const docs = await Assessment.find(query).sort({ createdAt: -1 });
     const records = docs.map(d => ({
       id: d._id.toString(),
       risk: d.recommendation || 'no-referral',
