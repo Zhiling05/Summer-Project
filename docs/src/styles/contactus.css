@@ -27,7 +27,7 @@
   margin: 0 auto; /* 水平居中 */
   padding: var(--space-m);
   box-sizing: border-box;
-  margin-top: -90px; /* 去除顶部的margin，避免header位置偏下 */
+  margin-top: -75px; /* 去除顶部的margin，避免header位置偏下 */
   padding-top: 0; /* 去除顶部padding */
   transition: margin-left 0.3s ease;
   min-height: 60vh;
