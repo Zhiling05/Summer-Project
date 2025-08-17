@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import "../styles/bottomnav.css"; // 引入底部导航栏样式（路径无误）
+import "../styles/bottomnav.css";
 
 const HomeIcon = ({ active }: { active: boolean }) => (
   <svg
@@ -67,7 +67,7 @@ const GuideIcon = ({ active }: { active: boolean }) => (
 
 // 底部导航栏组件
 const BottomNav = () => {
-  const navigate = useNavigate(); // 用于编程式跳转
+  const navigate = useNavigate();
   const location = useLocation();
 
   const handleNavigation = (path: string) => {
@@ -78,8 +78,6 @@ const BottomNav = () => {
 
   const items = [
     { label: "Home", to: "/select-role", Icon: HomeIcon },
-    // { label: "Assess", to: "/optometrist/assess/start", Icon: AssessIcon },
-      //姚璟：这里路径要想有点问题，之前一直写的是start，导航到Q1会出现bug，我改了一下，这里是在AssessRouter里面定义的
     { label: "Assess", to: "/optometrist/assess/start-page", Icon: AssessIcon },
     { label: "Records", to: "/optometrist/records", Icon: RecordsIcon },
     { label: "Guide", to: "/optometrist/guide", Icon: GuideIcon },
@@ -88,7 +86,16 @@ const BottomNav = () => {
   return (
     <nav className="bottom-nav">
       {items.map(({ label, to, Icon }) => {
-        const active = location.pathname.startsWith(to);
+        // 特殊处理 Assess 按钮的激活状态判断
+        let active;
+        if (label === "Assess") {
+          // 只要路径包含 /optometrist/assess 就认为是激活状态
+          active = location.pathname.includes("/optometrist/assess");
+        } else {
+          // 其他按钮使用 startsWith 判断
+          active = location.pathname.startsWith(to);
+        }
+        
         return (
           <button
             key={to}

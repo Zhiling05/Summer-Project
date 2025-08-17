@@ -4,6 +4,7 @@
 @import "./styles/records.css";
 /*上面是姚璟添加，为了满足records样式与question保持一致*/
 
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -19,12 +20,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+html {
+  overflow-y: scroll;  
+  overflow-x: hidden;  
+}
+
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -65,8 +73,3 @@ button:focus-visible {
 }
 
 
-/* 全局基础设置 */
-/*html {
-  overflow-y: scroll;  
-  overflow-x: hidden;  
-}*/

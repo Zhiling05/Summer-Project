@@ -5,10 +5,6 @@ import { useEffect, useState } from "react"; // yj添加useState和useLocation�
 import StartPage             from './StartPage';
 import DynamicQuestion       from './questions/DynamicQuestion';
 import DynamicRecommendation from './recommendations/DynamicRecommendation';
-import PreviewReport         from './recommendations/PreviewReport';   // ★ 新增
-
-
-// ← 你的弹窗组件
 import PopupWindow from "../../../components/PopupWindow";
 
 // // ← 如果还没导入，从 flow.ts 拿这几个函数
@@ -110,10 +106,6 @@ export default function AssessRouter(): JSX.Element {
                 <Route path=""           element={<Navigate to="start-page" replace />} />
                 <Route path="start-page" element={<StartPage />} />
                 <Route path="questions/:questionId" element={<DynamicQuestion />} />
-                <Route
-                    path="recommendations/report-preview/:id"
-                    element={<PreviewReport />}
-                />
                 <Route
                     path="recommendations/:resultId/:assessmentId"
                     element={<DynamicRecommendation />}  //yj添加/:assessmentId传参

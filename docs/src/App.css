@@ -1,3 +1,14 @@
+html {
+  /* 🔧 强制垂直滚动条始终显示，避免页面跳动 */
+  overflow-y: scroll;
+  /* 🔧 禁用水平滚动条 */
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;  /* 继承禁用水平滚动 */
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

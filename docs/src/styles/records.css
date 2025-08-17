@@ -129,9 +129,6 @@
     box-sizing: border-box;   /* 确保 width 包括了 padding */
 }
 
-/* 3. 表格 */
-.table-wrapper { overflow-x: auto; }
-
 .records-table {
     width: 100%;
     border-collapse: collapse;

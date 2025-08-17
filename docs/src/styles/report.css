@@ -1,132 +1,306 @@
-/* -------------------------------------------------
- *  Assessment Report – visual style (match Records)
- * ------------------------------------------------*/
-
-/* ⬅︎ 左侧色条 + 淡渐变背景（High / Moderate / Low） */
-.report-red {
-  border-inline-start: 10px solid #d03838;
-  background: linear-gradient(
-    135deg,
-    rgba(208, 56, 56, .04) 0%,
-    rgba(208, 56, 56, .02) 100%
-  );
-}
-.report-orange {
-  border-inline-start: 10px solid #e67e00;
-  background: linear-gradient(
-    135deg,
-    rgba(230, 126, 0, .04) 0%,
-    rgba(230, 126, 0, .02) 100%
-  );
-}
-.report-green {
-  border-inline-start: 10px solid #007f3b;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 127, 59, .04) 0%,
-    rgba(0, 127, 59, .02) 100%
-  );
+/* —— 设计变量 —— */
+:root {
+  --nhs-blue:        #005eb8;
+  --white:           #ffffff;
+  --text-body:       #0b0c0c;
+  --shadow-card:     0 8px 24px rgba(0,0,0,.08);
+  --radius-card:     16px;
+  --space-xs:        4px;
+  --space-s:         8px;
+  --space-m:         16px;
+  --space-l:         24px;
+  --space-xl:        32px;
 }
 
-/* —— 版心 —— */
+/* ===== 整体容器 ===== */
+.recommendation-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== 主内容区域 ===== */
 .report-main {
-  padding: var(--space-xl) var(--space-l) 80px;   /* 底部给 BottomNav */
-  max-width: 900px;
-  margin-inline: auto;
+  flex: 1;
+  padding: var(--space-xl) var(--space-l) 80px;
+  width: 80vw;  /* 🔧 改为 80vw */
+  max-width: none;
+  margin: 0 auto; 
 }
 
-/* —— 卡片统一外观 —— */
+/* ===== 报告卡片 ===== */
 .report-card {
   background: #fff;
   border-radius: 16px;
   box-shadow: var(--shadow-card);
   padding: 1.5rem 2rem;
   margin-block: 1.25rem;
-  overflow-x: auto;
-
-  /* --- hover 动效（与 .stats-card 一致） --- */
-  transition: transform .15s, box-shadow .15s;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   cursor: default;
 }
-.report-card:hover {
-  transform: translateY(-2px);
+
+/* —— 整个卡片渐变背景（按风险级别）—— */
+.report-red {
+  background: linear-gradient(135deg, #d03838 0%, rgba(208, 56, 56, .85) 100%);
+  color: var(--white);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.report-orange {
+  background: linear-gradient(135deg, #e67e00 0%, rgba(230, 126, 0, .85) 100%);
+  color: var(--white);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.report-green {
+  background: linear-gradient(135deg, #007f3b 0%, rgba(0, 127, 59, .85) 100%);
+  color: var(--white);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* —— 报告标题 —— */
+.report-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 1rem 0 1rem 0;
+  line-height: 1.3;
+  color: inherit; 
+}
+
+/* —— 按钮组 —— */
+.report-btn-group {
+  display: flex;
+  gap: var(--space-m);
+  margin-top: 3rem;
+}
+
+.report-btn-group button {
+  flex: 1;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2); 
+  border: none;
+  color: var(--white);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.report-btn-group button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.report-btn-group button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ===== 折叠卡片组件 ===== */
+.collapse-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+  width: 100%;
+}
+
+.collapse-card {
+  background: var(--white); 
+  border-radius: 16px;
+  box-shadow: var(--shadow-card); 
+  overflow: hidden;
+  transition: box-shadow .15s;
+  width: 100%;
+}
+
+.collapse-card.open {
   box-shadow: 0 6px 16px rgba(0, 0, 0, .14);
 }
 
-/* —— 小标题 —— */
-.report-heading {
-  font-family: var(--font-sans, "Inter", "Noto Sans", sans-serif);
-  font-size: 1.05rem;      /* ≈ 17 px */
-  font-weight: 700;
-  margin: 0 0 .75rem;
-  color: var(--text-body);
-}
-
-/* —— 正文 —— */
-.report-text {
-  font-family: "JetBrains Mono", Consolas, monospace;
-  font-size: .95rem;       /* ≈ 15 px */
-  line-height: 1.45;
-  margin: 0;
-  white-space: pre-wrap;
-  color: var(--text-body);
-}
-
-/* —— 窄屏收紧内边距 —— */
-@media (max-width: 640px) {
-  .report-main { padding: var(--space-l) var(--space-m) 80px; }
-}
-
-
-/* ───────── Sticky Summary Bar ───────── */
-.summary-bar {
-  position: sticky;
-  top: 56px;                     /* Header 高度 */
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  margin-block: 0 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.06);
-  background: #fff;
-  font-size: .95rem;
-}
-.summary-bar .badge {
-  font-weight: 700;
-  text-transform: capitalize;
-}
-.summary-bar .summary-text {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 50%;
-}
-.summary-bar .summary-date { opacity: .6; font-size: .85rem; }
-.summary-bar .actions button {
-  background: none; border: none; cursor: pointer;
-  font-size: 1.1rem; line-height: 1;
-  padding: 2px 6px; border-radius: 6px;
-  transition: background .15s;
-}
-.summary-bar .actions button:hover { background: rgba(0,0,0,.08); }
-
-/* 继承每种风险色的渐变底色 */
-.summary-bar.report-red    { background: linear-gradient(135deg, rgba(208,56,56,.05) 0%, rgba(208,56,56,.03) 100%); }
-.summary-bar.report-orange { background: linear-gradient(135deg, rgba(230,126,0,.05) 0%, rgba(230,126,0,.03) 100%); }
-.summary-bar.report-green  { background: linear-gradient(135deg, rgba(0,127,59,.05) 0%, rgba(0,127,59,.03) 100%); }
-
-/* ───────── Collapsible Card ───────── */
-.collapsible-header {
+.collapse-card-header {
+  padding: var(--space-m) var(--space-l);
+  font-size: 1.05rem;
+  font-weight: 600;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  border-bottom: 1px solid #eee;
+  color: var(--text-body);
 }
-.chevron { font-size: .9rem; opacity: .7; }
 
-.report-card.collapsed {
-  padding-bottom: .75rem;        /* 只给标题留空间 */
+.collapse-card-header:hover {
+  background: rgba(0, 0, 0, .03);
+}
+
+.collapse-icon {
+  font-size: 1.4rem;
+  width: 24px;
+  text-align: center;
+  color: var(--nhs-blue);
+}
+
+.collapse-card-body {
+  padding: var(--space-m) var(--space-l) var(--space-l);
+  font-size: 0.95rem;
+}
+
+/* ===== 邮件发送模态框（从 recommendation.css 合并）===== */
+.email-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.email-modal {
+  width: 90%;
+  max-width: 400px;
+  background: var(--white);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.email-modal__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-body);
+}
+
+.email-modal__input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--nhs-blue);
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.email-modal__input:focus {
+  outline: none;
+  border-color: #004b97;
+}
+
+.email-modal__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* 模态框按钮样式 */
+.btn-primary {
+  background: var(--nhs-blue);
+  color: var(--white);
+  border: 2px solid var(--nhs-blue);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #004b97;
+  border-color: #004b97;
+}
+
+.btn-primary:disabled {
+  background: #c5c5c5;
+  border-color: #c5c5c5;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--nhs-blue);
+  border: 2px solid var(--nhs-blue);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(0, 94, 184, .08);
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 640px) {
+  .report-main {
+    padding: var(--space-l) var(--space-m) 80px;
+    width: 90vw; /* 🔧 改为 90vw，与 records 一致 */
+  }
+  
+  .report-title {
+    font-size: 1.5rem;
+  }
+  
+  .report-btn-group {
+    flex-direction: column;
+  }
+  
+  .report-btn-group button {
+    flex: none;
+  }
+  
+  .collapse-card-header {
+    font-size: 1rem;
+    padding: var(--space-s) var(--space-m);
+  }
+  
+  .collapse-card-body {
+    padding: var(--space-s) var(--space-m) var(--space-m);
+  }
+}
+
+/* 小屏幕邮件模态框适配 */
+@media (max-width: 480px) {
+  .email-modal {
+    width: 95%;
+    padding: 1.5rem 1rem;
+  }
+  
+  .email-modal__actions {
+    flex-direction: column;
+  }
+  
+  .btn-primary,
+  .btn-outline {
+    width: 100%;
+  }
 }
