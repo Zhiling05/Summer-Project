@@ -55,24 +55,6 @@ export default function ContactPage() {
             </div>
 
             <div className="contact-info-item">
-              <h3>Follow Us</h3>
-              <p className="contact-description">
-                Stay updated with the latest news and updates about the DIPP project on our social media channels:
-              </p>
-              <ul className="social-links">
-                <li>
-                  <a href="https://www.youtube.com/channel/UCQ99TuE8DFfOFNjMgi7m1sQ" target="_blank" rel="noopener noreferrer">Youtube</a>
-                </li>
-                <li>
-                  <a href="https://www.linkedin.com/company/centre-for-academic-primary-care/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                </li>
-                <li>
-                  <a href="https://bsky.app/profile/capcbristol.bsky.social" target="_blank" rel="noopener noreferrer">Bluesky</a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="contact-info-item">
               <h3>Address</h3>
               <p>You can also visit us at our office:</p>
               <p>
@@ -89,7 +71,7 @@ export default function ContactPage() {
         <section className="contact-section">
           <h2 className="contact-section-title">Support Hours</h2>
           <p className="contact-description">
-            Our support team is available Monday through Friday from XXXX AM to XXXX PM. We strive to respond to all inquiries within 1-2 business days.
+            Our support team is available Monday through Friday from 9 AM to 5 PM. We strive to respond to all inquiries within 1-2 business days.
           </p>
         </section>
       </div>  
