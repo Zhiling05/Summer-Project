@@ -145,6 +145,27 @@
   }
 }
 
+/* 默认情况下：小三角位于气泡框的中心 */
+.ag-home::after, .ag-guide::after {
+  bottom: -10px; /* 小三角距离底部 20% */
+  left: 50% !important; /* 默认情况下，home的小三角居底部中间 */
+  right: auto !important; /* 移除右边的定位 */
+}
+
+/* 响应式：当屏幕宽度小于 768px 时，分别将 home 的尾巴设为左下 20% 和 guide 的尾巴设为右下 20% */
+@media (max-width: 1200px) {
+  .ag-home::after {
+    left: 20% !important; /* 小三角距左边 20px */
+    right: auto !important; /* 确保右边没有偏移 */
+  }
+
+  .ag-guide::after {
+    right: 20%!important; /* 小三角距右边 20px */
+    left: auto !important; /* 确保左边没有偏移 */
+  }
+}
+
+
 /* 移动端宽度适配 */
 @media (max-width: 480px) {
   .ag-bubble {

@@ -1,10 +1,11 @@
 // docs/src/pages/optometrist/OptometristApp.tsx
 import { Routes, Route, Navigate } from 'react-router-dom';
-import '../../styles/question.css';
+//import '../../styles/question.css';ZSA 0811 注释掉，因为这个文件已经被融合进theme.css
+import '../../styles/theme.css'; // ZSA 0811 确保引入主题
 import AssessRouter from './assess/AssessRouter';  
 import GuideRouter from './guide/GuideRouter';
 import Records from './Records';
-import TutorialRouter from './tutorial/TutorialRouter';
+import TutorialRouter from './tutorial/TutorialRouter';//zkx
 
 export default function OptometristApp() {
   return (
@@ -20,7 +21,8 @@ export default function OptometristApp() {
 
       {/* /optometrist/records → Records 页面 */}
       <Route path="records" element={<Records />} />
-      <Route path="tutorial/*" element={<TutorialRouter />} /> 
+      {/* zkx0811 tutorial 页面 */}
+      <Route path="tutorial/*" element={<TutorialRouter />} />
     </Routes>
   );
 }

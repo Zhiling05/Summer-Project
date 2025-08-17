@@ -9,7 +9,9 @@ type Step = {
   selector: string;
   desc?: string;
   placement?: 'top' | 'bottom' | 'left' | 'right';
+  className?: string; // 添加 className 字段
 };
+
 
 export default function Tutorial1() {
   const navigate = useNavigate();
@@ -54,15 +56,16 @@ export default function Tutorial1() {
   }, []);
 
   const steps = useMemo<Step[]>(() => [
-    { selector: '#tab-home',        desc: 'Choose your role to enter the section.', placement: 'top' },
+    { selector: '#tab-home',        desc: 'Choose your role to enter the section.', placement: 'top', className: 'ag-home' },
     { selector: '#tab-assess',      desc: 'Answer questions to assess the condition.', placement: 'top' },
     { selector: '#tab-records',     desc: 'View history and completed assessments.', placement: 'top' },
-    { selector: '#tab-guide',       desc: 'Access help and tutorials for key actions.', placement: 'top' },
-    // 汉堡栏：左侧（并在计算时下移一点）
+    { selector: '#tab-guide',       desc: 'Access help and tutorials for key actions.', placement: 'top', className: 'ag-guide' },
     { selector: '#hamburger-menu',  desc: 'Open the sidebar to access Settings and Contact Us.', placement: 'left' },
-    // Start now：正上方
     { selector: '#start-now',       desc: 'Click here to start the current assessment.', placement: 'top' },
   ], []);
+
+
+
 
   return (
     <div style={{ position: 'relative' }}>
@@ -248,10 +251,11 @@ function Overlay({
       </svg>
 
       <div
-        className={`ag-bubble ag-${bubble.placement}`}
+        className={`ag-bubble ag-${bubble.placement} ${step.className || ''}`} // 添加 step.className
         style={{ left: bubble.left, top: bubble.top }}
         onClick={(e) => e.stopPropagation()}
       >
+
         {/* 右上角 Skip（蓝色） */}
         <button className="ag-skip" onClick={onSkip}>{skipText}</button>
         {step.desc && <div className="ag-desc">{step.desc}</div>}

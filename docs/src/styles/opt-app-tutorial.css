@@ -7,19 +7,26 @@
     min-height: calc(100vh - 120px);
     box-sizing: border-box;
     padding: 40px 24px 80px 24px;
+    display: flex;
+    flex-direction: column; /* 改为垂直方向，保持响应式布局 */
+    justify-content: center;
+    align-items: flex-start; /* 改为 flex-start 让内容靠左 */
+    position: relative;  /*zkx8.12关键：为 back-button 提供定位参考 */
 }
 
 .tutorial-inner {
+    width: 100%;
     max-width: 960px;
     margin: 0 auto;
     padding: 0 8px;
+    position: relative;  /*zkx8.12关键：为 back-button 提供定位参考 */
 }
 
 .tutorial-h1 {
     color:var(--text-body);
     font-size: 2rem;
     font-weight: 700;
-    margin: 0 0 16px 0;
+    margin:  100px 0 var(--space-l) 0;;
 }
 
 .tutorial-tabs {
@@ -138,3 +145,37 @@
 
 
 .tutorial-button:disabled { opacity: .5; cursor:not-allowed; }
+
+/* optAppTutorial.css */
+
+/* 返回按钮样式 */
+.tutorial-back-button {
+    background: transparent;
+    border: none;
+    color: var(--core-blue);
+    font-size: 1.8rem;
+    padding: 6px 14px;
+    margin: var(--space-l) 0 var(--space-m);
+    border-radius: var(--radius-s);
+    cursor: pointer;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: -150px; /* 添加左边距 */
+    position: relative;
+}
+
+.back-button:hover,
+.back-button:focus-visible {
+  background: var(--core-blue);
+  color: var(--text-inverse);
+  outline: none;
+}
+
+@media (max-width: 480px) {
+    .tutorial-back-button {
+        font-size: 1.2rem;
+        margin-left: 5px;
+    }
+}

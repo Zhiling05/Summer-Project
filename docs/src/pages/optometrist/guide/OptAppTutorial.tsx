@@ -122,7 +122,7 @@ export default function OptAppTutorial() {
   return (
     <>
       <Header title="App Tutorial for Optometrists" />
-      <BackButton />
+      <BackButton className="tutorial-back-button" />
 
             <div className="tutorial-container">
                 <div className="tutorial-inner">

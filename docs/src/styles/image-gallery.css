@@ -4,7 +4,12 @@
     margin-left: calc(-50vw + 50%);
     min-height: calc(100vh - 120px);
     box-sizing: border-box;
-    padding: var(--space-xl) var(--space-l) calc(64px + var(--space-xl));
+    padding: var(--space-m) var(--space-l) calc(64px + var(--space-xl));
+}
+@media (max-width: 480px) {
+    .gallery-container {
+        padding: var(--space-s) var(--space-s) calc(32px + var(--space-m));
+    }
 }
 
 .gallery-wrapper {
@@ -19,7 +24,16 @@
     color: var(--text-body);
     font-size: 2rem;
     font-weight: 700;
-    margin: 0 0 var(--space-l) 0;
+    margin: 100px 0 var(--space-l) 0;
+}
+@media (max-width: 480px) {
+    .gallery-heading { margin-top: 80px; }  /* 手机 */
+}
+
+@media (max-width: 480px) {
+    .gallery-heading {
+        margin-top: 80px; /* 手机端与 records 一致 */
+    }
 }
 
 .gallery-empty-state {
@@ -50,20 +64,29 @@
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-body);
-    flex: 0 0 auto;
+    flex: 1 1 260px;
+    min-width: 200px;
+    max-width: 360px;
 }
 
 .filter-input-wrapper {
     position: relative;
     height: 45px;
     overflow: hidden;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .filter-bar { flex-direction: column; gap: var(--space-m); }
+    .filter-group { flex: 1 1 auto; min-width: 0; max-width: none; width: 100%; }
 }
 
 /* 输入框和下拉框 */
 .filter-input,
 .filter-select {
-    width: 310px !important;
+    width: 100% !important;
     height: 45px !important;
+    min-width: 0;
     border: 2px solid var(--border-grey);
     border-radius: var(--radius-s);
     font-size: 0.9rem;
@@ -97,4 +120,38 @@
     color: var(--border-grey);
     z-index: 1;
     pointer-events: none;
+}
+
+
+
+/* 返回按钮样式 */
+.tutorial-back-button {
+    background: transparent;
+    border: none;
+    color: var(--core-blue);
+    font-size: 1.8rem;
+    padding: 6px 14px;
+    margin: var(--space-l) 0 var(--space-m);
+    border-radius: var(--radius-s);
+    cursor: pointer;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: -150px; /* 添加左边距 */
+    position: relative;
+}
+
+.back-button:hover,
+.back-button:focus-visible {
+  background: var(--core-blue);
+  color: var(--text-inverse);
+  outline: none;
+}
+
+@media (max-width: 480px) {
+    .tutorial-back-button {
+        font-size: 1.2rem;
+        margin-left: 5px;
+    }
 }

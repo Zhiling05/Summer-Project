@@ -1,56 +1,91 @@
-/* === 在 :root 中定义头部高度 === */
+/* === 在 :root 中定义变量 === */
 :root {
-  --header-height: 64px; /* 假设 header 高度为 64px */
-  --page-width: 90%; /* 设置页面宽度为 records 页面的一致宽度 */
+  --header-height: 64px; /* header 高度 */
+  --page-width: 90%;     /* 页面宽度比例 */
+  --content-max-width: 1200px; /* 最大内容宽度 */
+  --side-padding: 24px;  /* 页面左右内边距 */
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --core-blue: #005eb8;
+  --text-body: #231f20; /* 浅色模式下的正文文字颜色 */
+  --text-inverse: #ffffff; /* 浅色模式下的反向文字颜色 */
+  --card-bg: #ffffff; /* 卡片背景色（浅色模式） */
+  --card-bg-dark: #273036; /* 卡片背景色（深色模式） */
+  --border-grey: #aeb7bd;
+  --components-hover: #e6edf3;
 }
+
+/* === 页面容器 === */
 .contact-page-container {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
-  gap: 40px;/*修改留白空间供go back按钮放置 zkx*/
+  gap: var(--space-l);
   width: var(--page-width);
-  max-width: var(--content-max-width); /* 限制最大宽度 */
-  margin: -75px auto 0; /* 水平居中 */
-  padding: 0 var(--side-padding); /* 两侧留白 */
+  max-width: var(--content-max-width);
+  margin: 0 auto; /* 水平居中 */
+  padding: var(--space-m);
   box-sizing: border-box;
+  margin-top: -75px; /* 去除顶部的margin，避免header位置偏下 */
+  padding-top: 0; /* 去除顶部padding */
+  transition: margin-left 0.3s ease;
+  min-height: 60vh;
 }
 
+/* === 内容区域 === */
 .text-content {
-  background-color: #fff;
-  padding: 32px;
+  background-color: var(--card-bg); /* 默认白色背景 */
+  padding: var(--space-l);
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  word-wrap: break-word; /* 防止溢出，强制换行 */
+  overflow-wrap: break-word; /* 强制换行以避免溢出 */
 }
 
+/* === 标题样式 === */
 .contact-title {
   font-size: 2rem;
-  color: var(--core-blue);
-  margin-bottom: 16px;
+  color: var(--core-blue); /* 保持原色 */
+  margin-bottom: var(--space-m);
   text-align: center;
   font-weight: bold;
+  word-wrap: break-word; /* 防止标题溢出 */
 }
 
+/* === 区块样式 === */
 .contact-section {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-l);
 }
 
 .contact-section-title {
   font-size: 1.5rem;
-  color: var(--core-blue);
-  margin-bottom: 12px;
+  color: var(--core-blue); /* 保持原色 */
+  margin-bottom: var(--space-s);
   font-weight: bold;
   border-bottom: 2px solid var(--core-blue);
-  padding-bottom: 4px;
+  padding-bottom: var(--space-s);
 }
 
+/* === 描述文字 === */
 .contact-description {
   font-size: 1rem;
-  color: #555;
+  color: #555; /* 默认文字颜色 */
   line-height: 1.6;
+  margin-bottom: var(--space-m);
+  word-wrap: break-word; /* 防止溢出 */
 }
 
+/* === 划分线 === */
 .divider {
-  margin: 24px 0;
+  margin: var(--space-l) 0;
   border: none;
   border-top: 2px solid #eee;
 }
@@ -58,25 +93,26 @@
 /* === 联系方式项布局 === */
 .contact-info {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 两列布局 */
-  gap: 0px;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-m);
+  width: 100%;
 }
 
 .contact-info-item {
   background-color: #f9f9f9;
-  padding: 16px;
+  padding: var(--space-s);
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .contact-info-item h3 {
   font-size: 1.2rem;
-  color: var(--core-blue);
-  margin-bottom: 8px;
+  color: var(--core-blue); /* 保持原色 */
+  margin-bottom: var(--space-s);
 }
 
 .contact-info-item a {
-  color: var(--core-blue);
+  color: var(--core-blue); /* 保持原色 */
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -88,7 +124,7 @@
 /* === 社交媒体链接样式 === */
 .social-links {
   display: flex;
-  gap: 16px;
+  gap: var(--space-m);
 }
 
 .social-links li {
@@ -97,7 +133,7 @@
 
 .social-links a {
   font-size: 1.1rem;
-  color: var(--core-blue);
+  color: var(--core-blue); /* 保持原色 */
   text-decoration: none;
   font-weight: 500;
   padding: 8px 16px;
@@ -112,27 +148,156 @@
 }
 
 .social-links a:active {
-  background-color: #003d8f;
+  background-color: var(--core-blue); /* 保持原色 */;
 }
 
 /* === 支持小时样式 === */
 .support-hours {
   font-size: 1.1rem;
-  color: #555;
+  color:var(--text-inverse); /* 保持原色 */;
   line-height: 1.6;
-  padding: 16px;
+  padding: var(--space-s);
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* === 响应式设计（适应小屏幕设备） === */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .contact-page-container {
+    padding: var(--space-s);
+  }
+
+  .text-content {
+    padding: var(--space-m);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .contact-title {
+    font-size: 1.6rem;
+  }
+
+  .contact-section-title {
+    font-size: 1.3rem;
+  }
+
+  .contact-description {
+    font-size: 0.95rem;
+  }
+
   .contact-info {
-    grid-template-columns: 1fr; /* 一列布局 */
+    grid-template-columns: 1fr;
   }
 
   .social-links {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-page-container {
+    padding: var(--space-s);
+  }
+
+  .text-content {
+    padding: var(--space-m);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .contact-title {
+    font-size: 1.4rem;
+  }
+
+  .contact-section-title {
+    font-size: 1.2rem;
+  }
+
+  .contact-description {
+    font-size: 0.9rem;
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+  }
+
+  .social-links {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-page-container {
+    padding: var(--space-s);
+  }
+
+  .text-content {
+    padding: var(--space-s);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .contact-title {
+    font-size: 1.3rem;
+  }
+
+  .contact-section-title {
+    font-size: 1.1rem;
+  }
+
+  .contact-description {
+    font-size: 0.85rem;
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+  }
+
+  .social-links {
+    flex-direction: column;
+  }
+}
+
+/* === 深色模式样式 === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --core-blue: #63b6ff; /* 深色模式下的核心蓝色 */
+    --text-body: #e8edee; /* 深色模式下的正文文字颜色 */
+    --text-inverse: #ffffff; /* 白色文字 */
+    --card-bg: #273036; /* 深色模式下的卡片背景色 */
+    --border-grey: #768692; /* 深色模式下的边框颜色 */
+  }
+
+  /* 内容区域的背景色和文字颜色 */
+  .contact-page-container .text-content {
+    background-color: var(--card-bg); /* 使用深色卡片背景 */
+    color: var(--text-inverse); /* 白色文字 */
+  }
+
+  /* 标题文字 */
+  .contact-title,
+  .contact-section-title {
+    color: var(--text-inverse); /* 深色模式下的标题颜色 */
+  }
+
+  /* 描述文字 */
+  .contact-description {
+    color: var(--text-inverse); /* 深色模式下的文字颜色 */
+  }
+
+  /* 联系方式项的背景色 */
+  .contact-info-item {
+    background-color: #3a444f; /* 深色模式下的项背景色 */
+    color: var(--text-inverse); /* 白色文字 */
+  }
+
+  /* 链接文字 */
+  .contact-info-item a {
+    color: var(--text-inverse) !important; /* 保持原蓝色链接 */
+  }
+
+  .social-links a {
+    color: var(--text-inverse) !important; /* 保持原蓝色链接 */
   }
 }

@@ -126,7 +126,7 @@ useEffect(() => {
         <Header title="Records" />
         <BackButton />{/* 使用 goback 组件zkx */}
         <Sidebar /> {/* 使用 Sidebar 组件zkx */}
-        <div className="page-container">
+        {/*<div className="page-container">*/}
         <main className="records-main">
           <div className="records-wrapper">
           <h1 className="records-title">Records</h1>
@@ -222,7 +222,7 @@ useEffect(() => {
           </div>
           </div>
         </main>
-        </div>
+        {/*</div>*/}
         <BottomNav />
       </>
   );
