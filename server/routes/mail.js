@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Assessment = require('../models/Assessment');
 const { buildFullReportText, buildDocFromText } = require('../utils/doc');
-const { sendAssessmentMail } = require('../utils/mailer');
+// const { sendAssessmentMail } = require('../utils/mailer');
+const { sendAssessmentMail, verifySMTP } = require('../utils/mailer');
 const { extractSymptoms } = require('../utils/symptoms');
 
 /**
@@ -10,7 +11,10 @@ const { extractSymptoms } = require('../utils/symptoms');
  * 用于监控和调试
  */
 router.get('/send-report/ping', (_req, res) => {
-  res.json({ ok: true, route: 'mail' });
+  // res.json({ ok: true, route: 'mail' });
+  verifySMTP()
+      .then(() => res.json({ ok: true }))
+      .catch(e => res.status(500).json({ ok: false, error: e.message }));
 });
 
 /**

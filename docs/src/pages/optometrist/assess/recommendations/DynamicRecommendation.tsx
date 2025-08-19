@@ -159,9 +159,10 @@ const EmailModal: React.FC<{
 const DynamicRecommendation: React.FC = () => {
   useEffect(() => {
     // 标记完成，之后不再弹窗
-    sessionStorage.setItem('assessmentComplete', 'true');
+    // sessionStorage.setItem('assessmentComplete', 'true');
     sessionStorage.removeItem('assessStarted');
     sessionStorage.removeItem('lastQuestionId');
+    sessionStorage.removeItem('assessmentComplete'); // 保守清掉旧值
   }, []);
 
   /* —— 路由参数 —— */

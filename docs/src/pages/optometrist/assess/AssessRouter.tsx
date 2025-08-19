@@ -33,10 +33,10 @@ export default function AssessRouter(): JSX.Element {
         }
 
         // 已完成过一次就不再弹
-        if (sessionStorage.getItem('assessmentComplete') === 'true') {
-            setShowModal(false);
-            return;
-        }
+        // if (sessionStorage.getItem('assessmentComplete') === 'true') {
+        //     setShowModal(false);
+        //     return;
+        // }
 
         // 进度判断：必须开始过且有 lastQuestionId
         const started = sessionStorage.getItem('assessStarted') === 'true';
