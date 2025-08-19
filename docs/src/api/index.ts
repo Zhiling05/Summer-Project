@@ -13,8 +13,6 @@ export interface CreateAssessmentRequest {
   // patientId: string;  // 不需要记录患者id啊
   answers: Answer[];
   recommendation: string;
-  // content: string; // yj添加：解决500报错
-  // timestamp: string;
 }
 
 // 后端成功创建评估记录后返回给前端的响应数据结构
@@ -63,6 +61,25 @@ export interface GetReferralStatisticsResponse {
   period: '3months' | '6months' | '1year';
   data: ReferralStatistic[];
 }
+
+// 配合cookie实现用户隔离
+const API = (import.meta.env.VITE_API_BASE || '/api').replace(/\/+$/,''); // '/api'
+
+function join(p: string){ return `${API}${p.startsWith('/')?p:'/'+p}`; }
+
+async function http<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const res = await fetch(join(path), {
+    credentials: 'include',
+    headers: { 'Content-Type':'application/json', ...(init.headers||{}) },
+    ...init
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`API ${res.status} ${res.statusText}: ${text}`);
+  return (text ? JSON.parse(text) : ({} as any)) as T;
+}
+
+export const ensureGuest = () => http('/guest', { method:'POST' });
+
 
 // const API_BASE = '/api';
 //const API_BASE = 'http://localhost:4000/api';

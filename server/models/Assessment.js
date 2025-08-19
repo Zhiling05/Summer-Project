@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const AssessmentSchema = new Schema({
+  userId: { type: String, required: true },   // 添加用户隔离功能
   role: { type: String, enum: ['optometrist','gp','patient'], required: true },
   content: { type: String, default: '' },   // 建议用 default，避免因空串报 500
   recommendation: { 
@@ -30,7 +31,7 @@ const AssessmentSchema = new Schema({
 
 
 AssessmentSchema.index(
-  { createdAt: 1 },
+  { userId:1, createdAt:-1 },
   {
     expireAfterSeconds: 60 * 60 * 24 * 90,
     partialFilterExpression: { role: 'optometrist' }

@@ -13,6 +13,7 @@ const { extractSymptoms } = require('../utils/symptoms');
  */
 router.get('/assessments', async (req, res) => {
    try {
+    const owner = { userId: req.user.id };  //用户隔离
     // const limit = Math.max(1, Math.min(parseInt(req.query.limit || '50', 10), 200));  不限制只有50个，否则会发生到了50后，新增的数据会把别的数据挤掉
     const query = {};
     
@@ -44,7 +45,8 @@ router.get('/assessments', async (req, res) => {
         query.createdAt.$lte = endDate;
       }
     }
-    const docs = await Assessment.find(query).sort({ createdAt: -1 });
+    // const docs = await Assessment.find(query).sort({ createdAt: -1 });
+     const docs = await Assessment.find({ ...query, ...owner }).sort({ createdAt: -1 });
     const records = docs.map(d => ({
       id: d._id.toString(),
       risk: d.recommendation || 'no-referral',
@@ -71,11 +73,17 @@ router.get('/assessments/:id', async (req, res) => {
   }
 
   try {
-    const assessment = await Assessment.findById(id);
-    
-    if (!assessment) {
-      return res.status(404).json({ error: 'Assessment not found' });
-    }
+    // const assessment = await Assessment.findById(id);
+    // if (!assessment) {return res.status(404).json({ error: 'Assessment not found' });}
+    //
+    // //cookie
+    // if (assessment.useId !== req.user.id) {
+    //   return res.status(404).json({ error: 'Invalid userId. Assessment not found' });
+    // }
+      const assessment = await Assessment.findOne({ _id: id, userId: req.user.id });
+      if (!assessment) return res.status(404).json({ error: 'Assessment not found' });
+
+
 
     // 如果没有存储症状，则从答案中提取
     const symptoms = (assessment.symptoms && assessment.symptoms.length) 
@@ -127,6 +135,7 @@ router.post('/assessments', async (req, res) => {
 
     // 创建新记录
     const newRecord = await Assessment.create({
+      userId: req.user.id,
       role,
       answers,
       recommendation,
@@ -174,23 +183,28 @@ router.post('/extract-symptoms', async (req, res) => {
  */
 router.get('/statistics/risk-levels', async (req, res) => {
   try {
+    const owner = { userId: req.user.id };
     // 高风险统计
     const highRiskCount = await Assessment.countDocuments({
+      ...owner,
       recommendation: { $in: ['EMERGENCY_DEPARTMENT', 'IMMEDIATE'] }
     });
     
     // 中风险统计
     const mediumRiskCount = await Assessment.countDocuments({
+      ...owner,
       recommendation: { $in: ['URGENT_TO_OPH', 'URGENT_TO_GP_OR_NEUR'] }
     });
     
     // 低风险统计
     const lowRiskCount = await Assessment.countDocuments({
+      ...owner,
       recommendation: { $in: ['TO_GP', 'NO_REFERRAL', 'OTHER_EYE_CONDITIONS_GUIDANCE'] }
     });
     
     // 总数统计
-    const totalCount = await Assessment.countDocuments();
+    // const totalCount = await Assessment.countDocuments();
+    const totalCount = await Assessment.countDocuments(owner);
     
     res.json({
       high: highRiskCount,
