@@ -85,11 +85,6 @@ export const ensureGuest = () => http('/guest', { method:'POST' });
 //const API_BASE = 'http://localhost:4000/api';
 const API_BASE = import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_BASE_URL || '/api';
 
-// 添加这行调试
-console.log('🔍 API_BASE resolved to:', API_BASE);
-console.log('🔍 VITE_API_BASE:', import.meta.env.VITE_API_BASE);
-console.log('🔍 VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
-
 async function request<T>(url: string, opts: RequestInit = {}): Promise<T> {
   const res = await fetch(API_BASE + url, {
     headers: { 'Content-Type': 'application/json' },
