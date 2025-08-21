@@ -15,6 +15,7 @@ import SideBar from './components/SideBar';  // 引入你自己写的 SideBar �
 import './styles/theme.css'; //深浅色主题
 
 import { ensureGuest } from './api/index';
+import AdminDashboard from "./pages/admin/Admin.tsx";
 
 export default function App() {
   useEffect(() => { ensureGuest().catch(console.error); }, []); //先设置cookie
@@ -46,6 +47,7 @@ const FontSizeAwareApp = () => {
         <Route path="/optometrist/*" element={<OptometristApp />} />
         <Route path="/patient/*" element={<PatientApp />} />
         <Route path="/gp/*" element={<GPApp />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );

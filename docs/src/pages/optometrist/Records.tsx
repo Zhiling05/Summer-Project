@@ -3,7 +3,6 @@ import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import BackButton from '../../components/BackButton';//zkx
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { parseISO } from "date-fns";
 import { listAssessments } from "../../api";
@@ -12,9 +11,18 @@ import { listAssessments } from "../../api";
 import Header from "../../components/Header";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/records.css";
-//import recordsJson from "../../data/records.json";
+
 import { AssessmentRecommendations } from "../../types/recommendation";
 import Sidebar from '../../components/SideBar'; //zkx：sidebar侧栏
+
+//日历
+import DatePicker, { registerLocale } from "react-datepicker";
+import { enGB } from "date-fns/locale";
+import 'react-datepicker/dist/react-datepicker.css';
+registerLocale('en-GB', enGB);
+
+
+
 
 //定义一个类型安全的级别数组，后面的红黄绿卡片要用
 const LEVELS: Level[] = ["high", "medium", "low"];
@@ -187,10 +195,13 @@ export default function Records() {
                 <DatePicker
                     selected={from}
                     onChange={(date) => setFrom(date)}
-                    placeholderText="YYYY-MM-DD"
-                    dateFormat="yyyy-MM-dd"
-                    locale="en-US"
+                    placeholderText="DD-MM-YY"
+                    dateFormat="dd-MM-yy"
+                    locale="en-GB"
                     isClearable
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
                 />
               </label>
               <label>
@@ -198,10 +209,13 @@ export default function Records() {
                 <DatePicker
                 selected={to}
                 onChange={(date) => setTo(date)}
-                placeholderText="YYYY-MM-DD"
-                dateFormat="yyyy-MM-dd"
-                locale="en-US"
+                placeholderText="DD-MM-YY"
+                dateFormat="dd-MM-yy"
+                locale="en-GB"
                 isClearable
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
                 />
               </label>
             </section>
