@@ -20,18 +20,27 @@ export default function UserSelectionPage() {
     setPasswordError('');
   };
 
-  const handlePasswordSubmit = () => {
-    // TODO: Replace with actual password validation
-    const correctPassword = 'admin123'; // This should be replaced with actual authentication
-    
-    if (password === correctPassword) {
+  const handlePasswordSubmit = async () => {
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({ error: 'Incorrect password. Please try again.' }));
+        setPasswordError(e.error || 'Incorrect password. Please try again.');
+        setPassword('');
+        return;
+      }
       setShowPasswordModal(false);
-      navigate('/admin');
-    } else {
-      setPasswordError('Incorrect password. Please try again.');
-      setPassword('');
+      navigate('/admin', { state: { from: '/user-selection' } });
+    } catch {
+      setPasswordError('Invalid password. Please try again.');
     }
   };
+
 
   const handleModalClose = () => {
     setShowPasswordModal(false);
@@ -122,15 +131,15 @@ export default function UserSelectionPage() {
                   borderRadius: 'var(--radius-s, 4px)',
                   fontSize: '1rem',
                   boxSizing: 'border-box',
-                  background: 'var(--lighter-base, #ffffff)',
-                  color: 'var(--text-body, #231f20)',
+                  background: 'var(--lighter-base)',
+                  color: 'var(--text-body)',
                   marginBottom: '1rem'
                 }}
               />
               
               {passwordError && (
                 <div style={{
-                  color: 'var(--urgent-red, #DA291C)',
+                  color: 'var(--urgent-red)',
                   fontSize: '0.9rem',
                   textAlign: 'center',
                   marginBottom: '1rem'
@@ -143,8 +152,8 @@ export default function UserSelectionPage() {
                 <button 
                   onClick={handleModalClose}
                   style={{
-                    background: 'var(--border-grey, #aeb7bd)',
-                    color: 'var(--text-inverse, #ffffff)',
+                    background: 'var(--border-grey)',
+                    color: 'var(--text-inverse)',
                     border: 'none',
                     borderRadius: 'var(--radius-s, 4px)',
                     padding: '0.75rem 1.5rem',
@@ -158,8 +167,8 @@ export default function UserSelectionPage() {
                   onClick={handlePasswordSubmit}
                   disabled={!password.trim()}
                   style={{
-                    background: password.trim() ? 'var(--core-blue, #005eb8)' : '#c5c5c5',
-                    color: 'var(--text-inverse, #ffffff)',
+                    background: password.trim() ? 'var(--core-blue)' : '#c5c5c5',
+                    color: 'var(--text-inverse)',
                     border: 'none',
                     borderRadius: 'var(--radius-s, 4px)',
                     padding: '0.75rem 1.5rem',

@@ -25,13 +25,13 @@ const normalizeRisk = (raw: string) =>
     raw.toLowerCase().replace(/_/g, "-") as RiskLabel;
 
 const RISK_TEXT: Record<RiskLabel, string> = {
-    "emergency-department": "Emergency Department",
-    "immediate": "Immediate",
-    "urgent-to-oph": "Urgent to Ophthalmology",
-    "urgent-to-gp-or-neur": "Urgent to GP/Neurology",
-    "to-gp": "To GP",
+    "emergency-department": "Referral to Emergency Department",
+    "immediate": "Immediate referral",
+    "urgent-to-oph": "Urgent Referral to Ophthalmology",
+    "urgent-to-gp-or-neur": "Urgent Referral to GP or Neurology",
+    "to-gp": "Referral to GP",
     "no-referral": "No Referral",
-    "other-eye-conditions-guidance": "Other Eye Conditions Guidance",
+    "other-eye-conditions-guidance": "Other Eye Conditions Guidance Required",
 };
 
 const RISK_TO_LEVEL: Record<RiskLabel, Level> = {
@@ -55,7 +55,7 @@ const PAGE_SIZE = 20;
 const dOnly = (iso?: string) => (iso ?? "").slice(0, 10);
 
 export default function AdminDashboard() {
-    const nav = useNavigate();
+    // const nav = useNavigate();
 
     // 数据
     const [rows, setRows] = useState<Row[]>([]);
@@ -64,11 +64,9 @@ export default function AdminDashboard() {
     // 过滤
     const [levels, setLevels] = useState<Set<Level>>(new Set());
     const [recs, setRecs]     = useState<Set<RiskLabel>>(new Set(ALL_RECS));
-    // const [from, setFrom]     = useState<string>(""); // yyyy-mm-dd
-    // const [to, setTo]         = useState<string>("");
-    const [from, setFrom] = useState<string>("");        // 仍用于请求参数（YYYY-MM-DD）
+    const [from, setFrom] = useState<string>("");
     const [to, setTo]     = useState<string>("");
-    const [fromDate, setFromDate] = useState<Date|null>(null); // 仅用于日历
+    const [fromDate, setFromDate] = useState<Date|null>(null);
     const [toDate, setToDate]     = useState<Date|null>(null);
 
     const toApi = (d: Date|null) => d ? format(d, 'yyyy-MM-dd') : '';
