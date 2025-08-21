@@ -59,3 +59,25 @@
     background-color: var(--components-hover, #e8f0f8);
     cursor: pointer;
 }
+
+/* Administrator Option Styles */
+.admin-option {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+}
+
+.admin-link {
+    color: var(--core-blue, #005eb8); /* NHS blue */
+    text-decoration: underline;
+    font-size: 1rem; /* Slightly larger than before */
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    transition: color 0.2s ease;
+}
+
+.admin-link:hover {
+    color: var(--text-hover, #7C2855); /* Deep purple from theme.css */
+}
