@@ -67,9 +67,9 @@
 }
 
 /* 风险色标签变量 */
-.stats-card.red    { --stats-clr: #d03838; color: var(--stats-clr); }
-.stats-card.orange { --stats-clr: #e67e00; color: var(--stats-clr); }
-.stats-card.green  { --stats-clr: #007f3b; color: var(--stats-clr); }
+.stats-card.red    { color: var(--urgent-red); }
+.stats-card.orange { color: var(--risk-orange); }
+.stats-card.green  { color: var(--risk-green); }
 
 .stats-title { font-size: 1.05rem; font-weight: 600; color: var(--text-body); }
 .stats-num   { font-size: 2.4rem; font-weight: 700; line-height: 1; }
@@ -202,9 +202,9 @@
     font-weight: 600;
     color: var(--text-inverse);
 }
-.tag-red    { background: #d03838; }
-.tag-orange { background: #e67e00; }
-.tag-green  { background: #007f3b; }
+.tag-red    { background: var(--urgent-red); }
+.tag-orange { background: var(--risk-orange); }
+.tag-green  { background: var(--risk-green); }
 
 /* 详情按钮 */
 .view-btn {

@@ -1,0 +1,179 @@
+/* ====== Admin page (standalone) ====== */
+
+/* -- Layout shell -- */
+.admin-main{
+    flex:1;
+    background:var(--page-base);
+    padding:var(--space-s) 0 calc(64px + var(--space-xl));
+    display:flex;
+}
+.admin-wrapper{
+    max-width:var(--container-max);
+    margin:0 auto;
+    padding:0 var(--space-l);
+    width:100%;
+    box-sizing:border-box;
+}
+.admin-title{
+    font-size:1.8rem;
+    font-weight:700;
+    color:var(--text-body);
+    margin:100px 0 var(--space-xl);
+}
+
+/* -- Top bar -- */
+.admin-topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:80px;
+}
+.admin-banner{
+    padding:8px 12px;
+    background:#fff3cd;
+    border:1px solid #ffeeba;
+    color:#856404;
+    border-radius:4px;
+}
+
+/* -- Filter card -- */
+.admin-filter{
+    margin-top:16px;
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    background:var(--lighter-base);
+    padding:16px;
+}
+
+/* rows: Label | Controls */
+.admin-row{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    align-items:center;
+    gap:16px;
+    margin-bottom:32px;
+}
+.admin-label{
+    font-weight:700;
+    color:var(--text-body);
+}
+
+/* inline control groups */
+.controls-inline{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.controls-inline input[type="date"]{ min-width:150px; width:150px; padding:8px 12px; }
+
+/* DatePicker 等宽并与按钮同一行 */
+.controls-inline .dp-sm .react-datepicker-wrapper{ width: 160px; }  /* 调整到和按钮近似宽 */
+.controls-inline .dp-sm .react-datepicker__input-container input{
+    width: 160px;
+    padding: 8px 12px;
+    text-align: center;
+}
+.controls-inline{ flex-wrap: nowrap; }          /* 常规不换行 */
+@media (max-width: 900px){
+    .controls-inline{ flex-wrap: wrap; }          /* 窄屏再允许换行 */
+}
+
+
+/* Referral list on one line (wrap if narrow) */
+.rec-list{ display:flex; gap:12px 24px; align-items:center; flex-wrap:wrap; }
+
+/* Risk level buttons in one line */
+.risk-buttons{
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+
+/* Bottom bar: pills left, reset right */
+.admin-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-top:8px;
+}
+
+/* -- Pills -- */
+.admin-pills{ display:flex; gap:8px; flex-wrap:wrap; }
+.tag-pill{
+    display:inline-flex;
+    align-items:center;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:.75rem;
+    font-weight:600;
+    color:var(--text-inverse);
+    white-space:nowrap;
+}
+
+
+/* 避免文字跨列叠加：允许在本列内断行 */
+.admin-cell-id{ overflow-wrap:anywhere; word-break:break-word; white-space:normal; }
+.admin-cell-ref{ overflow-wrap:anywhere; word-break:break-word; white-space:normal; }
+
+/* 行内元素垂直居中，减少错位 */
+.admin-table td, .admin-table th{ vertical-align:middle; }
+
+
+.tag-red{ background:var(--urgent-red); }
+.tag-orange{ background:var(--risk-orange); }
+.tag-green{ background:var(--risk-green); }
+
+/* -- Buttons (match Records style) -- */
+.view-btn{
+    background:var(--lighter-base);
+    border:2px solid var(--core-blue);
+    color:var(--core-blue);
+    padding:6px 14px;
+    font-size:.9rem;
+    border-radius:var(--radius-s);
+    cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+}
+.view-btn:hover{ background:var(--core-blue); color:var(--text-inverse); }
+.reset-btn{ background:var(--card-bg); border-color:var(--core-blue); color:var(--core-blue); }
+.reset-btn:hover{ background:var(--core-blue); border-color:var(--core-blue); color:var( --text-inverse) }
+
+/* -- Table -- */
+.admin-table-wrapper{ margin-top:16px; }
+.admin-table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--lighter-base);
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    overflow:hidden;
+    table-layout:fixed;
+}
+.admin-table th,
+.admin-table td{
+    padding:14px 20px;
+    text-align:left;
+    font-size:.95rem;
+    border-bottom:1px solid var(--border-grey);
+    color:var(--text-body);
+}
+.admin-table th:last-child,
+.admin-table td:last-child{ text-align:right; }
+.admin-table tbody tr:hover{ background:var(--page-base); }
+
+/* -- calender -- */
+.admin-filter input[type="date"]{
+    border:2px solid var(--border-grey);
+    border-radius:var(--radius-s);
+    background:var(--lighter-base);
+    color:var(--text-body);
+    transition:border-color .15s;
+}
+.admin-filter input[type="date"]:focus{
+    outline:none; border-color:var(--core-blue);
+}
+
+/* -- Responsive -- */
+@media (max-width: 720px){
+    .admin-row{ grid-template-columns:1fr; }
+    .admin-label{ margin-bottom:6px; }
+    .admin-topbar{ flex-direction:column; gap:8px; align-items:flex-start; }
+    .admin-title{ margin-top:60px; }
+}
