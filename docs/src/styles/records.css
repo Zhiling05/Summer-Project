@@ -167,7 +167,8 @@
     white-space: normal;
     word-break: break-all;
     overflow-wrap: anywhere; /* 任意处断行，避免挤压其他列 */
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;}
+    /* font-family: ui-monospace, SFMono-Regular, Menlo, monospace; */  /* 修改id的字体和其他一样 */
+}
 .records-table th:nth-child(2),
 .records-table td:nth-child(2) { width: 20%; }
 .records-table th:nth-child(3),
