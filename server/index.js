@@ -6,28 +6,28 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const authGuard  = require('./middleware/auth-guard');
 const path = require('path');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 // 导入路由模块
 const assessmentsRoutes = require('./routes/assessments');
 const exportRoutes = require('./routes/export');
-const mailRoutes = require('./routes/mail');
+// const mailRoutes = require('./routes/mail');
 const reportRoutes = require('./routes/report');
 // 创建Express应用
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 
-// 创建全局邮件发送器
-global.transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: false, 
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+// // 创建全局邮件发送器
+// global.transporter = nodemailer.createTransport({
+//   host: process.env.SMTP_HOST,
+//   port: process.env.SMTP_PORT,
+//   secure: false, 
+//   auth: {
+//     user: process.env.SMTP_USER,
+//     pass: process.env.SMTP_PASS,
+//   },
+// });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -81,7 +81,7 @@ app.use('/api', authRoutes);                   // /api/guest 等无需鉴权
 // API路由注册
 app.use('/api', authGuard, assessmentsRoutes);
 app.use('/api', exportRoutes);
-app.use('/api', mailRoutes);
+// app.use('/api', mailRoutes);
 app.use('/api', reportRoutes);
 
 app.get('/health', (req, res) => {
@@ -132,12 +132,6 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
-  
-  if (process.env.SMTP_HOST && process.env.SMTP_USER) {
-    console.log(`Email service configured with ${process.env.SMTP_HOST}`);
-  } else {
-    console.warn('Email service not configured! Set SMTP_* environment variables.');
-  }
 });
 
 process.on('unhandledRejection', (err) => {
