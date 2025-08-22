@@ -1,7 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const {format} = require('date-fns');
 const Assessment = require('../models/Assessment');
 const { extractSymptoms } = require('../utils/symptoms');
+
+// 新增：生成自定义ID的函数
+async function generateCustomId() {
+  const today = format(new Date(), 'ddMMyyyy');
+  const lastRecord = await Assessment.findOne({
+    customId: { $regex: `^${today}_` }
+  }).sort({ customId: -1 });
+  
+  let sequence = 1;
+  if (lastRecord) {
+    const lastSequence = parseInt(lastRecord.customId.split('_')[1]);
+    sequence = lastSequence + 1;
+  }
+  
+  return `${today}_${sequence.toString().padStart(3, '0')}`;
+}
 
 /**
  * GET /assessments - 获取评估列表
@@ -14,7 +31,6 @@ const { extractSymptoms } = require('../utils/symptoms');
 router.get('/assessments', async (req, res) => {
    try {
     const owner = { userId: req.user.id };  //用户隔离
-    // const limit = Math.max(1, Math.min(parseInt(req.query.limit || '50', 10), 200));  不限制只有50个，否则会发生到了50后，新增的数据会把别的数据挤掉
     const query = {};
     
     // 风险级别筛选
@@ -48,9 +64,9 @@ router.get('/assessments', async (req, res) => {
     // const docs = await Assessment.find(query).sort({ createdAt: -1 });
      const docs = await Assessment.find({ ...query, ...owner }).sort({ createdAt: -1 });
     const records = docs.map(d => ({
-      id: d._id.toString(),
+      id: d.customId || d._id.toString(),
       risk: d.recommendation || 'no-referral',
-      date: d.createdAt // 前端期望字段名为date
+      date: d.createdAt
     }));
 
     res.json({ records });
@@ -73,17 +89,8 @@ router.get('/assessments/:id', async (req, res) => {
   }
 
   try {
-    // const assessment = await Assessment.findById(id);
-    // if (!assessment) {return res.status(404).json({ error: 'Assessment not found' });}
-    //
-    // //cookie
-    // if (assessment.useId !== req.user.id) {
-    //   return res.status(404).json({ error: 'Invalid userId. Assessment not found' });
-    // }
-      const assessment = await Assessment.findOne({ _id: id, userId: req.user.id });
+      const assessment = await Assessment.findOne({ customId: id, userId: req.user.id });
       if (!assessment) return res.status(404).json({ error: 'Assessment not found' });
-
-
 
     // 如果没有存储症状，则从答案中提取
     const symptoms = (assessment.symptoms && assessment.symptoms.length) 
@@ -92,7 +99,7 @@ router.get('/assessments/:id', async (req, res) => {
 
     // 返回AssessmentDetail格式
     res.json({
-      id: assessment._id.toString(),
+      id: assessment.customId,
       role: assessment.role,
       answers: assessment.answers || [],
       symptoms: symptoms,
@@ -132,9 +139,12 @@ router.post('/assessments', async (req, res) => {
 
     // 从答案中提取症状
     const symptoms = extractSymptoms(answers);
+    // 新增：生成自定义ID
+    const customId = await generateCustomId();
 
     // 创建新记录
     const newRecord = await Assessment.create({
+      customId,
       userId: req.user.id,
       role,
       answers,
@@ -144,7 +154,7 @@ router.post('/assessments', async (req, res) => {
 
     // 返回完整的AssessmentDetail
     res.status(201).json({
-      id: newRecord._id.toString(),
+      id: newRecord.customId,
       role: newRecord.role,
       answers: newRecord.answers,
       symptoms: newRecord.symptoms,

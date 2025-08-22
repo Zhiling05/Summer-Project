@@ -24,7 +24,7 @@ router.get('/assessments/:id/export', async (req, res) => {
   
   try {
     // 查找评估记录
-    const record = await Assessment.findById(id);
+    const record = await Assessment.findOne({ customId: id });
     if (!record) {
       return res.status(404).json({ error: 'Assessment not found' });
     }
@@ -36,13 +36,14 @@ router.get('/assessments/:id/export', async (req, res) => {
 
     // 准备报告数据
     const payload = {
+      assessmentId: record.customId,
       createdAt: record.createdAt,
       symptoms,
       recommendation: record.recommendation || '',
     };
 
     // 生成报告文本
-    const filename = `assessment_report_${record._id}.txt`;
+    const filename = `assessment_report_${record.customId}.txt`;
     const content = buildFullReportText(payload);
 
     // 设置下载响应头

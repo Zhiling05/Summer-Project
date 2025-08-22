@@ -39,6 +39,7 @@ function buildFullReportText(ass) {
     'ASSESSMENT REPORT',
     '================',
     '',
+        `Assessment ID: ${ass.assessmentId || 'N/A'}`,  // 新增这行
     `Date: ${dateStr}`,
     '',
     'SYMPTOMS:',

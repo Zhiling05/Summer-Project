@@ -37,7 +37,7 @@ router.post('/send-report', async (req, res, next) => {
     }
 
     // 查找评估记录
-    const record = await Assessment.findById(assessmentId);
+    const record = await Assessment.findOne({ customId: assessmentId });
     if (!record) {
       return res.status(404).json({ error: 'Assessment not found' });
     }
@@ -49,6 +49,7 @@ router.post('/send-report', async (req, res, next) => {
 
     // 准备报告数据 - 只包含需要的字段
     const payload = {
+      assessmentId: record.customId,
       createdAt: record.createdAt,
       symptoms,
       recommendation: record.recommendation || '',
