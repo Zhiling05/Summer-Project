@@ -3,13 +3,34 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { randomUUID } = require('crypto');
 
+// 退出登录：清掉 auth/gid
+    router.post('/logout', (req, res) => {
+          const isProd = process.env.NODE_ENV === 'production';
+          res
+            .clearCookie('auth', { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd })
+            .clearCookie('gid',  { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd })
+            .json({ ok: true });
+        });
+
+    // 查看当前身份（可选，便于调试）
+        router.get('/whoami', (req, res) => {
+              try {
+                    const token = req.cookies?.auth;
+                    const p = token ? jwt.verify(token, process.env.JWT_SECRET) : null;
+                    res.json({ id: req.cookies?.gid || null, role: p?.role || 'guest' });
+                  } catch {
+                    res.json({ id: req.cookies?.gid || null, role: 'guest' });
+                  }
+            });
 
 router.post('/guest', (req, res) => {
+    const force = req.query.force === 'true';
     const isProd = process.env.NODE_ENV === 'production';
 
     // 在已有有效 auth（尤其是 admin）时，不要降级覆盖
     const cur = req.cookies?.auth;
-    if (cur) {
+    // if (cur) {
+    if (cur && !force) {
         try {
             const p = jwt.verify(cur, process.env.JWT_SECRET);
             if (p && p.role) {

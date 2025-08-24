@@ -15,11 +15,6 @@ export interface CreateAssessmentRequest {
   recommendation: string;
 }
 
-// 后端成功创建评估记录后返回给前端的响应数据结构
-// export interface CreateAssessmentResponse {
-//   id: string;    // 唯一id，mongodb自动生成
-//   createdAt: string;    //
-// }
 
 // 后端返回的评估数据字段
 export interface AssessmentDetail {
@@ -62,41 +57,85 @@ export interface GetReferralStatisticsResponse {
   data: ReferralStatistic[];
 }
 
-// 配合cookie实现用户隔离
-const API = (import.meta.env.VITE_API_BASE || '/api').replace(/\/+$/,''); // '/api'
+// // 配合cookie实现用户隔离
+// const API = (import.meta.env.VITE_API_BASE || '/api').replace(/\/+$/,''); // '/api'
+//
+// function join(p: string){ return `${API}${p.startsWith('/')?p:'/'+p}`; }
+//
+// async function http<T>(path: string, init: RequestInit = {}): Promise<T> {
+//   const res = await fetch(join(path), {
+//     credentials: 'include',
+//     headers: { 'Content-Type':'application/json', ...(init.headers||{}) },
+//     ...init
+//   });
+//   const text = await res.text();
+//   if (!res.ok) throw new Error(`API ${res.status} ${res.statusText}: ${text}`);
+//   return (text ? JSON.parse(text) : ({} as any)) as T;
+// }
+//
+// export const ensureGuest = () => http('/guest', { method:'POST' });
+//
+//
+//
+// const API_BASE = import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_BASE_URL || '/api';
+//
+//
+//
+// async function request<T>(url: string, opts: RequestInit = {}): Promise<T> {
+//   const res = await fetch(API_BASE + url, {
+//     headers: { 'Content-Type': 'application/json' },
+//     credentials: 'include',
+//     ...opts,
+//   });
+//   if (!res.ok) {
+//     const errorText = await res.text();
+//     throw new Error(`API ${res.status} ${res.statusText}: ${errorText}`);
+//   }
+//   return res.json();
+// }
 
-function join(p: string){ return `${API}${p.startsWith('/')?p:'/'+p}`; }
+// 统一基础地址：兼容 VITE_API_BASE 与历史 VITE_API_BASE_URL；去掉末尾斜杠
+const API_BASE = (import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/,'');
 
-async function http<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const res = await fetch(join(path), {
+// 统一拼接
+const pathJoin = (p: string) => `${API_BASE}${p.startsWith('/') ? p : '/' + p}`;
+
+// JSON 封装
+export async function http<T = any>(path: string, init: RequestInit = {}): Promise<T> {
+  const res = await fetch(pathJoin(path), {
     credentials: 'include',
-    headers: { 'Content-Type':'application/json', ...(init.headers||{}) },
-    ...init
+    headers: { 'Content-Type': 'application/json', ...(init.headers || {}) },
+    ...init,
   });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`API ${res.status} ${res.statusText}: ${text}`);
-  return (text ? JSON.parse(text) : ({} as any)) as T;
+  const body = await res.text();
+  if (!res.ok) throw new Error(`API ${res.status} ${res.statusText}: ${body}`);
+  return body ? (JSON.parse(body) as T) : ({} as T);
 }
 
-export const ensureGuest = () => http('/guest', { method:'POST' });
-
-
-// const API_BASE = '/api';
-//const API_BASE = 'http://localhost:4000/api';
-const API_BASE = import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_BASE_URL || '/api';
-
-async function request<T>(url: string, opts: RequestInit = {}): Promise<T> {
-  const res = await fetch(API_BASE + url, {
-    headers: { 'Content-Type': 'application/json' },
+// 文本封装（报告预览用）
+export async function httpText(path: string, init: RequestInit = {}): Promise<string> {
+  const res = await fetch(pathJoin(path), {
     credentials: 'include',
-    ...opts,
+    headers: { ...(init.headers || {}) },
+    ...init,
   });
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`API ${res.status} ${res.statusText}: ${errorText}`);
-  }
-  return res.json();
+  const body = await res.text();
+  if (!res.ok) throw new Error(`API ${res.status} ${res.statusText}: ${body}`);
+  return body;
 }
+
+// 兼容旧代码：request 等于 http
+const request = <T>(url: string, opts: RequestInit = {}) => http<T>(url, opts);
+
+// 强制降级到普通用户（用于离开 admin 时）
+export const ensureGuest = () => http('/guest?force=true', { method: 'POST' });
+
+// 退出并降级（admin 界面“退出管理”按钮使用）
+export const logoutAndDowngrade = async () => {
+  await http('/logout', { method: 'POST' });
+  await http('/guest?force=true', { method: 'POST' });
+};
+
 
 // —— API Functions —— //
 
@@ -115,29 +154,16 @@ export function getAssessment(id: string): Promise<AssessmentDetail> {
   return request<AssessmentDetail>(`/assessments/${id}`);
 }
 
-// 3. 获取纯文本报告(用于预览)
-export async function fetchReportText(id: string): Promise<string> {
-  const res = await fetch(`${API_BASE}/assessments/${id}/report`, {
-    credentials: 'include',
-  });
-  if (!res.ok) throw new Error(`Fetch report failed: ${res.statusText}`);
-  return res.text();
-}
+// // 3. 获取纯文本报告(用于预览)
+// export async function fetchReportText(id: string): Promise<string> {
+//   const res = await fetch(`${API_BASE}/assessments/${id}/report`, {
+//     credentials: 'include',
+//   });
+//   if (!res.ok) throw new Error(`Fetch report failed: ${res.statusText}`);
+//   return res.text();
+// }
+export const fetchReportText = (id: string) => httpText(`/assessments/${id}/report`);
 
-// // 3. 导出（目前 txt，可预留 docx）
-// export async function exportAssessment(
-//   id: string,
-//   format: 'txt' | 'docx' = 'txt'
-// ): Promise<Blob> {
-//   const res = await fetch(
-//     `${API_BASE}/assessments/${id}/export?format=${format}`,
-//     {
-//       headers: { 'Content-Type': 'application/json' },
-//       credentials: 'include',
-//     }
-//   );
-//   if (!res.ok) throw new Error(`Export failed: ${res.statusText}`);
-//   return res.blob();
 
 
 // 4. 导出评估报告为文件(下载功能)
@@ -240,13 +266,14 @@ export async function listAssessments(
     }
   }
   
-  const res = await fetch(`${API_BASE}/assessments?${params.toString()}`, {
-    credentials: 'include',
-  });
-  
-  if (!res.ok) throw new Error(`List failed: ${res.statusText}`);
-  
-  const json = await res.json();
+  // const res = await fetch(`${API_BASE}/assessments?${params.toString()}`, {
+  //   credentials: 'include',
+  // });
+  //
+  // if (!res.ok) throw new Error(`List failed: ${res.statusText}`);
+  //
+  // const json = await res.json();
+  const json = await http(`/assessments?${params.toString()}`);
   
   const arr = Array.isArray(json) ? json : json.records;
   

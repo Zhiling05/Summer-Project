@@ -177,3 +177,6 @@
     .admin-topbar{ flex-direction:column; gap:8px; align-items:flex-start; }
     .admin-title{ margin-top:60px; }
 }
+
+/* styles/admin.css */
+.exit-button { border:none; background:transparent; font-weight:600; cursor:pointer; }
