@@ -216,6 +216,7 @@ export async function listAssessments(
     riskLevel?: 'high' | 'medium' | 'low' | 'all';
     startDate?: string;
     endDate?: string;
+    scope?: 'own'|'all';
   }
 ): Promise<{
   records: { id: string; date: string; risk: string }[];
@@ -233,6 +234,9 @@ export async function listAssessments(
     }
     if (filters.endDate) {
       params.append('endDate', filters.endDate);
+    }
+    if (filters.scope) {
+      params.append('scope', filters.scope);
     }
   }
   

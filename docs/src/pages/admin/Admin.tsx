@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { listAssessments } from "../../api";
 import "../../styles/admin.css";
 import BackButton from "../../components/BackButton";
@@ -86,7 +85,9 @@ export default function AdminDashboard() {
                 if (from) params.startDate = from;
                 if (to)   params.endDate   = to;
 
-                const { records } = await listAssessments(params);
+                // const { records } = await listAssessments(params);
+                const { records } = await listAssessments(undefined, { ...params, scope: 'all' });
+
                 const data: Row[] = (records || []).map((r: any) => ({
                     id: r.id,
                     date: r.createdAt ?? r.date,
@@ -172,15 +173,15 @@ export default function AdminDashboard() {
         setFrom(""); setTo("");
         setPage(1);
     };
-    const toggleLevel = (l: Level) => {
-        const s = new Set(levels);
-        s.has(l) ? s.delete(l) : s.add(l);
-        setLevels(s);
+    const toggleLevel = (level: Level) => {
+        const set = new Set(levels);
+        set.has(level) ? set.delete(level) : set.add(level);
+        setLevels(set);
     };
-    const toggleRec = (r: RiskLabel) => {
-        const s = new Set(recs);
-        s.has(r) ? s.delete(r) : s.add(r);
-        setRecs(s);
+    const toggleRec = (risk: RiskLabel) => {
+        const set = new Set(recs);
+        set.has(risk) ? set.delete(risk) : set.add(risk);
+        setRecs(set);
     };
 
     return (
@@ -284,12 +285,12 @@ export default function AdminDashboard() {
                             <th>Risk Level</th>
                             <th>Referral</th>
                             <th>Time</th>
-                            <th></th>
+                            {/*<th></th>*/}
                         </tr>
                         </thead>
                         <tbody>
                         {loading ? (
-                            <tr><td colSpan={5} style={{ textAlign: "center", padding: 24 }}>Loading…</td></tr>
+                            <tr><td colSpan={4} style={{ textAlign: "center", padding: 24 }}>Loading…</td></tr>
                         ) : pageRows.length ? (
                             pageRows.map((r) => {
                                 const lvl = RISK_TO_LEVEL[r.risk];
@@ -301,16 +302,11 @@ export default function AdminDashboard() {
                                         </td>
                                         <td className="admin-cell-ref">{RISK_TEXT[r.risk]}</td>
                                         <td className="admin-cell-time">{dOnly(r.date)}</td>
-                                        <td className="admin-cell-actions">
-                                            <button className="view-btn" onClick={() => { /* nav(`/admin/preview/${r.id}`) */ }}>
-                                                View Details
-                                            </button>
-                                        </td>
                                     </tr>
                                 );
                             })
                         ) : (
-                            <tr><td colSpan={5} style={{ textAlign: "center", padding: 24 }}>No Matching Records</td></tr>
+                            <tr><td colSpan={4} style={{ textAlign: "center", padding: 24 }}>No Matching Records</td></tr>
                         )}
                         </tbody>
                     </table>
