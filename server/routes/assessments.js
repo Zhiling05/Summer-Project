@@ -96,9 +96,13 @@ router.get('/assessments/:id', async (req, res) => {
 
   try {
     const isAdmin = req.user?.role === 'admin';
-    const filter = (isAdmin && req.query.scope === 'all')
-       ? { customId: id }
-       : { customId: id, userId: req.user.id };
+    // const filter = (isAdmin && req.query.scope === 'all')
+    //    ? { customId: id }
+    //    : { customId: id, userId: req.user.id };
+    if (req.query.scope === 'all' && !isAdmin) {
+      return res.status(403).json({error: 'forbidden'});
+    }
+    const filter = (isAdmin && req.query.scope === 'all') ? { customId: id } : { customId: id, userId: req.user.id };
     const assessment = await Assessment.findOne(filter);
 
       if (!assessment) return res.status(404).json({ error: 'Assessment not found' });
@@ -204,10 +208,12 @@ router.post('/extract-symptoms', async (req, res) => {
  */
 router.get('/statistics/risk-levels', async (req, res) => {
   try {
-    // const base = (req.user?.role === 'admin') ? {} : { userId: req.user.id };
     const isAdmin = req.user?.role === 'admin';
-    if (req.query.scope === 'all' && !isAdmin) return res.status(403).json({ error: 'forbidden' });
+    if (req.query.scope === 'all' && !isAdmin) {
+      return res.status(403).json({error: 'forbidden'});
+    }
     const base = (isAdmin && req.query.scope === 'all') ? {} : { userId: req.user.id };
+
 
     // 高风险统计
     const highRiskCount = await Assessment.countDocuments({

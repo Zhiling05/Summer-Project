@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { listAssessments } from "../../api";
 import "../../styles/admin.css";
-import BackButton from "../../components/BackButton";
+// import BackButton from "../../components/BackButton";
+
+import { useNavigate } from 'react-router-dom';
 
 //日历选择器-DD-MM-YY
 import DatePicker, { registerLocale } from 'react-datepicker';
@@ -9,6 +11,8 @@ import { enGB } from 'date-fns/locale';
 import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from "../../components/Header.tsx";
+
+import { http, logoutAndDowngrade } from "../../api/index";
 
 registerLocale('en-GB', enGB);
 
@@ -54,7 +58,11 @@ const PAGE_SIZE = 20;
 const dOnly = (iso?: string) => (iso ?? "").slice(0, 10);
 
 export default function AdminDashboard() {
-    // const nav = useNavigate();
+    const nav = useNavigate();
+    const onExitAdmin = async () => {
+        await logoutAndDowngrade();  // /logout → /guest?force=true
+        nav('/select-role');
+        };
 
     // 数据
     const [rows, setRows] = useState<Row[]>([]);
@@ -184,10 +192,32 @@ export default function AdminDashboard() {
         setRecs(set);
     };
 
+    async function loadAllForAdmin(params: { riskLevel?: string; startDate?: string; endDate?: string }) {
+        const qs = new URLSearchParams({
+            ...(params.riskLevel ? { riskLevel: params.riskLevel } : {}),
+            ...(params.startDate ? { startDate: params.startDate } : {}),
+            ...(params.endDate ? { endDate: params.endDate } : {}),
+            scope: 'all', // 仅 admin 界面加
+        }).toString();
+
+        const json: any = await http(`/assessments?${qs}`);
+        const list = Array.isArray(json) ? json : (json?.records ?? []);
+
+        const rows = list.map((r: any) => ({
+            id:   r.id ?? r._id ?? r.customId,
+            date: r.date ?? r.createdAt,
+            risk: String(r.risk ?? r.recommendation ?? 'no-referral').toLowerCase().replace(/_/g, '-'),
+        }));
+
+        setRows(rows); // 确保上方 useState<[...]> 是 rows，而非 data/records
+    }
+
+
+
     return (
         <>
             <Header title="Admin Console" />
-            <BackButton />{/* 使用 goback 组件zkx */}
+            <button className="exit-button" onClick={onExitAdmin}>Exit</button>
 
         <main className="admin-main">
             <div className="admin-wrapper">
