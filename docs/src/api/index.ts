@@ -132,7 +132,7 @@ export const ensureGuest = () => http('/guest?force=true', { method: 'POST' });
 
 // 退出并降级（admin 界面“退出管理”按钮使用）
 export const logoutAndDowngrade = async () => {
-  await http('/logout', { method: 'POST' });
+  // await http('/logout', { method: 'POST' });
   await http('/guest?force=true', { method: 'POST' });
 };
 

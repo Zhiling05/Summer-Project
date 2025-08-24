@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { listAssessments } from "../../api";
+// import { listAssessments } from "../../api";
 import "../../styles/admin.css";
 // import BackButton from "../../components/BackButton";
 
@@ -93,14 +93,23 @@ export default function AdminDashboard() {
                 if (from) params.startDate = from;
                 if (to)   params.endDate   = to;
 
-                // const { records } = await listAssessments(params);
-                const { records } = await listAssessments(undefined, { ...params, scope: 'all' });
+                // // const { records } = await listAssessments(params);
+                // const { records } = await listAssessments(undefined, { ...params, scope: 'all' });
+                //
+                // const data: Row[] = (records || []).map((r: any) => ({
+                //     id: r.id,
+                //     date: r.createdAt ?? r.date,
+                //     risk: normalizeRisk(String(r.recommendation ?? r.risk)),
+                // }));
+                const qs = new URLSearchParams({ ...params, scope: 'all' }).toString();
+                const json: any = await http(`/assessments?${qs}`);
+                const arr  = Array.isArray(json) ? json : (json?.records ?? []);
+                const data: Row[] = arr.map((r: any) => ({
+                       id:   r.id ?? r._id ?? r.customId,
+                       date: r.createdAt ?? r.date,
+                       risk: normalizeRisk(String(r.recommendation ?? r.risk)),
+                   }));
 
-                const data: Row[] = (records || []).map((r: any) => ({
-                    id: r.id,
-                    date: r.createdAt ?? r.date,
-                    risk: normalizeRisk(String(r.recommendation ?? r.risk)),
-                }));
                 if (mounted) {
                     setRows(data);
                     setPage(1);
@@ -217,7 +226,7 @@ export default function AdminDashboard() {
     return (
         <>
             <Header title="Admin Console" />
-            <button className="exit-button" onClick={onExitAdmin}>Exit</button>
+            <button className="exit-button" onClick={onExitAdmin}>← Exit</button>
 
         <main className="admin-main">
             <div className="admin-wrapper">
