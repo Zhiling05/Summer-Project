@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import BackButton from '../../components/BackButton';//zkx
 import "react-datepicker/dist/react-datepicker.css";
 import { parseISO } from "date-fns";
-import { listAssessments } from "../../api";
-
+// import { listAssessments } from "../../api";
+import { http } from "../../api/index";
 
 import Header from "../../components/Header";
 import BottomNav from "../../components/BottomNav";
@@ -84,9 +84,14 @@ export default function Records() {
   useEffect(() => {
     setLoading(true);
     // listAssessments() // 移除limit参数，获取所有数据
-    listAssessments(undefined, { scope: 'own' })
-      .then(({ records }) => {
-        const normalized = records.map((r: any) => {
+    // listAssessments(undefined, { scope: 'own' })
+    //   .then(({ records }) => {
+    //     const normalized = records.map((r: any) => {
+    http('/assessments')
+       .then((json: any) => {
+          const arr = Array.isArray(json) ? json : (json?.records ?? []);
+          const normalized = arr.map((r: any) => {
+
           const date = r.createdAt ?? r.date;            // 统一时间
           const raw  = r.recommendation ?? r.risk;       // 统一推荐
           const risk = (normalizeRisk(String(raw)) as RiskLabel) || "no-referral";

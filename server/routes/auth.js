@@ -8,7 +8,7 @@ const { randomUUID } = require('crypto');
           const isProd = process.env.NODE_ENV === 'production';
           res
             .clearCookie('auth', { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd })
-            .clearCookie('gid',  { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd })
+            // .clearCookie('gid',  { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd })
             .json({ ok: true });
         });
 

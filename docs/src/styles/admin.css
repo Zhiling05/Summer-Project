@@ -179,4 +179,17 @@
 }
 
 /* styles/admin.css */
-.exit-button { border:none; background:transparent; font-weight:600; cursor:pointer; }
+.exit-button {
+    margin-top:12px;
+    border:none;
+    background:transparent;
+    font-weight:600;
+    font-size:28px;
+    gap:8px;
+    color:var(--text-body);
+    cursor:pointer; }
+
+.exit-button:hover {
+    color:var(--text-inverse);
+    background:var(--core-blue);
+    }
