@@ -154,8 +154,8 @@
     border-bottom:1px solid var(--border-grey);
     color:var(--text-body);
 }
-.admin-table th:last-child,
-.admin-table td:last-child{ text-align:right; }
+/*.admin-table th:last-child,*/
+/*.admin-table td:last-child{ text-align:right; }*/
 .admin-table tbody tr:hover{ background:var(--page-base); }
 
 /* -- calender -- */

@@ -83,7 +83,8 @@ export default function Records() {
   // 获取所有数据
   useEffect(() => {
     setLoading(true);
-    listAssessments() // 移除limit参数，获取所有数据
+    // listAssessments() // 移除limit参数，获取所有数据
+    listAssessments(undefined, { scope: 'own' })
       .then(({ records }) => {
         const normalized = records.map((r: any) => {
           const date = r.createdAt ?? r.date;            // 统一时间
