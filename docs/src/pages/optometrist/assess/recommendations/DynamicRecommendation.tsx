@@ -3,7 +3,6 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   fetchReportText,
   exportAssessment,
-  sendReport,
   getAssessment,
 } from "../../../../api";
 import { saveAs } from "file-saver";
@@ -110,56 +109,54 @@ function CollapsibleCard({
   );
 }
 
-/* ---------- 邮件发送模态框 ---------- */
-const EmailModal: React.FC<{
-  open: boolean;
-  loading: boolean;
-  onClose: () => void;
-  onSend: (email: string) => void;
-}> = ({ open, loading, onClose, onSend }) => {
-  if (!open) return null;
+// /* ---------- 邮件发送模态框 ---------- */
+// const EmailModal: React.FC<{
+//   open: boolean;
+//   loading: boolean;
+//   onClose: () => void;
+//   onSend: (email: string) => void;
+// }> = ({ open, loading, onClose, onSend }) => {
+//   if (!open) return null;
 
-  const [email, setEmail] = React.useState("");
+//   const [email, setEmail] = React.useState("");
 
-  return (
-    <div className="email-modal-overlay" onClick={onClose}>
-      <div
-        className="email-modal"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h3 className="email-modal__title">Send report via email</h3>
+//   return (
+//     <div className="email-modal-overlay" onClick={onClose}>
+//       <div
+//         className="email-modal"
+//         onClick={(e) => e.stopPropagation()}
+//       >
+//         <h3 className="email-modal__title">Send report via email</h3>
 
-        <input
-          type="email"
-          placeholder="name@example.com"
-          className="email-modal__input"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+//         <input
+//           type="email"
+//           placeholder="name@example.com"
+//           className="email-modal__input"
+//           value={email}
+//           onChange={(e) => setEmail(e.target.value)}
+//         />
 
-        <div className="email-modal__actions">
-          <button
-            className="btn-primary"
-            disabled={loading || !email}
-            onClick={() => onSend(email)}
-          >
-            {loading ? "Sending…" : "Send"}
-          </button>
-          <button className="btn-outline" onClick={onClose}>
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
+//         <div className="email-modal__actions">
+//           <button
+//             className="btn-primary"
+//             disabled={loading || !email}
+//             onClick={() => onSend(email)}
+//           >
+//             {loading ? "Sending…" : "Send"}
+//           </button>
+//           <button className="btn-outline" onClick={onClose}>
+//             Cancel
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 /* =============================================================== */
 
 const DynamicRecommendation: React.FC = () => {
   useEffect(() => {
-    // 标记完成，之后不再弹窗
-    // sessionStorage.setItem('assessmentComplete', 'true');
     sessionStorage.removeItem('assessStarted');
     sessionStorage.removeItem('lastQuestionId');
     sessionStorage.removeItem('assessmentComplete'); // 保守清掉旧值
@@ -176,8 +173,6 @@ const DynamicRecommendation: React.FC = () => {
   // 状态管理
   const [assessment, setAssessment] = useState<any | null>(null);
   const [reportText, setReportText] = useState("");
-  const [sending, setSending] = useState(false);
-  const [showEmailModal, setShowEmailModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // 导航
@@ -208,10 +203,36 @@ const DynamicRecommendation: React.FC = () => {
     return text;
   };
 
-  // 打开/关闭邮件模态框
-  const openEmailModal = () => setShowEmailModal(true);
-  const closeEmailModal = () => {
-    if (!sending) setShowEmailModal(false);
+  // // 打开/关闭邮件模态框
+  // const openEmailModal = () => setShowEmailModal(true);
+  // const closeEmailModal = () => {
+  //   if (!sending) setShowEmailModal(false);
+  // };
+
+  // 新增：打开默认邮件客户端函数
+  const openDefaultEmailClient = async () => {
+    try {
+      const reportText = await ensureReport();
+      const fullContent = reportText + '\n\n---\nYou can also download this report as a file from our website.';
+      const subject = encodeURIComponent('Assessment Report');
+      const body = encodeURIComponent(fullContent);
+      
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      
+      // 移动设备延迟检测
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        setTimeout(() => {
+          if (document.hasFocus()) {
+            alert('No email app found. Please install an email app and try again.');
+          }
+        }, 2000);
+      }
+      
+    } catch (error) {
+      console.error('Failed to open email client:', error);
+      alert('Failed to open email client. Please install an email app first.');
+    }
   };
 
   // 复制报告
@@ -244,27 +265,6 @@ const DynamicRecommendation: React.FC = () => {
     } catch (e) {
       console.error("Download failed", e);
       alert("Failed to download report. Please try again.");
-    }
-  };
-
-  // 处理邮件发送
-  const sendEmail = async (email: string) => {
-    if (!finalAssessmentId) {
-      alert("Assessment ID missing");
-      setShowEmailModal(false);
-      return;
-    }
-    
-    try {
-      setSending(true);
-      await sendReport(finalAssessmentId, email, "txt");
-      alert("Report sent successfully!");
-      setShowEmailModal(false);
-    } catch (e) {
-      console.error("Failed to send email", e);
-      alert("Failed to send email. Please try again.");
-    } finally {
-      setSending(false);
     }
   };
 
@@ -325,8 +325,8 @@ const DynamicRecommendation: React.FC = () => {
                 ⬇️ Download
               </button>
               <button
-                onClick={openEmailModal}
-                disabled={!finalAssessmentId || sending}
+                onClick={openDefaultEmailClient}
+                disabled={!finalAssessmentId}
                 title={!finalAssessmentId ? "Assessment ID missing" : ""}
               >
                 ✉️ Email
@@ -345,13 +345,6 @@ const DynamicRecommendation: React.FC = () => {
             </CollapsibleCard>
           </section>
         </main>
-
-        <EmailModal
-          open={showEmailModal}
-          loading={sending}
-          onClose={closeEmailModal}
-          onSend={sendEmail}
-        />
       </div>
 
       <BottomNav />

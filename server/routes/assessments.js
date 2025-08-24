@@ -1,7 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const {format} = require('date-fns');
 const Assessment = require('../models/Assessment');
 const { extractSymptoms } = require('../utils/symptoms');
+
+// 新增：生成自定义ID的函数
+async function generateCustomId() {
+  const today = format(new Date(), 'ddMMyyyy');
+  const lastRecord = await Assessment.findOne({
+    customId: { $regex: `^${today}_` }
+  }).sort({ customId: -1 });
+
+  let sequence = 1;
+  if (lastRecord) {
+    const lastSequence = parseInt(lastRecord.customId.split('_')[1]);
+    sequence = lastSequence + 1;
+  }
+
+  return `${today}_${sequence.toString().padStart(3, '0')}`;
+}
 
 /**
  * GET /assessments - 获取评估列表
@@ -53,9 +70,9 @@ router.get('/assessments', async (req, res) => {
      const docs = await Assessment.find({ ...query, ...owner }).sort({ createdAt: -1 });
 
     const records = docs.map(d => ({
-      id: d._id.toString(),
+      id: d.customId || d._id.toString(),
       risk: d.recommendation || 'no-referral',
-      date: d.createdAt // 前端期望字段名为date
+      date: d.createdAt
     }));
 
     res.json({ records });
@@ -78,18 +95,13 @@ router.get('/assessments/:id', async (req, res) => {
   }
 
   try {
-    // const assessment = await Assessment.findOne(
-    //     (req.user?.role === 'admin') ? { _id: id } : { _id: id, userId: req.user.id }
-    // );
     const isAdmin = req.user?.role === 'admin';
     const filter = (isAdmin && req.query.scope === 'all')
-       ? { _id: id }
-       : { _id: id, userId: req.user.id };
+       ? { customId: id }
+       : { customId: id, userId: req.user.id };
     const assessment = await Assessment.findOne(filter);
 
       if (!assessment) return res.status(404).json({ error: 'Assessment not found' });
-
-
 
     // 如果没有存储症状，则从答案中提取
     const symptoms = (assessment.symptoms && assessment.symptoms.length) 
@@ -98,7 +110,7 @@ router.get('/assessments/:id', async (req, res) => {
 
     // 返回AssessmentDetail格式
     res.json({
-      id: assessment._id.toString(),
+      id: assessment.customId,
       role: assessment.role,
       answers: assessment.answers || [],
       symptoms: symptoms,
@@ -138,9 +150,12 @@ router.post('/assessments', async (req, res) => {
 
     // 从答案中提取症状
     const symptoms = extractSymptoms(answers);
+    // 新增：生成自定义ID
+    const customId = await generateCustomId();
 
     // 创建新记录
     const newRecord = await Assessment.create({
+      customId,
       userId: req.user.id,
       role,
       answers,
@@ -150,7 +165,7 @@ router.post('/assessments', async (req, res) => {
 
     // 返回完整的AssessmentDetail
     res.status(201).json({
-      id: newRecord._id.toString(),
+      id: newRecord.customId,
       role: newRecord.role,
       answers: newRecord.answers,
       symptoms: newRecord.symptoms,
@@ -196,21 +211,18 @@ router.get('/statistics/risk-levels', async (req, res) => {
 
     // 高风险统计
     const highRiskCount = await Assessment.countDocuments({
-      // ...owner,
       ...base,
       recommendation: { $in: ['EMERGENCY_DEPARTMENT', 'IMMEDIATE'] }
     });
     
     // 中风险统计
     const mediumRiskCount = await Assessment.countDocuments({
-      // ...owner,
       ...base,
       recommendation: { $in: ['URGENT_TO_OPH', 'URGENT_TO_GP_OR_NEUR'] }
     });
     
     // 低风险统计
     const lowRiskCount = await Assessment.countDocuments({
-      // ...owner,
       ...base,
       recommendation: { $in: ['TO_GP', 'NO_REFERRAL', 'OTHER_EYE_CONDITIONS_GUIDANCE'] }
     });

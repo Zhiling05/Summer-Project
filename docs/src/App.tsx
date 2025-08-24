@@ -42,7 +42,6 @@ const FontSizeAwareApp = () => {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/select-role" element={<UserSelectionPage />} />
         <Route path="/settings" element={<Sidebar.SettingsPage />} />
-        {/*<Route path="/about-us" element={<Sidebar.AboutPage />} /> zkx合并到contact us*/}
         <Route path="/contact-us" element={<Sidebar.ContactPage />} />
         <Route path="/optometrist/*" element={<OptometristApp />} />
         <Route path="/patient/*" element={<PatientApp />} />

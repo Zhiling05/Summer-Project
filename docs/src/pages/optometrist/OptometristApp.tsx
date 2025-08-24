@@ -5,7 +5,7 @@ import '../../styles/theme.css'; // ZSA 0811 确保引入主题
 import AssessRouter from './assess/AssessRouter';  
 import GuideRouter from './guide/GuideRouter';
 import Records from './Records';
-import TutorialRouter from './tutorial/TutorialRouter';//zkx
+import Tutorial from './Tutorial';
 
 export default function OptometristApp() {
   return (
@@ -22,7 +22,7 @@ export default function OptometristApp() {
       {/* /optometrist/records → Records 页面 */}
       <Route path="records" element={<Records />} />
       {/* zkx0811 tutorial 页面 */}
-      <Route path="tutorial/*" element={<TutorialRouter />} />
+      <Route path="tutorial" element={<Tutorial />} />
     </Routes>
   );
 }

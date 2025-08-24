@@ -1,9 +1,9 @@
-// docs/src/pages/optometrist/tutorial/Tutorial1.tsx
+// docs/src/pages/optometrist/tutorial/Tutorial.tsx
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import StartPage from '../assess/StartPage'; // ✅ 直接渲染 StartPage 作底板
+import StartPage from './assess/StartPage'; // ✅ 直接渲染 StartPage 作底板
 import { useNavigate } from 'react-router-dom';
-import '../../../styles/tutorial.css'; // ✅ 外置样式（使用 theme.css 变量）
+import '../../styles/tutorial.css'; 
 
 type Step = {
   selector: string;
@@ -13,7 +13,7 @@ type Step = {
 };
 
 
-export default function Tutorial1() {
+export default function Tutorial() {
   const navigate = useNavigate();
   const [stepIndex, setStepIndex] = useState(0);
   const [visible, setVisible] = useState(true);

@@ -155,17 +155,17 @@ export async function exportAssessment(
   return res.blob();
 }
 
-// 4. 发送报告邮件
-export function sendReport(
-  assessmentId: string,
-  emailTo: string,
-  format: 'txt' | 'docx' = 'txt'
-): Promise<{ ok: boolean }> {
-  return request<{ ok: boolean }>('/send-report', {
-    method: 'POST',
-    body: JSON.stringify({ assessmentId, emailTo, format }),
-  });
-}
+// // 4. 发送报告邮件
+// export function sendReport(
+//   assessmentId: string,
+//   emailTo: string,
+//   format: 'txt' | 'docx' = 'txt'
+// ): Promise<{ ok: boolean }> {
+//   return request<{ ok: boolean }>('/send-report', {
+//     method: 'POST',
+//     body: JSON.stringify({ assessmentId, emailTo, format }),
+//   });
+// }
 
 // export function sendReport(
 //   assessmentId: string,
