@@ -14,7 +14,7 @@ export default function StartPage() {
   useEffect(() => {
         const seen = localStorage.getItem('seenAssessmentGuide') === 'true';
         if (!seen) {
-        navigate('/optometrist/tutorial/1', { replace: true });
+        navigate('/optometrist/tutorial', { replace: true });
         }
     }, [navigate]);
 

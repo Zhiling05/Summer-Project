@@ -68,7 +68,7 @@
 }
 
 /* 标签颜色 */
-.image-card__category-badge--true {
+.image-card__category-badge--papilloedema {
   background: var(--urgent-red);
 }
 .image-card__category-badge--pseudo {
@@ -173,4 +173,8 @@
   .image-card__image-area {
     height: 160px;
   }
+}
+
+.image-card__click-hint {
+  display: none !important; /* 完全隐藏点击提示 */
 }
