@@ -84,20 +84,6 @@ const DynamicQuestion = () => {
   const { questionId = "" } = useParams<{ questionId: string }>();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   sessionStorage.setItem("lastQuestionId", questionId);
-  //   }, [questionId]);
-
-  // 暂时先不添加patientId
-  // /* ——— 生成一次 patientId，整次问卷保持不变 ——— */
-  // const [patientId] = useState(() => `pid-${Date.now().toString(36)}`);
-
-  // const questionsList: Question[] = Array.isArray(
-  //   (questionnaire as any).questions
-  // )
-  //   ? (questionnaire as any).questions
-  //   : (questionnaire as any);
-
   // 问题数据: 使用useMemo缓存整个问题列表，不需要让问题列表在组件渲染时每次都重新计算
   const questions = useMemo<Question[]>(() => {
     return Array.isArray((questionnaire as any).questions)
@@ -108,11 +94,6 @@ const DynamicQuestion = () => {
   const currentQuestion = useMemo<Question | undefined>(() => {
     return questions.find((q) => q.id === questionId);
   }, [questionId, questions]);
-
-  // // 获取当前题目
-  // const currentQuestion = useMemo<Question | undefined>(() => {
-  //   return questionsList.find((q) => q.id === questionId);
-  // }, [questionId]);
 
   // 答案状态
   const [singleAns, setSingleAns] = useState<string>("");
@@ -144,19 +125,6 @@ const DynamicQuestion = () => {
     
     setErrors([]);
   }, [questionId, answerHistory, currentQuestion]);
-
-  // // 题目切换时重置答案
-  // useEffect(() => {
-  //   setSingleAns("");
-  //   setMultiAns([]);
-  //   setErrors([]); // ycl
-  // }, [questionId]);
-
-  // /* 已作答？ */
-  // const answered =
-  //   currentQuestion?.type === "single"
-  //     ? singleAns !== ""
-  //     : multiAns.length > 0;
 
   /* 多选切换 */
   const toggleOption = (value: string) => {
@@ -249,8 +217,17 @@ const DynamicQuestion = () => {
           state: { assessmentId }
         });
       } catch (error) {
-        console.error('Failed to save assessment:', error);
-        alert('Failed to save assessment. Please try again.');
+          console.error('Failed to save assessment:', error);
+  // 临时显示详细错误信息
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const errorDetails = `
+错误: ${errorMessage}
+URL: ${window.location.href}
+时间: ${new Date().toISOString()}
+API地址: ${import.meta.env.VITE_API_BASE || '/api'}
+  `;
+  alert(errorDetails);
+  console.error('Full error:', error);
       }
       return;
     }
