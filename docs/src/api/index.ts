@@ -95,7 +95,11 @@ export interface GetReferralStatisticsResponse {
 // }
 
 // 统一基础地址：兼容 VITE_API_BASE 与历史 VITE_API_BASE_URL；去掉末尾斜杠
-const API_BASE = (import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/,'');
+// const API_BASE = (import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/,'');
+// const base = import.meta.env.VITE_API_BASE || '/api';
+const API_BASE = '/api';
+
+
 
 // 统一拼接
 const pathJoin = (p: string) => `${API_BASE}${p.startsWith('/') ? p : '/' + p}`;
