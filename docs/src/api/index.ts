@@ -1,3 +1,14 @@
+// Token 管理
+const TOKEN_KEY = 'dipp_auth_token';
+const GID_KEY = 'dipp_guest_id';
+
+const saveToken = (token: string) => localStorage.setItem(TOKEN_KEY, token);
+const getToken = () => localStorage.getItem(TOKEN_KEY);
+const removeToken = () => localStorage.removeItem(TOKEN_KEY);
+
+const saveGuestId = (gid: string) => localStorage.setItem(GID_KEY, gid);
+const getGuestId = () => localStorage.getItem(GID_KEY);
+
 // —— Types —— //
 export interface Answer {
   questionId: string;
@@ -101,22 +112,55 @@ const API_BASE = (import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_BASE
 const pathJoin = (p: string) => `${API_BASE}${p.startsWith('/') ? p : '/' + p}`;
 
 // JSON 封装
+// export async function http<T = any>(path: string, init: RequestInit = {}): Promise<T> {
+//   const res = await fetch(pathJoin(path), {
+//     credentials: 'include',
+//     headers: { 'Content-Type': 'application/json', ...(init.headers || {}) },
+//     ...init,
+//   });
+//   const body = await res.text();
+//   if (!res.ok) throw new Error(`API ${res.status} ${res.statusText}: ${body}`);
+//   return body ? (JSON.parse(body) as T) : ({} as T);
+// }
+
 export async function http<T = any>(path: string, init: RequestInit = {}): Promise<T> {
-  const res = await fetch(pathJoin(path), {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(init.headers || {}) },
+  const token = getToken();  // ← 从 localStorage 获取 token
+  
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),  // ← 如果有token，添加到header
+    ...(init.headers || {})
+  };
+  
+  const config: RequestInit = {
     ...init,
-  });
+    headers
+    // 删除了 credentials: 'include'  ← 不再需要发送cookie
+  };
+  
+  const res = await fetch(pathJoin(path), config);
   const body = await res.text();
   if (!res.ok) throw new Error(`API ${res.status} ${res.statusText}: ${body}`);
   return body ? (JSON.parse(body) as T) : ({} as T);
 }
 
+
 // 文本封装（报告预览用）
 export async function httpText(path: string, init: RequestInit = {}): Promise<string> {
+  // const res = await fetch(pathJoin(path), {
+  //   // credentials: 'include',
+  //   headers: { ...(init.headers || {}) },
+  //   ...init,
+  // });
+  const token = getToken();
+  
+  const headers = {
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),  // 添加 token
+    ...(init.headers || {})
+  };
+  
   const res = await fetch(pathJoin(path), {
-    credentials: 'include',
-    headers: { ...(init.headers || {}) },
+    headers,
     ...init,
   });
   const body = await res.text();
@@ -128,12 +172,49 @@ export async function httpText(path: string, init: RequestInit = {}): Promise<st
 const request = <T>(url: string, opts: RequestInit = {}) => http<T>(url, opts);
 
 // 强制降级到普通用户（用于离开 admin 时）
-export const ensureGuest = () => http('/guest?force=true', { method: 'POST' });
+// export const ensureGuest = () => http('/guest?force=true', { method: 'POST' });
+export const ensureGuest = async () => {
+  try {
+    // 检查是否已有 token
+    const existingToken = getToken();
+    if (existingToken) {
+      // 验证 token 是否有效
+      try {
+        // 可以调用一个验证端点，或直接返回
+        return { ok: true };
+      } catch {
+        // token 无效，继续获取新的
+      }
+    }
+    
+    const gid = getGuestId();
+    const result = await fetch(`${API_BASE}/guest`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gid })  // 发送已有的 gid（如果有）
+    }).then(res => res.json());
+    
+    if (result.token) {
+      saveToken(result.token);
+      saveGuestId(result.id);
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Failed to ensure guest:', error);
+    throw error;
+  }
+};
 
 // 退出并降级（admin 界面“退出管理”按钮使用）
+// export const logoutAndDowngrade = async () => {
+//   // await http('/logout', { method: 'POST' });
+//   await http('/guest?force=true', { method: 'POST' });
+// };
 export const logoutAndDowngrade = async () => {
-  // await http('/logout', { method: 'POST' });
-  await http('/guest?force=true', { method: 'POST' });
+  removeToken();
+  // 重新获取 guest token
+  await ensureGuest();
 };
 
 
@@ -171,69 +252,23 @@ export async function exportAssessment(
   id: string,
   format: 'txt' | 'docx' = 'txt'
 ): Promise<Blob> {
+  // const res = await fetch(
+  //   `${API_BASE}/assessments/${id}/export?format=${format}`,
+  //   {
+  //     credentials: 'include',
+  //   }
+  // );
+  const token = getToken();
+  
   const res = await fetch(
     `${API_BASE}/assessments/${id}/export?format=${format}`,
     {
-      credentials: 'include',
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     }
   );
   if (!res.ok) throw new Error(`Export failed: ${res.statusText}`);
   return res.blob();
 }
-
-// // 4. 发送报告邮件
-// export function sendReport(
-//   assessmentId: string,
-//   emailTo: string,
-//   format: 'txt' | 'docx' = 'txt'
-// ): Promise<{ ok: boolean }> {
-//   return request<{ ok: boolean }>('/send-report', {
-//     method: 'POST',
-//     body: JSON.stringify({ assessmentId, emailTo, format }),
-//   });
-// }
-
-// export function sendReport(
-//   assessmentId: string,
-//   emailTo: string,
-//   format: 'txt' | 'docx' = 'txt'
-// ) {
-//   return request<{ ok: boolean }>('/send-report', {
-//     method: 'POST',
-//     body: JSON.stringify({ assessmentId, emailTo, format }),
-//   });
-// }
-
-// export async function listAssessments(limit = 50) {
-//   const res = await fetch(`/api/assessments?limit=${limit}`, {
-//     credentials: 'include',
-//   });
-//   if (!res.ok) throw new Error(`List failed: ${res.statusText}`);
-//   return res.json() as Promise<{
-//     records: { id: string; date: string; risk: string }[];
-//   }>;
-// }
-// docs/src/api/index.ts
-// export async function listAssessments(limit = 50) {
-//   const res = await fetch(`${API_BASE}/assessments?limit=${limit}`, {
-//   });
-//   if (!res.ok) throw new Error(`List failed: ${res.statusText}`);
-
-//   const json = await res.json();
-
-//   // 兼容后端可能返回数组，或 { records: [...] }
-//   const arr = Array.isArray(json) ? json : json.records;
-
-//   const records = (arr ?? []).map((d: any) => ({
-//     id:   d.id ?? d._id,                       // 统一为 id
-//     date: d.date ?? d.createdAt,               // 统一为 date
-//     risk: d.risk ?? d.recommendation ?? 'no-referral', // 统一为 risk
-//   }));
-
-//   return { records } as {
-//     records: { id: string; date: string; risk: string }[];
-//   };
-// }
 
 // 4.获取评估列表：把筛选逻辑放在服务器端了
 export async function listAssessments(

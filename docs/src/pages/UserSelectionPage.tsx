@@ -42,19 +42,41 @@ export default function UserSelectionPage() {
   //     setPasswordError('Invalid password. Please try again.');
   //   }
   // };
-    const handlePasswordSubmit = async () => {
-        try {
-            await http('/admin/login', {
-                  method: 'POST',
-                  body: JSON.stringify({ password }),
-                });
-            setShowPasswordModal(false);
-            navigate('/admin', { state: { from: '/user-selection' } });
-          } catch {
-            setPasswordError('Incorrect password. Please try again.');
-            setPassword('');
-          }
-      };
+    // const handlePasswordSubmit = async () => {
+    //     try {
+    //         await http('/admin/login', {
+    //               method: 'POST',
+    //               body: JSON.stringify({ password }),
+    //             });
+    //         setShowPasswordModal(false);
+    //         navigate('/admin', { state: { from: '/user-selection' } });
+    //       } catch {
+    //         setPasswordError('Incorrect password. Please try again.');
+    //         setPassword('');
+    //       }
+    //   };
+  const handlePasswordSubmit = async () => {
+    try {
+      const result = await http('/admin/login', {
+        method: 'POST',
+        body: JSON.stringify({ 
+          password,
+          gid: localStorage.getItem('dipp_guest_id')
+        })
+      });
+      
+      if (result.token) {
+        localStorage.setItem('dipp_auth_token', result.token);
+        setShowPasswordModal(false);
+        navigate('/admin', { state: { from: '/user-selection' } });
+      } else {
+        throw new Error('Login failed');
+      }
+    } catch {
+      setPasswordError('Incorrect password. Please try again.');
+      setPassword('');
+    }
+  };
 
 
   const handleModalClose = () => {
