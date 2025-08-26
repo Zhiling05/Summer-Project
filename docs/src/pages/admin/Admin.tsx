@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { listAssessments } from "../../api";
+// import { listAssessments } from "../../api";
 import "../../styles/admin.css";
-import BackButton from "../../components/BackButton";
+// import BackButton from "../../components/BackButton";
+
+import { useNavigate } from 'react-router-dom';
 
 //日历选择器-DD-MM-YY
 import DatePicker, { registerLocale } from 'react-datepicker';
@@ -10,6 +11,8 @@ import { enGB } from 'date-fns/locale';
 import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import Header from "../../components/Header.tsx";
+
+import { http, logoutAndDowngrade } from "../../api/index";
 
 registerLocale('en-GB', enGB);
 
@@ -55,7 +58,11 @@ const PAGE_SIZE = 20;
 const dOnly = (iso?: string) => (iso ?? "").slice(0, 10);
 
 export default function AdminDashboard() {
-    // const nav = useNavigate();
+    const nav = useNavigate();
+    const onExitAdmin = async () => {
+        await logoutAndDowngrade();  // /logout → /guest?force=true
+        nav('/select-role');
+        };
 
     // 数据
     const [rows, setRows] = useState<Row[]>([]);
@@ -86,12 +93,23 @@ export default function AdminDashboard() {
                 if (from) params.startDate = from;
                 if (to)   params.endDate   = to;
 
-                const { records } = await listAssessments(params);
-                const data: Row[] = (records || []).map((r: any) => ({
-                    id: r.id,
-                    date: r.createdAt ?? r.date,
-                    risk: normalizeRisk(String(r.recommendation ?? r.risk)),
-                }));
+                // // const { records } = await listAssessments(params);
+                // const { records } = await listAssessments(undefined, { ...params, scope: 'all' });
+                //
+                // const data: Row[] = (records || []).map((r: any) => ({
+                //     id: r.id,
+                //     date: r.createdAt ?? r.date,
+                //     risk: normalizeRisk(String(r.recommendation ?? r.risk)),
+                // }));
+                const qs = new URLSearchParams({ ...params, scope: 'all' }).toString();
+                const json: any = await http(`/assessments?${qs}`);
+                const arr  = Array.isArray(json) ? json : (json?.records ?? []);
+                const data: Row[] = arr.map((r: any) => ({
+                       id:   r.id ?? r._id ?? r.customId,
+                       date: r.createdAt ?? r.date,
+                       risk: normalizeRisk(String(r.recommendation ?? r.risk)),
+                   }));
+
                 if (mounted) {
                     setRows(data);
                     setPage(1);
@@ -172,21 +190,43 @@ export default function AdminDashboard() {
         setFrom(""); setTo("");
         setPage(1);
     };
-    const toggleLevel = (l: Level) => {
-        const s = new Set(levels);
-        s.has(l) ? s.delete(l) : s.add(l);
-        setLevels(s);
+    const toggleLevel = (level: Level) => {
+        const set = new Set(levels);
+        set.has(level) ? set.delete(level) : set.add(level);
+        setLevels(set);
     };
-    const toggleRec = (r: RiskLabel) => {
-        const s = new Set(recs);
-        s.has(r) ? s.delete(r) : s.add(r);
-        setRecs(s);
+    const toggleRec = (risk: RiskLabel) => {
+        const set = new Set(recs);
+        set.has(risk) ? set.delete(risk) : set.add(risk);
+        setRecs(set);
     };
+
+    async function loadAllForAdmin(params: { riskLevel?: string; startDate?: string; endDate?: string }) {
+        const qs = new URLSearchParams({
+            ...(params.riskLevel ? { riskLevel: params.riskLevel } : {}),
+            ...(params.startDate ? { startDate: params.startDate } : {}),
+            ...(params.endDate ? { endDate: params.endDate } : {}),
+            scope: 'all', // 仅 admin 界面加
+        }).toString();
+
+        const json: any = await http(`/assessments?${qs}`);
+        const list = Array.isArray(json) ? json : (json?.records ?? []);
+
+        const rows = list.map((r: any) => ({
+            id:   r.id ?? r._id ?? r.customId,
+            date: r.date ?? r.createdAt,
+            risk: String(r.risk ?? r.recommendation ?? 'no-referral').toLowerCase().replace(/_/g, '-'),
+        }));
+
+        setRows(rows); // 确保上方 useState<[...]> 是 rows，而非 data/records
+    }
+
+
 
     return (
         <>
             <Header title="Admin Console" />
-            <BackButton />{/* 使用 goback 组件zkx */}
+            <button className="exit-button" onClick={onExitAdmin}>← Exit</button>
 
         <main className="admin-main">
             <div className="admin-wrapper">
@@ -284,12 +324,12 @@ export default function AdminDashboard() {
                             <th>Risk Level</th>
                             <th>Referral</th>
                             <th>Time</th>
-                            <th></th>
+                            {/*<th></th>*/}
                         </tr>
                         </thead>
                         <tbody>
                         {loading ? (
-                            <tr><td colSpan={5} style={{ textAlign: "center", padding: 24 }}>Loading…</td></tr>
+                            <tr><td colSpan={4} style={{ textAlign: "center", padding: 24 }}>Loading…</td></tr>
                         ) : pageRows.length ? (
                             pageRows.map((r) => {
                                 const lvl = RISK_TO_LEVEL[r.risk];
@@ -301,16 +341,11 @@ export default function AdminDashboard() {
                                         </td>
                                         <td className="admin-cell-ref">{RISK_TEXT[r.risk]}</td>
                                         <td className="admin-cell-time">{dOnly(r.date)}</td>
-                                        <td className="admin-cell-actions">
-                                            <button className="view-btn" onClick={() => { /* nav(`/admin/preview/${r.id}`) */ }}>
-                                                View Details
-                                            </button>
-                                        </td>
                                     </tr>
                                 );
                             })
                         ) : (
-                            <tr><td colSpan={5} style={{ textAlign: "center", padding: 24 }}>No Matching Records</td></tr>
+                            <tr><td colSpan={4} style={{ textAlign: "center", padding: 24 }}>No Matching Records</td></tr>
                         )}
                         </tbody>
                     </table>

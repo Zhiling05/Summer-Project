@@ -18,19 +18,10 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 
-// // 创建全局邮件发送器
-// global.transporter = nodemailer.createTransport({
-//   host: process.env.SMTP_HOST,
-//   port: process.env.SMTP_PORT,
-//   secure: false, 
-//   auth: {
-//     user: process.env.SMTP_USER,
-//     pass: process.env.SMTP_PASS,
-//   },
-// });
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.set('trust proxy', 1);
 
 // CORS配置 - 允许前端访问API
 const allowedOrigins = process.env.FRONTEND_ORIGIN 
@@ -73,7 +64,7 @@ mongoose.connect(process.env.MONGO_URI)
 // app.use(cors({ origin: ['https://dipp-frontend.onrender.com'], credentials: true }));
 // app.use(cookieParser());
 
-app.use(cors({ origin: process.env.FRONTEND_ORIGIN.split(','), credentials: true }));
+// app.use(cors({ origin: process.env.FRONTEND_ORIGIN.split(','), credentials: true }));
 app.use(cookieParser());
 
 app.use('/api', authRoutes);                   // /api/guest 等无需鉴权
@@ -92,10 +83,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-// // API Documentation
-// app.get('/api-docs', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'api-docs.html'));
-// });
 
 // 生产环境下提供静态文件服务
 if (process.env.NODE_ENV === 'production') {
