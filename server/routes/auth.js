@@ -42,9 +42,24 @@ router.post('/guest', (req, res) => {
     const gid = req.cookies?.gid || randomUUID();
     const token = jwt.sign({ sub: gid, role: 'guest' }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
+    // res
+    //     .cookie('gid',  gid,   { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd, maxAge:180*24*3600*1000 })
+    //     .cookie('auth', token, { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd, maxAge: 30*24*3600*1000 })
+    //     .json({ ok: true, id: gid });
+    // 修复移动端Cookie问题
     res
-        .cookie('gid',  gid,   { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd, maxAge:180*24*3600*1000 })
-        .cookie('auth', token, { httpOnly:true, sameSite: isProd ? 'none' : 'lax', secure: isProd, maxAge: 30*24*3600*1000 })
+        .cookie('gid', gid, { 
+            httpOnly: true, 
+            sameSite: 'none',  // 改为 'none'
+            secure: true,      // 强制 true（HTTPS必需）
+            maxAge: 180*24*3600*1000 
+        })
+        .cookie('auth', token, { 
+            httpOnly: true, 
+            sameSite: 'none',  // 改为 'none'
+            secure: true,      // 强制 true
+            maxAge: 30*24*3600*1000 
+        })
         .json({ ok: true, id: gid });
 });
 
