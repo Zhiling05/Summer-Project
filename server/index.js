@@ -24,51 +24,21 @@ app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
 
 // CORS配置 - 允许前端访问API
-// const allowedOrigins = process.env.FRONTEND_ORIGIN 
-//   ? process.env.FRONTEND_ORIGIN.split(',') 
-//   : ['http://localhost:5173'];
-
-// app.use(cors({
-//   origin: function(origin, callback) {
-//     if (!origin) return callback(null, true);
-    
-//     if (allowedOrigins.indexOf(origin) === -1) {
-//       const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   },
-//   credentials: true,
-// }));
-
 const allowedOrigins = process.env.FRONTEND_ORIGIN 
   ? process.env.FRONTEND_ORIGIN.split(',') 
-  : ['http://localhost:5173', 'http://localhost:5174'];
-
-// 添加前端部署域名到允许列表
-allowedOrigins.push('https://dipp-frontend.onrender.com');
+  : ['http://localhost:5173'];
 
 app.use(cors({
   origin: function(origin, callback) {
-    console.log('Request origin:', origin); // 调试用
-    
-    // 允许无origin的请求（如移动端应用、Postman等）
     if (!origin) return callback(null, true);
     
-    // 检查是否在允许列表中
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
     }
-    
-    // 对于代理请求，可能origin会是前端域名
-    const msg = `CORS: Origin ${origin} not allowed. Allowed origins: ${allowedOrigins.join(', ')}`;
-    console.warn(msg);
-    return callback(new Error(msg), false);
+    return callback(null, true);
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-  exposedHeaders: ['Set-Cookie']
 }));
 
 // 连接MongoDB数据库
