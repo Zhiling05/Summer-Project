@@ -61,10 +61,10 @@
     transition: transform .15s, box-shadow .15s;
     cursor: default;
 }
-.stats-card:hover {
+/* .stats-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
-}
+} */
 
 /* 风险色标签变量 */
 .stats-card.red    { color: var(--urgent-red); }
