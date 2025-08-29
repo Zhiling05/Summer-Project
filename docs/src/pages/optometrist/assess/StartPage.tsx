@@ -35,7 +35,7 @@ export default function StartPage() {
                         className="continue-button startpage-button"
                         onClick={() => navigate('../questions/Q1')}
                     >
-                        Start now
+                        Start Assessment
                     </button>
                 </div>
             </main>

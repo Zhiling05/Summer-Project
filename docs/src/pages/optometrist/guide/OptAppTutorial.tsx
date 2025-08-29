@@ -34,7 +34,7 @@ export default function OptAppTutorial() {
     assess: [
       {
         title: "Starting an Assessment",
-        text: "The Assess section provides a comprehensive evaluation tool for patients with suspected papilloedema. When you tap 'Start now', you'll begin a series of evidence-based clinical questions. The questionnaire uses adaptive logic - your answers determine which questions appear next, ensuring an efficient and targeted assessment. Questions cover symptoms like headache, visual disturbances, disc appearance, and associated clinical findings. Each question includes clear instructions and multiple-choice or checkbox options."
+        text: "The Assess section provides a comprehensive evaluation tool for patients with suspected papilloedema. When you tap 'Start Assessment', you'll begin a series of evidence-based clinical questions. The questionnaire uses adaptive logic - your answers determine which questions appear next, ensuring an efficient and targeted assessment. Questions cover symptoms like headache, visual disturbances, disc appearance, and associated clinical findings. Each question includes clear instructions and multiple-choice or checkbox options."
       },
       {
         title: "Understanding Results and Referrals",
