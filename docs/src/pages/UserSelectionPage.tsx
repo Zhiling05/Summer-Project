@@ -22,39 +22,19 @@ export default function UserSelectionPage() {
     setPasswordError('');
   };
 
-  // const handlePasswordSubmit = async () => {
-  //   try {
-  //     const res = await fetch('/api/admin/login', {
-  //       method: 'POST',
-  //       credentials: 'include',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ password }),
-  //     });
-  //     if (!res.ok) {
-  //       const e = await res.json().catch(() => ({ error: 'Incorrect password. Please try again.' }));
-  //       setPasswordError(e.error || 'Incorrect password. Please try again.');
-  //       setPassword('');
-  //       return;
-  //     }
-  //     setShowPasswordModal(false);
-  //     navigate('/admin', { state: { from: '/user-selection' } });
-  //   } catch {
-  //     setPasswordError('Invalid password. Please try again.');
-  //   }
-  // };
-    const handlePasswordSubmit = async () => {
-        try {
-            await http('/admin/login', {
-                  method: 'POST',
-                  body: JSON.stringify({ password }),
-                });
-            setShowPasswordModal(false);
-            navigate('/admin', { state: { from: '/user-selection' } });
-          } catch {
-            setPasswordError('Incorrect password. Please try again.');
-            setPassword('');
-          }
-      };
+  const handlePasswordSubmit = async () => {
+      try {
+          await http('/admin/login', {
+                method: 'POST',
+                body: JSON.stringify({ password }),
+              });
+          setShowPasswordModal(false);
+          navigate('/admin', { state: { from: '/user-selection' } });
+        } catch {
+          setPasswordError('Incorrect password. Please try again.');
+          setPassword('');
+        }
+    };
 
 
   const handleModalClose = () => {
@@ -74,7 +54,7 @@ export default function UserSelectionPage() {
 
   const roles = [
     { id: 'gp', title: 'I am a GP', route: '/gp' },
-    { id: 'ophthalmology', title: 'I am an Ophthalmology', route: '/ophthalmology' },
+    { id: 'ophthalmology', title: 'I am an Ophthalmologist', route: '/ophthalmology' },
     { id: 'neurologist', title: 'I am a Neurologist', route: '/neurologist' },
     { id: 'optometrist', title: 'I am an Optometrist', route: '/optometrist/assess/start-page' },
     { id: 'patient', title: 'I am a Patient', route: '/patient' }
