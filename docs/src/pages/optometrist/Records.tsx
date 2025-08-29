@@ -2,10 +2,9 @@ import { useMemo, useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import BackButton from '../../components/BackButton';//zkx
+import BackButton from '../../components/BackButton';
 import "react-datepicker/dist/react-datepicker.css";
-import { parseISO } from "date-fns";
-// import { listAssessments } from "../../api";
+import { parseISO, format } from "date-fns";
 import { http } from "../../api/index";
 
 import Header from "../../components/Header";
@@ -13,9 +12,8 @@ import BottomNav from "../../components/BottomNav";
 import "../../styles/records.css";
 
 import { AssessmentRecommendations } from "../../types/recommendation";
-import Sidebar from '../../components/SideBar'; //zkx：sidebar侧栏
+import Sidebar from '../../components/SideBar'; 
 
-//日历
 import DatePicker, { registerLocale } from "react-datepicker";
 import { enGB } from "date-fns/locale";
 import 'react-datepicker/dist/react-datepicker.css';
@@ -23,14 +21,11 @@ registerLocale('en-GB', enGB);
 
 
 
-
-//定义一个类型安全的级别数组，后面的红黄绿卡片要用
 const LEVELS: Level[] = ["high", "medium", "low"];
 export type Level = "high" | "medium" | "low";
 
 type RiskLabel = NonNullable<AssessmentRecommendations["recommendationType"]>;
 
-/** 把 `"EMERGENCY_DEPARTMENT"` → `"emergency-department"` */
 function normalizeRisk(raw: string): RiskLabel {
   return raw.toLowerCase().replace(/_/g, "-") as RiskLabel;
 }
@@ -58,24 +53,19 @@ const RISK_TO_LEVEL: Record<RiskLabel, Level> = {
   "other-eye-conditions-guidance":    "medium",
 };
 
-const dateOnly = (iso: string) => iso.slice(0, 10);
+const formatDateForDisplay = (iso: string) => {
+  const date = parseISO(iso);
+  return format(date, 'dd-MM-yyyy');
+};
 type FilterValue = Level | "all";
 
-// 分页常量
 const PAGE_SIZE = 20;
 
-/*下面写组件了*/
 export default function Records() {
   const navigate = useNavigate();
-
-  // —— 数据状态 ——
   const [remoteRecs, setRemoteRecs] = useState<NormalizedRecord[]>([]);
   const [loading, setLoading] = useState(false);
-
-  // —— 分页状态 ——
   const [currentPage, setCurrentPage] = useState(1);
-
-  // —— 筛选状态 ——
   const [level, setLevel] = useState<FilterValue>("all");
   const [from, setFrom] = useState<Date | null>(null);
   const [to, setTo] = useState<Date | null>(null);
@@ -83,10 +73,6 @@ export default function Records() {
   // 获取所有数据
   useEffect(() => {
     setLoading(true);
-    // listAssessments() // 移除limit参数，获取所有数据
-    // listAssessments(undefined, { scope: 'own' })
-    //   .then(({ records }) => {
-    //     const normalized = records.map((r: any) => {
     http('/assessments')
        .then((json: any) => {
           const arr = Array.isArray(json) ? json : (json?.records ?? []);
@@ -103,7 +89,7 @@ export default function Records() {
       .finally(() => setLoading(false));
   }, []);
 
-  const all: NormalizedRecord[] = remoteRecs;   // 为空数组时即表示还没有记录
+  const all: NormalizedRecord[] = remoteRecs;  
 
   // —— 统计（基于所有数据） ——
   const stats = useMemo(() => {
@@ -167,8 +153,8 @@ export default function Records() {
   return (
       <>
         <Header title="Records" />
-        <BackButton />{/* 使用 goback 组件zkx */}
-        <Sidebar /> {/* 使用 Sidebar 组件zkx */}
+        <BackButton />
+        <Sidebar /> 
         
         <main className="records-main">
           <div className="records-wrapper">
@@ -269,7 +255,7 @@ export default function Records() {
                     return (
                         <tr key={r.id}>
                           <td>{r.id}</td>
-                          <td>{dateOnly(r.date)}</td>
+                          <td>{formatDateForDisplay(r.date)}</td>
                           <td>
                             <span className={`tag-pill tag-${LEVEL_UI[lvl].css}`}>{LEVEL_UI[lvl].title}</span>
                           </td>
