@@ -17,7 +17,7 @@ export default function OptAppTutorial() {
     home: { name: 'Home', steps: 1 },
     assess: { name: 'Assess', steps: 2 },
     records: { name: 'Records', steps: 2 },
-    guide: { name: 'Guide', steps: 2 }
+    help: { name: 'Help', steps: 2 }
   };
 
   const content: {
@@ -33,32 +33,32 @@ export default function OptAppTutorial() {
     ],
     assess: [
       {
-        title: "Questionnaire Process",
-        text: "Understanding the adaptive questionnaire system and question types."
+        title: "Starting an Assessment",
+        text: "The Assess section provides a comprehensive evaluation tool for patients with suspected papilloedema. When you tap 'Start now', you'll begin a series of evidence-based clinical questions. The questionnaire uses adaptive logic - your answers determine which questions appear next, ensuring an efficient and targeted assessment. Questions cover symptoms like headache, visual disturbances, disc appearance, and associated clinical findings. Each question includes clear instructions and multiple-choice or checkbox options."
       },
       {
-        title: "Viewing Results",
-        text: "How to interpret referral recommendations and next steps."
+        title: "Understanding Results and Referrals",
+        text: "After completing the questionnaire, you'll receive a specific referral recommendation based on the clinical algorithm. Results range from 'No referral required' for low-risk cases to 'Emergency Department immediately' for high-risk presentations. Each result page displays the recommendation clearly with color coding (green for low risk, orange for moderate, red for high risk). You can copy, download, or email the assessment report for your records or to include with referrals. The system automatically saves all completed assessments to your Records."
       }
     ],
     records: [
       {
-        title: "Assessment History",
-        text: "Navigate and review your previous patient assessments."
+        title: "Viewing Assessment History",
+        text: "The Records section displays all your completed patient assessments in a chronological list. Each record shows a unique assessment ID, completion date (in DD-MM-YYYY format), and risk level classification with color-coded tags. The page includes summary statistics showing the total number of high, moderate, and low-risk assessments you've completed. You can click 'View Details' on any record to see the full assessment report and referral recommendation."
       },
       {
-        title: "Managing Records",
-        text: "Search, filter and organize your assessment data."
+        title: "Filtering and Managing Records",
+        text: "Use the filter options to find specific assessments quickly. You can filter by risk level (High, Moderate, Low, or All) and set date ranges using the Start Date and End Date pickers. The system supports pagination when you have many records, showing 20 assessments per page. This makes it easy to review patterns in your assessments, track referral outcomes, and maintain comprehensive documentation for clinical governance and audit purposes."
       }
     ],
-    guide: [
+    help: [
       {
-        title: "Reference Images",
-        text: "Using the diagnostic image gallery for clinical decision support."
+        title: "Reference Image Gallery and Clinical Materials",
+        text: "The Help section provides access to a comprehensive reference image gallery containing examples of papilloedema, pseudopapilloedema, and normal optic disc appearances. You can view fundus photographs alongside corresponding OCT images to better understand disc elevation, crowded discs, drusen, and normal variants. The gallery includes search and filtering capabilities to quickly find specific conditions or anatomical features relevant to your clinical assessment."
       },
       {
-        title: "Help Resources",
-        text: "Accessing tutorials and additional support materials."
+        title: "Clinical Guidelines and Application Support",
+        text: "The Help section also contains detailed tutorials on how to use each feature of the application effectively. Learn best practices for conducting assessments, interpreting results, and managing your patient records. Find troubleshooting guides, frequently asked questions, and tips for integrating the tool into your clinical workflow. You can also access information about the research behind this tool and how to provide feedback to help improve the system for all users."
       }
     ]
   };
@@ -79,7 +79,7 @@ export default function OptAppTutorial() {
     const totalSteps = modules[currentModule as keyof typeof modules].steps;
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
-    } else if (currentModule !== 'guide') {
+    } else if (currentModule !== 'help') {
       const moduleKeys = Object.keys(modules);
       const currentIndex = moduleKeys.indexOf(currentModule);
       if (currentIndex < moduleKeys.length - 1) {
@@ -136,7 +136,7 @@ export default function OptAppTutorial() {
                                     className={`tutorial-tab ${currentModule === moduleName ? 'active' : ''}`}
                                     onClick={() => switchModule(moduleName)}
                                 >
-                                    {moduleName}
+                                    {modules[moduleName as keyof typeof modules].name}
                                 </button>
                             ))}
                         </div>
@@ -146,14 +146,12 @@ export default function OptAppTutorial() {
                         {isOverviewStage && (
                             <div className="tutorial-text">
                                 <p>The optometrist app provides four main functions to support your clinical practice.</p>
-                                <p>Three of these functions will be particularly helpful for your clinical work. The Assess section guides you through questionnaires about patients' symptoms to determine appropriate referral recommendations. The Records section lets you view and manage your assessment history. The Guide section provides access to reference images and tutorials. You can view detailed tutorials for these sections later.</p>
+                                <p>Three of these functions will be particularly helpful for your clinical work. The Assess section guides you through questionnaires about patients' symptoms to determine appropriate referral recommendations. The Records section lets you view and manage your assessment history. The Help section provides access to reference materials and tutorials. You can view detailed tutorials for these sections later.</p>
                                 <p>In addition to these main functions, the app includes additional features designed to enhance your user experience and support your workflow.</p>
                                 <h3>Navigation Bar</h3>
-                                <p>-- insert: picture of navigation buttons</p>
                                 <p>The bottom navigation bar displays four icons, each representing one of the main app functions. You can navigate between any section at any time by tapping the corresponding icon. This allows you to move seamlessly between different parts of the app during your workflow.</p>
                                 <h3>Settings and Information</h3>
-                                <p>-- insert: picture of sidebar</p>
-                                <p>A sidebar on the left side of the page provides access to settings and information about the research team. In the settings section, you can adjust features such as font size and enable dark mode for easier viewing. If you need to contact us, you can find our email address in the About Us section.</p>
+                                <p>A sidebar on the left side of the page provides access to settings and information about the research team. In the settings section, you can adjust features such as font size for easier viewing. If you need to contact us, you can find our email address in the About Us section.</p>
                             </div>
                         )}
 
@@ -178,9 +176,9 @@ export default function OptAppTutorial() {
                         <button
                             onClick={nextStep}
                             className="tutorial-button tutorial-button--next"
-                            disabled={currentModule === 'guide' && currentStep === modules.guide.steps}
+                            disabled={currentModule === 'help' && currentStep === modules.help.steps}
                         >
-                            {isOverviewStage ? 'Next →' : (currentModule === 'guide' && currentStep === modules.guide.steps) ? 'Complete Tutorial' : 'Next →'}
+                            {isOverviewStage ? 'Next →' : (currentModule === 'help' && currentStep === modules.help.steps) ? 'Complete Tutorial' : 'Next →'}
                         </button>
                     </div>
                 </div>

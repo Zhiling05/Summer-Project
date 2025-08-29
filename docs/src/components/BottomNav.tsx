@@ -80,7 +80,7 @@ const BottomNav = () => {
     { label: "Home", to: "/select-role", Icon: HomeIcon },
     { label: "Assess", to: "/optometrist/assess/start-page", Icon: AssessIcon },
     { label: "Records", to: "/optometrist/records", Icon: RecordsIcon },
-    { label: "Guide", to: "/optometrist/guide", Icon: GuideIcon },
+    { label: "Help", to: "/optometrist/guide", Icon: GuideIcon },
   ];
 
   return (
