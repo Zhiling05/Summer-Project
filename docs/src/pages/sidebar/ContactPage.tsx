@@ -41,7 +41,7 @@ export default function ContactPage() {
             <div className="contact-info-item">
               <h3>Website</h3>
               <p>
-                For general inquiries or support, our website is: 
+                Follow what's happening in CAPC study:
                 <a href="https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/" > https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/</a>
               </p>
             </div>
