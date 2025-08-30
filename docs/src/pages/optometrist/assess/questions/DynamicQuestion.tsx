@@ -18,57 +18,6 @@ import { Question, RawOption } from "../../../../types/assessment.ts";
 const normalize = (opt: RawOption): { label: string; value: string } =>
   typeof opt === "string" ? { label: opt, value: opt } : opt;
 
-// // 仅用 meta 提取症状
-// function extractSymptomsFromMeta(
-//     answersArr: Array<{ questionId: string; question: string; answer: string }>,
-//     questionsList: Array<any>
-// ): string[] {
-//   const qMap = new Map(questionsList.map(q => [q.id, q]));
-//   const YES = /^(yes|y)$/i;
-//   const NO  = /^(no|n)$/i;
-
-//   const out: string[] = [];
-
-//   const toArray = (ans: string | string[]) =>
-//       Array.isArray(ans)
-//           ? ans
-//           : String(ans).split(",").map(s => s.trim()).filter(Boolean);
-
-//   for (const a of answersArr) {
-//     const q = qMap.get(a.questionId);
-//     if (!q) continue;
-
-//     const opts: { label: string; value: string; isNone?: boolean }[] =
-//         (q.options || []).map((o: any) =>
-//             typeof o === "string"
-//                 ? { label: o, value: o }
-//                 : (o as { label: string; value: string; isNone?: boolean })
-//         );
-
-//     const isNone = (v: string) =>
-//         !!opts.find((o: { label: string; value: string; isNone?: boolean }) => o.value === v && o.isNone);
-
-//     if (q.type === "single") {
-//       const v = String(a.answer).trim();
-//       if (YES.test(v) && q.meta?.symptomOnYes) {
-//         out.push(q.meta.symptomOnYes);
-//       } else if (!NO.test(v)) {
-//         const mapped = q.meta?.optionSymptomMap?.[v];
-//         if (mapped) out.push(mapped);
-//       }
-//     } else {
-//       for (const v of toArray(a.answer)) {
-//         if (NO.test(v) || isNone(v)) continue;
-//         const mapped = q.meta?.optionSymptomMap?.[v];
-//         if (mapped) out.push(mapped);
-//       }
-//     }
-//   }
-
-//   return Array.from(new Set(out)).filter(Boolean);
-// }
-
-
 /**
  * DynamicQuestion - 动态评估问题组件
  * 
@@ -101,10 +50,20 @@ const DynamicQuestion = () => {
   const [answerHistory, setAnswerHistory] = useState<AnswerHistory>({});
   const [errors, setErrors] = useState<string[]>([]);
 
+  // 首次挂载：从 sessionStorage 恢复答题记录
+      useEffect(() => {
+          const saved = sessionStorage.getItem("answerHistory");
+          if (saved) {
+             try { setAnswerHistory(JSON.parse(saved) as AnswerHistory); } catch {}
+          }
+      }, []);
+
+
   useEffect(() => {
     // 把两个合并了，记录评估开始和记录最后访问的问题
     sessionStorage.setItem("assessStarted", "true");
     sessionStorage.setItem("lastQuestionId", questionId);
+    sessionStorage.removeItem("assessmentComplete"); //一旦进入题目，标记为未完成
   }, [questionId]);
 
    // 现在返回之前的问题能看到之前的回答，而不是必须重新选择
@@ -171,6 +130,8 @@ const DynamicQuestion = () => {
       [currentQuestion.id]: currentAnswer,
     };
     setAnswerHistory(updatedHistory);
+    sessionStorage.setItem("answerHistory", JSON.stringify(updatedHistory));
+
 
     // 4. 确定下一步
     let nextId = getNextId(
@@ -221,10 +182,10 @@ const DynamicQuestion = () => {
   // 临时显示详细错误信息
   const errorMessage = error instanceof Error ? error.message : String(error);
   const errorDetails = `
-错误: ${errorMessage}
-URL: ${window.location.href}
-时间: ${new Date().toISOString()}
-API地址: ${import.meta.env.VITE_API_BASE || '/api'}
+  错误: ${errorMessage}
+  URL: ${window.location.href}
+  时间: ${new Date().toISOString()}
+  API地址: ${import.meta.env.VITE_API_BASE || '/api'}
   `;
   alert(errorDetails);
   console.error('Full error:', error);

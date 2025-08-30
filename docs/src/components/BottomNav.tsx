@@ -1,5 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
 import "../styles/bottomnav.css";
+import PopupWindow from "./PopupWindow";
 
 const HomeIcon = ({ active }: { active: boolean }) => (
   <svg
@@ -70,11 +72,40 @@ const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleNavigation = (path: string) => {
-    if (location.pathname !== path) {
-      navigate(path);
-    }
-  };
+
+  // 是否处于“进行中的评估题目页”
+      const inAssess = location.pathname.startsWith("/optometrist/assess/");
+      const onResult = location.pathname.includes("/optometrist/assess/recommendations");
+      const completed = sessionStorage.getItem("assessmentComplete") === "true";
+      const inOngoingAssess = inAssess && !onResult && !completed;
+
+   // 离开拦截弹窗状态
+       const [leaveOpen, setLeaveOpen] = useState(false);
+   const [target, setTarget] = useState<string | null>(null);
+
+       // 拦截：从评估页跳到评估外页面 → 弹窗
+           const guardNav = (to: string) => (e: React.MouseEvent) => {
+       const toIsAssess = to.startsWith("/optometrist/assess/");
+       const isLeavingAssess = inOngoingAssess && !toIsAssess;
+       if (isLeavingAssess) {
+           e.preventDefault();
+           setTarget(to);
+           setLeaveOpen(true);
+           return;
+         }
+       if (location.pathname !== to) navigate(to);
+     };
+       const keepProgress = () => {
+       setLeaveOpen(false);
+       if (target) navigate(target);
+       };
+   const discardProgress = () => {
+       sessionStorage.removeItem("assessStarted");
+       sessionStorage.removeItem("lastQuestionId");
+       sessionStorage.removeItem("assessmentComplete");
+       setLeaveOpen(false);
+       if (target) navigate(target);
+     };
 
   const items = [
     { label: "Home", to: "/select-role", Icon: HomeIcon },
@@ -84,6 +115,7 @@ const BottomNav = () => {
   ];
 
   return (
+    <>
     <nav className="bottom-nav">
       {items.map(({ label, to, Icon }) => {
         // 特殊处理 Assess 按钮的激活状态判断
@@ -100,7 +132,8 @@ const BottomNav = () => {
           <button
             key={to}
             className={`nav-item${active ? " active" : ""}`}
-            onClick={() => handleNavigation(to)}
+            // onClick={() => handleNavigation(to)}
+            onClick={guardNav(to)}
             style={{ position: "relative" }}
           >
             <Icon active={active} />
@@ -108,7 +141,18 @@ const BottomNav = () => {
           </button>
         );
       })}
-    </nav>
+      </nav>
+        <PopupWindow
+        open={leaveOpen}
+        onContinue={keepProgress}     // “保留进度”
+        onRestart={discardProgress}   // “不保留进度”
+        onClose={() => setLeaveOpen(false)}
+        title="Leave assessment?"
+        description="Do you want to keep your progress?"
+        continueText="Save"
+        restartText="Disgard"
+        />
+    </>
   );
 };
 

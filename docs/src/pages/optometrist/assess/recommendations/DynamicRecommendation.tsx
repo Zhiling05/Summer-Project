@@ -88,6 +88,7 @@ const ReportPreview: React.FC<{
     </pre>
   );
 };
+
 function CollapsibleCard({
   title,
   defaultOpen = false,
@@ -109,56 +110,13 @@ function CollapsibleCard({
   );
 }
 
-// /* ---------- 邮件发送模态框 ---------- */
-// const EmailModal: React.FC<{
-//   open: boolean;
-//   loading: boolean;
-//   onClose: () => void;
-//   onSend: (email: string) => void;
-// }> = ({ open, loading, onClose, onSend }) => {
-//   if (!open) return null;
-
-//   const [email, setEmail] = React.useState("");
-
-//   return (
-//     <div className="email-modal-overlay" onClick={onClose}>
-//       <div
-//         className="email-modal"
-//         onClick={(e) => e.stopPropagation()}
-//       >
-//         <h3 className="email-modal__title">Send report via email</h3>
-
-//         <input
-//           type="email"
-//           placeholder="name@example.com"
-//           className="email-modal__input"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//         />
-
-//         <div className="email-modal__actions">
-//           <button
-//             className="btn-primary"
-//             disabled={loading || !email}
-//             onClick={() => onSend(email)}
-//           >
-//             {loading ? "Sending…" : "Send"}
-//           </button>
-//           <button className="btn-outline" onClick={onClose}>
-//             Cancel
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
 /* =============================================================== */
 
 const DynamicRecommendation: React.FC = () => {
   useEffect(() => {
     sessionStorage.removeItem('assessStarted');
     sessionStorage.removeItem('lastQuestionId');
+    sessionStorage.removeItem('answerHistory');
     sessionStorage.removeItem('assessmentComplete'); // 保守清掉旧值
   }, []);
 
