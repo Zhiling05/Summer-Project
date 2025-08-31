@@ -118,6 +118,8 @@ const DynamicRecommendation: React.FC = () => {
     sessionStorage.removeItem('lastQuestionId');
     sessionStorage.removeItem('answerHistory');
     sessionStorage.removeItem('assessmentComplete'); // 保守清掉旧值
+    sessionStorage.removeItem('questionTrail'); // DynamicRecommendation 里
+
   }, []);
 
   /* —— 路由参数 —— */

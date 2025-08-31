@@ -198,6 +198,20 @@ const DynamicQuestion = () => {
     navigate(`/optometrist/assess/questions/${nextId}`);
   };
 
+
+
+  // 记录题目访问轨迹，用于 BackButton 智能回退
+  useEffect(() => {
+    const raw = sessionStorage.getItem('questionTrail') || '[]';
+    let trail: string[] = [];
+    try { trail = JSON.parse(raw); } catch {}
+    if (trail[trail.length - 1] !== questionId) {
+      trail.push(questionId);
+      sessionStorage.setItem('questionTrail', JSON.stringify(trail));
+    }
+  }, [questionId]);
+
+
   // ===== 错误状态处理 =====
   /* ——— 题目不存在 —— */
   if (!currentQuestion)
