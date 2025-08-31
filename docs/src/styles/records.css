@@ -29,10 +29,10 @@
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-body);
-    margin: 100px 0 var(--space-xl) 0; /* 桌面 100px */
+    margin: 100px 0 var(--space-xl) 0;
 }
 @media (max-width: 480px) {
-    .records-title { margin-top: 80px; }       /* 手机 80px */
+    .records-title { margin-top: 80px; }
 }
 
 /* -----------------------------------------------------------

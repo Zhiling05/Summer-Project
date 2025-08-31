@@ -74,10 +74,15 @@ const BottomNav = () => {
 
 
   // 是否处于“进行中的评估题目页”
-      const inAssess = location.pathname.startsWith("/optometrist/assess/");
-      const onResult = location.pathname.includes("/optometrist/assess/recommendations");
-      const completed = sessionStorage.getItem("assessmentComplete") === "true";
-      const inOngoingAssess = inAssess && !onResult && !completed;
+  //     const inAssess = location.pathname.startsWith("/optometrist/assess/");
+  //     const onResult = location.pathname.includes("/optometrist/assess/recommendations");
+  //     const completed = sessionStorage.getItem("assessmentComplete") === "true";
+  //     const inOngoingAssess = inAssess && !onResult && !completed;
+    const onQuestions = location.pathname.includes("/optometrist/assess/questions/");
+    const completed   = sessionStorage.getItem("assessmentComplete") === "true";
+    const started     = sessionStorage.getItem("assessStarted") === "true";
+    const hasLast     = !!sessionStorage.getItem("lastQuestionId");
+    const inOngoingAssess = started && hasLast && onQuestions && !completed;
 
    // 离开拦截弹窗状态
        const [leaveOpen, setLeaveOpen] = useState(false);
