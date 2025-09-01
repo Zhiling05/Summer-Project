@@ -1,7 +1,3 @@
-/* docs/src/styles/header.css 
-
-/* —— 统一header样式 —— */
-
 body, html {
   margin: 0;
   padding: 0;
@@ -14,13 +10,13 @@ body, html {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 10; /* 保证 header 在最上层 */
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: var(--space-m);
 }
-/* Logo与汉堡菜单区域 */
+
 .nhs-header__left {
   display: flex;
   align-items: center;
@@ -35,15 +31,15 @@ body, html {
   width: auto;
   margin-right: 20%;
 }
-/* 中间标题区域 */
+
 .nhs-header__center {
   flex: 2;
   color: var(--text-inverse);
   font-size: 1.125rem;
   font-weight: 600;
-  text-align: right; /* 文本已设置为右对齐 */
-  display: block; /* 默认显示标题 */
-  margin-left: 40rem; /* 增加右边距，可以根据需要调整这个值 zkx */
+  text-align: right;
+  display: block;
+  margin-left: 40rem;
 }
 
 .nhs-header__right {
@@ -62,10 +58,9 @@ body, html {
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-right: 10%; /* 增加右边距 zkx*/
+  margin-right: 10%;
 }
 
-/* —— 移动端适配 —— */
 @media (max-width: 640px) {
   .nhs-logo,
   .dipp-logo,
@@ -74,20 +69,18 @@ body, html {
   }
 
   .nhs-header__center {
-    display: none; /* 移动端隐藏标题 */
-    margin-right: 80%; /* 增加右边距 zkx*/
+    display: none;
+    margin-right: 80%;
   }
 
-  
-  /* 汉堡按钮 */
   .hamburger-btn {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    z-index: 9999; /* 提高z-index，确保汉堡按钮可点击 */
-    position: absolute; /* 确保汉堡按钮固定在顶部栏 */
+    z-index: 9999;
+    position: absolute;
     top: 16px;
-    left: 16px; /* 确保汉堡按钮在屏幕左上角 */
+    left: 16px;
   }
 
   .hamburger-btn .bar {
@@ -96,30 +89,27 @@ body, html {
     background-color: white;
   }
 
-  /* 新增返回按钮容器样式 */
   .back-container {
     position: fixed;
-    top: 70px; /* 根据header高度调整 */
+    top: 70px;
     left: 20px;
-    z-index: 9; /* 比header低一层 */
+    z-index: 9;
     background-color: transparent;
     padding: 10px;
   }
   
-  /* 返回按钮仍然显示，并且为箭头形态 */
   .nhs-header__back {
-    display: inline-flex; /* 确保按钮显示 */
-    margin-right: 20%; /* 增加右边距 zkx*/
+    display: inline-flex;
+    margin-right: 20%;
   }
 
   .nhs-header__back .back-arrow {
-    font-size: 1.2rem; /* 显示为三角形箭头 */
-    margin-right: 20%; /* 增加右边距 zkx*/
+    font-size: 1.2rem;
+    margin-right: 20%;
   }
 
-  /* logo与汉堡菜单在一行 */
   .nhs-header__left,
   .nhs-header__right {
-    flex: 0 1 auto; /* 自适应，不占用太多空间 */
+    flex: 0 1 auto;
   }
 }
