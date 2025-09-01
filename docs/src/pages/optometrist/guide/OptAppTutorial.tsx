@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';//zkx
+import { useNavigate } from 'react-router-dom';
 import Header from '../../../components/Header';
 import BottomNav from '../../../components/BottomNav';
 import BackButton from '../../../components/BackButton';
 import '../../../styles/opt-app-tutorial.css';
 
-
+/**
+ * OptAppTutorial - Interactive tutorial for optometrists
+ * - Provides overview and step-by-step guidance for app features
+ * - Covers Home, Assess, Records, and Help modules
+ */
 export default function OptAppTutorial() {
   const [isOverviewStage, setIsOverviewStage] = useState(true);
   const [currentModule, setCurrentModule] = useState('home');
   const [currentStep, setCurrentStep] = useState(1);
 
-  const navigate = useNavigate();//zkx
+  const navigate = useNavigate();
 
   const modules = {
     home: { name: 'Home', steps: 1 },
@@ -21,10 +25,7 @@ export default function OptAppTutorial() {
   };
 
   const content: {
-    [key: string]: Array<{
-      title?: string;
-      text: string;
-    }>;
+    [key: string]: Array<{ title?: string; text: string }>;
   } = {
     home: [
       {
@@ -63,19 +64,19 @@ export default function OptAppTutorial() {
     ]
   };
 
+  /** Switch between tutorial modules */
   const switchModule = (moduleName: string) => {
     if (isOverviewStage) return;
-    
     setCurrentModule(moduleName);
     setCurrentStep(1);
   };
 
+  /** Go to next step or next module */
   const nextStep = () => {
     if (isOverviewStage) {
       setIsOverviewStage(false);
       return;
     }
-    
     const totalSteps = modules[currentModule as keyof typeof modules].steps;
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
@@ -86,14 +87,12 @@ export default function OptAppTutorial() {
         setCurrentModule(moduleKeys[currentIndex + 1]);
         setCurrentStep(1);
       }
-    } else {
-      // Tutorial completed - no action
     }
   };
 
+  /** Go to previous step or back to overview */
   const prevStep = () => {
     if (isOverviewStage) return;
-    
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     } else if (currentModule !== 'home') {
@@ -105,14 +104,14 @@ export default function OptAppTutorial() {
         setCurrentStep(modules[prevModule as keyof typeof modules].steps);
       }
     } else {
-      // 如果在 home 模块的第一步，返回到概述页面
+      // At first step of home module → return to overview
       setIsOverviewStage(true);
     }
   };
 
+  /** Get current tutorial content */
   const getCurrentContent = () => {
     if (isOverviewStage) return null;
-    
     const moduleContent = content[currentModule as keyof typeof content];
     return moduleContent[currentStep - 1];
   };
@@ -121,70 +120,74 @@ export default function OptAppTutorial() {
 
   return (
     <>
-      <Header title="App Tutorial for Optometrists" />
+      <Header title="App Tutorial" />
       <BackButton className="tutorial-back-button" />
 
-            <div className="tutorial-container">
-                <div className="tutorial-inner">
-                    <h1 className="tutorial-h1">App Tutorial for Optometrists</h1>
+      <div className="tutorial-container">
+        <div className="tutorial-inner">
+          <h1 className="tutorial-h1">App Tutorial for Optometrists</h1>
 
-                    {!isOverviewStage && (
-                        <div className="tutorial-tabs">
-                            {Object.keys(modules).map((moduleName) => (
-                                <button
-                                    key={moduleName}
-                                    className={`tutorial-tab ${currentModule === moduleName ? 'active' : ''}`}
-                                    onClick={() => switchModule(moduleName)}
-                                >
-                                    {modules[moduleName as keyof typeof modules].name}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-                    <div className="tutorial-content">
-                        {isOverviewStage && (
-                            <div className="tutorial-text">
-                                <p>The optometrist app provides four main functions to support your clinical practice.</p>
-                                <p>Three of these functions will be particularly helpful for your clinical work. The Assess section guides you through questionnaires about patients' symptoms to determine appropriate referral recommendations. The Records section lets you view and manage your assessment history. The Help section provides access to reference materials and tutorials. You can view detailed tutorials for these sections later.</p>
-                                <p>In addition to these main functions, the app includes additional features designed to enhance your user experience and support your workflow.</p>
-                                <h3>Navigation Bar</h3>
-                                <p>The bottom navigation bar displays four icons, each representing one of the main app functions. You can navigate between any section at any time by tapping the corresponding icon. This allows you to move seamlessly between different parts of the app during your workflow.</p>
-                                <h3>Settings and Information</h3>
-                                <p>A sidebar on the left side of the page provides access to settings and information about the research team. In the settings section, you can adjust features such as font size for easier viewing. If you need to contact us, you can find our email address in the About Us section.</p>
-                            </div>
-                        )}
-
-                        {!isOverviewStage && currentContent && (
-                            <div>
-                                {currentContent.title && <h2 className="tutorial-h2">{currentContent.title}</h2>}
-                                <div className="tutorial-text">
-                                    <p>{currentContent.text}</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="tutorial-buttons">
-                        <button
-                            onClick={prevStep}
-                            className="tutorial-button tutorial-button--prev"
-                            disabled={isOverviewStage}
-                        >
-                            ← Previous
-                        </button>
-                        <button
-                            onClick={nextStep}
-                            className="tutorial-button tutorial-button--next"
-                            disabled={currentModule === 'help' && currentStep === modules.help.steps}
-                        >
-                            {isOverviewStage ? 'Next →' : (currentModule === 'help' && currentStep === modules.help.steps) ? 'Complete Tutorial' : 'Next →'}
-                        </button>
-                    </div>
-                </div>
+          {!isOverviewStage && (
+            <div className="tutorial-tabs">
+              {Object.keys(modules).map((moduleName) => (
+                <button
+                  key={moduleName}
+                  className={`tutorial-tab ${currentModule === moduleName ? 'active' : ''}`}
+                  onClick={() => switchModule(moduleName)}
+                >
+                  {modules[moduleName as keyof typeof modules].name}
+                </button>
+              ))}
             </div>
+          )}
 
-            <BottomNav />
-        </>
-    );
+          <div className="tutorial-content">
+            {isOverviewStage && (
+              <div className="tutorial-text">
+                <p>The optometrist app provides four main functions to support your clinical practice.</p>
+                <p>Three of these functions will be particularly helpful for your clinical work. The Assess section guides you through questionnaires about patients' symptoms to determine appropriate referral recommendations. The Records section lets you view and manage your assessment history. The Help section provides access to reference materials and tutorials.</p>
+                <p>In addition to these main functions, the app includes additional features designed to enhance your user experience and support your workflow.</p>
+                <h3>Navigation Bar</h3>
+                <p>The bottom navigation bar displays four icons, each representing one of the main app functions. You can navigate between any section at any time by tapping the corresponding icon. This allows you to move seamlessly between different parts of the app during your workflow.</p>
+                <h3>Settings and Information</h3>
+                <p>A sidebar on the left side of the page provides access to settings and information about the research team. In the settings section, you can adjust features such as font size for easier viewing. If you need to contact us, you can find our email address in the About Us section.</p>
+              </div>
+            )}
+
+            {!isOverviewStage && currentContent && (
+              <div>
+                {currentContent.title && <h2 className="tutorial-h2">{currentContent.title}</h2>}
+                <div className="tutorial-text">
+                  <p>{currentContent.text}</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="tutorial-buttons">
+            <button
+              onClick={prevStep}
+              className="tutorial-button tutorial-button--prev"
+              disabled={isOverviewStage}
+            >
+              ← Previous
+            </button>
+            <button
+              onClick={nextStep}
+              className="tutorial-button tutorial-button--next"
+              disabled={currentModule === 'help' && currentStep === modules.help.steps}
+            >
+              {isOverviewStage
+                ? 'Next →'
+                : (currentModule === 'help' && currentStep === modules.help.steps)
+                ? 'Complete Tutorial'
+                : 'Next →'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <BottomNav />
+    </>
+  );
 }
