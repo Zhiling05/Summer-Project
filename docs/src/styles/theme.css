@@ -265,7 +265,7 @@ body {
   justify-content: center;              /* question-box 垂直居中 */
   /*  顶部留 var(--space-xl)，底部给导航让路  */
   padding: var(--space-xl) 0 calc(64px + 128px);
-  margin-top: 80px; /* zkx加，新增上边距，放置 go back*/
+  margin-top: var(--space-l); 
 }
 
 /* —— 内容栅格 —— */
@@ -302,9 +302,10 @@ padding-bottom: calc(64px + 16px);
   
   /* 使按钮相对于父容器定位 */
   position: relative;
-  top: 40%;   /* 距离父容器顶部 10px */
-  left: 3%;  /* 距离父容器左边 10px */
+  top: 0;   /* 距离父容器顶部 10px */
+  left: 0;  /* 距离父容器左边 10px */
   z-index: 10; /* 确保按钮位于其他内容之上 */
+  margin-top: var(--space-l); 
 }
 
 .back-button:hover,
@@ -318,9 +319,10 @@ padding-bottom: calc(64px + 16px);
 @media (max-width: 640px) {
   .back-button {
     position: relative;
-    top: 40%;    /* 更小的顶部百分比 */
-    left: 10%;   /* 更小的左侧百分比 */
-    font-size: 1.4rem; /* 进一步缩小字体大小 */
+    top: 0;    /* 取消百分比定位 */
+    left: 0;
+    font-size: 1.4rem;
+    margin-top: var(--space-m); /* 小屏幕用更小的间距 */
   }
 }
 
@@ -641,4 +643,24 @@ img {
   color: var(--text-inverse);
   border-color: var(--core-blue);
   outline: none;
+}
+/* ================================
+   NHS 风格小号 Go Back 按钮
+   ================================ */
+.back-button.small {
+  font-size: 0.85rem;         /* 小字号，接近 NHS 链接风格 */
+  padding: 2px 8px;           /* 内边距很小 */
+  border: 1px solid var(--core-blue); 
+  border-radius: 4px;
+  background: transparent;
+  color: var(--core-blue);
+  cursor: pointer;
+
+  margin-top: 0;                /* 紧贴 Header */
+  margin-bottom: var(--space-s); /* 按钮与正文之间小间距 */
+}
+
+.back-button.small:hover {
+  background: var(--core-blue);
+  color: var(--text-inverse);
 }

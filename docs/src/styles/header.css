@@ -46,7 +46,6 @@ body, html {
   margin-left: 40rem; /* 增加右边距，可以根据需要调整这个值 zkx */
 }
 
-/* 返回按钮区域 */
 .nhs-header__right {
   display: flex;
   justify-content: flex-end;

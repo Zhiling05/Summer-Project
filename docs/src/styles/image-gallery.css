@@ -24,15 +24,11 @@
     color: var(--text-body);
     font-size: 2rem;
     font-weight: 700;
-    margin: 100px 0 var(--space-l) 0;
+    margin: var(--space-xs) 0 var(--space-l) 0; /* 调整顶部间距，与 go back 按钮保持一致 */
 }
 @media (max-width: 480px) {
-    .gallery-heading { margin-top: 80px; }  /* 手机 */
-}
-
-@media (max-width: 480px) {
-    .gallery-heading {
-        margin-top: 80px; /* 手机端与 records 一致 */
+    .gallery-heading { 
+        margin: var(--space-xs) 0 var(--space-l) 0; /* 手机端也保持一致的间距 */
     }
 }
 
@@ -120,38 +116,4 @@
     color: var(--border-grey);
     z-index: 1;
     pointer-events: none;
-}
-
-
-
-/* 返回按钮样式 */
-.tutorial-back-button {
-    background: transparent;
-    border: none;
-    color: var(--core-blue);
-    font-size: 1.8rem;
-    padding: 6px 14px;
-    margin: var(--space-l) 0 var(--space-m);
-    border-radius: var(--radius-s);
-    cursor: pointer;
-    transition: all .15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: -150px; /* 添加左边距 */
-    position: relative;
-}
-
-.back-button:hover,
-.back-button:focus-visible {
-  background: var(--core-blue);
-  color: var(--text-inverse);
-  outline: none;
-}
-
-@media (max-width: 480px) {
-    .tutorial-back-button {
-        font-size: 1.2rem;
-        margin-left: 5px;
-    }
 }

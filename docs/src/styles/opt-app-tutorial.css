@@ -6,10 +6,10 @@
     margin-left: calc(-50vw + 50%);
     min-height: calc(100vh - 120px);
     box-sizing: border-box;
-    padding: 40px 24px 80px 24px;
+    padding: var(--space-s) 24px 80px 24px;
     display: flex;
     flex-direction: column; /* 改为垂直方向，保持响应式布局 */
-    justify-content: center;
+    justify-content: flex-start; /* 改为 flex-start 让内容从顶部开始 */
     align-items: flex-start; /* 改为 flex-start 让内容靠左 */
     position: relative;  /*zkx8.12关键：为 back-button 提供定位参考 */
 }
@@ -26,7 +26,7 @@
     color:var(--text-body);
     font-size: 2rem;
     font-weight: 700;
-    margin:  100px 0 var(--space-l) 0;;
+    margin: var(--space-xs) 0 var(--space-xs) 0; /* 调整顶部间距，与 go back 按钮保持一致 */
 }
 
 .tutorial-tabs {
@@ -143,39 +143,4 @@
     margin: 24px 0 12px 0;
 }
 
-
 .tutorial-button:disabled { opacity: .5; cursor:not-allowed; }
-
-/* optAppTutorial.css */
-
-/* 返回按钮样式 */
-.tutorial-back-button {
-    background: transparent;
-    border: none;
-    color: var(--core-blue);
-    font-size: 1.8rem;
-    padding: 6px 14px;
-    margin: var(--space-l) 0 var(--space-m);
-    border-radius: var(--radius-s);
-    cursor: pointer;
-    transition: all .15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: -150px; /* 添加左边距 */
-    position: relative;
-}
-
-.back-button:hover,
-.back-button:focus-visible {
-  background: var(--core-blue);
-  color: var(--text-inverse);
-  outline: none;
-}
-
-@media (max-width: 480px) {
-    .tutorial-back-button {
-        font-size: 1.2rem;
-        margin-left: 5px;
-    }
-}

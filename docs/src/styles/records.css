@@ -29,10 +29,10 @@
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-body);
-    margin: 100px 0 var(--space-xl) 0;
+    margin: var(--space-xl) 0 var(--space-xl) 0;
 }
 @media (max-width: 480px) {
-    .records-title { margin-top: 80px; }
+    .records-title { margin-top: var(--space-l); }
 }
 
 /* -----------------------------------------------------------
@@ -237,7 +237,6 @@
 }
 
 .records-title {
-    margin-top: 150px; /* 原有 */
     margin-bottom: var(--space-xl); /* ✅ 新增：标题和统计卡之间的间距 */
 }
 
