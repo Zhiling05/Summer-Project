@@ -20,13 +20,12 @@ afterEach(() => {
   mockNavigate.mockClear();
 });
 
-// 确保这个文件一定有 1 个可执行用例
 test("smoke: the test runner is alive", () => {
   expect(true).toBe(true);
 });
 
 describe("GuideHome", () => {
-  test("渲染标题和两张卡片", () => {
+  test("Render the title and two cards", () => {
     render(
       <MemoryRouter>
         <GuideHome />
@@ -38,7 +37,7 @@ describe("GuideHome", () => {
     expect(screen.getByTestId("bottom-nav")).toBeInTheDocument();
   });
 
-  test("点击图片库卡片跳转 gallery", async () => {
+  test("Click the image gallery card to jump gallery", async () => {
     render(
       <MemoryRouter>
         <GuideHome />
@@ -48,7 +47,7 @@ describe("GuideHome", () => {
     expect(mockNavigate).toHaveBeenCalledWith("gallery");
   });
 
-  test("点击教程卡片跳转 tutorial", async () => {
+  test("Click tutorial card to jump tutorial", async () => {
     render(
       <MemoryRouter>
         <GuideHome />
