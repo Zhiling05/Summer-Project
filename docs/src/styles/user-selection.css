@@ -2,13 +2,13 @@
     min-height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
-    padding-top: var(--space-s); /* 桌面端 */
+    padding-top: var(--space-s); 
     padding-bottom: 100px;
 }
 
 @media (max-width: 480px) {
     .user-selection-page {
-        padding-top: var(--space-m); /* 手机端 */
+        padding-top: var(--space-m);
         padding-bottom: 20px;
     }
 }
