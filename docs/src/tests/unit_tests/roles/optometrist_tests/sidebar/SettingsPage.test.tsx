@@ -6,7 +6,6 @@ import SettingsPage from "../../../../../pages/sidebar/SettingsPage";
 
 const mockSetFontSize = jest.fn();
 
-// ⚠️ 注意：这里的 jest.mock 路径要从“测试文件”出发
 jest.mock(
   "../../../../../components/Header",
   () =>
@@ -21,8 +20,7 @@ jest.mock(
       <div data-testid="back-btn">Go back</div>
 );
 
-// 用项目中真实文件路径去 mock FontSizeContext，
-// 并把 setFontSize 绑定到上面的 mockSetFontSize
+// mock FontSizeContext，
 jest.mock(
   "../../../../../pages/sidebar/FontSizeContext",
   () => ({
@@ -34,7 +32,7 @@ jest.mock(
 );
 
 describe("SettingsPage", () => {
-  test("初始渲染", () => {
+  test("render", () => {
     render(
       <MemoryRouter>
         <SettingsPage />
@@ -68,7 +66,7 @@ describe("SettingsPage", () => {
     ).toBeInTheDocument();
   });
 
-  test("点击按钮调用 setFontSize", async () => {
+  test("click button to use setFontSize", async () => {
     const user = userEvent.setup();
     render(
       <MemoryRouter>
