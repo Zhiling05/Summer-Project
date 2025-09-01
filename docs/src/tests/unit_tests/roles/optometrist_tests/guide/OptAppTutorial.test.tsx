@@ -14,7 +14,7 @@ jest.mock("../../../../../components/BackButton", () => () => (
 ));
 
 describe("OptAppTutorial", () => {
-  test("初始渲染", () => {
+  test("Initial rendering", () => {
     render(
       <MemoryRouter>
         <OptAppTutorial />
@@ -26,46 +26,44 @@ describe("OptAppTutorial", () => {
     expect(
       screen.getByText(/The optometrist app provides/i)
     ).toBeInTheDocument();
-    // 模块标签不显示
+    // Module labels are not displayed
     expect(screen.queryByRole("button", { name: /home/i })).not.toBeInTheDocument();
-    // Prev 按钮禁用
+    // Prev button is disabled
     expect(screen.getByRole("button", { name: /previous/i })).toBeDisabled();
   });
 
-  test("点击 Next 进入", async () => {
+  test("Click Next to enter", async () => {
     render(
       <MemoryRouter>
         <OptAppTutorial />
       </MemoryRouter>
     );
     await userEvent.click(screen.getByRole("button", { name: /next/i }));
-    // 显示模块标签
+    // Display module labels
     expect(screen.getByRole("button", { name: /home/i })).toBeInTheDocument();
-    // 内容来自 home 模块
+    // from home module
     expect(
       screen.getByText(/you will return to the role selection/i)
     ).toBeInTheDocument();
   });
 
-  test("模块内切换步骤和模块", async () => {
+  test("Switch steps and modules within the module", async () => {
     render(
       <MemoryRouter>
         <OptAppTutorial />
       </MemoryRouter>
     );
-    // 进入教程
     await userEvent.click(screen.getByRole("button", { name: /next/i }));
-    // 切换到 assess 模块标签
     await userEvent.click(screen.getByRole("button", { name: /assess/i }));
     expect(
       screen.getByText(/Questionnaire Process/i)
     ).toBeInTheDocument();
-    // Next 到第二步
+    // Next to step 2
     await userEvent.click(screen.getByRole("button", { name: /next/i }));
     expect(
       screen.getByText(/Viewing Results/i)
     ).toBeInTheDocument();
-    // Prev 返回第一步
+    // Prev to step 1
     await userEvent.click(screen.getByRole("button", { name: /previous/i }));
     expect(
       screen.getByText(/Questionnaire Process/i)
@@ -78,9 +76,9 @@ describe("OptAppTutorial", () => {
         <OptAppTutorial />
       </MemoryRouter>
     );
-    // 进入教程
+    // begin the tutorial
     await userEvent.click(screen.getByRole("button", { name: /next/i }));
-    // 快速点击 Next 直到 guide 模块最后一步
+    //click next to the last step of the tutorial 
     const nextBtn = screen.getByRole("button", { name: /next/i });
     for (let i = 0; i < 6; i++) {
       await userEvent.click(nextBtn);
