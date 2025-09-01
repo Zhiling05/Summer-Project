@@ -1,23 +1,18 @@
-/* ===== Tutorial overlay (uses theme.css variables) ===== */
-
-/* 覆盖根层 */
 .ag-root {
   position: fixed;
   inset: 0;
   z-index: 99999;
 }
 
-/* 镂空遮罩：外暗内透 */
 .ag-mask {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-/* 气泡卡片 */
 .ag-bubble {
   position: absolute;
-  width: 380px;                 /* 统一更大尺寸 */
+  width: 380px;
   min-height: 150px;
   background: var(--lighter-base);
   color: var(--text-body);
@@ -28,7 +23,6 @@
   line-height: 1.6;
 }
 
-/* 右上角 Skip（蓝） */
 .ag-bubble .ag-skip {
   position: absolute;
   top: 10px;
@@ -42,22 +36,19 @@
   padding: 4px 6px;
 }
 
-/* 正文文案 */
 .ag-desc {
   color: var(--text-body);
   font-size: 1rem;
-  margin-top: 29px;     /* 与 Skip 拉开 */
-  margin-bottom: 20px;  /* 与按钮区拉开 */
+  margin-top: 29px;
+  margin-bottom: 20px;
 }
 
-/* 按钮区 */
 .ag-actions {
   display: flex;
   align-items: center;
-  gap: 18px;            /* Prev/Next 间距更大 */
+  gap: 18px;
 }
 
-/* 普通按钮（灰） */
 .ag-btn {
   border: 1px solid var(--border-grey);
   background: #e0e0e0;
@@ -66,18 +57,17 @@
   padding: 8px 14px;
   font-size: 1rem;
   cursor: pointer;
-  width: 120px;  /* Set width */
-  height: 40px;  /* Set height */
+  width: 120px;
+  height: 40px;
 }
 .ag-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* 主按钮（蓝、无边框） */
 .ag-btn.primary {
   background: var(--core-blue);
   border: none;
   color: var(--text-body);
-  width: 120px;  /* Set width */
-  height: 40px;  /* Set height */
+  width: 120px;
+  height: 40px;
 }
 .ag-btn.primary:focus { outline: none; }
 .ag-btn.primary:focus-visible {
@@ -85,7 +75,6 @@
   outline-offset: 2px;
 }
 
-/* 气泡“小尾巴” */
 .ag-bubble::after {
   content: "";
   position: absolute;
@@ -94,79 +83,69 @@
   filter: drop-shadow(0 2px 2px rgba(215, 213, 213, 0.12));
 }
 
-/* placement = top => 尾巴朝下（卡片在目标上方） */
 .ag-top::after {
   bottom: -10px; left: 50%; transform: translateX(-50%);
   border-width: 10px 10px 0 10px;
   border-color: var(--lighter-base) transparent transparent transparent;
 }
 
-/* placement = bottom => 尾巴朝上（卡片在目标下方），偏左 */
 .ag-bottom::after {
   top: -10px; left: 20px;
   border-width: 0 10px 10px 10px;
   border-color: transparent transparent var(--lighter-base) transparent;
 }
 
-/* placement = left => 我们也用朝上、偏左的小尾巴 */
 .ag-left::after {
-  top: -10px; left: 20px;         /* 顶部偏左 */
-  border-width: 0 10px 10px 10px; /* 朝上 */
+  top: -10px; left: 20px;
+  border-width: 0 10px 10px 10px;
   border-color: transparent transparent var(--lighter-base) transparent;
 }
 
-/* placement = right => 尾巴在左中（朝右） */
 .ag-right::after {
   left: -10px; top: 50%; transform: translateY(-50%) rotate(-90deg);
   border-width: 10px 10px 0 10px;
   border-color: var(--lighter-base) transparent transparent transparent;
 }
 
-/* —— 适配暗色：遮罩颜色用变量 —— */
 @media (prefers-color-scheme: dark) {
   .ag-bubble {
-   
-    background: var(--page-base); /* 使用深色模式的背景 */
-    color: var(--text-body);    /* 使用深色模式下的文字颜色 */
+    background: var(--page-base);
+    color: var(--text-body);
   }
 
   .ag-desc {
-    color: var(--text-body);  /* 使用深色模式下的文字颜色 */
+    color: var(--text-body);
   }
 
   .ag-skip {
-    color: var(--light-blue); /* 深色模式下的 Skip 按钮颜色 */
+    color: var(--light-blue);
   }
 
   .ag-btn {
     border: 1px solid #aeb7bd;
-    background: var(--core---border-grey); /* 使用深色模式下的主题色 */
+    background: var(--core---border-grey);
     color: var(--text-body);
   }
 }
 
-/* 默认情况下：小三角位于气泡框的中心 */
 .ag-home::after, .ag-guide::after {
-  bottom: -10px; /* 小三角距离底部 20% */
-  left: 50% !important; /* 默认情况下，home的小三角居底部中间 */
-  right: auto !important; /* 移除右边的定位 */
+  bottom: -10px;
+  left: 50% !important;
+  right: auto !important;
 }
 
-/* 响应式：当屏幕宽度小于 768px 时，分别将 home 的尾巴设为左下 20% 和 guide 的尾巴设为右下 20% */
 @media (max-width: 1200px) {
   .ag-home::after {
-    left: 20% !important; /* 小三角距左边 20px */
-    right: auto !important; /* 确保右边没有偏移 */
+    left: 20% !important;
+    right: auto !important;
   }
 
   .ag-guide::after {
-    right: 20%!important; /* 小三角距右边 20px */
-    left: auto !important; /* 确保左边没有偏移 */
+    right: 20%!important;
+    left: auto !important;
   }
 }
 
-
-/* 移动端宽度适配 */
 @media (max-width: 480px) {
   .ag-bubble {
     left: 12px !important;
