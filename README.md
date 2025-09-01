@@ -2,14 +2,22 @@
 
 ## How to Use This Documentation
 
-For Clinicians and stakeholders, please read Customer Guide. 
-For engineers please read Engineering Handover.
+For Clinicians and stakeholders, please read [Client Guide](#client-guide-for-nhs-clinicians). 
+For engineers please read Engineering Handover (to be drafted).
 
-If you have any specific questions, please check contents below.
+If you have any specific questions, please check Table of Contents below:
+
+### Table of Contents<br>
+[Client Guide (for NHS Clinicians)](#client-guide-for-nhs-clinicians)<br>
+   - [A1: System Instruction](#a1--system-instruction)
+   - [A2: How to Read the Questionnaire JSON](#a2-how-to-read-the-questionnaire-json)
+   - [A3: Standard Change Process (via GitHub)](#a3-standard-change-process-via-github)
+   - [A4: FAQs](#a4-faqs)
 
 
+---
 
-## Customer Guide (for NHS clinicians)
+## Client Guide (for NHS clinicians)
 
 ### A1 : System Instruction
 
@@ -78,6 +86,8 @@ For more detailed information (e.g. DIPP website and email), please check the Si
 <br>
 <br>
 
+---
+
 
 ### A2: How to Read the Questionnaire JSON
 
@@ -110,6 +120,8 @@ What it looks like in code example:
 
 <br>
 <br>
+
+---
 
 ### A3: Standard Change Process (via GitHub)
 
@@ -147,7 +159,7 @@ Follow these steps to safely update the questionnaire:
 
 If all checks are satisfied, proceed to merge (Step 7).
 
-7. **Confirm clinical logic → merge PR**
+7. **Confirm clinical logic and merge PR**
     - Review your edits in the PR and confirm they are correct.
     - Then, Merge the PR into the main branch (by **Admin or any authorized user**).
 
@@ -158,6 +170,23 @@ If all checks are satisfied, proceed to merge (Step 7).
 9. **Rollback if needed**
     - If the new questionnaire does not behave as expected, notify the Admin.
     - They can roll back to the previous `questionnaireVersion`.
+
+   
+
+----
+
+### A4: FAQs
+
+**Q: I cannot log in / I forgot my password.**<br>
+Please contact the Admin to access the password - And always remenber to check the network connection first.
+
+**Q: The Records page shows “Loading...” for a long time.**<br>
+When there are numerous records, it takes time to load the data.
+In addition, for patient privacy protection, users can only view data they have personally handled.
+
+**Q: How do I know my edits have taken effect?**<br>
+The system is deployed automatically . After merging your change, please wait a few minutes and then refresh the application link. 
+
 
 
 <br>
