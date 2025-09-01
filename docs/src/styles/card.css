@@ -1,5 +1,3 @@
-/* src/styles/card.css */
-/* 基础卡片样式 */
 .base-card {
   background-color: var(--lighter-base);
   border: 1px solid var(--border-grey);
@@ -16,23 +14,19 @@
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-/* 不可点击的卡片 */
 .base-card--non-clickable {
   cursor: default;
 }
 
-/* 悬浮效果 */
 .base-card:hover {
   border: 1px solid var(--core-blue);
   border-bottom: 4px solid var(--core-blue);
 }
 
-/* 卡片内容容器 */
 .card-content {
   flex: 1;
 }
 
-/* 卡片标题 */
 .card-title {
   font-size: 1.2rem;
   font-weight: 700;
@@ -42,18 +36,14 @@
   transition: color 0.2s ease;
 }
 
-/* 卡片标题悬浮效果 */
 .base-card:hover .card-title {
   color: var(--text-hover);
   text-decoration: underline;
 }
 
-/* 有描述时的标题底边距 */
 .card-title--with-description {
   margin-bottom: 0.5rem;
 }
-
-/* 卡片描述 */
 
 .card-description {
   font-size: 1rem;
@@ -62,13 +52,11 @@
   line-height: 1.6;
 }
 
-/* 箭头容器 */
 .card-arrow-container {
   margin-left: 1rem;
   flex-shrink: 0;
 }
 
-/* 箭头圆形背景 */
 .card-arrow-circle {
   width: 32px;
   height: 32px;

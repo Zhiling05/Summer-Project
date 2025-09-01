@@ -1,5 +1,3 @@
-/* back-button.css */
-
 .back-button {
   display: inline-flex;
   align-items: center;
@@ -12,18 +10,18 @@
   color: var(--core-blue);
   cursor: pointer;
 
-  margin: 0 0 var(--space-xxs) 0; /* 按钮与正文的间距 */
+  margin: 0 0 var(--space-xxs) 0; /* spacing between button and content */
 }
 
-/* 单独控制箭头大小 */
+/* Arrow size */
 .back-arrow {
-  font-size: 1rem;   /* 比正文文字小 */
+  font-size: 1rem;
   line-height: 1;
 }
 
-/* 单独控制文字大小 */
+/* Text size */
 .back-text {
-  font-size: 0.85rem;  /* 可以独立调节 */
+  font-size: 0.85rem;
   line-height: 1.2;
 }
 

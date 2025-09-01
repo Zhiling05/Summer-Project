@@ -1,737 +1,296 @@
 /* ====== Admin page (standalone) ====== */
 
 /* -- Layout shell -- */
-.admin-main{
-    flex:1;
-    background:var(--page-base);
-    padding:var(--space-s) 0 calc(64px + var(--space-xl));
-    display:flex;
+.admin-main {
+  flex: 1;
+  background: var(--page-base);
+  padding: var(--space-s) 0 calc(64px + var(--space-xl));
+  display: flex;
 }
-.admin-wrapper{
-    max-width:var(--container-max);
-    margin:0 auto;
-    padding:0 var(--space-l);
-    width:100%;
-    box-sizing:border-box;
+.admin-wrapper {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-l);
+  width: 100%;
+  box-sizing: border-box;
 }
-.admin-title{
-    font-size:1.8rem;
-    font-weight:700;
-    color:var(--text-body);
-    margin:100px 0 var(--space-xl);
+.admin-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-body);
+  margin: var(--space-xs) 0 var(--space-xs) 0; 
 }
 
 /* -- Top bar -- */
-.admin-topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:80px;
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 80px;
 }
-.admin-banner{
-    padding:8px 12px;
-    background:#fff3cd;
-    border:1px solid #ffeeba;
-    color:#856404;
-    border-radius:4px;
+.admin-banner {
+  padding: 8px 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  color: #856404;
+  border-radius: 4px;
 }
 
 /* -- Filter card -- */
-.admin-filter{
-    margin-top:16px;
-    border:1px solid var(--border-grey);
-    border-radius:8px;
-    background:var(--lighter-base);
-    padding:16px;
+.admin-filter {
+  margin-top: 16px;
+  border: 1px solid var(--border-grey);
+  border-radius: 8px;
+  background: var(--lighter-base);
+  padding: 16px;
 }
-
-/* rows: Label | Controls */
-.admin-row{
-    display:grid;
-    grid-template-columns:180px 1fr;
-    align-items:center;
-    gap:16px;
-    margin-bottom:32px;
+.admin-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
 }
-.admin-label{
-    font-weight:700;
-    color:var(--text-body);
+.admin-label {
+  font-weight: 700;
+  color: var(--text-body);
 }
 
 /* inline control groups */
-.controls-inline{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-.controls-inline input[type="date"]{ min-width:150px; width:150px; padding:8px 12px; }
-
-/* DatePicker 等宽并与按钮同一行 */
-.controls-inline .dp-sm .react-datepicker-wrapper{ width: 160px; }  /* 调整到和按钮近似宽 */
-.controls-inline .dp-sm .react-datepicker__input-container input{
-    width: 160px;
-    padding: 8px 12px;
-    text-align: center;
+.controls-inline {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
-.controls-inline{ flex-wrap: nowrap; }          /* 常规不换行 */
-@media (max-width: 900px){
-    .controls-inline{ flex-wrap: wrap; }          /* 窄屏再允许换行 */
+.controls-inline .dp-sm .react-datepicker-wrapper {
+  width: 120px;
 }
-
-
-/* Referral list on one line (wrap if narrow) */
-.rec-list{ display:flex; gap:12px 24px; align-items:center; flex-wrap:wrap; }
-
-/* Risk level buttons in one line */
-.risk-buttons{
-    display:flex;
-    gap:12px;
-    align-items:center;
+.controls-inline .dp-sm .react-datepicker__input-container input {
+  width: 120px;
+  height: 40px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  text-align: center;
+  border: 2px solid var(--border-grey);
+  border-radius: var(--radius-s);
+  background: var(--lighter-base);
+  color: var(--text-body);
+  font-size: 0.9rem;
 }
-
-/* Bottom bar: pills left, reset right */
-.admin-bottom{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    margin-top:8px;
+.controls-inline .dp-sm .react-datepicker__input-container input:focus {
+  outline: none;
+  border-color: var(--core-blue);
 }
 
-/* -- Pills -- */
-.admin-pills{ display:flex; gap:8px; flex-wrap:wrap; }
-.tag-pill{
-    display:inline-flex;
-    align-items:center;
-    padding:6px 10px;
-    border-radius:999px;
-    font-size:.75rem;
-    font-weight:600;
-    color:var(--text-inverse);
-    white-space:nowrap;
+/* Referral list and risk buttons */
+.rec-list {
+  display: flex;
+  gap: 12px 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.risk-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
-
-/* 避免文字跨列叠加：允许在本列内断行 */
-.admin-cell-id{ overflow-wrap:anywhere; word-break:break-word; white-space:normal; }
-.admin-cell-ref{ overflow-wrap:anywhere; word-break:break-word; white-space:normal; }
-
-/* 行内元素垂直居中，减少错位 */
-.admin-table td, .admin-table th{ vertical-align:middle; }
-
-
-.tag-red{ background:var(--urgent-red); }
-.tag-orange{ background:var(--risk-orange); }
-.tag-green{ background:var(--risk-green); }
-
-/* -- Buttons (match Records style) -- */
-.view-btn{
-    background:var(--lighter-base);
-    border:2px solid var(--core-blue);
-    color:var(--core-blue);
-    padding:6px 14px;
-    font-size:.9rem;
-    border-radius:var(--radius-s);
-    cursor:pointer;
-    transition:background .15s,color .15s,border-color .15s;
+/* -- Pills and bottom bar -- */
+.admin-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border-grey);
 }
-.view-btn:hover{ background:var(--core-blue); color:var(--text-inverse); }
-.reset-btn{ background:var(--card-bg); border-color:var(--core-blue); color:var(--core-blue); }
-.reset-btn:hover{ background:var(--core-blue); border-color:var(--core-blue); color:var( --text-inverse) }
+.admin-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--text-inverse);
+  white-space: nowrap;
+}
+.total-display {
+  background: var(--core-blue);
+  color: var(--text-inverse);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Table adjustments */
+.admin-cell-id,
+.admin-cell-ref {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+.admin-table td,
+.admin-table th {
+  vertical-align: middle;
+}
+
+/* Tag colors */
+.tag-red { background: var(--urgent-red); }
+.tag-orange { background: var(--risk-orange); }
+.tag-green { background: var(--risk-green); }
+
+/* Buttons */
+.view-btn {
+  background: var(--lighter-base);
+  border: 2px solid var(--core-blue);
+  color: var(--core-blue);
+  padding: 6px 14px;
+  font-size: .9rem;
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.view-btn:hover {
+  background: var(--core-blue);
+  color: var(--text-inverse);
+}
+.view-btn.active-view {
+  background: var(--core-blue);
+  color: var(--text-inverse);
+  border-color: var(--core-blue);
+}
+.reset-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-body);
+  text-decoration: underline;
+  font-weight: 500;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.reset-btn:hover {
+  color: var(--core-blue);
+}
 
 /* -- Table -- */
-.admin-table-wrapper{ margin-top:16px; }
-.admin-table{
-    width:100%;
-    border-collapse:collapse;
-    background:var(--lighter-base);
-    border:1px solid var(--border-grey);
-    border-radius:8px;
-    overflow:hidden;
-    table-layout:fixed;
+.admin-table-wrapper { margin-top: 16px; }
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--lighter-base);
+  border: 1px solid var(--border-grey);
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: fixed;
 }
 .admin-table th,
-.admin-table td{
-    padding:14px 20px;
-    text-align:left;
-    font-size:.95rem;
-    border-bottom:1px solid var(--border-grey);
-    color:var(--text-body);
+.admin-table td {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: .95rem;
+  border-bottom: 1px solid var(--border-grey);
+  color: var(--text-body);
 }
-/*.admin-table th:last-child,*/
-/*.admin-table td:last-child{ text-align:right; }*/
-.admin-table tbody tr:hover{ background:var(--page-base); }
+.admin-table tbody tr:hover {
+  background: var(--page-base);
+}
 
-/* -- calender -- */
-.admin-filter input[type="date"]{
-    border:2px solid var(--border-grey);
-    border-radius:var(--radius-s);
-    background:var(--lighter-base);
-    color:var(--text-body);
-    transition:border-color .15s;
+/* Exit button */
+.exit-button {
+  margin-top: 12px;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  font-size: 28px;
+  gap: 8px;
+  color: var(--text-body);
+  cursor: pointer;
 }
-.admin-filter input[type="date"]:focus{
-    outline:none; border-color:var(--core-blue);
+.exit-button:hover {
+  color: var(--text-inverse);
+  background: var(--core-blue);
 }
+
+/* Statistics cards */
+.stats-cards-container { margin-top: 16px; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.stat-card {
+  background: var(--lighter-base);
+  border: 1px solid var(--border-grey);
+  border-radius: 8px;
+  padding: 20px;
+}
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.stat-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-body);
+}
+.stat-card-percentage {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.stat-card-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 8px 0;
+  color: var(--text-body);
+}
+.stat-card-desc {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+/* Risk level borders */
+.stat-red { border-left: 4px solid var(--urgent-red); }
+.stat-red .stat-card-percentage { color: var(--urgent-red); }
+.stat-orange { border-left: 4px solid var(--risk-orange); }
+.stat-orange .stat-card-percentage { color: var(--risk-orange); }
+.stat-green { border-left: 4px solid var(--risk-green); }
+.stat-green .stat-card-percentage { color: var(--risk-green); }
 
 /* -- Responsive -- */
-@media (max-width: 720px){
-    .admin-row{ grid-template-columns:1fr; }
-    .admin-label{ margin-bottom:6px; }
-    .admin-topbar{ flex-direction:column; gap:8px; align-items:flex-start; }
-    .admin-title{ margin-top:60px; }
-}
-
-/* styles/admin.css */
-.exit-button {
-    margin-top:12px;
-    border:none;
-    background:transparent;
-    font-weight:600;
-    font-size:28px;
-    gap:8px;
-    color:var(--text-body);
-    cursor:pointer; }
-
-.exit-button:hover {
-    color:var(--text-inverse);
-    background:var(--core-blue);
-    }
-
-/* ====== Admin Statistics Extensions (Add to admin.css) ====== */
-
-/* -- View Mode Button Active State -- */
-.view-btn.active-view {
-    background: var(--core-blue);
-    color: var(--text-inverse);
-    border-color: var(--core-blue);
-}
-
-/* -- 统一控件高度和样式 -- */
-.controls-inline {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-/* 强制时间按钮换行 */
-.controls-inline .view-btn:nth-child(4) {
-    flex-basis: 100%;
-}
-
-.controls-inline .view-btn {
-    height: 40px;
-    padding: 8px 12px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.controls-inline .dp-sm .react-datepicker-wrapper {
-    width: 120px;
-}
-
-.controls-inline .dp-sm .react-datepicker__input-container input {
-    width: 120px;
-    height: 40px;
-    padding: 8px 12px;
-    box-sizing: border-box;
-    text-align: center;
-    border: 2px solid var(--border-grey);
-    border-radius: var(--radius-s);
-    background: var(--lighter-base);
-    color: var(--text-body);
-    font-size: 0.9rem;
-}
-
-.controls-inline .dp-sm .react-datepicker__input-container input:focus {
-    outline: none;
-    border-color: var(--core-blue);
-}
-
-/* -- Reset Button (简洁样式) -- */
-.reset-btn {
-    background: transparent !important;
-    border: none !important;
-    color: var(--text-body) !important;
-    text-decoration: underline;
-    font-weight: 500;
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-.reset-btn:hover {
-    background: transparent !important;
-    color: var(--core-blue) !important;
-    border: none !important;
-}
-
-/* -- Total Assessments Display (更显眼) -- */
-.admin-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-top: 8px;
-    padding: 12px 0;
-    border-top: 1px solid var(--border-grey);
-}
-
-.admin-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.total-display {
-    background: var(--core-blue);
-    color: var(--text-inverse);
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* -- Statistics Cards Container -- */
-.stats-cards-container {
-    margin-top: 16px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
-}
-
-/* -- Individual Stat Card -- */
-.stat-card {
-    background: var(--lighter-base);
-    border: 1px solid var(--border-grey);
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.stat-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.stat-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--text-body);
-}
-
-.stat-card-percentage {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.stat-card-number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1;
-    margin: 8px 0;
-    color: var(--text-body);
-}
-
-.stat-card-desc {
-    font-size: 0.9rem;
-    color: var(--text-body);
-    opacity: 0.8;
-    margin-top: 8px;
-}
-
-/* -- Risk Level Colors -- */
-.stat-red {
-    border-left: 4px solid var(--urgent-red);
-}
-.stat-red .stat-card-percentage {
-    color: var(--urgent-red);
-}
-
-.stat-orange {
-    border-left: 4px solid var(--risk-orange);
-}
-.stat-orange .stat-card-percentage {
-    color: var(--risk-orange);
-}
-
-.stat-green {
-    border-left: 4px solid var(--risk-green);
-}
-.stat-green .stat-card-percentage {
-    color: var(--risk-green);
-}
-
-/* -- Responsive Design -- */
 @media (max-width: 900px) {
-    .controls-inline {
-        flex-wrap: wrap;
-    }
+  .controls-inline { flex-wrap: wrap; }
 }
-
 @media (max-width: 720px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .stat-card-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .stat-card-title {
-        font-size: 0.95rem;
-    }
-    
-    .stat-card-percentage {
-        align-self: flex-end;
-        font-size: 1.1rem;
-    }
-    
-    .admin-bottom {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-    }
-    
-    .total-display {
-        text-align: center;
-    }
-}/* ====== Admin Statistics Extensions (Add to admin.css) ====== */
+  .admin-row { grid-template-columns: 1fr; }
+  .admin-label { margin-bottom: 6px; }
+  .admin-topbar { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .admin-title { margin-top: 60px; }
 
-/* -- View Mode Button Active State -- */
-.view-btn.active-view {
-    background: var(--core-blue);
-    color: var(--text-inverse);
-    border-color: var(--core-blue);
-}
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .stat-card-title { font-size: 0.95rem; }
+  .stat-card-percentage { align-self: flex-end; font-size: 1.1rem; }
 
-/* -- 统一控件高度 -- */
-.controls-inline {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-}
+  .admin-bottom { flex-direction: column; align-items: stretch; gap: 8px; }
+  .total-display { text-align: center; }
 
-.controls-inline .view-btn,
-.controls-inline .dp-sm .react-datepicker__input-container input {
-    height: 40px;
-    padding: 8px 12px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.controls-inline .dp-sm .react-datepicker-wrapper {
-    width: 120px;
-}
-
-.controls-inline .dp-sm .react-datepicker__input-container input {
-    width: 120px;
-    text-align: center;
-    border: 2px solid var(--border-grey);
-    border-radius: var(--radius-s);
-    background: var(--lighter-base);
-    color: var(--text-body);
-    font-size: 0.9rem;
-}
-
-.controls-inline .dp-sm .react-datepicker__input-container input:focus {
-    outline: none;
-    border-color: var(--core-blue);
-}
-
-/* -- Total Assessments Display (更显眼) -- */
-.admin-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-top: 8px;
-    padding: 12px 0;
-    border-top: 1px solid var(--border-grey);
-}
-
-.admin-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.total-display {
-    background: var(--core-blue);
-    color: var(--text-inverse);
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* -- Statistics Cards Container -- */
-.stats-cards-container {
-    margin-top: 16px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
-}
-
-/* -- Individual Stat Card -- */
-.stat-card {
-    background: var(--lighter-base);
-    border: 1px solid var(--border-grey);
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.stat-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.stat-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--text-body);
-}
-
-.stat-card-percentage {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.stat-card-number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1;
-    margin: 8px 0;
-    color: var(--text-body);
-}
-
-.stat-card-desc {
-    font-size: 0.9rem;
-    color: var(--text-body);
-    opacity: 0.8;
-    margin-top: 8px;
-}
-
-/* -- Risk Level Colors -- */
-.stat-red {
-    border-left: 4px solid var(--urgent-red);
-}
-.stat-red .stat-card-percentage {
-    color: var(--urgent-red);
-}
-
-.stat-orange {
-    border-left: 4px solid var(--risk-orange);
-}
-.stat-orange .stat-card-percentage {
-    color: var(--risk-orange);
-}
-
-.stat-green {
-    border-left: 4px solid var(--risk-green);
-}
-.stat-green .stat-card-percentage {
-    color: var(--risk-green);
-}
-
-/* -- Responsive Design -- */
-@media (max-width: 720px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .stat-card-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .stat-card-title {
-        font-size: 0.95rem;
-    }
-    
-    .stat-card-percentage {
-        align-self: flex-end;
-        font-size: 1.1rem;
-    }
-    
-    .admin-bottom {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-    }
-    
-    .total-display {
-        text-align: center;
-    }
-    
-    .controls-inline {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .controls-inline .view-btn,
-    .controls-inline .dp-sm .react-datepicker-wrapper {
-        width: 100%;
-    }
-}/* ====== Admin Statistics Extensions (Add to admin.css) ====== */
-
-/* -- View Mode Button Active State -- */
-.view-btn.active-view {
-    background: var(--core-blue);
-    color: var(--text-inverse);
-    border-color: var(--core-blue);
-}
-
-/* -- Total Assessments Display (更显眼) -- */
-.admin-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-top: 8px;
-    padding: 12px 0;
-    border-top: 1px solid var(--border-grey);
-}
-
-.admin-pills {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.total-display {
-    background: var(--core-blue);
-    color: var(--text-inverse);
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* -- Statistics Cards Container -- */
-.stats-cards-container {
-    margin-top: 16px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
-}
-
-/* -- Individual Stat Card -- */
-.stat-card {
-    background: var(--lighter-base);
-    border: 1px solid var(--border-grey);
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.stat-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.stat-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--text-body);
-}
-
-.stat-card-percentage {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.stat-card-number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1;
-    margin: 8px 0;
-    color: var(--text-body);
-}
-
-.stat-card-desc {
-    font-size: 0.9rem;
-    color: var(--text-body);
-    opacity: 0.8;
-    margin-top: 8px;
-}
-
-/* -- Risk Level Colors -- */
-.stat-red {
-    border-left: 4px solid var(--urgent-red);
-}
-.stat-red .stat-card-percentage {
-    color: var(--urgent-red);
-}
-
-.stat-orange {
-    border-left: 4px solid var(--risk-orange);
-}
-.stat-orange .stat-card-percentage {
-    color: var(--risk-orange);
-}
-
-.stat-green {
-    border-left: 4px solid var(--risk-green);
-}
-.stat-green .stat-card-percentage {
-    color: var(--risk-green);
-}
-
-/* -- Responsive Design -- */
-@media (max-width: 720px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .stat-card-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .stat-card-title {
-        font-size: 0.95rem;
-    }
-    
-    .stat-card-percentage {
-        align-self: flex-end;
-        font-size: 1.1rem;
-    }
-    
-    .admin-bottom {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-    }
-    
-    .total-display {
-        text-align: center;
-    }
+  .controls-inline { flex-direction: column; align-items: stretch; }
+  .controls-inline .view-btn,
+  .controls-inline .dp-sm .react-datepicker-wrapper { width: 100%; }
 }

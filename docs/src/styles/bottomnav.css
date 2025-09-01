@@ -1,20 +1,20 @@
-/* 底部导航栏容器 */
+/* ===== Bottom navigation bar ===== */
 .bottom-nav {
-  background: var(--page-base); /* 白色背景 */
-  border-top: 4px solid var(--core-blue); /* 改为 NHS 蓝色粗线 */
+  background: var(--page-base);
+  border-top: 4px solid var(--core-blue); /* NHS blue top border */
   display: flex;
-  justify-content: space-around; /* 平均分布四个按钮 */
+  justify-content: space-around;
   align-items: center;
-  height: 64px; /* 固定高度 */
-  position: fixed; /* 固定在页面底部 */
-  left: 0;          /* 关键：把静态位置锁到视口左边 */
-  right: 0;         /* 可选，保证右侧也贴边 */
+  height: 64px;
+  position: fixed;
+  left: 0;
+  right: 0;
   bottom: 0;
   width: 100%;
-  z-index: 998; /* 略低于顶部栏，避免盖住顶部 NHS 区 */
+  z-index: 998; /* slightly below top header */
 }
 
-/* 每个按钮（图标 + 文本） */
+/* Each button (icon + text) */
 .bottom-nav button {
   background: none;
   border: none;
@@ -26,13 +26,10 @@
   font-size: 0.9rem;
   cursor: pointer;
   padding: 4px 8px;
+  position: relative;
 }
 
-/* ======================= */
-/* ★ 新增：方框高亮效果 ★  */
-/* ======================= */
-/* —— ★ 方框高亮（粗 4 px，恰好包在底栏内） —— */
-/* ——— 方形背景高亮 ——— */
+/* Highlight background box behind button */
 .bottom-nav button::before {
   content: "";
   position: absolute;
@@ -41,42 +38,33 @@
   width: 70px;                 
   height: 56px;
   transform: translate(-50%, -50%);
-  border-radius: 8px;           /* 轻微圆角，可按需调整 */
-  background: transparent;      /* 默认透明 */
-  z-index: -1;                  /* 放到按钮下方 */
+  border-radius: 8px;
+  background: transparent;
+  z-index: -1;
 }
 
-/* 悬停时：可选是否也加背景，不需要可删掉 */
+/* Optional: hover background */
 .bottom-nav button:hover::before {
-  background: var(--lighter-base);          /* 若想只有选中才填色，就删除这一段 */
+  background: var(--lighter-base);
 }
 
-/* 选中时：淡蓝色方形背景 */
+/* Active state: filled background */
 .bottom-nav button.active::before {
   background: var(--lighter-base);
 }
 
-/* ——— 文字 / 图标颜色 ——— */
-.bottom-nav button { color: var(--core-blue); }         /* 默认深蓝 */
-.bottom-nav button:hover { color: var(--light-blue); }  /* 悬停浅蓝 */
-.bottom-nav button.active { color: var(--core-blue); }  /* 选中保持深蓝 */
+/* Text and icon colors */
+.bottom-nav button { color: var(--core-blue); }
+.bottom-nav button:hover { color: var(--light-blue); }
+.bottom-nav button.active { color: var(--core-blue); }
 
-/* ——— 图标 ——— */
+/* Icons */
 .nav-icon {
   width: 28px;
   height: 28px;
   margin-bottom: 4px;
-  /* 之前的黑色滤镜已移除 */
   object-fit: contain;
   transition: color 0.18s ease;
+  fill: none; /* outline only */
 }
-
-/* 鼠标悬停时的颜色变化 */
-.bottom-nav button:hover {
-  color: var(--light-blue);
-}
-
-/* 只画描边，不填充（防止 Records 变成实心方块） */
-.nav-icon        { fill: none; }
-.nav-item.active .nav-icon { fill: none; }  /* 选中时同样不填 */
-
+.nav-item.active .nav-icon { fill: none; }

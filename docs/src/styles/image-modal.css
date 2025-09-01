@@ -1,6 +1,3 @@
-/* ===== 图片模态框样式（简化版 - 仅滚轮缩放） ===== */
-
-/* 禁用背景滚动 */
 body.modal-open {
   overflow: hidden !important;
   position: fixed !important;
@@ -8,7 +5,6 @@ body.modal-open {
   height: 100% !important;
 }
 
-/* 模态框遮罩层 */
 .image-modal-overlay {
   position: fixed;
   top: 0;
@@ -21,10 +17,9 @@ body.modal-open {
   justify-content: center;
   z-index: 1000;
   padding: 20px;
-  overflow: hidden; /* 防止内部滚动 */
+  overflow: hidden; 
 }
 
-/* 模态框主容器 */
 .image-modal-container {
   max-width: 90vw;
   max-height: 90vh;
@@ -34,7 +29,6 @@ body.modal-open {
   position: relative;
 }
 
-/* 图片容器 - 简化版（移除拖拽功能） */
 .image-modal-image-wrapper {
   position: relative;
   max-width: 100%;
@@ -45,7 +39,6 @@ body.modal-open {
   user-select: none;
 }
 
-/* 图片样式 - 简化变换 */
 .image-modal-image {
   max-width: 100%;
   max-height: 75vh;
@@ -55,7 +48,6 @@ body.modal-open {
   transform-origin: center center;
 }
 
-/* 关闭提示文字 */
 .image-modal-close-hint {
   position: absolute;
   top: 24px;
@@ -71,7 +63,6 @@ body.modal-open {
   pointer-events: none;
 }
 
-/* 缩放控制面板 */
 .image-modal-zoom-controls {
   position: absolute;
   top: 24px;
@@ -112,7 +103,6 @@ body.modal-open {
   cursor: not-allowed;
 }
 
-/* 缩放比例显示 */
 .image-modal-zoom-level {
   color: white;
   font-size: 12px;
@@ -124,7 +114,6 @@ body.modal-open {
   justify-content: center;
 }
 
-/* 导航按钮基础样式 */
 .image-modal-nav-btn {
   position: absolute;
   top: 50%;
@@ -146,17 +135,14 @@ body.modal-open {
   line-height: 1;
 }
 
-/* 上一张按钮 */
 .image-modal-nav-btn--prev {
   left: 24px;
 }
 
-/* 下一张按钮 */
 .image-modal-nav-btn--next {
   right: 24px;
 }
 
-/* 导航按钮悬停效果 */
 .image-modal-nav-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-50%) scale(1.05);
@@ -166,13 +152,11 @@ body.modal-open {
   transform: translateY(-50%) scale(0.95);
 }
 
-/* 禁用状态的导航按钮 */
 .image-modal-nav-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
 
-/* 图片信息区域 */
 .image-modal-info {
   color: white;
   text-align: center;
@@ -181,7 +165,6 @@ body.modal-open {
   padding: 0 20px;
 }
 
-/* 图片标题 */
 .image-modal-title {
   margin: 0 0 12px 0;
   font-size: 20px;
@@ -189,7 +172,6 @@ body.modal-open {
   line-height: 1.3;
 }
 
-/* 图片计数器容器 */
 .image-modal-counter {
   display: flex;
   align-items: center;
@@ -198,13 +180,11 @@ body.modal-open {
   margin-top: 16px;
 }
 
-/* 图片指示器容器 */
 .image-modal-indicators {
   display: flex;
   gap: 6px;
 }
 
-/* 单个指示器点 */
 .image-modal-indicator {
   width: 8px;
   height: 8px;
@@ -212,27 +192,20 @@ body.modal-open {
   transition: all 0.3s ease;
 }
 
-/* 当前图片指示器 */
 .image-modal-indicator--active {
   background-color: #ffffff;
 }
 
-/* 非当前图片指示器 */
 .image-modal-indicator--inactive {
   background-color: rgba(255, 255, 255, 0.4);
 }
 
-/* 计数器文本 */
 .image-modal-counter-text {
   margin: 0;
   opacity: 0.8;
   font-size: 14px;
 }
 
-
-/* ===== 响应式设计 ===== */
-
-/* 平板设备 */
 @media (max-width: 768px) {
   .image-modal-overlay {
     padding: 16px;
@@ -288,7 +261,6 @@ body.modal-open {
   
 }
 
-/* 手机设备 */
 @media (max-width: 480px) {
   .image-modal-overlay {
     padding: 12px;
@@ -367,6 +339,6 @@ body.modal-open {
   
   .image-modal-instructions {
     font-size: 12px;
-    transform: translate(-50%, -80px); /* 手机设备上更靠近图片 */
+    transform: translate(-50%, -80px); 
   }
 }

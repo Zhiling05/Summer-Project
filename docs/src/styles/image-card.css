@@ -1,5 +1,3 @@
-/* src/styles/image-card.css */
-/* 图片卡片容器 */
 .image-card {
   background: var(--lighter-base);
   border: 1px solid var(--border-grey);
@@ -19,7 +17,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* 图片区域容器 */
 .image-card__image-area {
   height: 200px;
   overflow: hidden;
@@ -27,7 +24,6 @@
   background: var(--image-placeholder-gradient);
 }
 
-/* 图片或占位符 */
 .image-card__image {
   width: 100%;
   height: 100%;
@@ -39,7 +35,6 @@
   transform: scale(1.05);
 }
 
-/* 图片占位符 */
 .image-card__placeholder {
   width: 100%;
   height: 100%;
@@ -53,7 +48,6 @@
   line-height: 1.3;
 }
 
-/* 分类标签 */
 .image-card__category-badge {
   position: absolute;
   top: 8px;
@@ -67,7 +61,6 @@
   z-index: 2;
 }
 
-/* 标签颜色 */
 .image-card__category-badge--papilloedema {
   background: var(--urgent-red);
 }
@@ -78,7 +71,6 @@
   background: var(--risk-green);
 }
 
-/* 图片数量提示 */
 .image-card__count-indicator {
   position: absolute;
   bottom: 8px;
@@ -99,7 +91,6 @@
   font-size: 14px;
 }
 
-/* 文字内容区域 */
 .image-card__content {
   padding: 16px;
 }
@@ -127,7 +118,6 @@
   overflow: hidden;
 }
 
-/* 网格布局容器 */
 .image-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -141,7 +131,6 @@
   }
 }
 
-/* 响应式调整 */
 @media (max-width: 768px) {
   .image-cards-grid {
     grid-template-columns: 1fr;
@@ -176,5 +165,5 @@
 }
 
 .image-card__click-hint {
-  display: none !important; /* 完全隐藏点击提示 */
+  display: none !important; 
 }
