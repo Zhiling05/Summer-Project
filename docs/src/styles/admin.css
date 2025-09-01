@@ -18,7 +18,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: var(--text-body);
-  margin: var(--space-xs) 0 var(--space-xs) 0; 
+  margin: 100px 0 var(--space-xl);
 }
 
 /* -- Top bar -- */
