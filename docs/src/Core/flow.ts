@@ -1,9 +1,8 @@
 import questionnaire from "../data/questionnaire.json";
 
-/** 这里直接解构出数组 */
 const { questions } = questionnaire as { questions: any[] };
 
-/** —— 在这里定义数据结构接口 —— */
+/** Interface for a single question */
 interface Question {
   id: string;
   type: string;
@@ -11,34 +10,33 @@ interface Question {
   navigation?: Record<string, unknown>;
   rules?: Array<{ if?: Record<string, any>; next: string }>;
   next?: string | Record<string, string>;
-  meta?: { symptomOnYes?: string; };
+  meta?: { symptomOnYes?: string };
 }
 
 interface Questionnaire {
   questions: Question[];
 }
 
-/** 全局答案，key=题号，value=当前题答案 */
+/** Global in-memory answers, key = question ID */
 const answers: Record<string, any> = {};
 
-/** 在组件里调用：保存用户作答 */
+/** Save user's answer */
 export function recordAnswer(id: string, value: any) {
   answers[id] = value;
 }
 
-/** 计算下一题 id（同原逻辑） */
+/** Determine the next question ID based on current answer */
 export function getNextId(
-    currentId: string,
-    currentValue: any
+  currentId: string,
+  currentValue: any
 ): string | undefined {
-  const entry = questions.find(e => e.id === currentId);
+  const entry = questions.find((e) => e.id === currentId);
   if (!entry) return;
 
   if (entry.next) {
     return typeof entry.next === "string"
-        ? entry.next
-        : entry.next[currentValue];
-
+      ? entry.next
+      : entry.next[currentValue];
   }
 
   for (const r of entry.rules ?? []) {
@@ -56,7 +54,6 @@ export function getNextId(
       } else if (key.endsWith(".includesExactlyOneOf")) {
         ok = currentValue.filter((v: string) => value.includes(v)).length === 1;
       }
-
       if (!ok) break;
     }
 
@@ -64,17 +61,17 @@ export function getNextId(
   }
 }
 
-/** 是否已有未完成的评估 */
+/** Check if there is any unfinished progress */
 export function hasProgress(): boolean {
   return Object.keys(answers).length > 0;
 }
 
-/** 清空当前评估数据 */
+/** Reset all stored answers */
 export function resetAssessment(): void {
   Object.keys(answers).forEach((k) => delete answers[k]);
 }
 
-/** 找到第一个未答的题目 ID，或返回 undefined */
+/** Get the first unanswered question ID, or undefined if all are answered */
 export function getFirstUnanswered(): string | undefined {
   const dataArray = (questionnaire as Questionnaire).questions;
   for (const q of dataArray) {
