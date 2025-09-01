@@ -1,10 +1,8 @@
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import DynamicQuestion from '../../../../../pages/optometrist/assess/questions/DynamicQuestion';
 
-// Mock 外部依赖
 const mockNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
@@ -19,7 +17,6 @@ jest.mock('../../../../../api', () => ({
   }),
 }));
 
-// Mock 问卷数据 - 只包含测试必需的
 jest.mock('../../../../../data/questionnaire.json', () => ({
   questions: [
     {
@@ -50,7 +47,6 @@ jest.mock('../../../../../data/questionnaire.json', () => ({
   ]
 }));
 
-// Mock 导航逻辑
 jest.mock('../../../../../utils/NavigationLogic', () => ({
   getNextId: jest.fn((currentId: string, answer: string | string[]) => {
     if (currentId === 'Q1') return answer === 'Yes' ? 'Q2' : 'Q9';
@@ -63,12 +59,10 @@ jest.mock('../../../../../utils/NavigationLogic', () => ({
   }),
 }));
 
-// Mock 验证逻辑
 jest.mock('../../../../../utils/ValidationLogic', () => ({
-  validateByType: jest.fn(() => []), // 默认无错误
+  validateByType: jest.fn(() => []), 
 }));
 
-// Mock 组件
 jest.mock('../../../../../components/Header', () => 
   ({ title }: { title: string }) => <div data-testid="header">{title}</div>
 );
@@ -96,7 +90,6 @@ describe('DynamicQuestion Component', () => {
     jest.clearAllMocks();
   });
 
-  // 1. 基础渲染测试
   describe('Basic Rendering', () => {
     it('renders single choice question correctly', () => {
       renderWithRouter('Q1');
@@ -122,15 +115,13 @@ describe('DynamicQuestion Component', () => {
 
     it('renders all required UI components', () => {
       renderWithRouter('Q1');
-      
-      // 验证所有被 DynamicQuestion 渲染的组件都存在
+    
       expect(screen.getByTestId('header')).toBeInTheDocument();
       expect(screen.getByTestId('bottom-nav')).toBeInTheDocument();
       expect(screen.getByTestId('back-button')).toBeInTheDocument();
     });
   });
 
-  // 2. 单选题交互测试
   describe('Single Choice Interaction', () => {
     it('handles option selection correctly', async () => {
       const user = userEvent.setup();
@@ -139,16 +130,13 @@ describe('DynamicQuestion Component', () => {
       const yesOption = screen.getByLabelText('Yes');
       const noOption = screen.getByLabelText('No');
 
-      // 初始状态：都未选中
       expect(yesOption).not.toBeChecked();
       expect(noOption).not.toBeChecked();
 
-      // 选择 Yes
       await user.click(yesOption);
       expect(yesOption).toBeChecked();
       expect(noOption).not.toBeChecked();
 
-      // 切换到 No
       await user.click(noOption);
       expect(yesOption).not.toBeChecked();
       expect(noOption).toBeChecked();
@@ -166,7 +154,6 @@ describe('DynamicQuestion Component', () => {
     });
   });
 
-  // 3. 多选题交互测试
   describe('Multiple Choice Interaction', () => {
     it('handles multiple selections correctly', async () => {
       const user = userEvent.setup();
@@ -175,14 +162,12 @@ describe('DynamicQuestion Component', () => {
       const seizuresOption = screen.getByLabelText('Seizures');
       const noneOption = screen.getByLabelText('None of the above');
 
-      // 可以选择多个选项
       await user.click(seizuresOption);
       await user.click(noneOption);
 
       expect(seizuresOption).toBeChecked();
       expect(noneOption).toBeChecked();
 
-      // 可以取消选择
       await user.click(seizuresOption);
       expect(seizuresOption).not.toBeChecked();
       expect(noneOption).toBeChecked();
@@ -200,7 +185,6 @@ describe('DynamicQuestion Component', () => {
     });
   });
 
-  // 4. 导航功能测试
   describe('Navigation', () => {
     it('navigates to next question for regular answers', async () => {
       const user = userEvent.setup();
@@ -238,7 +222,6 @@ describe('DynamicQuestion Component', () => {
     });
   });
 
-  // 5. 错误处理测试
   describe('Error Handling', () => {
     it('displays validation errors when present', async () => {
       const { validateByType } = require('../../../../../utils/ValidationLogic');
@@ -254,28 +237,20 @@ describe('DynamicQuestion Component', () => {
     });
   });
 
-  // 6. 状态重置测试
   describe('State Management', () => {
     it('resets form state when question changes', () => {
-      // 先渲染Q2并选择一个选项
       const { unmount } = renderWithRouter('Q2');
       
       fireEvent.click(screen.getByLabelText('Seizures'));
       expect(screen.getByLabelText('Seizures')).toBeChecked();
-      
-      // 卸载Q2组件
       unmount();
-      
-      // 重新渲染Q1
       renderWithRouter('Q1');
 
-      // Q1的所有选项应该都是未选中状态
       const radioButtons = screen.getAllByRole('radio');
       radioButtons.forEach(radio => {
         expect(radio).not.toBeChecked();
       });
       
-      // 验证Next按钮是禁用的（因为没有选择任何选项）
       const nextButton = screen.getByRole('button', { name: /next/i });
       expect(nextButton).toBeDisabled();
     });

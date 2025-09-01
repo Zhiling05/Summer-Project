@@ -1,9 +1,8 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import UserSelectionPage from '../../pages/UserSelectionPage';
 
-// Mock Header 和 Sidebar
+// Mock Header and Sidebar
 jest.mock('../../components/Header', () => ({ title }: { title: string }) => (
   <div data-testid="header">{title}</div>
 ));

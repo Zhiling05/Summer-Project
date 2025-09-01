@@ -1,10 +1,9 @@
-import React from 'react';
+
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import DynamicRecommendation from '../../../../../pages/optometrist/assess/recommendations/DynamicRecommendation';
 
-// Mock window.alert to avoid JSDOM errors
 Object.defineProperty(window, 'alert', {
   writable: true,
   value: jest.fn(),
@@ -95,7 +94,6 @@ describe('DynamicRecommendation Component', () => {
     (saveAs as jest.Mock).mockClear();
   });
 
-  // 1. 基础渲染测试
   describe('Basic Rendering', () => {
     it('renders recommendation page correctly with valid resultId', () => {
       const state = { assessmentId: 'test-assessment-123' };
@@ -124,8 +122,7 @@ describe('DynamicRecommendation Component', () => {
     it('renders all required UI components', () => {
       const state = { assessmentId: 'test-assessment-123' };
       renderWithRouter('/optometrist/assess/recommendations/EMERGENCY_DEPARTMENT', state);
-      
-      // 验证所有被 DynamicRecommendation 渲染的组件都存在
+    
       expect(screen.getByTestId('header')).toBeInTheDocument();
       expect(screen.getByTestId('bottom-nav')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /preview.*report/i })).toBeInTheDocument();
@@ -142,7 +139,6 @@ describe('DynamicRecommendation Component', () => {
     });
   });
 
-  // 2. 报告预览功能测试
   describe('Report Preview Functionality', () => {
     it('handles preview report action successfully', async () => {
       const user = userEvent.setup();
@@ -162,7 +158,6 @@ describe('DynamicRecommendation Component', () => {
     });
   });
 
-  // 3. 下载功能测试
   describe('Download Functionality', () => {
     it('handles download action successfully', async () => {
       const user = userEvent.setup();
@@ -182,7 +177,6 @@ describe('DynamicRecommendation Component', () => {
     });
   });
 
-  // 4. 邮件模态框功能测试
   describe('Email Modal Functionality', () => {
     it('opens email modal when Send via Email button is clicked', async () => {
       const user = userEvent.setup();
@@ -321,7 +315,6 @@ describe('DynamicRecommendation Component', () => {
     });
   });
 
-  // 5. 错误处理测试
   describe('Error Handling', () => {
     it('handles preview report error gracefully', async () => {
       const user = userEvent.setup();

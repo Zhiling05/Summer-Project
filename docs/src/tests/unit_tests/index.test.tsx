@@ -6,11 +6,6 @@ describe('navigation/index.ts exports', () => {
         expect(typeof NavigationPages.SettingsPage).toBe('function');
     });
 
-    it('should export AboutPage component', () => {
-        expect(NavigationPages.AboutPage).toBeDefined();
-        expect(typeof NavigationPages.AboutPage).toBe('function');
-    });
-
     it('should export ContactPage component', () => {
         expect(NavigationPages.ContactPage).toBeDefined();
         expect(typeof NavigationPages.ContactPage).toBe('function');

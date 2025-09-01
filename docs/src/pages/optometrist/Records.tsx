@@ -1,6 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import BackButton from '../../components/BackButton';
 import "react-datepicker/dist/react-datepicker.css";
 import { parseISO, format } from "date-fns";
 import { http } from "../../api/index";
@@ -137,7 +136,6 @@ export default function Records() {
   return (
     <>
       <Header title="Records" />
-      <BackButton />
       <Sidebar /> 
       
       <main className="records-main">

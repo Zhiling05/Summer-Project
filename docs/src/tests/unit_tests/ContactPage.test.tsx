@@ -1,8 +1,6 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ContactPage from '../../pages/sidebar/ContactPage';
 
-// Mock Header 组件
 jest.mock('../../components/Header', () => ({ title }: { title: string }) => (
   <div data-testid="header">{title}</div>
 ));

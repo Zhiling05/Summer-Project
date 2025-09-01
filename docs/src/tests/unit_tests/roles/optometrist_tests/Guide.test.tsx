@@ -1,9 +1,7 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import GuideHome from '../../../../pages/optometrist/guide/GuideHome';
 
-// Mock Header 和 BottomNav 组件
 jest.mock('../../../../components/Header', () => ({ title }: { title: string }) => (
   <div data-testid="header">{title}</div>
 ));
@@ -12,7 +10,6 @@ jest.mock('../../../../components/BottomNav', () => () => (
   <div data-testid="bottom-nav">BottomNav</div>
 ));
 
-// Mock useNavigate
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => {
   const original = jest.requireActual('react-router-dom');

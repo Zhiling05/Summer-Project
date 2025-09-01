@@ -1,9 +1,7 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import OptometristApp from '../../../../pages/optometrist/OptometristApp';
 
-// Mock子路由组件
 jest.mock('../../../../pages/optometrist/assess/AssessRouter', () => () => (
   <div data-testid="assess-router">Assess Router Loaded</div>
 ));
