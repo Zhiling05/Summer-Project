@@ -1,7 +1,6 @@
-// docs/src/pages/optometrist/tutorial/Tutorial.tsx
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import StartPage from './assess/StartPage'; // ✅ 直接渲染 StartPage 作底板
+import StartPage from './assess/StartPage';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/tutorial.css'; 
 
@@ -9,28 +8,31 @@ type Step = {
   selector: string;
   desc?: string;
   placement?: 'top' | 'bottom' | 'left' | 'right';
-  className?: string; // 添加 className 字段
+  className?: string;
 };
 
-
+/**
+ * Tutorial - Interactive onboarding guide for optometrists
+ * - Overlays on top of StartPage
+ * - Highlights navigation and key actions step by step
+ */
 export default function Tutorial() {
   const navigate = useNavigate();
   const [stepIndex, setStepIndex] = useState(0);
   const [visible, setVisible] = useState(true);
 
   const close = () => {
-    localStorage.setItem('seenAssessmentGuide', 'true'); // ✅ 写入已看过
+    localStorage.setItem('seenAssessmentGuide', 'true');
     setVisible(false);
-    navigate('/optometrist/assess', { replace: true });  // ✅ 回到 StartPage
+    navigate('/optometrist/assess', { replace: true });
   };
 
-  // 尝试给底部四个 Tab 与 Start 按钮打上 id（没有就根据文字匹配）
+  // Ensure bottom nav tabs and start button have IDs for spotlight targeting
   useEffect(() => {
     const ensureId = (el: Element | null, id: string) => {
       if (el && !el.getAttribute('id')) (el as HTMLElement).id = id;
     };
 
-    // 底部导航四个
     const withinNav = (txt: string) =>
       Array.from(document.querySelectorAll('nav *')).find(
         el => (el.textContent || '').trim().toLowerCase() === txt.toLowerCase()
@@ -45,7 +47,6 @@ export default function Tutorial() {
     ensureId(byLabel('Records')|| withinNav('Records')|| null, 'tab-records');
     ensureId(byLabel('Guide')  || withinNav('Guide')  || null, 'tab-guide');
 
-    // Start now 按钮（优先已有 id，其次按文本匹配）
     const startBtn =
       document.getElementById('start-now') ||
       Array.from(document.querySelectorAll('button, a')).find(
@@ -64,14 +65,11 @@ export default function Tutorial() {
     { selector: '#start-now',       desc: 'Click here to start the current assessment.', placement: 'top' },
   ], []);
 
-
-
-
   return (
     <div style={{ position: 'relative' }}>
-      {/* 1) 先渲染 StartPage（你的原始界面作为背景） */}
+      {/* Render StartPage as background */}
       <StartPage />
-      {/* 2) 再叠加引导蒙版 */}
+      {/* Overlay tutorial on top */}
       {visible && (
         <Overlay
           steps={steps}
@@ -85,7 +83,11 @@ export default function Tutorial() {
   );
 }
 
-/** === 覆盖层 UI（挂到 body，确保不被遮挡） === */
+/**
+ * Overlay - UI layer for tutorial spotlight
+ * - Creates dark mask with transparent hole
+ * - Shows tooltip bubble near highlighted element
+ */
 function Overlay({
   steps,
   index,
@@ -107,11 +109,10 @@ function Overlay({
   skipText?: string;
   finishText?: string;
 }) {
-  // ======= 常量 & 工具（Spotlight + 位置上拉） =======
-  const BUBBLE_GAP = 12;       // 气泡与目标基本间距
-  const BOTTOM_PULLUP = 20;    // 仅 bottom 时再往上拉，避免压到底栏
-  const HOLE_PADDING = 6;      // 镂空洞与目标的间距
-  const HOLE_RADIUS = 12;      // 镂空洞圆角
+  const BUBBLE_GAP = 12;       // bubble margin to target
+  const BOTTOM_PULLUP = 20;    // pull up bubble when placed bottom
+  const HOLE_PADDING = 6;      // padding around spotlight hole
+  const HOLE_RADIUS = 12;      // corner radius of spotlight hole
 
   function roundedRectPath(x: number, y: number, w: number, h: number, r: number) {
     const rr = Math.min(r, w / 2, h / 2);
@@ -133,12 +134,12 @@ function Overlay({
   const step = steps[index];
 
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
-  const [holePath, setHolePath] = useState<string>(''); // ✅ Spotlight 镂空路径
+  const [holePath, setHolePath] = useState<string>('');
   const [bubble, setBubble] = useState<{ left: number; top: number; placement: 'top'|'bottom'|'left'|'right' }>(
     { left: 24, top: 24, placement: 'top' }
   );
 
-  // 键盘 + 锁滚动
+  // Handle keyboard navigation and scroll lock
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onSkip();
@@ -163,7 +164,6 @@ function Overlay({
     }
     setTargetRect(rect);
 
-    // ✅ 计算镂空洞路径
     if (rect) {
       const x = rect.x - HOLE_PADDING;
       const y = rect.y - HOLE_PADDING;
@@ -174,7 +174,6 @@ function Overlay({
       setHolePath('');
     }
 
-    // ✅ 计算气泡位置（含特例偏移）
     const vw = window.innerWidth;
     const scrollY = window.scrollY;
     const place = step.placement ?? 'bottom';
@@ -182,15 +181,13 @@ function Overlay({
     let left = 24, top = 24 + scrollY;
     if (rect) {
       const centerX = rect.x + rect.width / 2;
-      const EXTRA_DOWN = 30; // 汉堡栏 & Start 再往下偏移量
+      const EXTRA_DOWN = 30;
 
       if (place === 'top') {
         top = Math.max(scrollY + 12, rect.y - 172);
-        // 汉堡栏或 start now 需要下移
         if (step.selector === '#hamburger-menu' || step.selector === '#start-now') {
           top += EXTRA_DOWN;
         }
-        // Start now 想再往上些，给个反向微调（按需保留/调节）
         if (step.selector === '#start-now') {
           top -= 40;
         }
@@ -202,7 +199,6 @@ function Overlay({
         }
         left = Math.min(Math.max(12, centerX - 180), vw - 12 - 360);
 
-        // （可选）避让底部导航，如果 BottomNav 容器有 id="bottom-nav"
         const ESTIMATED_BUBBLE_HEIGHT = 160;
         const bottomNav = document.getElementById('bottom-nav');
         if (bottomNav) {
@@ -214,7 +210,7 @@ function Overlay({
       } else if (place === 'left') {
         top = rect.y + rect.height / 2 + 30;
         if (step.selector === '#hamburger-menu') {
-          top += 20; // 汉堡栏再下移一些，避免贴顶
+          top += 20;
         }
         left = Math.max(12, rect.x - 12 - 320);
       } else {
@@ -239,24 +235,22 @@ function Overlay({
 
   const ui = (
     <div className="ag-root" role="dialog" aria-modal onClick={onSkip}>
-      {/* ✅ SVG 镂空蒙版：外面变暗，洞内完全透明（使用主题变量） */}
+      {/* Dark overlay with spotlight hole */}
       <svg className="ag-mask" width="100%" height="100%">
         <defs>
           <mask id="ag-hole">
             <rect x="0" y="0" width="100%" height="100%" fill="white" />
-            {holePath && <path d={holePath} fill="black" />} {/* black = 透明洞 */}
+            {holePath && <path d={holePath} fill="black" />}
           </mask>
         </defs>
         <rect x="0" y="0" width="100%" height="100%" fill="var(--overlay-dark)" mask="url(#ag-hole)" />
       </svg>
 
       <div
-        className={`ag-bubble ag-${bubble.placement} ${step.className || ''}`} // 添加 step.className
+        className={`ag-bubble ag-${bubble.placement} ${step.className || ''}`}
         style={{ left: bubble.left, top: bubble.top }}
         onClick={(e) => e.stopPropagation()}
       >
-
-        {/* 右上角 Skip（蓝色） */}
         <button className="ag-skip" onClick={onSkip}>{skipText}</button>
         {step.desc && <div className="ag-desc">{step.desc}</div>}
 
@@ -271,5 +265,5 @@ function Overlay({
     </div>
   );
 
-  return createPortal(ui, document.body); // ✅ 挂 body，确保最上层
+  return createPortal(ui, document.body);
 }
