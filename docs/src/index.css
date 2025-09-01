@@ -1,15 +1,13 @@
-/*@import "./styles/question.css";*/
-/*ZSA 0811 */
+
 @import "./styles/theme.css";
 @import "./styles/records.css";
-/*上面是姚璟添加，为了满足records样式与question保持一致*/
 
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  font-size: var(--font-size, 16px); /* 使用 --font-size 作为动态字体大小 */
+  font-size: var(--font-size, 16px); 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
