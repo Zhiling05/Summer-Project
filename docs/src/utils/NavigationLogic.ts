@@ -1,14 +1,19 @@
 import questionnaire from "../data/questionnaire.json";
 
-
+// Option type definition for questionnaire options
 type Opt = string | { label: string; value: string; isNone?: boolean };
 
+// Normalize options to consistent object format
 function normOptions(opts: Opt[] = []) {
   return opts.map(o => typeof o === 'string' ? { label: o, value: o } : o);
 }
+
+// Get question by ID from questionnaire data
 function getQuestionById(id: string) {
   return (questionnaire as any).questions.find((q: any) => q.id === id);
 }
+
+// Check if a value is considered a "None" option for a given question
 function isNoneValueByQid(qid: string, v: string) {
   const q = getQuestionById(qid);
   const opts = normOptions(q?.options);
@@ -16,7 +21,7 @@ function isNoneValueByQid(qid: string, v: string) {
   return hit?.isNone === true || v === 'None of the above';
 }
 
-// 类型定义
+// Type definitions for navigation logic
 export type AnswerHistory = Record<string, string | string[]>;
 type NavigationType = "simple" | "conditional" | "cross-question";
 
@@ -33,6 +38,13 @@ interface CrossQuestionRule {
   next: string;
 }
 
+/**
+ * Determine the next question ID based on current question, answer, and answer history
+ * @param currentId - Current question ID
+ * @param answer - Current question's answer(s)
+ * @param answerHistory - History of all previous answers
+ * @returns Next question ID or undefined if assessment complete
+ */
 export function getNextId(
     currentId: string,
     answer: string | string[],
@@ -63,6 +75,9 @@ export function getNextId(
   }
 }
 
+/**
+ * Handle simple navigation rules (direct answer-to-next mapping)
+ */
 function getNextBySimpleRules(
     rules: string | SimpleRules,
     answer: string | string[]
@@ -73,22 +88,9 @@ function getNextBySimpleRules(
   return;
 }
 
-// function getNextByConditionalRules(
-//     rules: ConditionalRules,
-//     answer: string[]
-// ): string | undefined {
-//   if (!Array.isArray(answer)) return;
-//
-//   if (answer.includes("None of the above") && rules["None of the above"]) {
-//     return rules["None of the above"];
-//   }
-//   const hasSymptom = answer.some((opt) => opt !== "None of the above");
-//   if (hasSymptom && rules["ifAnySymptom"]) {
-//     return rules["ifAnySymptom"];
-//   }
-//
-//   return;
-// }
+/**
+ * Handle conditional navigation rules (based on presence of symptoms)
+ */
 function getNextByConditionalRules(
     rules: ConditionalRules,
     answer: string[],
@@ -96,17 +98,17 @@ function getNextByConditionalRules(
 ): string | undefined {
   if (!Array.isArray(answer)) return;
 
-  // 当前题的 none 集合
+  // Get "none" options for current question
   const opts = normOptions(current?.options);
   const isNone = (v: string) =>
       !!opts.find(o => o.value === v && o.isNone) || v === "None of the above";
 
-  // 全部都是 none → 走 "None of the above"
+  // All answers are "none" options → go to "None of the above" route
   if (answer.length > 0 && answer.every(isNone) && rules["None of the above"]) {
     return rules["None of the above"];
   }
 
-  // 只要有一个不是 none → 走 ifAnySymptom
+  // At least one non-"none" answer → go to symptom route
   const hasSymptom = answer.some(v => !isNone(v));
   if (hasSymptom && rules["ifAnySymptom"]) {
     return rules["ifAnySymptom"];
@@ -115,64 +117,9 @@ function getNextByConditionalRules(
   return;
 }
 
-
-// function getNextByCrossQuestionRules(
-//     rules: CrossQuestionRule[],
-//     history: AnswerHistory,
-//     defaultNext?: string,
-//     currentId?: string,
-//     answer?: string | string[]
-// ): string | undefined {
-//   for (const rule of rules) {
-//     let passed = true;
-//
-//     for (const [key, expected] of Object.entries(rule)) {
-//       // if (key === "next") continue;
-//       // 跳过“下一个目标”、运算符和值字段
-//       if (key === "next" || key === "operator" || key === "value") continue;
-//
-//       const [qid, method] = key.split(".");
-//
-//       // 当前题目的答案需要从 answer 参数中读取
-//       const val = (qid === currentId) ? answer : history[qid];
-//
-//       if (method === "hasAnyExcept") {
-//         if (!Array.isArray(val) || !val.some((v) => v !== expected)) passed = false;
-//       }
-//
-//       else if (method === "includesOnly") {
-//         if (!Array.isArray(val) || val.some((v) => v !== expected)) passed = false;
-//       }
-//
-//       else if (method === "countExcept") {
-//         const count = Array.isArray(val)
-//             ? val.filter((v) => v !== expected).length
-//             : 0;
-//         const op = rule.operator;
-//         const value = rule.value;
-//
-//         if (
-//             (op === ">=" && !(count >= value)) ||
-//             (op === "<=" && !(count <= value)) ||
-//             (op === "=" && count !== value)
-//         ) {
-//           passed = false;
-//         }
-//       }
-//
-//       // else {
-//       //   console.warn(`Unknown method "${method}" in cross-question rule.`);
-//       //   passed = false;
-//       // }
-//     }
-//
-//     if (passed) return rule.next;
-//   }
-//
-//
-//
-//   return defaultNext;
-// }
+/**
+ * Handle cross-question navigation rules (complex conditions across multiple questions)
+ */
 function getNextByCrossQuestionRules(
     rules: CrossQuestionRule[],
     history: AnswerHistory,
@@ -184,10 +131,13 @@ function getNextByCrossQuestionRules(
     let passed = true;
 
     for (const [key, expected] of Object.entries(rule)) {
+      // Skip navigation control fields
       if (key === "next" || key === "operator" || key === "value") continue;
+      
       const [qid, method] = key.split(".");
       const val = (qid === currentId) ? answer : history[qid];
 
+      // Convert value to array for consistent processing
       const toArr = (v: any): string[] =>
           Array.isArray(v) ? v : (v == null ? [] : [v]);
 
@@ -197,7 +147,7 @@ function getNextByCrossQuestionRules(
       if (method === "hasAnyExcept") {
         if (!arr.length) { passed = false; continue; }
         if (expIsNone) {
-          // 有至少一个不是 none
+          // Check if at least one answer is not a "none" option
           if (!arr.some(v => !isNoneValueByQid(qid, v))) passed = false;
         } else {
           if (!arr.some(v => v !== expected)) passed = false;
@@ -207,7 +157,7 @@ function getNextByCrossQuestionRules(
       else if (method === "includesOnly") {
         if (!arr.length) { passed = false; continue; }
         if (expIsNone) {
-          // 全都是 none
+          // Check if all answers are "none" options
           if (!arr.every(v => isNoneValueByQid(qid, v))) passed = false;
         } else {
           if (!arr.every(v => v === expected)) passed = false;

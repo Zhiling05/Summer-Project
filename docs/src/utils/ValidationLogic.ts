@@ -1,23 +1,21 @@
 /**
- * 校验单选题：只能选择一个选项
- * @param selections 当前已选项数组
- * @returns 错误信息数组（无错误时返回空数组）
+ * Validate single selection questions: only one option can be selected
+ * @param selections Array of currently selected options
+ * @returns Array of error messages (empty if no errors)
  */
 export function validateSingleSelection(
     selections: string[]
   ): string[] {
     const errors: string[] = [];
 
-    // lzl：添加防御性检查，避免 null/undefined 引发 .length 报错
+    // Defensive check to prevent null/undefined causing .length errors
     if (!Array.isArray(selections)) {
       selections = [];
     }
   
     if (!selections || selections.length === 0) {
-      //errors.push('必须选择一个选项。');
       errors.push('You must select an option.');
     } else if (selections.length > 1) {
-      //errors.push('只能选择一个选项。');
       errors.push('You can select only one option.');
     }
   
@@ -25,11 +23,11 @@ export function validateSingleSelection(
   }
   
   /**
-   * 校验多选题：允许选择任意数量的选项，无最低限制；可选地限制最大值
-   * 同时，当选项中包含 “None of the above” 时，该项与其他选项互斥
-   * @param selections 当前已选项数组
-   * @param max 最多选择数，可选
-   * @returns 错误信息数组（无错误时返回空数组）
+   * Validate multiple selection questions: allows selecting any number of options with optional max limit
+   * Also handles mutual exclusion when "None of the above" is selected
+   * @param selections Array of currently selected options
+   * @param max Optional maximum number of selections allowed
+   * @returns Array of error messages (empty if no errors)
    */
   export function validateMultipleSelection(
     selections: string[],
@@ -37,20 +35,19 @@ export function validateSingleSelection(
   ): string[] {
     const errors: string[] = [];
 
-    // lzl: 添加防御性检查，确保 selections 是数组，避免 includes 报错
+    // Defensive check to ensure selections is an array, preventing includes() errors
     if (!Array.isArray(selections)) {
       selections = [];
     }
   
-    // 互斥校验：如果选择了 “None of the above”，则不能再选其他
+    // Mutual exclusion validation: "None of the above" cannot be selected with other options
     const noneLabel = 'None of the above';
     if (selections.includes(noneLabel) && selections.length > 1) {
-      //errors.push(`如果选择 “${noneLabel}”，则不能选择其他选项。`);
       errors.push(`If you choose "${noneLabel}", you cannot select any other options.`);
     }
-    // 可选的最大数量限制
+    
+    // Optional maximum count validation
     if (typeof max === 'number' && selections.length > max) {
-      //errors.push(`最多只能选择 ${max} 项。`);
       errors.push(`You can select at most ${max} options.`);
     }
   
@@ -58,11 +55,12 @@ export function validateSingleSelection(
   }
   
   /**
-   * 通用入口：根据题目类型调用不同的校验，支持多种 type 格式
-   * @param type 题目类型（如 'single', 'single-choice', 'multi', 'multiple-choice'）
-   * @param selections 当前已选项数组
-   * @param optionsCount （多选题）最大选项数
-   * @returns 错误信息数组
+   * Generic validation entry point: dispatches to appropriate validation based on question type
+   * Supports various type formats for flexibility
+   * @param type Question type (e.g., 'single', 'single-choice', 'multi', 'multiple-choice')
+   * @param selections Array of currently selected options
+   * @param optionsCount Maximum number of options available (for multiple choice questions)
+   * @returns Array of error messages
    */
   export function validateByType(
     type: string,
@@ -70,10 +68,10 @@ export function validateSingleSelection(
     optionsCount?: number
   ): string[] {
 
-    // lzl: 添加防御性检查， 避免 type 为 null 时 .toLowerCase() 报错
+    // Defensive check to prevent null type causing .toLowerCase() errors
     const t = (type || '').toLowerCase();
 
-    // lzl: 添加防御性检查，确保 selections 为数组，兼容边界输入
+    // Defensive check to ensure selections is an array for consistent handling
     if (!Array.isArray(selections)) {
       selections = [];
     }
@@ -84,7 +82,7 @@ export function validateSingleSelection(
     if (t.startsWith('multi')) {
       return validateMultipleSelection(selections, optionsCount);
     }
-    // 默认按单选处理
+    
+    // Default to single selection validation
     return validateSingleSelection(selections);
   }
-  
