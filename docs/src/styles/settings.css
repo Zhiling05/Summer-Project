@@ -1,49 +1,45 @@
-/* === 在 :root 中定义头部高度 === */
 :root {
-  --header-height: 64px; /* 假设 header 高度为 64px */
-  --page-width: 90%; /* 设置页面宽度为 records 页面的一致宽度 */
-  --content-max-width: 1200px; /* 设置内容最大宽度 */
-  --side-padding: 24px; /* 页面左右边距 */
+  --header-height: 64px;
+  --page-width: 90%;
+  --content-max-width: 1200px;
+  --side-padding: 24px;
   --space-s: 8px;
   --space-m: 16px;
   --space-l: 24px;
   --core-blue: #005eb8;
 }
 
-/* === 页面容器 === */
 .settings-page-container {
   display: grid;
-  grid-template-columns: 1fr; /* 单列布局 */
-  grid-template-rows: auto 1fr; /* 标题和内容区域 */
-  gap: var(--space-l); /* 栅格间距 */
-  margin-left: auto; /* 水平居中 */
-  margin-right: auto; /* 水平居中 */
-  max-width: var(--content-max-width); /* 最大宽度 */
-  padding: var(--space-m); /* 内边距 */
-  box-sizing: border-box; /* 盒模型 */
-  margin-top: -15px; /* 顶部边距设置为负的 header 高度 */
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-l);
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--content-max-width);
+  padding: var(--space-m);
+  box-sizing: border-box;
+  margin-top: -15px;
 }
 
-/* === 内容区域 === */
 .text-content {
   background-color: #fff;
   padding: var(--space-l);
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 1000px; /* 最大宽度增加至 1000px */
+  max-width: 1000px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  word-wrap: break-word; /* 强制换行，防止溢出 */
+  word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
-/* === 标题样式 === */
 .settings-title {
-  font-size: 2.2rem; /* 增加标题的字体大小 */
+  font-size: 2.2rem;
   color: var(--core-blue);
   margin-bottom: var(--space-m);
   text-align: center;
@@ -51,7 +47,6 @@
   line-height: 1.4;
 }
 
-/* === 区块样式 === */
 .settings-section {
   margin-bottom: var(--space-l);
 }
@@ -65,37 +60,31 @@
   padding-bottom: var(--space-s);
 }
 
-/* === 描述文字 === */
 .settings-description {
-  font-size: 1.1rem; /* 增大文字尺寸 */
+  font-size: 1.1rem;
   color: #555;
   line-height: 1.8;
   margin-bottom: var(--space-m);
-  max-width: 80vw; /* 使段落宽度根据屏幕宽度变化 */
-  text-align: justify; /* 调整文字对齐 */
+  max-width: 80vw;
+  text-align: justify;
 }
 
-/* === 划分线 === */
 .divider {
   margin: var(--space-l) 0;
   border: none;
   border-top: 2px solid #eee;
 }
 
-
-
-/* === 设置项布局 === */
 .settings-info {
   display: flex;
-  flex-wrap: wrap; /* 使项目换行 */
-  gap: 18px; /* 通过 gap 来设置间距 */
-  justify-content: center; /* 保证按钮向左对齐 */
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
 }
 
-/* 针对每个按钮设置宽度和间距 */
 .settings-info-item {
-  width: calc(33.33% - 18px); /* 每个按钮占据 1/3 的宽度，减去间距 */
-  margin-bottom: 18px; /* 添加底部间距 */
+  width: calc(33.33% - 18px);
+  margin-bottom: 18px;
 }
 
 .settings-info-item h3 {
@@ -114,10 +103,9 @@
   color: #005bb5;
 }
 
-/* === 响应式设计（适应小屏幕设备） === */
 @media (max-width: 1024px) {
   .settings-page-container {
-    padding: var(--space-s); /* 更小的边距 */
+    padding: var(--space-s);
   }
 
   .text-content {
@@ -127,19 +115,19 @@
   }
 
   .settings-title {
-    font-size: 1.8rem; /* 标题缩小 */
+    font-size: 1.8rem;
   }
 
   .settings-section-title {
-    font-size: 1.4rem; /* 小屏时标题略微缩小 */
+    font-size: 1.4rem;
   }
 
   .settings-description {
-    font-size: 1rem; /* 段落文字缩小 */
+    font-size: 1rem;
   }
 
   .settings-info {
-    grid-template-columns: 1fr; /* 一列布局 */
+    grid-template-columns: 1fr;
   }
 }
 
@@ -163,7 +151,7 @@
   }
 
   .settings-info {
-    grid-template-columns: 1fr; /* 一列布局 */
+    grid-template-columns: 1fr;
   }
 }
 
@@ -191,6 +179,6 @@
   }
 
   .settings-info {
-    grid-template-columns: 1fr; /* 保持一列布局 */
+    grid-template-columns: 1fr;
   }
 }
