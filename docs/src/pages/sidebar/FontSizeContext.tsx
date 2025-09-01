@@ -1,17 +1,17 @@
 import React, { createContext, useState, useContext } from "react";
 
-// 定义字体大小类型
+/* Font size type definition */
 type FontSizeType = "13px" | "18px" | "24px";
 
-// 创建上下文
+/* Create context for font size management */
 const FontSizeContext = createContext<{
   fontSize: FontSizeType;
   setFontSize: React.Dispatch<React.SetStateAction<FontSizeType>>;
 } | undefined>(undefined);
 
-// FontSizeProvider 组件
+/* FontSizeProvider component for wrapping app with font size context */
 export const FontSizeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [fontSize, setFontSize] = useState<FontSizeType>("18px"); // 默认字体大小为 16px
+  const [fontSize, setFontSize] = useState<FontSizeType>("18px");
 
   return (
     <FontSizeContext.Provider value={{ fontSize, setFontSize }}>
@@ -20,7 +20,7 @@ export const FontSizeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-// 自定义 Hook 来访问字体大小和设置方法
+/* Custom hook to access font size and setter function */
 export const useFontSize = () => {
   const context = useContext(FontSizeContext);
   if (!context) {

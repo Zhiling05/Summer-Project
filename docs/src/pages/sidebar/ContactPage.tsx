@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/contactus.css';
 import Header from '../../components/Header';
-import BackButton from '../../components/BackButton';//zkx
+import BackButton from '../../components/BackButton';
 
 export default function ContactPage() {
   const [headerHeight, setHeaderHeight] = useState<number>(0);
 
   useEffect(() => {
-    const header = document.querySelector('.nhs-header') as HTMLElement;  // 类型断言
+    /* Calculate header height for proper page spacing */
+    const header = document.querySelector('.nhs-header') as HTMLElement;
     if (header) {
-      setHeaderHeight(header.offsetHeight); // 安全访问 offsetHeight
+      setHeaderHeight(header.offsetHeight);
     }
   }, []);
+
   return (
     <div className="contact-page-container" style={{ paddingTop: `${headerHeight}px` }}>
-      <Header title="Follow Us" showBack={true} /> {/* 使用 Header 中的返回按钮 */}
+      <Header title="Follow Us" showBack={true} />
       <BackButton />
       <div className="text-content">
         <h1 className="contact-title">Contact Us</h1>
-
 
         <section className="contact-section">
           <h2 className="contact-section-title">About Our Team</h2>
           <p className="contact-description">
             The DIPP is led by a team of passionate researchers dedicated to improving healthcare.
             For more information, our website is: 
-                <a href="https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/research-team/"> https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/research-team/</a>
+            <a href="https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/research-team/"> https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/research-team/</a>
           </p>
-          {/* 这里添加一个分隔线 */}
           <hr className="divider" />
         </section>
 
@@ -42,7 +42,7 @@ export default function ContactPage() {
               <h3>Website</h3>
               <p>
                 Follow what's happening in CAPC study:
-                <a href="https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/" > https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/</a>
+                <a href="https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/"> https://www.bristol.ac.uk/primaryhealthcare/researchthemes/dipp-study/</a>
               </p>
             </div>
             
@@ -64,7 +64,6 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* 添加一个分隔线 */}
           <hr className="divider" />
         </section>
 
