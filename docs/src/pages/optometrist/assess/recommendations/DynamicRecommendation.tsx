@@ -11,18 +11,18 @@ import "../../../../styles/report.css";
 import Header from "../../../../components/Header";
 import BottomNav from "../../../../components/BottomNav";
 
-// 完整推荐文本映射
+/** Human-readable recommendation text mapping */
 const RECOMMEND_TEXT: Record<string, string> = {
   EMERGENCY_DEPARTMENT: "Send patient to Emergency Department immediately",
   IMMEDIATE: "Immediate referral to Eye Emergency On-Call",
-  URGENT_TO_OPH: "Urgent referral to Ophthalmology",
+  URGENT_TO_OPH: "Urgent referral to Ophthalmologist",
   URGENT_TO_GP_OR_NEUR: "Urgent referral to GP or Neurology",
-  TO_GP: "Refer to General Practitioner",
+  TO_GP: "Refer to GP",
   NO_REFERRAL: "No referral required",
   OTHER_EYE_CONDITIONS_GUIDANCE: "Referral to other department",
 };
 
-// 风险级别映射（用于CSS颜色类）
+/** Risk category mapping to color classes (used in UI styling) */
 const RISK_TO_LEVEL: Record<string, string> = {
   EMERGENCY_DEPARTMENT: "red",
   IMMEDIATE: "red",
@@ -33,7 +33,9 @@ const RISK_TO_LEVEL: Record<string, string> = {
   OTHER_EYE_CONDITIONS_GUIDANCE: "orange",
 };
 
-/* ---------- 报告预览组件 ---------- */
+/**
+ * ReportPreview - renders report text in a preformatted block
+ */
 const ReportPreview: React.FC<{
   assessmentId: string;
   reportText: string;
@@ -42,7 +44,6 @@ const ReportPreview: React.FC<{
   const [localReportText, setLocalReportText] = useState(reportText);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 当组件挂载时自动加载报告
   useEffect(() => {
     if (assessmentId && !localReportText) {
       setIsLoading(true);
@@ -53,24 +54,15 @@ const ReportPreview: React.FC<{
     }
   }, [assessmentId, localReportText, ensureReport]);
 
-  // 同步外部 reportText 变化
   useEffect(() => {
     if (reportText) {
       setLocalReportText(reportText);
     }
   }, [reportText]);
 
-  if (!assessmentId) {
-    return <p>Assessment ID missing</p>;
-  }
-
-  if (isLoading) {
-    return <p>Loading report preview...</p>;
-  }
-
-  if (!localReportText) {
-    return <p>No report available</p>;
-  }
+  if (!assessmentId) return <p>Assessment ID missing</p>;
+  if (isLoading) return <p>Loading report preview...</p>;
+  if (!localReportText) return <p>No report available</p>;
 
   return (
     <pre style={{ 
@@ -89,6 +81,9 @@ const ReportPreview: React.FC<{
   );
 };
 
+/**
+ * CollapsibleCard - simple UI wrapper with expandable content
+ */
 function CollapsibleCard({
   title,
   defaultOpen = false,
@@ -110,35 +105,33 @@ function CollapsibleCard({
   );
 }
 
-/* =============================================================== */
-
+/**
+ * DynamicRecommendation - shows final recommendation and report
+ * - Fetches and displays assessment result
+ * - Provides options to copy, download, or email the report
+ */
 const DynamicRecommendation: React.FC = () => {
   useEffect(() => {
     sessionStorage.removeItem('assessStarted');
     sessionStorage.removeItem('lastQuestionId');
     sessionStorage.removeItem('answerHistory');
-    sessionStorage.removeItem('assessmentComplete'); // 保守清掉旧值
-    sessionStorage.removeItem('questionTrail'); // DynamicRecommendation 里
-
+    sessionStorage.removeItem('assessmentComplete');
+    sessionStorage.removeItem('questionTrail');
   }, []);
 
-  /* —— 路由参数 —— */
   const { resultId, assessmentId } = useParams<{ resultId: string; assessmentId?: string }>();
   const { state } = useLocation() as { state?: { assessmentId?: string } };
   const finalAssessmentId = assessmentId || state?.assessmentId || "";
-  
-  // 获取推荐详情
+
   const recommendation = recommendationsData.find(r => r.id === resultId);
-  
-  // 状态管理
+
   const [assessment, setAssessment] = useState<any | null>(null);
   const [reportText, setReportText] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // 导航
   const navigate = useNavigate();
 
-  // 获取评估数据
+  // Fetch assessment details
   useEffect(() => {
     if (!finalAssessmentId) {
       setLoading(false);
@@ -149,12 +142,11 @@ const DynamicRecommendation: React.FC = () => {
       .then(setAssessment)
       .catch((e) => {
         console.error("Failed to load assessment", e);
-        // 如果获取失败，仍然显示页面，但不显示详细信息
       })
       .finally(() => setLoading(false));
   }, [finalAssessmentId]);
 
-  // 报告管理函数
+  /** Ensure report text is loaded */
   const ensureReport = async () => {
     if (reportText) return reportText;
     if (!finalAssessmentId) throw new Error("Assessment ID missing");
@@ -163,13 +155,7 @@ const DynamicRecommendation: React.FC = () => {
     return text;
   };
 
-  // // 打开/关闭邮件模态框
-  // const openEmailModal = () => setShowEmailModal(true);
-  // const closeEmailModal = () => {
-  //   if (!sending) setShowEmailModal(false);
-  // };
-
-  // 新增：打开默认邮件客户端函数
+  /** Open system default email client with pre-filled report */
   const openDefaultEmailClient = async () => {
     try {
       const reportText = await ensureReport();
@@ -179,7 +165,7 @@ const DynamicRecommendation: React.FC = () => {
       
       window.location.href = `mailto:?subject=${subject}&body=${body}`;
       
-      // 移动设备延迟检测
+      // Mobile fallback detection
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       if (isMobile) {
         setTimeout(() => {
@@ -188,20 +174,18 @@ const DynamicRecommendation: React.FC = () => {
           }
         }, 2000);
       }
-      
     } catch (error) {
       console.error('Failed to open email client:', error);
       alert('Failed to open email client. Please install an email app first.');
     }
   };
 
-  // 复制报告
+  /** Copy report text to clipboard */
   const handleCopy = async () => {
     if (!finalAssessmentId) {
       alert("Assessment ID missing");
       return;
     }
-    
     try {
       const text = await ensureReport();
       await navigator.clipboard.writeText(text);
@@ -212,13 +196,12 @@ const DynamicRecommendation: React.FC = () => {
     }
   };
 
-  // 处理报告下载
+  /** Download report as text file */
   const handleDownload = async () => {
     if (!finalAssessmentId) {
       alert("Assessment ID missing");
       return;
     }
-    
     try {
       const blob = await exportAssessment(finalAssessmentId, "txt");
       saveAs(blob, `assessment-${finalAssessmentId}.txt`);
@@ -228,18 +211,15 @@ const DynamicRecommendation: React.FC = () => {
     }
   };
 
-  // 推荐结果未找到
+  // Fallback when recommendation not found
   if (!recommendation) {
     return (
       <div className="recommendation-container">
         <Header title="Assessment Result" showBack />
-        
         <main className="recommendation-main">
           <div className="recommendation-card">
             <div className="recommendation-card__header" style={{ background: "#d32f2f" }}>
-              <h2 className="recommendation-title">
-                Result Not Found
-              </h2>
+              <h2 className="recommendation-title">Result Not Found</h2>
             </div>
             <div className="recommendation-body">
               <p className="recommendation-description">
@@ -256,34 +236,26 @@ const DynamicRecommendation: React.FC = () => {
             </div>
           </div>
         </main>
-        
         <BottomNav />
       </div>
     );
   }
 
-  // 获取完整推荐文本和颜色类
   const fullRecommendationText = RECOMMEND_TEXT[resultId as keyof typeof RECOMMEND_TEXT] || recommendation.title;
   const colorClass = `report-${RISK_TO_LEVEL[resultId as keyof typeof RISK_TO_LEVEL] || "green"}`;
 
-  /* —— 正常渲染 —— */
   return (
     <div className="recommendation-container">
       <Header title="Assessment Result" showBack />
 
       <div className="page-container">
         <main className="report-main">
-          {/* ——— 推荐结果卡片（参考图二的UI）——— */}
+          {/* Recommendation card */}
           <article className={`report-card ${colorClass}`}>
             <h2 className="report-title">{fullRecommendationText}</h2>
-
             <div className="report-btn-group">
-              <button onClick={handleCopy} disabled={!finalAssessmentId}>
-                📋 Copy
-              </button>
-              <button onClick={handleDownload} disabled={!finalAssessmentId}>
-                ⬇️ Download
-              </button>
+              <button onClick={handleCopy} disabled={!finalAssessmentId}>📋 Copy</button>
+              <button onClick={handleDownload} disabled={!finalAssessmentId}>⬇️ Download</button>
               <button
                 onClick={openDefaultEmailClient}
                 disabled={!finalAssessmentId}
@@ -294,7 +266,7 @@ const DynamicRecommendation: React.FC = () => {
             </div>
           </article>
 
-          {/* ——— 折叠的报告预览区域 ——— */}
+          {/* Collapsible report preview */}
           <section className="collapse-wrapper">
             <CollapsibleCard title="Preview Report" defaultOpen={true}>
               <ReportPreview 
