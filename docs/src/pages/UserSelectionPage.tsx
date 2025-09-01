@@ -3,15 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/card.css';
 import '../styles/user-selection.css';
-import '../styles/popupwindow.css';
+import '../styles/popupwindow.css'; 
 import Sidebar from '../components/SideBar';
 import { ensureGuest, http } from '../api';
 
-/**
- * UserSelectionPage - role selection screen
- * - Provides entry points for different user types
- * - Includes administrator login with password modal
- */
 export default function UserSelectionPage() {
   const navigate = useNavigate();
   useEffect(() => { void ensureGuest(); }, []);
@@ -96,13 +91,17 @@ export default function UserSelectionPage() {
           </div>
           {/* Administrator Option */}
           <div className="admin-option">
-            <a href="/admin" className="admin-link" onClick={handleAdminClick}>
+            <a
+              href="/admin"
+              className="admin-link"
+              onClick={handleAdminClick}
+            >
               I am an administrator
             </a>
           </div>
         </div>
       </div>
-
+      
       {/* Password Modal */}
       {showPasswordModal && (
         <div className="cm-overlay" onClick={handleModalClose}>
@@ -118,20 +117,58 @@ export default function UserSelectionPage() {
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={handleKeyDown}
               autoFocus
+              style={{
+                width: '100%',
+                padding: '0.75rem 1rem',
+                border: '2px solid var(--border-grey, #aeb7bd)',
+                borderRadius: 'var(--radius-s, 4px)',
+                fontSize: '1rem',
+                boxSizing: 'border-box',
+                background: 'var(--lighter-base)',
+                color: 'var(--text-body)',
+                marginBottom: '1rem'
+              }}
             />
 
             {passwordError && (
-              <div className="password-error">{passwordError}</div>
+              <div style={{
+                color: 'var(--urgent-red)',
+                fontSize: '0.9rem',
+                textAlign: 'center',
+                marginBottom: '1rem'
+              }}>
+                {passwordError}
+              </div>
             )}
 
             <div className="cm-actions">
-              <button onClick={handleModalClose} className="btn-cancel">
+              <button
+                onClick={handleModalClose}
+                style={{
+                  background: 'var(--border-grey)',
+                  color: 'var(--text-inverse)',
+                  border: 'none',
+                  borderRadius: 'var(--radius-s, 4px)',
+                  padding: '0.75rem 1.5rem',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+              >
                 Cancel
               </button>
               <button
                 onClick={handlePasswordSubmit}
                 disabled={!password.trim()}
-                className="btn-continue"
+                style={{
+                  background: password.trim() ? 'var(--core-blue)' : '#c5c5c5',
+                  color: 'var(--text-inverse)',
+                  border: 'none',
+                  borderRadius: 'var(--radius-s, 4px)',
+                  padding: '0.75rem 1.5rem',
+                  cursor: password.trim() ? 'pointer' : 'not-allowed',
+                  fontSize: '1rem',
+                  opacity: password.trim() ? 1 : 0.6
+                }}
               >
                 Continue
               </button>
