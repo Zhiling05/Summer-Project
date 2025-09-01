@@ -5,8 +5,8 @@ export type RawOption = string | { label: string; value: string };
 export interface QuestionNavigation {
   type: NavigationType;
   rules:
-    | Record<string, string>       // simple
-    | ({ [k: string]: any; next: string; operator?: string; value?: number })[]; // 条件 / 交叉
+    | Record<string, string> 
+    | ({ [k: string]: any; next: string; operator?: string; value?: number })[]; 
   defaultNext?: string;
 }
 
