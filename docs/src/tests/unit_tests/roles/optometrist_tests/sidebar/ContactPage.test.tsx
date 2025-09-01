@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import ContactPage from "../../../../../pages/sidebar/ContactPage";
 
-// 用 mock Header 渲染 .nhs-header（和页面一致的类名）
+// Render the .nhs-header (a class name consistent with the page) using the mock Header
 jest.mock("../../../../../components/Header", () =>
   ({ title }: { title: string }) => (
     <div className="nhs-header" data-testid="header">{title}</div>
@@ -15,7 +15,7 @@ jest.mock("../../../../../components/BackButton", () => () => (
 ));
 
 describe("ContactPage", () => {
-  test("基础渲染：标题/分区/链接", () => {
+  test("basic render:topic /part /link", () => {
     render(
       <MemoryRouter>
         <ContactPage />
@@ -44,7 +44,7 @@ describe("ContactPage", () => {
       screen.getByText(/The DIPP is led by a team/i)
     ).toBeInTheDocument();
 
-    // 社媒链接
+    // link of social media
     expect(screen.getByRole("link", { name: "Youtube" }))
       .toBeInTheDocument();
     expect(screen.getByRole("link", { name: "LinkedIn" }))
@@ -53,8 +53,7 @@ describe("ContactPage", () => {
       .toBeInTheDocument();
   });
 
-  test("根据 header 高度设置 paddingTop", () => {
-    // 在渲染前塞一个假的 .nhs-header，指定 offsetHeight
+  test(" Set paddingTop according to hight of header", () => {
     const dummy = document.createElement("div");
     dummy.className = "nhs-header";
     Object.defineProperty(dummy, "offsetHeight", { value: 80 });
@@ -75,7 +74,7 @@ describe("ContactPage", () => {
     document.body.removeChild(dummy);
   });
 
-  test("外部链接包含 target=_blank 与 rel=noopener", async () => {
+  test("link including target=_blank and rel=noopener", async () => {
     const user = userEvent.setup();
     render(
       <MemoryRouter>
@@ -95,6 +94,6 @@ describe("ContactPage", () => {
     expect(li.getAttribute("rel")).toContain("noopener");
     expect(bs.getAttribute("rel")).toContain("noopener");
 
-    await user.click(yt); // 简单触达一下交互
+    await user.click(yt);
   });
 });
