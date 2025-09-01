@@ -1,4 +1,3 @@
-/* 背景容器：只保留上下内边距，避免显宽 */
 .records-main {
     flex: 1;
     background: var(--page-base);
@@ -14,7 +13,6 @@
     }
 }
 
-/* 版心：对齐 user-selection */
 .records-wrapper {
     width: 80vw;
     max-width: 50rem;
@@ -24,7 +22,6 @@
     box-sizing: border-box;
 }
 
-/* 标题顶距与 user-selection 一致（桌面/手机） */
 .records-title {
     font-size: 1.8rem;
     font-weight: 700;
@@ -35,9 +32,6 @@
     .records-title { margin-top: var(--space-l); }
 }
 
-/* -----------------------------------------------------------
-   1. 风险统计卡
-   ----------------------------------------------------------- */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -61,12 +55,7 @@
     transition: transform .15s, box-shadow .15s;
     cursor: default;
 }
-/* .stats-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
-} */
 
-/* 风险色标签变量 */
 .stats-card.red    { color: var(--urgent-red); }
 .stats-card.orange { color: var(--risk-orange); }
 .stats-card.green  { color: var(--risk-green); }
@@ -75,7 +64,6 @@
 .stats-num   { font-size: 2.4rem; font-weight: 700; line-height: 1; }
 .stats-desc  { font-size: .95rem; color: var(--text-body); opacity: .8; }
 
-/* 2. 筛选栏 */
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
@@ -117,16 +105,14 @@
     border-color: var(--core-blue);
 }
 
-/* ── 让 react-datepicker 的 wrapper 也固定宽度 ── */
 .filter-bar .react-datepicker-wrapper,
 .filter-bar .react-datepicker__input-container {
     width: 160px;
 }
 
-/* ── 让实际的 text input 填满 wrapper ── */
 .filter-bar .react-datepicker__input-container input {
     width: 100%;
-    box-sizing: border-box;   /* 确保 width 包括了 padding */
+    box-sizing: border-box;
 }
 
 .records-table {
@@ -166,8 +152,7 @@
     max-width: 35%;
     white-space: normal;
     word-break: break-all;
-    overflow-wrap: anywhere; /* 任意处断行，避免挤压其他列 */
-    /* font-family: ui-monospace, SFMono-Regular, Menlo, monospace; */  /* 修改id的字体和其他一样 */
+    overflow-wrap: anywhere;
 }
 .records-table th:nth-child(2),
 .records-table td:nth-child(2) { width: 20%; }
@@ -179,16 +164,6 @@
     white-space: nowrap;
 }
 
-/* 让主容器始终占据视口的 80% 宽度，水平居中，并保留左右内边距 */
-/*.page-container,*/
-/*.records-main {*/
-/*    width: 90%;*/
-/*    max-width: none;*/
-/*    margin: 0 auto;*/
-/*    padding: 0 var(--space-l);*/
-/*    box-sizing: border-box;*/
-/*    padding-bottom: 60px;*/
-/*}*/
 .records-wrapper {
     max-width: var(--container-max);
     margin: 0 auto;
@@ -197,9 +172,6 @@
     box-sizing: border-box;
 }
 
-
-
-/* 风险标签 */
 .tag-pill {
     display: inline-block;
     padding: 2px 8px;
@@ -212,7 +184,6 @@
 .tag-orange { background: var(--risk-orange); }
 .tag-green  { background: var(--risk-green); }
 
-/* 详情按钮 */
 .view-btn {
     background: var(--lighter-base);
     border: 2px solid var(--light-blue);
@@ -228,7 +199,6 @@
     color: var(--text-body);
 }
 
-/* 响应式 */
 @media (max-width: 640px) {
     .records-main { padding: var(--space-l) var(--space-m) calc(64px + var(--space-l)); }
     .stats-grid { grid-template-columns: 1fr; }
@@ -237,18 +207,17 @@
 }
 
 .records-title {
-    margin-bottom: var(--space-xl); /* ✅ 新增：标题和统计卡之间的间距 */
+    margin-bottom: var(--space-xl);
 }
 
 .stats-grid {
-    margin-bottom: var(--space-xl); /* ✅ 卡片和 filter-bar 之间的间距 */
+    margin-bottom: var(--space-xl);
 }
 
 .filter-bar {
-    margin-bottom: var(--space-xl); /* ✅ filter-bar 和表格之间的间距 */
+    margin-bottom: var(--space-xl);
 }
 
 .table-wrapper {
-    margin-bottom: var(--space-xl); /* ✅ 表格和底部导航之间的空间 */
+    margin-bottom: var(--space-xl);
 }
-
