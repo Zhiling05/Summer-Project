@@ -1,45 +1,39 @@
-/* 页面整体结构 */
 .startpage-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--page-bg); /* 深色模式适配背景色 */
+    background-color: var(--page-bg);
 }
 
-/* 主内容区 */
 .startpage-main {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 80px; /* 预留 BottomNav 高度 */
+    padding-bottom: 80px; 
 }
 
-/* 主容器：80%宽度 + 居中 + 内边距 */
 .startpage-container {
     width: 80%;
     max-width: 1200px;
-    margin: 0 auto;          /* 水平居中 */
-    padding: 0 1rem;         /* 左右内边距 */
+    margin: 0 auto;    
+    padding: 0 1rem;        
     text-align: center;
 }
 
-/* 标题样式 */
 .startpage-title {
     margin-bottom: 2rem;
     font-size: 1.8rem;
     font-weight: bold;
 }
 
-/* 描述文本 */
 .startpage-desc {
     font-size: 1.1rem;
-    color: var(--text-secondary); /* 用全局变量适配深色模式 */
+    color: var(--text-secondary); 
     margin-bottom: 2rem;
     line-height: 1.6;
 }
 
-/* 按钮样式，可复用 continue-button 的基础风格 */
 .startpage-button {
     font-size: 1.1rem;
     padding: 16px 32px;
