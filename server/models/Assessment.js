@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
+/* MongoDB schema for assessment records with user isolation and automatic expiration */
 const AssessmentSchema = new Schema({
-  userId: { type: String, required: true },   // 添加用户隔离功能
+  userId: { type: String, required: true },
   role: { type: String, enum: ['optometrist','gp','patient'], required: true },
   customId: { type: String, unique: true, required: true},
-  content: { type: String, default: '' },   // 建议用 default，避免因空串报 500
+  content: { type: String, default: '' },
   recommendation: { 
     type: String, 
     enum: [
@@ -30,17 +30,18 @@ const AssessmentSchema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-
+/* TTL index - automatically delete optometrist records after 90 days */
 AssessmentSchema.index(
-  { userId:1, createdAt:-1 },
+  { userId: 1, createdAt: -1 },
   {
     expireAfterSeconds: 60 * 60 * 24 * 90,
     partialFilterExpression: { role: 'optometrist' }
   }
 );
 
-// 为常用查询添加索引
-AssessmentSchema.index({ role: 1, recommendation: 1 }); // 用于风险级别统计
-AssessmentSchema.index({ createdAt: -1 }); // 用于日期排序和筛选
-AssessmentSchema.index({ customId: 1});
+/* Database indexes for query optimization */
+AssessmentSchema.index({ role: 1, recommendation: 1 }); /* For risk level statistics */
+AssessmentSchema.index({ createdAt: -1 }); /* For date sorting and filtering */
+AssessmentSchema.index({ customId: 1 }); /* For unique ID lookups */
+
 module.exports = mongoose.model('Assessment', AssessmentSchema);

@@ -4,26 +4,23 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const authGuard  = require('./middleware/auth-guard');
+const authGuard = require('./middleware/auth-guard');
 const path = require('path');
-// const nodemailer = require('nodemailer');
 
-// 导入路由模块
+/* Import route modules */
 const assessmentsRoutes = require('./routes/assessments');
 const exportRoutes = require('./routes/export');
-// const mailRoutes = require('./routes/mail');
 const reportRoutes = require('./routes/report');
-// 创建Express应用
+
+/* Create Express application */
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.set('trust proxy', 1);
 
-// CORS配置 - 允许前端访问API
+/* CORS configuration - allow frontend access to API */
 const allowedOrigins = process.env.FRONTEND_ORIGIN 
   ? process.env.FRONTEND_ORIGIN.split(',') 
   : ['http://localhost:5173'];
@@ -41,7 +38,7 @@ app.use(cors({
   credentials: true,
 }));
 
-// 连接MongoDB数据库
+/* Connect to MongoDB database */
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => {
@@ -49,32 +46,15 @@ mongoose.connect(process.env.MONGO_URI)
     process.exit(1);
   });
 
-
-// 用户隔离：把当前用户写入req.user.id
-// 挂载顺序：先 /api/guest，再保护其它 /api
-// const authRoutes = require('./routes/auth');
-// const auth = require('./middleware/auth');
-// app.use('/api', authRoutes);
-// app.use('/api', auth, assessmentsRoutes);
-//
-//
-// // 匿名cookie-用户隔离
-// const cors = require('cors');
-// const cookieParser = require('cookie-parser');
-// app.use(cors({ origin: ['https://dipp-frontend.onrender.com'], credentials: true }));
-// app.use(cookieParser());
-
-// app.use(cors({ origin: process.env.FRONTEND_ORIGIN.split(','), credentials: true }));
 app.use(cookieParser());
 
-app.use('/api', authRoutes);                   // /api/guest 等无需鉴权
-
-// API路由注册
-app.use('/api', authGuard, assessmentsRoutes);
+/* API route registration */
+app.use('/api', authRoutes); /* Public routes like /api/guest */
+app.use('/api', authGuard, assessmentsRoutes); /* Protected assessment routes */
 app.use('/api', exportRoutes);
-// app.use('/api', mailRoutes);
 app.use('/api', reportRoutes);
 
+/* Health check endpoint */
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
@@ -83,13 +63,12 @@ app.get('/health', (req, res) => {
   });
 });
 
-
-// 生产环境下提供静态文件服务
+/* Serve static files in production */
 if (process.env.NODE_ENV === 'production') {
   const frontendBuildDir = path.join(__dirname, '../docs/dist');
   
   try {
-    // 检查dist目录是否存在
+    /* Check if dist directory exists */
     if (require('fs').existsSync(frontendBuildDir)) {
       console.log(`Serving static files from: ${frontendBuildDir}`);
       
@@ -107,6 +86,7 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
+/* Global error handler */
 app.use((err, req, res, next) => {
   console.error('Global error handler:', err.stack);
   res.status(500).json({
@@ -115,12 +95,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
+/* Start server */
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
 });
 
+/* Process error handlers */
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Promise Rejection:', err);
 });

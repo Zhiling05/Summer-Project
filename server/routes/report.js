@@ -2,34 +2,34 @@ const express = require('express');
 const router = express.Router();
 const Assessment = require('../models/Assessment');
 
-const { extractSymptoms }   = require('../utils/symptoms');
+const { extractSymptoms } = require('../utils/symptoms');
 const { buildFullReportText } = require('../utils/doc');
 
-/**
- * GET /assessments/:id/report - 获取评估报告文本
- * 返回评估报告的纯文本内容，用于预览而非下载
+/* 
+ * GET /assessments/:id/report - Get assessment report text for preview
+ * Returns plain text content for display, not download
  */
 router.get('/assessments/:id/report', async (req, res) => {
   const { id } = req.params;
   
-  // 验证ID
+  /* Validate ID */
   if (id === 'LOCAL') {
-    return res.status(400).json({ error: 'LOCAL is for preview only' }); //使用json格式的错误相应
+    return res.status(400).json({ error: 'LOCAL is for preview only' });
   }
   
   try {
-    // 查找评估记录
+    /* Find assessment record */
     const record = await Assessment.findOne({ customId: id });
     if (!record) {
       return res.status(404).json({ error: 'Assessment not found' });
     }
 
-    // 确保有症状数据
+    /* Ensure symptoms data is available */
     const symptoms = (record.symptoms && record.symptoms.length)
       ? record.symptoms
       : extractSymptoms(record.answers || []);
 
-    // 准备报告数据 - 只包含需要的字段
+    /* Prepare report data with required fields only */
     const payload = {
       assessmentId: record.customId, 
       createdAt: record.createdAt,
@@ -37,10 +37,10 @@ router.get('/assessments/:id/report', async (req, res) => {
       recommendation: record.recommendation || '',
     };
 
-    // 生成报告文本
+    /* Generate report text */
     const text = buildFullReportText(payload);
     
-    // 设置Content-Type但不设置Content-Disposition，使内容显示而非下载
+    /* Set Content-Type for display, not download */
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.send(text);
   } catch (err) {

@@ -5,9 +5,9 @@ const Assessment = require('../models/Assessment');
 const { extractSymptoms } = require('../utils/symptoms');
 const { buildFullReportText } = require('../utils/doc');
 
-/**
- * GET /assessments/:id/export - 导出评估报告为文件
- * 将评估报告生成为可下载的txt文件
+/* 
+ * GET /assessments/:id/export - Export assessment report as downloadable file
+ * Query params: format (default: 'txt')
  */
 router.get('/assessments/:id/export', async (req, res) => {
   const { id } = req.params;
@@ -17,24 +17,24 @@ router.get('/assessments/:id/export', async (req, res) => {
     return res.status(400).json({ error: 'LOCAL is for preview only' });
   }
   
-  // 验证格式（目前只支持txt）
+  /* Validate format - currently only txt is supported */
   if (format !== 'txt') {
     return res.status(400).json({ error: 'Only txt format is currently supported' });
   }
   
   try {
-    // 查找评估记录
+    /* Find assessment record */
     const record = await Assessment.findOne({ customId: id });
     if (!record) {
       return res.status(404).json({ error: 'Assessment not found' });
     }
 
-    // 确保有症状数据
+    /* Ensure symptoms data is available */
     const symptoms = (record.symptoms && record.symptoms.length)
       ? record.symptoms
       : extractSymptoms(record.answers || []);
 
-    // 准备报告数据
+    /* Prepare report data */
     const payload = {
       assessmentId: record.customId,
       createdAt: record.createdAt,
@@ -42,15 +42,13 @@ router.get('/assessments/:id/export', async (req, res) => {
       recommendation: record.recommendation || '',
     };
 
-    // 生成报告文本
+    /* Generate report content and filename */
     const filename = `assessment_report_${record.customId}.txt`;
     const content = buildFullReportText(payload);
 
-    // 设置下载响应头
+    /* Set download headers and send file */
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    
-    // 发送文件内容
     res.send(content);
   } catch (err) {
     console.error('[GET /assessments/:id/export] error:', err);

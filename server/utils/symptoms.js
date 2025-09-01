@@ -1,12 +1,5 @@
-// server/utils/symptoms.js
-
-
-/* ---------- 症状映射规则 ---------- */
 const SYMPTOM_RULES = {
-  /* 单选：Yes ⇒ Headache */
   Q1: { Yes: 'Headache' },
-
-  /* 多选：保留原文，None of the above 忽略 */
   Q2: {
     'None of the above': null,
     '*': a => a.answer,
@@ -20,20 +13,17 @@ const SYMPTOM_RULES = {
     '*': a => a.answer,
   },
 
-  /* TVO / Double vision / Cranial nerve… */
   Q5: { Yes: 'New-onset Transient visual obscurations (TVO)' },
   Q6: { Yes: 'Binocular double vision' },
   Q7: { Yes: 'Latent/manifest squint or uncorrected refractive error present' },
   Q8: { Yes: 'Cranial nerve palsy pattern' },
 
-  /* Q9 – Q13 与上面同义 */
   Q9 : { Yes: 'New-onset Transient visual obscurations (TVO)' },
   Q10: { Yes: 'Binocular double vision' },
   Q11: { Yes: 'Latent/manifest squint or uncorrected refractive error present' },
   Q12: { Yes: 'Cranial nerve palsy pattern' },
   Q13: { Yes: 'Other visual symptoms unrelated to papilledema' },
 
-  /* 视盘、眼底体征 */
   Q14: { Yes: 'Disc elevation' },
   Q15: {
     'None of the above': null,
@@ -44,19 +34,14 @@ const SYMPTOM_RULES = {
     '*': a => a.answer,
   },
 
-  /* 视盘异常 / Drusen */
   Q17: { Yes: 'Crowded/tilted discs or PHOMS on OCT imaging (previously known)' },
   Q18: { Yes: 'White-yellow bodies within the optic disc or signs compatible with drusen on OCT (previously known)' },
   Q19: { Yes: 'Crowded/tilted discs or PHOMS on OCT imaging (discovered at this visit)' },
   Q20: { Yes: 'White-yellow bodies within the optic disc or signs compatible with drusen on OCT (discovered at this visit)' },
 
-  /* 视力 / 视野改变 */
   Q21: { Yes: 'Change in visual acuity or fields' },
   Q22: { Yes: 'Change in visual acuity or fields' },
-
   Q23: { Yes: 'Disc elevation' },
-
-  
   Q24: {
     'None of the above': null,
     '*': a => a.answer,
@@ -65,13 +50,9 @@ const SYMPTOM_RULES = {
     'None of the above': null,
     '*': a => a.answer,
   },
-
-  /* crowded / drusen / 视力改变 逻辑重复出现 */
   Q26: { Yes: 'Crowded/tilted discs or PHOMS on OCT imaging (discovered at this visit or previously known)' },
   Q27: { Yes: 'White-yellow bodies within the optic disc or signs compatible with drusen on OCT' },
   Q28: { Yes: 'Change in visual acuity or fields' },
-
-  /* 再次出现的 disc-elevation + 眼底体征组合 */
   Q29: { Yes: 'Disc elevation' },
   Q30: {
     'None of the above': null,
@@ -82,12 +63,12 @@ const SYMPTOM_RULES = {
     '*': a => a.answer,
   },
 
-  /* 又一轮 crowded / drusen / 视力改变 */
+
   Q32: { Yes: 'Crowded/tilted discs or PHOMS on OCT imaging (discovered at this visit or previously known)' },
   Q33: { Yes: 'White-yellow bodies within the optic disc or signs compatible with drusen on OCT' },
   Q34: { Yes: 'Change in visual acuity or fields' },
 
-  /* NO_REFERRAL 分支前的最后一套重复题 */
+
   Q35: { Yes: 'Disc elevation' },
   Q36: {
     'None of the above': null,

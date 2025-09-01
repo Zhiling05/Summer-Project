@@ -4,7 +4,7 @@ const {format} = require('date-fns');
 const Assessment = require('../models/Assessment');
 const { extractSymptoms } = require('../utils/symptoms');
 
-// 新增：生成自定义ID的函数
+/* Generate custom ID in format: ddMMyyyy_001 */
 async function generateCustomId() {
   const today = format(new Date(), 'ddMMyyyy');
   const lastRecord = await Assessment.findOne({
@@ -20,28 +20,20 @@ async function generateCustomId() {
   return `${today}_${sequence.toString().padStart(3, '0')}`;
 }
 
-/**
- * GET /assessments - 获取评估列表
- * 支持参数：
- * - limit: 限制返回数量，默认50
- * - riskLevel: 按风险级别筛选 (high/medium/low/all)
- * - startDate: 开始日期筛选
- * - endDate: 结束日期筛选
+/* 
+ * GET /assessments - Get list of assessments with filtering
+ * Query params: riskLevel (high/medium/low/all), startDate, endDate, scope (own/all)
  */
 router.get('/assessments', async (req, res) => {
    try {
-    // const owner = { userId: req.user.id };  //用户隔离
-    //  const owner = (req.user?.role === 'admin') ? {} : { userId: req.user.id };  // 管理员放开
      const isAdmin = req.user?.role === 'admin';
-     const owner  = (isAdmin && req.query.scope === 'all') ? {} : { userId: req.user.id };
+     const owner = (isAdmin && req.query.scope === 'all') ? {} : { userId: req.user.id };
 
-     // const limit = Math.max(1, Math.min(parseInt(req.query.limit || '50', 10), 200));  不限制只有50个，否则会发生到了50后，新增的数据会把别的数据挤掉
     const query = {};
     
-    // 风险级别筛选
+    /* Risk level filtering */
     if (req.query.riskLevel && req.query.riskLevel !== 'all') {
       const riskLevel = req.query.riskLevel;
-      // 将high/medium/low映射到实际的recommendation值
       if (riskLevel === 'high') {
         query.recommendation = { $in: ['EMERGENCY_DEPARTMENT', 'IMMEDIATE'] };
       } else if (riskLevel === 'medium') {
@@ -51,7 +43,7 @@ router.get('/assessments', async (req, res) => {
       }
     }
     
-    // 日期范围筛选
+    /* Date range filtering */
     if (req.query.startDate || req.query.endDate) {
       query.createdAt = {};
       
@@ -60,14 +52,13 @@ router.get('/assessments', async (req, res) => {
       }
       
       if (req.query.endDate) {
-        // 设置为当天结束时间
         const endDate = new Date(req.query.endDate);
         endDate.setHours(23, 59, 59, 999);
         query.createdAt.$lte = endDate;
       }
     }
-    // const docs = await Assessment.find(query).sort({ createdAt: -1 });
-     const docs = await Assessment.find({ ...query, ...owner }).sort({ createdAt: -1 });
+
+    const docs = await Assessment.find({ ...query, ...owner }).sort({ createdAt: -1 });
 
     const records = docs.map(d => ({
       id: d.customId || d._id.toString(),
@@ -82,37 +73,32 @@ router.get('/assessments', async (req, res) => {
   }
 });
 
-/**
- * GET /assessments/:id - 获取单个评估详情
- * 返回评估的完整信息
+/* 
+ * GET /assessments/:id - Get single assessment details
+ * Returns complete assessment information
  */
 router.get('/assessments/:id', async (req, res) => {
   const { id } = req.params;
 
-  // 防止使用本地预览ID
   if (id === 'LOCAL') {
     return res.status(400).json({ error: 'LOCAL is for preview only' });
   }
 
   try {
     const isAdmin = req.user?.role === 'admin';
-    // const filter = (isAdmin && req.query.scope === 'all')
-    //    ? { customId: id }
-    //    : { customId: id, userId: req.user.id };
     if (req.query.scope === 'all' && !isAdmin) {
       return res.status(403).json({error: 'forbidden'});
     }
     const filter = (isAdmin && req.query.scope === 'all') ? { customId: id } : { customId: id, userId: req.user.id };
     const assessment = await Assessment.findOne(filter);
 
-      if (!assessment) return res.status(404).json({ error: 'Assessment not found' });
+    if (!assessment) return res.status(404).json({ error: 'Assessment not found' });
 
-    // 如果没有存储症状，则从答案中提取
+    /* Extract symptoms if not stored */
     const symptoms = (assessment.symptoms && assessment.symptoms.length) 
       ? assessment.symptoms 
       : extractSymptoms(assessment.answers || []);
 
-    // 返回AssessmentDetail格式
     res.json({
       id: assessment.customId,
       role: assessment.role,
@@ -127,9 +113,9 @@ router.get('/assessments/:id', async (req, res) => {
   }
 })
 
-/**
- * POST /assessments - 创建新评估
- * 接收评估数据并存储到数据库
+/* 
+ * POST /assessments - Create new assessment
+ * Body: role, answers[], recommendation
  */
 router.post('/assessments', async (req, res) => {
   try {
@@ -139,7 +125,7 @@ router.post('/assessments', async (req, res) => {
       recommendation
     } = req.body || {};
 
-    // 必填字段验证
+    /* Validate required fields */
     if (!role) {
       return res.status(400).json({ error: 'role is required' });
     }
@@ -152,12 +138,10 @@ router.post('/assessments', async (req, res) => {
       return res.status(400).json({ error: 'answers array is required and cannot be empty' });
     }
 
-    // 从答案中提取症状
+    /* Extract symptoms from answers and generate custom ID */
     const symptoms = extractSymptoms(answers);
-    // 新增：生成自定义ID
     const customId = await generateCustomId();
 
-    // 创建新记录
     const newRecord = await Assessment.create({
       customId,
       userId: req.user.id,
@@ -167,7 +151,6 @@ router.post('/assessments', async (req, res) => {
       symptoms,
     });
 
-    // 返回完整的AssessmentDetail
     res.status(201).json({
       id: newRecord.customId,
       role: newRecord.role,
@@ -182,9 +165,9 @@ router.post('/assessments', async (req, res) => {
   }
 });
 
-/**
- * POST /extract-symptoms - 从答案中提取症状
- * 接收答案数组，返回提取的症状数组
+/* 
+ * POST /extract-symptoms - Extract symptoms from answers array
+ * Body: answers[]
  */
 router.post('/extract-symptoms', async (req, res) => {
   try {
@@ -202,9 +185,9 @@ router.post('/extract-symptoms', async (req, res) => {
   }
 });
 
-/**
- * GET /statistics/risk-levels - 获取风险级别统计
- * 返回各风险级别的记录数量
+/* 
+ * GET /statistics/risk-levels - Get risk level statistics
+ * Returns count for high/medium/low risk assessments
  */
 router.get('/statistics/risk-levels', async (req, res) => {
   try {
@@ -214,28 +197,22 @@ router.get('/statistics/risk-levels', async (req, res) => {
     }
     const base = (isAdmin && req.query.scope === 'all') ? {} : { userId: req.user.id };
 
-
-    // 高风险统计
+    /* Count assessments by risk level */
     const highRiskCount = await Assessment.countDocuments({
       ...base,
       recommendation: { $in: ['EMERGENCY_DEPARTMENT', 'IMMEDIATE'] }
     });
     
-    // 中风险统计
     const mediumRiskCount = await Assessment.countDocuments({
       ...base,
       recommendation: { $in: ['URGENT_TO_OPH', 'URGENT_TO_GP_OR_NEUR'] }
     });
     
-    // 低风险统计
     const lowRiskCount = await Assessment.countDocuments({
       ...base,
       recommendation: { $in: ['TO_GP', 'NO_REFERRAL', 'OTHER_EYE_CONDITIONS_GUIDANCE'] }
     });
     
-    // 总数统计
-    // const totalCount = await Assessment.countDocuments();
-    // const totalCount = await Assessment.countDocuments(owner);
     const totalCount = await Assessment.countDocuments(base);
 
     res.json({
