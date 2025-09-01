@@ -1,31 +1,33 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "/src/styles/sidebar.css";
 
+/**
+ * SideBar - collapsible sidebar navigation
+ * - Toggles open/close with hamburger button
+ * - Closes automatically when navigating to settings or contact page
+ * - Can be closed by clicking outside
+ */
 const SideBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
   const prevPathRef = useRef(location.pathname);
 
-  // 监听路径变化
+  const specialPages = ["/settings", "/contact-us"];
+
   useEffect(() => {
     const currentPath = location.pathname;
     const prevPath = prevPathRef.current;
 
-    // 进入设置/联系我们页面时关闭侧边栏
-    if (['/settings', '/contact-us'].includes(currentPath)) {
-      setIsOpen(false);
-    } 
-    // 从设置/联系我们页面返回时打开侧边栏:ml-citation{ref="7" data="citationList"}
-    else if (['/settings', '/contact-us'].includes(prevPath)) {
-      setIsOpen(true);
+    if (specialPages.includes(currentPath)) {
+      setIsOpen(false); // close when entering special page
+    } else if (specialPages.includes(prevPath)) {
+      setIsOpen(true); // reopen when leaving special page
     }
 
     prevPathRef.current = currentPath;
   }, [location.pathname]);
 
-  // 外部点击关闭
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (
@@ -41,8 +43,7 @@ const SideBar: React.FC = () => {
     return () => window.removeEventListener("click", handleClick);
   }, [isOpen]);
 
-  // 判断是否显示汉堡按钮
-  const shouldShowHamburger = !['/settings', '/contact-us'].includes(location.pathname);
+  const shouldShowHamburger = !specialPages.includes(location.pathname);
 
   return (
     <>

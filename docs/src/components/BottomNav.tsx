@@ -58,60 +58,57 @@ const GuideIcon = ({ active }: { active: boolean }) => (
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    {/* left page */}
     <path d="M3 4.5c2-.5 4-.5 6 0v15c-2-.5-4-.5-6 0z" />
-    {/* right page */}
     <path d="M21 4.5c-2-.5-4-.5-6 0v15c2-.5 4-.5 6 0z" />
-   {/* center crease */}
     <line x1="12" y1="6" x2="12" y2="18" />
   </svg>
 );
 
-// 底部导航栏组件
+// Bottom navigation component for optometrist app
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check if user is currently in an ongoing assessment
+  const onQuestions = location.pathname.includes("/optometrist/assess/questions/");
+  const completed = sessionStorage.getItem("assessmentComplete") === "true";
+  const started = sessionStorage.getItem("assessStarted") === "true";
+  const hasLast = !!sessionStorage.getItem("lastQuestionId");
+  const inOngoingAssess = started && hasLast && onQuestions && !completed;
 
-  // 是否处于“进行中的评估题目页”
-  //     const inAssess = location.pathname.startsWith("/optometrist/assess/");
-  //     const onResult = location.pathname.includes("/optometrist/assess/recommendations");
-  //     const completed = sessionStorage.getItem("assessmentComplete") === "true";
-  //     const inOngoingAssess = inAssess && !onResult && !completed;
-    const onQuestions = location.pathname.includes("/optometrist/assess/questions/");
-    const completed   = sessionStorage.getItem("assessmentComplete") === "true";
-    const started     = sessionStorage.getItem("assessStarted") === "true";
-    const hasLast     = !!sessionStorage.getItem("lastQuestionId");
-    const inOngoingAssess = started && hasLast && onQuestions && !completed;
+  // State for leave assessment confirmation popup
+  const [leaveOpen, setLeaveOpen] = useState(false);
+  const [target, setTarget] = useState<string | null>(null);
 
-   // 离开拦截弹窗状态
-       const [leaveOpen, setLeaveOpen] = useState(false);
-   const [target, setTarget] = useState<string | null>(null);
+  // Navigation guard: show confirmation when leaving ongoing assessment
+  const guardNav = (to: string) => (e: React.MouseEvent) => {
+    const toIsAssess = to.startsWith("/optometrist/assess/");
+    const isLeavingAssess = inOngoingAssess && !toIsAssess;
+    if (isLeavingAssess) {
+      e.preventDefault();
+      setTarget(to);
+      setLeaveOpen(true);
+      return;
+    }
+    if (location.pathname !== to) navigate(to);
+  };
 
-       // 拦截：从评估页跳到评估外页面 → 弹窗
-           const guardNav = (to: string) => (e: React.MouseEvent) => {
-       const toIsAssess = to.startsWith("/optometrist/assess/");
-       const isLeavingAssess = inOngoingAssess && !toIsAssess;
-       if (isLeavingAssess) {
-           e.preventDefault();
-           setTarget(to);
-           setLeaveOpen(true);
-           return;
-         }
-       if (location.pathname !== to) navigate(to);
-     };
-       const keepProgress = () => {
-       setLeaveOpen(false);
-       if (target) navigate(target);
-       };
-   const discardProgress = () => {
-       sessionStorage.removeItem("assessStarted");
-       sessionStorage.removeItem("lastQuestionId");
-       sessionStorage.removeItem("assessmentComplete");
-       setLeaveOpen(false);
-       if (target) navigate(target);
-     };
+  // Keep assessment progress and navigate
+  const keepProgress = () => {
+    setLeaveOpen(false);
+    if (target) navigate(target);
+  };
 
+  // Discard assessment progress and navigate
+  const discardProgress = () => {
+    sessionStorage.removeItem("assessStarted");
+    sessionStorage.removeItem("lastQuestionId");
+    sessionStorage.removeItem("assessmentComplete");
+    setLeaveOpen(false);
+    if (target) navigate(target);
+  };
+
+  // Navigation items configuration
   const items = [
     { label: "Home", to: "/select-role", Icon: HomeIcon },
     { label: "Assess", to: "/optometrist/assess/start-page", Icon: AssessIcon },
@@ -121,42 +118,42 @@ const BottomNav = () => {
 
   return (
     <>
-    <nav className="bottom-nav">
-      {items.map(({ label, to, Icon }) => {
-        // 特殊处理 Assess 按钮的激活状态判断
-        let active;
-        if (label === "Assess") {
-          // 只要路径包含 /optometrist/assess 就认为是激活状态
-          active = location.pathname.includes("/optometrist/assess");
-        } else {
-          // 其他按钮使用 startsWith 判断
-          active = location.pathname.startsWith(to);
-        }
-        
-        return (
-          <button
-            key={to}
-            className={`nav-item${active ? " active" : ""}`}
-            // onClick={() => handleNavigation(to)}
-            onClick={guardNav(to)}
-            style={{ position: "relative" }}
-          >
-            <Icon active={active} />
-            <span>{label}</span>
-          </button>
-        );
-      })}
+      <nav className="bottom-nav">
+        {items.map(({ label, to, Icon }) => {
+          // Determine active state for each navigation item
+          let active;
+          if (label === "Assess") {
+            // Special handling for Assess button - active for any assess route
+            active = location.pathname.includes("/optometrist/assess");
+          } else {
+            // Other buttons use startsWith matching
+            active = location.pathname.startsWith(to);
+          }
+          
+          return (
+            <button
+              key={to}
+              className={`nav-item${active ? " active" : ""}`}
+              onClick={guardNav(to)}
+              style={{ position: "relative" }}
+            >
+              <Icon active={active} />
+              <span>{label}</span>
+            </button>
+          );
+        })}
       </nav>
-        <PopupWindow
+      
+      <PopupWindow
         open={leaveOpen}
-        onContinue={keepProgress}     // “保留进度”
-        onRestart={discardProgress}   // “不保留进度”
+        onContinue={keepProgress}
+        onRestart={discardProgress}
         onClose={() => setLeaveOpen(false)}
         title="Leave assessment?"
         description="Do you want to keep your progress?"
         continueText="Save"
-        restartText="Disgard"
-        />
+        restartText="Discard"
+      />
     </>
   );
 };

@@ -175,28 +175,3 @@ export async function listAssessments(
   
   return { records };
 }
-
-// Get risk level statistics for dashboard
-export function getRiskLevelStats(): Promise<{
-  high: number;
-  medium: number;
-  low: number;
-  total: number;
-}> {
-  return request<{
-    high: number;
-    medium: number;
-    low: number;
-    total: number;
-  }>('/statistics/risk-levels');
-}
-
-// Extract symptoms from assessment answers
-export function extractSymptoms(
-  answers: Answer[]
-): Promise<string[]> {
-  return request<string[]>('/extract-symptoms', {
-    method: 'POST',
-    body: JSON.stringify({ answers }),
-  });
-}
