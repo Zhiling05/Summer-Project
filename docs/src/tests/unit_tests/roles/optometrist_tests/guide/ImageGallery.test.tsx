@@ -14,18 +14,18 @@ jest.mock("../../../../../components/BackButton", () => () => (
 ));
 
 describe("ImageGallery", () => {
-  test("默认渲染所有图片项", () => {
+  test("Render all image items by default", () => {
     render(
       <MemoryRouter>
         <ImageGallery />
       </MemoryRouter>
     );
-    // 检查部分已知标题
+    // Check some known titles
     expect(screen.getByText(/Cotton wool spots/i)).toBeInTheDocument();
     expect(screen.getByText(/Normal optic disc/i)).toBeInTheDocument();
   });
 
-  test("搜索能过滤图片", async () => {
+  test("The search can filter images.", async () => {
     render(
       <MemoryRouter>
         <ImageGallery />
@@ -38,7 +38,7 @@ describe("ImageGallery", () => {
     expect(screen.queryByText(/cotton wool/i)).not.toBeInTheDocument();
   });
 
-  test("类别筛选只显示对应分类", async () => {
+  test("Category filtering only displays the corresponding categories", async () => {
     render(
       <MemoryRouter>
         <ImageGallery />
@@ -50,7 +50,7 @@ describe("ImageGallery", () => {
     expect(screen.queryByText(/cotton wool/i)).not.toBeInTheDocument();
   });
 
-  test("空态提示", async () => {
+  test("Empty state prompt", async () => {
     render(
       <MemoryRouter>
         <ImageGallery />
