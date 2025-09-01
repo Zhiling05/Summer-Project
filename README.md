@@ -2,13 +2,12 @@
 
 ## How to Use This Documentation
 
-For Clinicians and stakeholders, please read Section A (Customer Guide). 
-For engineers please read Section B (Engineering Handover).
+For Clinicians and stakeholders, please read Customer Guide. 
+For engineers please read Engineering Handover.
 
 If you have any specific questions, please check contents below.
 
 
----
 
 ## Customer Guide (for NHS clinicians)
 
@@ -20,29 +19,51 @@ This system categorises roles into two types. Standard users encompassing *GPs, 
 **The Optometrist interface currently offers full functionality, while other roles remain under development.**
 Administrator users must log in to the administrative interface using a password to view global data.
 
-Users may select their role identity via the role selection page.
+Users may select their role identity via the role selection page which is shown below:
+
+<div align="center">
+    <img src="docs/src/assets/README_IMG/Role-Selection.png" alt="Role Selection Page" width="700">
+    <p>Figure 1: Role-Selection Page</p>
+</div>
 
 
 #### Assessment Workflow
 
 You may start the assessment via the Assessment interface. During the assessment process, navigate between questions using the previous and next buttons, or alternatively, utilise your browser's back button.
+
+<div align="center">
+    <img src="docs/src/assets/README_IMG/questionnaire.png" alt="Question Example" width="700">
+    <p>Figure 2: Question Example</p>
+</div>
+
 However, please refrain from refreshing the page during the assessment process, as this carries the risk of losing your progress.
 
 When you try to leave the assessment page, a pop-up window will automatically appear asking if you want to save your current assessment progress. 
+
+<div align="center">
+    <img src="docs/src/assets/README_IMG/popup-window.png" alt="Pop up window" width="700">
+    <p>Figure 3: Pop-up Window</p>
+</div>
+
 Please choose according to your needs. If you choose to save, the system will automatically return you to the last question you were on when you navigate back to the assessment page.
 
 To view or export a report, please go to the Report page after completing the questionnaire. For each assessment you have completed, you can click the View Details button on the details page to perform more operations, including:
 - `Copy` the report results to the clipboard
 - `Download` a preview of the report (in PDF format)
 - Send `Email`: This will open your default email client. The subject line will be automatically filled with *Assessment Report,* the body will be automatically populated with the assessment report content, and you can enter the recipient yourself.
-
-----插入邮件功能截图----
+<div align="center">
+    <img src="docs/src/assets/README_IMG/Email_sending.png" alt="email sending funcion" width="700">
+    <p>Figure 4: Email Sending Function</p>
+</div>
 
 #### Other Main Pages
 
 You can navigate between the *Home, Assess, Records,* and *Help* pages using the navigation bar at the bottom of the page.
 
----添加底部导航栏截图--
+<div align="center">
+    <img src="docs/src/assets/README_IMG/BottomNav.png" alt="BottomNav" width="700">
+    <p>Figure 5: Bottom Navigation Bar</p>
+</div>
 
 **Records** 
 - Displays all assessment data the user has handled. 
@@ -59,28 +80,36 @@ For more detailed information (e.g. DIPP website and email), please check the Si
 
 
 ### A2: How to Read the Questionnaire JSON
-Core JSON files including
-`questionnaire.json` and
-`recommendations.json` .
-Here's a table illustrates what function each field maps to:
 
-| Field | Function | Safe to edit |
-|---|---|---|
-| `id` | Unique identifier of each question; used for routing and answer linking |  Do not change once published |
-| `type` | Defines question style and input mode (`single`, `multiple`, `input`, `confirm`) |  Change only if you understand the effect on UI and logic |
-| `question` | The text shown to clinicians during the assessment |  Safe to edit wording |
-| `hint` | Helper text displayed under the question (e.g. “Choose any that apply”) |  Safe to edit |
-| `options` | List of answer choices. Can be strings or objects with `{ "label", "value", "isNone" }` |  Safe to edit labels; keep `value` stable; `isNone` should not be removed if used for logic |
-| `meta.symptomOnYes` | Maps a “Yes” response to an internal symptom keyword |  Edit only if symptom coding changes |
-| `meta.optionSymptomMap` | Maps each option text/value to a symptom keyword |  Edit carefully; option texts must match keys |
-| `navigation.type` | Navigation mode (`simple`, `conditional`, `cross-question`) |  Do not change unless you are a developer |
-| `navigation.rules` | Defines jump logic: e.g. `{ "Yes": "Q2", "No": "Q9" }` or conditional objects |  Clinical and technical review required before editing |
-| `navigation.defaultNext` | Fallback target `id` if no rule matches |  Ensure target `id` exists |
+JSON is a format for storing and transporting data, in this system, it's used to present referral logic. We understand that most users do not have a technical background, but having a basic understanding of the questionnaire's JSON structure will make it much easier for you to use and adjust the questionnaire. 
+Since the questionnaire content is organized in natural language, no programming experience is needed to read and understand it. 
+By familiarizing yourself with the following instructions, you will not only gain a clearer understanding of how the system works but also be able to make changes to the questionnaire flow yourself, 
+reducing your reliance on technical staff.
+
+Core JSON files is `questionnaire.json`.
+This file describes the entire assessment flow in a simple JSON format, each question in the JSON contains a few key fields.
+Table below illustrates what function each field maps to:
+
+| Field | What it means                                                                                                                                                                                                                                                                         | Safe to edit?                                                                                                                                   |
+|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| **id** | A unique ID code for each question. The system uses it to know which question comes next.                                                                                                                                                                                             | **Do not change once published**                                                                                                                |
+| **type** | The question format: `single` (choose one), `multiple` (choose several), `input` (free text), `confirm` (yes/no).                                                                                                                                                                     | Only change if you are sure about the effect on the workflow                                                                                    |
+| **question** | The main text you see when filling in the questionnaire.                                                                                                                                                                                                                              | You can safely update the wording                                                                                                               |
+| **hint** | Extra helper text shown under the question.                                                                                                                                                                                                                                           | You can safely update                                                                                                                           |
+| **options** | The possible answers. Can be simple text (e.g. `"Yes"`) or an object like `{ "label": "None of the above", "value": "none", "isNone": true }`. <br>• `label` = what users see <br>• `value` = system code (used in logic & reports) <br>• `isNone` = marks “None of the above” option | You can edit the **label** text, or add new options. <br> Do **not** change or delete existing `id` or `value` fields without developer support |
+| **meta.symptomOnYes** | Connects a “Yes” answer to an internal symptom keyword for reporting.                                                                                                                                                                                                                 | Needs clinical/technical review if changed                                                                                                      |
+| **meta.optionSymptomMap** | Links each option (label/value) to an internal symptom keyword.                                                                                                                                                                                                                       | Edit with care, texts/values must match options                                                                                                 |
+| **navigation.type** | Defines how the next question is chosen: `simple`, `conditional`, or `cross-question`.                                                                                                                                                                                                | Do not change unless advised by the dev team                                                                                                    |
+| **navigation.rules** | The rules that decide which question comes next (e.g. `{ "Yes": "Q2", "No": "Q9" }`).                                                                                                                                                                                                 | Only change with developer/clinical guidance                                                                                                    |
+| **navigation.defaultNext** | Fallback question id if no rule matches.                                                                                                                                                                                                                                              | Change only if you know the target exists                                                                                                       |
 
 What it looks like in code example:
 <img src="docs/src/assets/README_IMG/JOSN_Example.png" alt="An example of JSON">
 
-如果clinicians想要修改JSON文件，请仔细对照safe to edit栏再决定是否需要请求技术人员的支持。
+**We highly recommend that clinicians carefully check the "Safe to edit" column in the table before deciding whether to request technical support for modifications to the JSON file.**
+
+<br>
+<br>
 
 ### A3: Standard Change Process (via GitHub)
 
@@ -104,7 +133,7 @@ Follow these steps to safely update the questionnaire:
     - Click `Propose changes`.
 
 6. **Submit a Pull Request (PR)**
-    - On the next page, click `Create pull request`. Your changes will now be reviewed. 
+    - Pull Request is a feature in GitHub used by developers to propose and review changes to a project's code. Now, click `Create pull request` on the next page. (Your changes will now be reviewed. )
     - Then, wait for automated checks, the system will run automatic tests on your branch. A green ✔️ means the file passed validation. Before merging, please go through the following checklist:
 
 | Check item | What to do |
@@ -130,4 +159,10 @@ If all checks are satisfied, proceed to merge (Step 7).
     - If the new questionnaire does not behave as expected, notify the Admin.
     - They can roll back to the previous `questionnaireVersion`.
 
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
