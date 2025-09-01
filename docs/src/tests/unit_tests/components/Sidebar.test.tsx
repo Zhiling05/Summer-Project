@@ -12,7 +12,6 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => mockLocation
 }));
 
-// 创建路由容器辅助函数
 const renderWithRouter = (initialPath = '/test') => {
   mockLocation.pathname = initialPath;
   return render(
@@ -26,12 +25,10 @@ describe('SideBar Component', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
     mockLocation = { pathname: '/test', state: null };
-    // 清理可能存在的事件监听器
     document.removeEventListener = jest.fn();
     window.removeEventListener = jest.fn();
   });
 
-  // 1. 汉堡按钮条件显示测试
   describe('Hamburger Button Visibility', () => {
     it('shows hamburger button on normal pages', () => {
       renderWithRouter('/optometrist/assess');
@@ -52,7 +49,6 @@ describe('SideBar Component', () => {
     });
   });
 
-  // 2. 侧边栏开关状态测试
   describe('Sidebar Toggle Functionality', () => {
     it('opens sidebar when hamburger button is clicked', () => {
       renderWithRouter('/test');
@@ -69,11 +65,11 @@ describe('SideBar Component', () => {
       
       const hamburgerBtn = screen.getByLabelText('Open navigation');
       
-      // 打开侧边栏
+    
       fireEvent.click(hamburgerBtn);
       expect(screen.getByLabelText('Close navigation')).toBeInTheDocument();
       
-      // 关闭侧边栏
+     
       const closeBtn = screen.getByLabelText('Close navigation');
       fireEvent.click(closeBtn);
       expect(screen.getByLabelText('Open navigation')).toBeInTheDocument();
@@ -102,12 +98,10 @@ describe('SideBar Component', () => {
     });
   });
 
-  // 3. 侧边栏链接渲染测试
   describe('Sidebar Links', () => {
     it('renders settings and contact us links', () => {
       renderWithRouter('/test');
       
-      // 打开侧边栏才能看到链接
       const hamburgerBtn = screen.getByLabelText('Open navigation');
       fireEvent.click(hamburgerBtn);
       
@@ -129,17 +123,14 @@ describe('SideBar Component', () => {
     });
   });
 
-  // 4. 路径变化时的行为测试
   describe('Path Change Behavior', () => {
     it('closes sidebar when navigating to settings page', () => {
       const { rerender } = renderWithRouter('/test');
       
-      // 先打开侧边栏
       const hamburgerBtn = screen.getByLabelText('Open navigation');
       fireEvent.click(hamburgerBtn);
       expect(document.querySelector('.sidebar.open')).toBeInTheDocument();
       
-      // 模拟路径变化到 settings
       mockLocation.pathname = '/settings';
       rerender(
         <MemoryRouter initialEntries={['/settings']}>
@@ -147,7 +138,6 @@ describe('SideBar Component', () => {
         </MemoryRouter>
       );
       
-      // 侧边栏应该关闭，汉堡按钮应该隐藏
       expect(document.querySelector('.sidebar.open')).not.toBeInTheDocument();
       expect(screen.queryByLabelText('Open navigation')).not.toBeInTheDocument();
     });
@@ -155,26 +145,23 @@ describe('SideBar Component', () => {
     it('closes sidebar when navigating to contact-us page', () => {
       const { rerender } = renderWithRouter('/test');
       
-      // 先打开侧边栏
       const hamburgerBtn = screen.getByLabelText('Open navigation');
       fireEvent.click(hamburgerBtn);
       expect(document.querySelector('.sidebar.open')).toBeInTheDocument();
       
-      // 模拟路径变化到 contact-us
       mockLocation.pathname = '/contact-us';
       rerender(
         <MemoryRouter initialEntries={['/contact-us']}>
           <SideBar />
         </MemoryRouter>
       );
-      
-      // 侧边栏应该关闭，汉堡按钮应该隐藏
+  
       expect(document.querySelector('.sidebar.open')).not.toBeInTheDocument();
       expect(screen.queryByLabelText('Open navigation')).not.toBeInTheDocument();
     });
   });
 
-  // 5. 汉堡按钮样式状态测试
+
   describe('Hamburger Button State', () => {
     it('applies active class when sidebar is open', () => {
       renderWithRouter('/test');
@@ -193,11 +180,9 @@ describe('SideBar Component', () => {
       
       const hamburgerBtn = screen.getByLabelText('Open navigation');
       
-      // 打开
       fireEvent.click(hamburgerBtn);
       expect(screen.getByLabelText('Close navigation')).toHaveClass('active');
       
-      // 关闭
       const closeBtn = screen.getByLabelText('Close navigation');
       fireEvent.click(closeBtn);
       expect(screen.getByLabelText('Open navigation')).not.toHaveClass('active');
