@@ -1,4 +1,4 @@
-/* —— 设计变量 —— */
+
 :root {
   --nhs-blue:        #005eb8;
   --white:           #ffffff;
@@ -12,7 +12,6 @@
   --space-xl:        32px;
 }
 
-/* ===== 整体容器 ===== */
 .recommendation-container {
   min-height: 100vh;
   display: flex;
@@ -29,16 +28,16 @@
   box-sizing: border-box;
 }
 
-/* ===== 主内容区域 ===== */
+
 .report-main {
   flex: 1;
   padding: var(--space-xl) var(--space-l) 80px;
-  width: 80vw;  /* 🔧 改为 80vw */
+  width: 80vw;  
   max-width: none;
   margin: 0 auto; 
 }
 
-/* ===== 报告卡片 ===== */
+
 .report-card {
   background: #fff;
   border-radius: 16px;
@@ -51,7 +50,7 @@
   cursor: default;
 }
 
-/* —— 整个卡片渐变背景（按风险级别）—— */
+
 .report-red {
   background: linear-gradient(135deg, #d03838 0%, rgba(208, 56, 56, .85) 100%);
   color: var(--white);
@@ -76,7 +75,7 @@
   max-width: 100%;
 }
 
-/* —— 报告标题 —— */
+
 .report-title {
   font-size: 1.8rem;
   font-weight: 700;
@@ -85,7 +84,7 @@
   color: inherit; 
 }
 
-/* —— 按钮组 —— */
+
 .report-btn-group {
   display: flex;
   gap: var(--space-m);
@@ -119,7 +118,6 @@
   opacity: 0.6;
 }
 
-/* ===== 折叠卡片组件 ===== */
 .collapse-wrapper {
   display: flex;
   flex-direction: column;
@@ -168,7 +166,6 @@
   font-size: 0.95rem;
 }
 
-/* ===== 邮件发送模态框（从 recommendation.css 合并）===== */
 .email-modal-overlay {
   position: fixed;
   inset: 0;
@@ -219,7 +216,7 @@
   justify-content: flex-end;
 }
 
-/* 模态框按钮样式 */
+
 .btn-primary {
   background: var(--nhs-blue);
   color: var(--white);
@@ -259,11 +256,11 @@
   background: rgba(0, 94, 184, .08);
 }
 
-/* ===== 响应式设计 ===== */
+
 @media (max-width: 640px) {
   .report-main {
     padding: var(--space-l) var(--space-m) 80px;
-    width: 90vw; /* 🔧 改为 90vw，与 records 一致 */
+    width: 90vw; 
   }
   
   .report-title {
@@ -288,7 +285,7 @@
   }
 }
 
-/* 小屏幕邮件模态框适配 */
+
 @media (max-width: 480px) {
   .email-modal {
     width: 95%;
