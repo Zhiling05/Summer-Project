@@ -1,12 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import '../styles/card.css';
 import '../styles/user-selection.css';
-import '../styles/popupwindow.css'; // 添加弹窗样式
-import Sidebar from '../components/SideBar'; //zkx：sidebar侧栏
+import '../styles/popupwindow.css';
+import Sidebar from '../components/SideBar';
 import { ensureGuest, http } from '../api';
 
+/**
+ * UserSelectionPage - role selection screen
+ * - Provides entry points for different user types
+ * - Includes administrator login with password modal
+ */
 export default function UserSelectionPage() {
   const navigate = useNavigate();
   useEffect(() => { void ensureGuest(); }, []);
@@ -23,19 +28,18 @@ export default function UserSelectionPage() {
   };
 
   const handlePasswordSubmit = async () => {
-      try {
-          await http('/admin/login', {
-                method: 'POST',
-                body: JSON.stringify({ password }),
-              });
-          setShowPasswordModal(false);
-          navigate('/admin', { state: { from: '/user-selection' } });
-        } catch {
-          setPasswordError('Incorrect password. Please try again.');
-          setPassword('');
-        }
-    };
-
+    try {
+      await http('/admin/login', {
+        method: 'POST',
+        body: JSON.stringify({ password }),
+      });
+      setShowPasswordModal(false);
+      navigate('/admin', { state: { from: '/user-selection' } });
+    } catch {
+      setPasswordError('Incorrect password. Please try again.');
+      setPassword('');
+    }
+  };
 
   const handleModalClose = () => {
     setShowPasswordModal(false);
@@ -43,14 +47,9 @@ export default function UserSelectionPage() {
     setPasswordError('');
   };
 
-  // const handleKeyPress = (e: React.KeyboardEvent) => {
-  //   if (e.key === 'Enter') {
-  //     handlePasswordSubmit();
-  //   }
-  // };
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') handlePasswordSubmit();
-      };
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handlePasswordSubmit();
+  };
 
   const roles = [
     { id: 'gp', title: 'I am a GP', route: '/gp' },
@@ -61,126 +60,85 @@ export default function UserSelectionPage() {
   ];
 
   return (
-      <>
-        <Header title="Select Role" />
-        <Sidebar />
-        <div className="user-selection-page">
-          <div className="user-selection-container">
-            <div className="user-selection-title-wrapper">
-              <h1 className="user-selection-title">Select Your Role</h1>
-            </div>
-            <div className="user-selection-cards">
-              {roles.map((role) => (
-                  <div
-                      key={role.id}
-                      className="base-card user-selection-card"
-                      onClick={() => navigate(role.route)}
-                  >
-                    <div className="card-content">
-                      <h3 className="card-title">{role.title}</h3>
-                    </div>
-                    <div className="card-arrow-container">
-                      <div className="card-arrow-circle">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path
-                              d="M9 18l6-6-6-6"
-                              stroke="white"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-              ))}
-            </div>
-             {/* Administrator Option */}
-            <div className="admin-option">
-              <a
-                href="/admin"
-                className="admin-link"
-                onClick={handleAdminClick}
+    <>
+      <Header title="Select Role" />
+      <Sidebar />
+      <div className="user-selection-page">
+        <div className="user-selection-container">
+          <div className="user-selection-title-wrapper">
+            <h1 className="user-selection-title">Select Your Role</h1>
+          </div>
+          <div className="user-selection-cards">
+            {roles.map((role) => (
+              <div
+                key={role.id}
+                className="base-card user-selection-card"
+                onClick={() => navigate(role.route)}
               >
-                I am an administrator
-              </a>
+                <div className="card-content">
+                  <h3 className="card-title">{role.title}</h3>
+                </div>
+                <div className="card-arrow-container">
+                  <div className="card-arrow-circle">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M9 18l6-6-6-6"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Administrator Option */}
+          <div className="admin-option">
+            <a href="/admin" className="admin-link" onClick={handleAdminClick}>
+              I am an administrator
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Password Modal */}
+      {showPasswordModal && (
+        <div className="cm-overlay" onClick={handleModalClose}>
+          <div className="cm-container" onClick={(e) => e.stopPropagation()}>
+            <h3 className="cm-title">Administrator Access</h3>
+            <p className="cm-desc">Please enter the administrator password</p>
+
+            <input
+              type="password"
+              className="password-modal-input"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+            />
+
+            {passwordError && (
+              <div className="password-error">{passwordError}</div>
+            )}
+
+            <div className="cm-actions">
+              <button onClick={handleModalClose} className="btn-cancel">
+                Cancel
+              </button>
+              <button
+                onClick={handlePasswordSubmit}
+                disabled={!password.trim()}
+                className="btn-continue"
+              >
+                Continue
+              </button>
             </div>
           </div>
         </div>
-        {/* Password Modal */}
-        {showPasswordModal && (
-          <div className="cm-overlay" onClick={handleModalClose}>
-            <div className="cm-container" onClick={(e) => e.stopPropagation()}>
-              <h3 className="cm-title">Administrator Access</h3>
-              <p className="cm-desc">Please enter the administrator password</p>
-
-              <input
-                type="password"
-                className="password-modal-input"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={handleKeyDown}
-                autoFocus
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  border: '2px solid var(--border-grey, #aeb7bd)',
-                  borderRadius: 'var(--radius-s, 4px)',
-                  fontSize: '1rem',
-                  boxSizing: 'border-box',
-                  background: 'var(--lighter-base)',
-                  color: 'var(--text-body)',
-                  marginBottom: '1rem'
-                }}
-              />
-
-              {passwordError && (
-                <div style={{
-                  color: 'var(--urgent-red)',
-                  fontSize: '0.9rem',
-                  textAlign: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  {passwordError}
-                </div>
-              )}
-
-              <div className="cm-actions">
-                <button
-                  onClick={handleModalClose}
-                  style={{
-                    background: 'var(--border-grey)',
-                    color: 'var(--text-inverse)',
-                    border: 'none',
-                    borderRadius: 'var(--radius-s, 4px)',
-                    padding: '0.75rem 1.5rem',
-                    cursor: 'pointer',
-                    fontSize: '1rem'
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handlePasswordSubmit}
-                  disabled={!password.trim()}
-                  style={{
-                    background: password.trim() ? 'var(--core-blue)' : '#c5c5c5',
-                    color: 'var(--text-inverse)',
-                    border: 'none',
-                    borderRadius: 'var(--radius-s, 4px)',
-                    padding: '0.75rem 1.5rem',
-                    cursor: password.trim() ? 'pointer' : 'not-allowed',
-                    fontSize: '1rem',
-                    opacity: password.trim() ? 1 : 0.6
-                  }}
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </>
+      )}
+    </>
   );
 }

@@ -1,43 +1,47 @@
-// docs/src/App.tsx
-
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import WelcomePage from './pages/WelcomePage';
 import UserSelectionPage from './pages/UserSelectionPage';
-import * as Sidebar from './pages/sidebar';  // 引入你自己的 Sidebar
+import * as Sidebar from './pages/sidebar';
 import OptometristApp from './pages/optometrist/OptometristApp';
 import PatientApp from './pages/patient/PatientApp';
 import GPApp from './pages/gp/GPApp';
-import ContactPage from './pages/sidebar/ContactPage'; //zkx
-import SettingsPage from './pages/sidebar/SettingsPage'; //zkx
-import { FontSizeProvider, useFontSize } from './pages/sidebar/FontSizeContext'; //zkx
-import SideBar from './components/SideBar';  // 引入你自己写的 SideBar 组件
-import './styles/theme.css'; //深浅色主题
-
+import { FontSizeProvider, useFontSize } from './pages/sidebar/FontSizeContext';
+import SideBar from './components/SideBar';
+import './styles/theme.css';
 import { ensureGuest } from './api/index';
 import AdminDashboard from "./pages/admin/Admin.tsx";
 
+/**
+ * App - root component
+ * - Provides font size context and global routing
+ * - Hides sidebar on WelcomePage for clean splash screen
+ */
 export default function App() {
-  useEffect(() => { ensureGuest().catch(console.error); }, []); //先设置cookie
+  useEffect(() => { ensureGuest().catch(console.error); }, []);
   return (
     <FontSizeProvider>
-      <FontSizeAwareApp />
+      <BrowserRouter>
+        <FontSizeAwareApp />
+      </BrowserRouter>
     </FontSizeProvider>
   );
 }
 
 const FontSizeAwareApp = () => {
-  const { fontSize } = useFontSize(); // 获取当前字体大小
+  const { fontSize } = useFontSize();
+  const location = useLocation();
 
-  // 在组件加载时设置字体大小
   useEffect(() => {
-    document.documentElement.style.setProperty('--font-size', fontSize); // 设置全局 CSS 变量
+    document.documentElement.style.setProperty('--font-size', fontSize);
   }, [fontSize]);
 
+  // Hide sidebar on WelcomePage
+  const hideSidebar = location.pathname === "/";
+
   return (
-    <BrowserRouter>
-      {/* 确保在每个页面中都能访问到 SideBar */}
-      <SideBar />
+    <>
+      {!hideSidebar && <SideBar />}
       <Routes>
         <Route path="/" element={<WelcomePage />} />
         <Route path="/select-role" element={<UserSelectionPage />} />
@@ -48,6 +52,6 @@ const FontSizeAwareApp = () => {
         <Route path="/gp/*" element={<GPApp />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
