@@ -1,5 +1,5 @@
 {
-  // 确保将 tsconfig.app.json 识别为 TypeScript 项目根
+  
   "extends": "./tsconfig.json",
 
   "compilerOptions": {

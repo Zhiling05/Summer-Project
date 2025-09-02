@@ -1,14 +1,3 @@
-// const { createDefaultPreset } = require("ts-jest");
-//
-// const tsJestTransformCfg = createDefaultPreset().transform;
-//
-// /** @type {import("jest").Config} **/
-// module.exports = {
-//   preset: 'ts-jest',
-//   testEnvironment: 'jsdom',
-//   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'], // remain commented for now
-//   transform: {},
-// };
 
 module.exports = {
   preset: 'ts-jest',
@@ -21,7 +10,7 @@ module.exports = {
     '\\.svg\\?url$': '<rootDir>/_mocks_/fileMock.js',
     '\\.svg$': '<rootDir>/_mocks_/fileMock.js',
   },
-  //solve png showing problem
+ 
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.app.json',
