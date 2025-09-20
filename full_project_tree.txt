@@ -1,0 +1,326 @@
+﻿├── app_documentation
+│   ├── architecture
+│   │   ├── Architecture_Team_Documentation_0714.md
+│   │   ├── Reconfiguration0715.pdf
+│   │   └── routes.md
+│   ├── evaluation
+│   │   ├── evaluation_plan_timetable.png
+│   │   └── Evaluation_Procedure.md
+│   ├── pathway
+│   │   └── optometrist
+│   │       └── decision_tree
+│   │           ├── 1_Eye_findings_that_positively_identify_papilloedema.md
+│   │           ├── 2_Known_diagnosis_of_pseudopapilloedema_with_change_in_disc_appearance_and_or_acuity_fields.md
+│   │           ├── 3_pseudopapilloedema_but_may_need_referral.md
+│   │           ├── 4_Diagnostic_pathway_for_features_of_normal_pseudopapilloedema.md
+│   │           ├── 5_headache_but_no_raised_intracranial_pressure.md
+│   │           ├── 6_intracranial pressure.md
+│   │           ├── 7_headaches_with_red_flags.md
+│   │           ├── 8_Urgent_Referral_for_Headache.md
+│   │           ├── Optometrist_Decision_Tree_Version_One.pdf
+│   │           └── Optometrist_Decision_Tree_Version_Two.pdf
+│   ├── requirements
+│   │   └── optometrist
+│   │       └── User Story_for_optometrist_and_acceptance_criteria.md
+│   ├── testing
+│   │   └── workbook.md
+│   └── UIUX
+│       └── Existing_software_interface_functionality.pdf
+├── docs
+│   ├── _mocks_
+│   │   ├── fileMock.js
+│   │   └── styleMock.js
+│   ├── public
+│   │   └── vite.svg
+│   ├── src
+│   │   ├── api
+│   │   │   └── index.ts
+│   │   ├── assets
+│   │   │   ├── icons
+│   │   │   │   ├── Assess.svg
+│   │   │   │   ├── Guide.svg
+│   │   │   │   ├── Home.svg
+│   │   │   │   └── Records.svg
+│   │   │   ├── image-gallery
+│   │   │   │   ├── 0362 left crowded disc OCT.PNG
+│   │   │   │   ├── 0362 left crowded disc.PNG
+│   │   │   │   ├── 0362 right crowded disc OCT.PNG
+│   │   │   │   ├── 0362 right crowded disc.PNG
+│   │   │   │   ├── 1312 left drusen OCT.PNG
+│   │   │   │   ├── 1312 left drusen.PNG
+│   │   │   │   ├── 1312 right drusen OCT.PNG
+│   │   │   │   ├── 1312 right drusen.PNG
+│   │   │   │   ├── 1376 Left swelling OCT.png
+│   │   │   │   ├── 1376 Left swelling.png
+│   │   │   │   ├── 1376 Right swelling OCT.png
+│   │   │   │   ├── 1376 Right swelling.png
+│   │   │   │   ├── 3258 left crowded disc  OCT.PNG
+│   │   │   │   ├── 3258 left crowded disc.PNG
+│   │   │   │   ├── 3258 right crowded disc OCT.PNG
+│   │   │   │   ├── 3258 right crowded disc.PNG
+│   │   │   │   ├── 5701 left swelling OCT.PNG
+│   │   │   │   ├── 5701 left swelling.PNG
+│   │   │   │   ├── 5701 right swelling OCT.PNG
+│   │   │   │   ├── 5701 right swelling.PNG
+│   │   │   │   ├── 5955 left crowded disc OCT.PNG
+│   │   │   │   ├── 5955 left crowded disc.PNG
+│   │   │   │   ├── 5955 right crowded disc.PNG
+│   │   │   │   ├── 5955 right crowded optic disc OCT.PNG
+│   │   │   │   ├── 6023 left crowded disc OCT.PNG
+│   │   │   │   ├── 6023 left crowded disc.PNG
+│   │   │   │   ├── 6023 right crowded disc OCT.PNG
+│   │   │   │   ├── 6023 right crowded disc.PNG
+│   │   │   │   ├── 6332 normal left OCT.PNG
+│   │   │   │   ├── 6332 normal left.PNG
+│   │   │   │   ├── 6332 normal right OCT.PNG
+│   │   │   │   ├── 6332 normal right.PNG
+│   │   │   │   ├── 7835 Left swelling OCT.png
+│   │   │   │   ├── 7835 Left swelling.png
+│   │   │   │   ├── 7835 Right swelling OCT.png
+│   │   │   │   ├── 7835 Right swelling.png
+│   │   │   │   ├── 8209 left crowded disc OCT.PNG
+│   │   │   │   ├── 8209 left crowded disc.PNG
+│   │   │   │   ├── 8209 right crowded disc OCT.PNG
+│   │   │   │   ├── 8209 right crowded disc.PNG
+│   │   │   │   ├── 8514 left tilted and crowded disc OCT.PNG
+│   │   │   │   ├── 8514 left tilted and crowded disc.PNG
+│   │   │   │   ├── 8514 right tilted and crowded disc OCT.PNG
+│   │   │   │   └── 8514 right tilted and crowded disc.PNG
+│   │   │   ├── README_IMG
+│   │   │   │   ├── BottomNav.png
+│   │   │   │   ├── Email_sending.png
+│   │   │   │   ├── JOSN_Example.png
+│   │   │   │   ├── popup-window.png
+│   │   │   │   ├── questionnaire.png
+│   │   │   │   └── Role-Selection.png
+│   │   │   ├── DIPP_Study_logo.png
+│   │   │   ├── DIPP_Study_logo_black.png
+│   │   │   ├── humbug.png
+│   │   │   ├── NHS_LOGO.jpg
+│   │   │   └── react.svg
+│   │   ├── components
+│   │   │   ├── BackButton.tsx
+│   │   │   ├── BottomNav.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── PopupWindow.tsx
+│   │   │   └── SideBar.tsx
+│   │   ├── Core
+│   │   │   └── flow.ts
+│   │   ├── data
+│   │   │   ├── questionnaire.json
+│   │   │   ├── recommendations.json
+│   │   │   └── records.json
+│   │   ├── pages
+│   │   │   ├── admin
+│   │   │   │   └── Admin.tsx
+│   │   │   ├── gp
+│   │   │   │   ├── assess
+│   │   │   │   │   ├── AssessRouter.tsx
+│   │   │   │   │   └── StartPage.tsx
+│   │   │   │   ├── guide
+│   │   │   │   │   ├── GuideHome.tsx
+│   │   │   │   │   └── GuideRouter.tsx
+│   │   │   │   ├── tutorial
+│   │   │   │   │   ├── Tutorial1.tsx
+│   │   │   │   │   └── TutorialRouter.tsx
+│   │   │   │   ├── GPApp.tsx
+│   │   │   │   └── Records.tsx
+│   │   │   ├── neurologist
+│   │   │   │   ├── assess
+│   │   │   │   │   ├── AssessRouter.tsx
+│   │   │   │   │   └── StartPage.tsx
+│   │   │   │   ├── guide
+│   │   │   │   │   ├── GuideHome.tsx
+│   │   │   │   │   └── GuideRouter.tsx
+│   │   │   │   ├── tutorial
+│   │   │   │   │   ├── Tutorial1.tsx
+│   │   │   │   │   └── TutorialRouter.tsx
+│   │   │   │   ├── NeurologistApp.tsx
+│   │   │   │   └── Records.tsx
+│   │   │   ├── ophthalmologist
+│   │   │   │   ├── assess
+│   │   │   │   │   ├── AssessRouter.tsx
+│   │   │   │   │   └── StartPage.tsx
+│   │   │   │   ├── guide
+│   │   │   │   │   ├── GuideHome.tsx
+│   │   │   │   │   └── GuideRouter.tsx
+│   │   │   │   ├── tutorial
+│   │   │   │   │   ├── Tutorial1.tsx
+│   │   │   │   │   └── TutorialRouter.tsx
+│   │   │   │   ├── OphthalmologyApp.tsx
+│   │   │   │   └── Records.tsx
+│   │   │   ├── optometrist
+│   │   │   │   ├── assess
+│   │   │   │   │   ├── questions
+│   │   │   │   │   │   └── DynamicQuestion.tsx
+│   │   │   │   │   ├── recommendations
+│   │   │   │   │   │   └── DynamicRecommendation.tsx
+│   │   │   │   │   ├── AssessRouter.tsx
+│   │   │   │   │   └── StartPage.tsx
+│   │   │   │   ├── guide
+│   │   │   │   │   ├── GuideHome.tsx
+│   │   │   │   │   ├── GuideRouter.tsx
+│   │   │   │   │   ├── ImageGallery.tsx
+│   │   │   │   │   └── OptAppTutorial.tsx
+│   │   │   │   ├── OptometristApp.tsx
+│   │   │   │   ├── Records.tsx
+│   │   │   │   └── Tutorial.tsx
+│   │   │   ├── patient
+│   │   │   │   ├── assess
+│   │   │   │   │   ├── AssessRouter.tsx
+│   │   │   │   │   └── StartPage.tsx
+│   │   │   │   ├── guide
+│   │   │   │   │   ├── GuideHome.tsx
+│   │   │   │   │   └── GuideRouter.tsx
+│   │   │   │   ├── tutorial
+│   │   │   │   │   ├── Tutorial1.tsx
+│   │   │   │   │   └── TutorialRouter.tsx
+│   │   │   │   ├── PatientApp.tsx
+│   │   │   │   └── Records.tsx
+│   │   │   ├── sidebar
+│   │   │   │   ├── ContactPage.tsx
+│   │   │   │   ├── FontSizeContext.tsx
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── SettingsPage.tsx
+│   │   │   ├── UserSelectionPage.tsx
+│   │   │   └── WelcomePage.tsx
+│   │   ├── styles
+│   │   │   ├── admin.css
+│   │   │   ├── backbutton.css
+│   │   │   ├── bottomnav.css
+│   │   │   ├── card.css
+│   │   │   ├── contactus.css
+│   │   │   ├── guidehome.css
+│   │   │   ├── header.css
+│   │   │   ├── image-card.css
+│   │   │   ├── image-gallery.css
+│   │   │   ├── image-modal.css
+│   │   │   ├── opt-app-tutorial.css
+│   │   │   ├── popupwindow.css
+│   │   │   ├── preview-report.css
+│   │   │   ├── question.css
+│   │   │   ├── recommendation.css
+│   │   │   ├── records.css
+│   │   │   ├── report.css
+│   │   │   ├── settings.css
+│   │   │   ├── sidebar.css
+│   │   │   ├── startpage.css
+│   │   │   ├── theme.css
+│   │   │   ├── tutorial.css
+│   │   │   ├── user-selection.css
+│   │   │   └── welcome.css
+│   │   ├── tests
+│   │   │   └── unit_tests
+│   │   │       ├── __snapshots__
+│   │   │       │   ├── AboutPage.test.tsx.snap
+│   │   │       │   ├── ContactPage.test.tsx.snap
+│   │   │       │   ├── index.test.tsx.snap
+│   │   │       │   └── SettingPage.test.tsx.snap
+│   │   │       ├── components
+│   │   │       │   ├── BackButton.test.tsx
+│   │   │       │   ├── BottomNav.test.tsx
+│   │   │       │   ├── Header.test.tsx
+│   │   │       │   ├── PopupWindow.test.tsx
+│   │   │       │   └── Sidebar.test.tsx
+│   │   │       ├── roles
+│   │   │       │   └── optometrist_tests
+│   │   │       │       ├── assess
+│   │   │       │       │   ├── AssessRouter.test.tsx
+│   │   │       │       │   ├── DynamicQuestion.test.tsx
+│   │   │       │       │   ├── DynamicRecommendation.test.tsx
+│   │   │       │       │   ├── NavigationLogic.test.ts
+│   │   │       │       │   ├── StartPage.test.tsx
+│   │   │       │       │   └── ValidationLogic.test.ts
+│   │   │       │       ├── guide
+│   │   │       │       │   ├── GuideHome.test.tsx
+│   │   │       │       │   ├── ImageGallery.test.tsx
+│   │   │       │       │   └── OptAppTutorial.test.tsx
+│   │   │       │       ├── records
+│   │   │       │       │   └── Records.test.tsx
+│   │   │       │       ├── sidebar
+│   │   │       │       │   ├── ContactPage.test.tsx
+│   │   │       │       │   └── SettingsPage.test.tsx
+│   │   │       │       ├── Guide.test.tsx
+│   │   │       │       └── OptometristApp.test.tsx
+│   │   │       ├── utils
+│   │   │       │   ├── NavigationLogic.test.ts
+│   │   │       │   └── ValidationLogic.test.ts
+│   │   │       ├── ContactPage.test.tsx
+│   │   │       ├── index.test.tsx
+│   │   │       ├── SettingPage.test.tsx
+│   │   │       ├── test_dummy.test.ts
+│   │   │       ├── UserSelectionPage.test.tsx
+│   │   │       └── WelcomePage.test.tsx
+│   │   ├── types
+│   │   │   ├── assessment.ts
+│   │   │   ├── images.d.ts
+│   │   │   ├── json.d.ts
+│   │   │   └── recommendation.ts
+│   │   ├── utils
+│   │   │   ├── NavigationLogic.ts
+│   │   │   └── ValidationLogic.ts
+│   │   ├── App.css
+│   │   ├── App.tsx
+│   │   ├── index.css
+│   │   ├── main.tsx
+│   │   ├── tree.txt
+│   │   └── vite-env.d.ts
+│   ├── .gitignore
+│   ├── complete_tree.txt
+│   ├── docs.iml
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── jest.config.cjs
+│   ├── jest.setup.ts
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   ├── tsconfig.app.json
+│   ├── tsconfig.build.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
+├── project_management
+│   ├── meetings
+│   │   ├── meeting_1.md
+│   │   ├── meeting_2.md
+│   │   ├── meeting_3.md
+│   │   ├── meeting_4.md
+│   │   ├── meeting_5.md
+│   │   ├── meeting_6.md
+│   │   ├── meeting_7.md
+│   │   ├── meeting_8.md
+│   │   ├── meeting_9.md
+│   │   └── Project Kick-off Meeting Minutes.md
+│   ├── sprint
+│   │   ├── Sprint1
+│   │   │   ├── Sprint1_Planning.pdf
+│   │   │   ├── Sprint1_Retrospective.md
+│   │   │   └── Sprint1_Review.md
+│   │   └── Sprint2
+│   │       ├── Sprint_2_Review.pdf
+│   │       ├── Sprint2_Planning.pdf
+│   │       └── Sprint2_Retrospective.md
+│   └── Group_22_Summer_Project_Proposal.pdf
+├── server
+│   ├── middleware
+│   │   └── auth-guard.js
+│   ├── models
+│   │   └── Assessment.js
+│   ├── routes
+│   │   ├── assessments.js
+│   │   ├── auth.js
+│   │   ├── export.js
+│   │   └── report.js
+│   ├── utils
+│   │   ├── doc.js
+│   │   └── symptoms.js
+│   ├── index.js
+│   ├── package.json
+│   ├── package-lock.json
+│   └── sever_tree.txt
+├── .gitignore
+├── .nvmrc
+├── full_project_tree.txt
+├── LICENSE
+└── README.md
