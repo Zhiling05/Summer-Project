@@ -114,41 +114,8 @@
 │   │   │   ├── admin
 │   │   │   │   └── Admin.tsx
 │   │   │   ├── gp
-│   │   │   │   ├── assess
-│   │   │   │   │   ├── AssessRouter.tsx
-│   │   │   │   │   └── StartPage.tsx
-│   │   │   │   ├── guide
-│   │   │   │   │   ├── GuideHome.tsx
-│   │   │   │   │   └── GuideRouter.tsx
-│   │   │   │   ├── tutorial
-│   │   │   │   │   ├── Tutorial1.tsx
-│   │   │   │   │   └── TutorialRouter.tsx
-│   │   │   │   ├── GPApp.tsx
-│   │   │   │   └── Records.tsx
 │   │   │   ├── neurologist
-│   │   │   │   ├── assess
-│   │   │   │   │   ├── AssessRouter.tsx
-│   │   │   │   │   └── StartPage.tsx
-│   │   │   │   ├── guide
-│   │   │   │   │   ├── GuideHome.tsx
-│   │   │   │   │   └── GuideRouter.tsx
-│   │   │   │   ├── tutorial
-│   │   │   │   │   ├── Tutorial1.tsx
-│   │   │   │   │   └── TutorialRouter.tsx
-│   │   │   │   ├── NeurologistApp.tsx
-│   │   │   │   └── Records.tsx
 │   │   │   ├── ophthalmologist
-│   │   │   │   ├── assess
-│   │   │   │   │   ├── AssessRouter.tsx
-│   │   │   │   │   └── StartPage.tsx
-│   │   │   │   ├── guide
-│   │   │   │   │   ├── GuideHome.tsx
-│   │   │   │   │   └── GuideRouter.tsx
-│   │   │   │   ├── tutorial
-│   │   │   │   │   ├── Tutorial1.tsx
-│   │   │   │   │   └── TutorialRouter.tsx
-│   │   │   │   ├── OphthalmologyApp.tsx
-│   │   │   │   └── Records.tsx
 │   │   │   ├── optometrist
 │   │   │   │   ├── assess
 │   │   │   │   │   ├── questions
@@ -166,17 +133,6 @@
 │   │   │   │   ├── Records.tsx
 │   │   │   │   └── Tutorial.tsx
 │   │   │   ├── patient
-│   │   │   │   ├── assess
-│   │   │   │   │   ├── AssessRouter.tsx
-│   │   │   │   │   └── StartPage.tsx
-│   │   │   │   ├── guide
-│   │   │   │   │   ├── GuideHome.tsx
-│   │   │   │   │   └── GuideRouter.tsx
-│   │   │   │   ├── tutorial
-│   │   │   │   │   ├── Tutorial1.tsx
-│   │   │   │   │   └── TutorialRouter.tsx
-│   │   │   │   ├── PatientApp.tsx
-│   │   │   │   └── Records.tsx
 │   │   │   ├── sidebar
 │   │   │   │   ├── ContactPage.tsx
 │   │   │   │   ├── FontSizeContext.tsx
@@ -266,7 +222,6 @@
 │   │   ├── tree.txt
 │   │   └── vite-env.d.ts
 │   ├── .gitignore
-│   ├── complete_tree.txt
 │   ├── docs.iml
 │   ├── eslint.config.js
 │   ├── index.html
