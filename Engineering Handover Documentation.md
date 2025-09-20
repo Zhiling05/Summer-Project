@@ -8,67 +8,39 @@ Administrator Password: admin123
 
 ------
 
-### Content
+## Table of Contents
 
-[Engineering Handover Documentation](#engineering-handover-documentation)
-
-​	[Development Progress](#development-progress)
-
-​	[Code Access](#code-access)
-
-​	[Deployment Environment Information](#deployment-environment-information)
-
-​	[Technical Architecture](#technical-architecture)
-
-​	[Project File Structure](#project-file-structure)
-
-​	[Code Documentation](#code-documentation)
-
-​		[Frontend Application (docs/)](#frontend-application-docs)
-
-​			[Shared Components (`src/components/`)](#shared-components-srccomponents)
-
-​			[Optometrist Module (`src/pages/optometrist/`)](#optometrist-module-srcpagesoptometrist)
-
-​			[Administrator Module (`src/pages/admin/`)](#administrator-module-srcpagesadmin)
-
-​			[Sidebar Functionality (`src/pages/sidebar/`)](#sidebar-functionality-srcpagessidebar)
-
-​			[Core Utility Functions (`src/utils/`)](#core-utility-functions-srcutils)
-
-​			[Styling System (`src/styles/`)](#styling-system-srcstyles)
-
-​			[Configuration Files (`src/data/`)](#configuration-files-srcdata)
-
-​			[Test Files (`src/tests/`)](#test-files-srctests)
-
-​		[Backend Service (server/)](#backend-service-server)
-
-​			[API Route Design](#api-route-design)
-
-​			[Report System](#report-system)
-
-​			[Data Models](#data-models)
-
-​			[Utility Functions](#utility-functions)
-
-​			[Middleware](#middleware)
-
-​	[Development Environment Setup](#development-environment-setup)
-
-​		[Frontend Development](#frontend-development)
-
-​		[Backend Development](#backend-development)
-
-​		[Environment Variable Configuration](#environment-variable-configuration)
-
-​	[New Role Module Development Guide](#new-role-module-development-guide)
-
-​		[Development Steps](#development-steps)
-
-​		[Reusable Components](#reusable-components)
-
-​	[Contact Information](#contact-information)
+- [Engineering Handover Documentation](#engineering-handover-documentation)
+  - [Table of Contents](#table-of-contents)
+  - [Development Progress](#development-progress)
+  - [Code Access](#code-access)
+  - [Deployment Environment Information](#deployment-environment-information)
+  - [Technical Architecture](#technical-architecture)
+  - [Project File Structure](#project-file-structure)
+  - [Code Documentation](#code-documentation)
+    - [Frontend Application (docs/)](#frontend-application-docs)
+      - [**Shared Components (`src/components/`)**](#shared-components-srccomponents)
+      - [Optometrist Module (`src/pages/optometrist/`)](#optometrist-module-srcpagesoptometrist)
+      - [Administrator Module (`src/pages/admin/`)](#administrator-module-srcpagesadmin)
+      - [Sidebar Functionality (`src/pages/sidebar/`)](#sidebar-functionality-srcpagessidebar)
+      - [Core Utility Functions (`src/utils/`)](#core-utility-functions-srcutils)
+      - [Styling System (`src/styles/`)](#styling-system-srcstyles)
+      - [Configuration Files (`src/data/`)](#configuration-files-srcdata)
+      - [Test Files (`src/tests/`)](#test-files-srctests)
+    - [Backend Service (server/)](#backend-service-server)
+      - [API Route Design](#api-route-design)
+      - [Report System](#report-system)
+      - [Data Models](#data-models)
+      - [Utility Functions](#utility-functions)
+      - [Middleware](#middleware)
+  - [Development Environment Setup](#development-environment-setup)
+    - [Frontend Development](#frontend-development)
+    - [Backend Development](#backend-development)
+    - [Environment Variable Configuration](#environment-variable-configuration)
+  - [New Role Module Development Guide](#new-role-module-development-guide)
+    - [Development Steps](#development-steps)
+    - [Reusable Components](#reusable-components)
+  - [Contact Information](#contact-information)
 
 
 
