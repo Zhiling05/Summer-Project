@@ -19,7 +19,7 @@ Administrator Password: admin123
   - [Project File Structure](#project-file-structure)
   - [Code Documentation](#code-documentation)
     - [Frontend Application (docs/)](#frontend-application-docs)
-      - [**Shared Components (`src/components/`)**](#shared-components-srccomponents)
+      - [Shared Components (`src/components/`)](#shared-components-srccomponents)
       - [Optometrist Module (`src/pages/optometrist/`)](#optometrist-module-srcpagesoptometrist)
       - [Administrator Module (`src/pages/admin/`)](#administrator-module-srcpagesadmin)
       - [Sidebar Functionality (`src/pages/sidebar/`)](#sidebar-functionality-srcpagessidebar)
@@ -108,7 +108,7 @@ In addition to the core code files, the root directory contains some additional 
 
 ### Frontend Application (docs/)
 
-#### **Shared Components (`src/components/`)**
+#### Shared Components (`src/components/`)
 
 - `Header.tsx` - Top navigation bar containing NHS branding and page titles
 - `BottomNav.tsx` - Bottom navigation bar for main function switching, includes navigation guard logic
