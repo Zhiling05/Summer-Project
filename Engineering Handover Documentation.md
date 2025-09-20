@@ -66,6 +66,8 @@ If you have been granted permission to continue developing this software, please
 
 For detailed project file structure, please refer to the `full_project_tree.txt` file.
 
+In addition to the core code files, the root directory contains some additional documents. The `app_documentation` folder contains documents related to software functionality development during the project development process, such as route structure, UI/UX design, testing instructions, etc. The `project_management` folder contains documents related to project management, mainly including meeting records and sprint-related files, etc. These documents can be deleted during subsequent development.
+
 
 
 ## Code Documentation
