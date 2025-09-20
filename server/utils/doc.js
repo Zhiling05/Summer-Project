@@ -5,8 +5,8 @@ const tmp = require('tmp-promise');
 const RECOMMEND_TEXT = {
   EMERGENCY_DEPARTMENT: 'Send patient to Emergency Department immediately',
   IMMEDIATE: 'Immediate referral to Eye Emergency On-Call',
-  URGENT_TO_OPH: 'Urgent referral to Ophthalmology',
-  URGENT_TO_GP_OR_NEUR: 'Urgent referral to GP or Neurology',
+  URGENT_TO_OPH: 'Urgent referral to Ophthalmologist',
+  URGENT_TO_GP_OR_NEUR: 'Urgent referral to GP or Neurologist',
   TO_GP: 'Refer to General Practitioner',
   NO_REFERRAL: 'No referral required',
   OTHER_EYE_CONDITIONS_GUIDANCE: 'Referral to other department',
