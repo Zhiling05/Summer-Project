@@ -2,9 +2,7 @@
 
 You can access the current development software online through the following link:
 
-Production Environment: https://dipp-frontend.onrender.com
-
-Administrator Password: admin123
+Production Environment:  [link](https://dipp-frontend.onrender.com)
 
 ------
 
